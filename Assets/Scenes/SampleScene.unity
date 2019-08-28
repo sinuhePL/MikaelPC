@@ -368,6 +368,8 @@ MonoBehaviour:
     type: 3}
   cavalerySquadArmy1Prefab: {fileID: 4949005357050187562, guid: d3844162088de664a935e5416372db08,
     type: 3}
+  cavalerySquadArmy2Prefab: {fileID: 4332561230818777294, guid: c1b6f0683879f264eb8e4325e04cef6c,
+    type: 3}
 --- !u!4 &1185829298
 Transform:
   m_ObjectHideFlags: 0

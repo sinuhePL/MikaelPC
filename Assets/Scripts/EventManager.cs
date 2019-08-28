@@ -25,4 +25,10 @@ public class EventManager : MonoBehaviour
     {
         if (onUnitClicked != null) onUnitClicked(idUnit);
     }
+
+    public static event Action<int> onAttackClicked;
+    public static void RaiseEventOnAttackClicked(int idAttack)
+    {
+        if (onAttackClicked != null) onAttackClicked(idAttack);
+    }
 }

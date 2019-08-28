@@ -58,7 +58,7 @@ public class PanZoom : MonoBehaviour
 
     void zoom(float increment)
     {
-        Camera.main.orthographicSize = Mathf.Clamp(Mathf.Lerp(myCamera.orthographicSize, myCamera.orthographicSize - increment, 7 * smoothing * Time.deltaTime), zoomOutMin, zoomOutMax);
+        Camera.main.orthographicSize = Mathf.Clamp(Mathf.Lerp(myCamera.orthographicSize, myCamera.orthographicSize - increment, smoothing * Time.deltaTime), zoomOutMin, zoomOutMax);
         Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f, 0.0f));
         Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
         Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));

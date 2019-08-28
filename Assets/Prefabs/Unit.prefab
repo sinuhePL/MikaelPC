@@ -43,3 +43,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e003f398855d89f4d8243e268aa51cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  arrowForwardBluePrefab: {fileID: 3757254920715771083, guid: 2e7b4573427006241833f1a7d2b892b2,
+    type: 3}
+  arrowForwardBlueEmptyPrefab: {fileID: 3557962994860806313, guid: 95c7c6131a8c2ac48ae2cf2b85fe0c98,
+    type: 3}
+  arrowForwardRedPrefab: {fileID: 8727380695787613884, guid: ffee91fb78afd0a4bb45571afc0742df,
+    type: 3}
+  arrowForwardRedEmptyPrefab: {fileID: 1699968237141974864, guid: 6f4fe96dc88bca3408f2f3e7aeeb04f9,
+    type: 3}
+  arrowLeftBluePrefab: {fileID: 8000755823287522045, guid: a5b41d163e9d00b46a188273819350e7,
+    type: 3}
+  arrowLeftBlueEmptyPrefab: {fileID: 7695891919044051818, guid: 8a7e2adcf6c61ee49aa8defe47d7faa5,
+    type: 3}
+  arrowLeftRedPrefab: {fileID: 1442486428619705518, guid: 86084cd580e93c44da0da8282315816e,
+    type: 3}
+  arrowLeftRedEmptyPrefab: {fileID: 1631764687173582081, guid: e934ebd1561762044909c8c8eecd9253,
+    type: 3}
+  arrowRightBluePrefab: {fileID: 1066109459651258309, guid: c7a21eff1d077ed4eb28463f01ee669d,
+    type: 3}
+  arrowRightBlueEmptyPrefab: {fileID: 3308964614676296366, guid: 044a549367bdef842bb7aeb6b905f345,
+    type: 3}
+  arrowRightRedPrefab: {fileID: 2479942602626285816, guid: 384435d4298efdd43a9210dedf446b2b,
+    type: 3}
+  arrowRightRedEmptyPrefab: {fileID: 6632720676485160200, guid: 01d00b4d3d0d5784bb2e7bbb89480f33,
+    type: 3}

@@ -22,6 +22,7 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private Transform[] boardFields;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] private GameObject cavalerySquadArmy1Prefab;
+    [SerializeField] private GameObject cavalerySquadArmy2Prefab;
 
     public static int boardWidth = 6;
     public static int boardHeight = 5;
@@ -74,16 +75,16 @@ public class BattleManager : MonoBehaviour {
             }
         }
 
-        //inicalizacja jednostek
+        //inicjalizacja jednostek
         clickedUnitId = -1;
         units = new List<GameObject>();
         // create test unit
-        tempObj = Instantiate(unitPrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(5, 1, cavalerySquadArmy1Prefab);
+        tempObj = Instantiate(unitPrefab, new Vector3(15.0f, 0.05f, -20.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(5, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3);
         units.Add(tempObj);
 
-        tempObj = Instantiate(unitPrefab, new Vector3(11.0f, 0.05f, -24.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(4, 2, cavalerySquadArmy1Prefab);
+        tempObj = Instantiate(unitPrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(4, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6);
         units.Add(tempObj);
         // end test unit
         EventManager.onUnitClicked += myUnitClicked;
