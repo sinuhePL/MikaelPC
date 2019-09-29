@@ -8,9 +8,9 @@ public class Unit
     private int unitId;
     private string unitType;
     private int initialStrength;
-    private int strength;
+    private int _strength;
     private int initialMorale;
-    private int morale;
+    private int _morale;
     private int testModifier;
     private bool isAvialable;
     private List<Attack> unitAttacks;
@@ -25,6 +25,21 @@ public class Unit
             if (a.GetId() == aId) tempA = a;
         }
         return tempA;
+    }
+
+    public int strength
+    {
+        get {return _strength;}
+        set {_strength = value;}
+    }
+    public int morale
+    {
+        get { return _morale; }
+        set { _morale = value; }
+    }
+    public string GetUnitType()
+    {
+        return unitType;
     }
 
     public Unit(Unit pattern, Army a)   // konstruktor kopiujący
@@ -162,5 +177,14 @@ public class Unit
                 if (_attack.CheckAndSetTarget(_unit)) break;
             }
         }
+    }
+
+    public Attack GetAttack(int idAttack)
+    {
+        foreach (Attack a in unitAttacks)
+        {
+            if (a.GetId() == idAttack) return a;
+        }
+        return null;
     }
 }

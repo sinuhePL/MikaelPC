@@ -1,14 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitController : MonoBehaviour
 {
     private bool isInitialized = false;
+    private bool isOutlined;
     private int _squadNumber;
     private int _aliveSquadNumer;
+    private int _morale;
     private int _armyId;
+    private string _unitType;
     private int _unitId;
+    private int _unitTileId;
     private GameObject[] _squads;
     private GameObject forwardArrow;
     private GameObject forwardArrowEmpty;
@@ -37,24 +42,109 @@ public class UnitController : MonoBehaviour
         rightArrow.GetComponent<ArrowController>().ShowArrow(idAttack);
     }
 
+    private void myTileClicked(int idTile)
+    {
+        if (isOutlined)
+        {
+            for (int i = 0; i < _aliveSquadNumer; i++)
+            {
+                _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+            }
+            forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
+            leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
+            rightArrowEmpty.GetComponent<ArrowController>().HideArrow();
+            forwardArrow.GetComponent<ArrowController>().HideArrow();
+            leftArrow.GetComponent<ArrowController>().HideArrow();
+            rightArrow.GetComponent<ArrowController>().HideArrow();
+            forwardArrow.SetActive(false);
+            forwardArrowEmpty.SetActive(false);
+            leftArrow.SetActive(false);
+            leftArrowEmpty.SetActive(false);
+            rightArrow.SetActive(false);
+            rightArrowEmpty.SetActive(false);
+            isOutlined = false;
+        }
+    }
+
+    private void myUnitClicked(int idUnit)
+    {
+        if(idUnit == UnitId && !isOutlined)
+        {
+            forwardArrow.SetActive(true);
+            forwardArrowEmpty.SetActive(true);
+            leftArrow.SetActive(true);
+            leftArrowEmpty.SetActive(true);
+            rightArrow.SetActive(true);
+            rightArrowEmpty.SetActive(true);
+            for (int i = 0; i < _aliveSquadNumer; i++)
+            {
+                _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+            }
+            forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
+            leftArrowEmpty.GetComponent<ArrowController>().ShowArrow();
+            rightArrowEmpty.GetComponent<ArrowController>().ShowArrow();
+            isOutlined = true;
+        }
+        else if(isOutlined)
+        {
+            for (int i = 0; i < _aliveSquadNumer; i++)
+            {
+                _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+            }
+            forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
+            leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
+            rightArrowEmpty.GetComponent<ArrowController>().HideArrow();
+            forwardArrow.GetComponent<ArrowController>().HideArrow();
+            leftArrow.GetComponent<ArrowController>().HideArrow();
+            rightArrow.GetComponent<ArrowController>().HideArrow();
+            forwardArrow.SetActive(false);
+            forwardArrowEmpty.SetActive(false);
+            leftArrow.SetActive(false);
+            leftArrowEmpty.SetActive(false);
+            rightArrow.SetActive(false);
+            rightArrowEmpty.SetActive(false);
+            isOutlined = false;
+        }
+    }
+
     private void OnDestroy()
     {
-        EventManager.onAttackClicked += myAttackClicked;
+        EventManager.onAttackClicked -= myAttackClicked;
+        EventManager.onUnitClicked -= myUnitClicked;
+        EventManager.onTileClicked -= myTileClicked;
     }
 
     public int UnitId
     {
-        get
-        {
-            return _unitId;
-        }
-        set
-        {
-            _unitId = value;
-        }
+        get {return _unitId;}
     }
 
-    public void InitializeUnit(int squadNumber, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId)   //   armyId == 1 then blue else red
+    public string UnitType
+    {
+        get { return _unitType; }
+    }
+
+    public int InitialStrength
+    {
+        get { return _squadNumber; }
+    }
+
+    public int InitialMorale
+    {
+        get { return _morale; }
+    }
+
+    public int ArmyId
+    {
+        get { return _armyId; }
+    }
+
+    public int UnitTileId
+    {
+        get { return _unitTileId; }
+    }
+
+    public void InitializeUnit(int squadNumber, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red
     {
         Vector3 tempPos;
 
@@ -66,11 +156,25 @@ public class UnitController : MonoBehaviour
                 return;
             }
             isInitialized = true;
+            isOutlined = false;
+            _unitType = unitType;
             _unitId = unitId;
             _squadNumber = squadNumber;
             _aliveSquadNumer = squadNumber;
             _armyId = armyId;
+            _unitTileId = tileId;
             _squads = new GameObject[_squadNumber];
+            switch(unitType)
+            {
+                case "French Cavalery":
+                    _morale = 5;
+                    break;
+            }
+            // set position based on id tile which it sits on 
+            float xpos = (tileId % BattleManager.boardWidth) * BattleManager.boardFieldWitdth + BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth*0.25f;
+            float zpos = (tileId % BattleManager.boardHeight) * -1.0f * BattleManager.boardFieldHeight - BattleManager.boardFieldHeight /*- BattleManager.boardFieldHeight * 0.4f*/;
+            transform.position = new Vector3(xpos, 0.05f, zpos);
+
             if (_armyId == 1)
             {
                 forwardArrow = Instantiate(arrowForwardBluePrefab, transform.position + new Vector3(1.0f, 0.0f, 4.0f), arrowForwardBluePrefab.transform.rotation);
@@ -95,6 +199,13 @@ public class UnitController : MonoBehaviour
             leftArrowEmpty.GetComponent<ArrowController>().AttackId = leftAttackId;
             rightArrow.GetComponent<ArrowController>().AttackId = rightAttackId;
             rightArrowEmpty.GetComponent<ArrowController>().AttackId = rightAttackId;
+            forwardArrow.SetActive(false);
+            forwardArrowEmpty.SetActive(false);
+            leftArrow.SetActive(false);
+            leftArrowEmpty.SetActive(false);
+            rightArrow.SetActive(false);
+            rightArrowEmpty.SetActive(false);
+            // inicjalizacja squadów
             for (int i = 0; i< _squadNumber; i++)
             {
                 tempPos = transform.position;
@@ -108,6 +219,8 @@ public class UnitController : MonoBehaviour
                 _squads[i].GetComponentInChildren<PawnController>().UnitId = _unitId;
             }
             EventManager.onAttackClicked += myAttackClicked;
+            EventManager.onUnitClicked += myUnitClicked;
+            EventManager.onTileClicked += myTileClicked;
         }
         else Debug.Log("Tried to initialized CavaleryController again! Id: " + _unitId);
 
@@ -128,33 +241,6 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    // called when unit clicked
-    public void Outline()
-    {
-        for (int i = 0; i < _aliveSquadNumer; i++)
-        {
-            _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
-        }
-        forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-        leftArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-        rightArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-    }
-
-    // called when other unit clicked
-    public void DisableOutline()
-    {
-        for (int i = 0; i < _aliveSquadNumer; i++)
-        {
-            _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
-        }
-        forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
-        leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
-        rightArrowEmpty.GetComponent<ArrowController>().HideArrow();
-        forwardArrow.GetComponent<ArrowController>().HideArrow();
-        leftArrow.GetComponent<ArrowController>().HideArrow();
-        rightArrow.GetComponent<ArrowController>().HideArrow();
-    }
-
     public void ActivateAttack(int attackId)
     {
         forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
@@ -173,5 +259,20 @@ public class UnitController : MonoBehaviour
         forwardArrow.GetComponent<ArrowController>().HideArrow(attackId);
         leftArrow.GetComponent<ArrowController>().HideArrow(attackId);
         rightArrow.GetComponent<ArrowController>().HideArrow(attackId);
+    }
+
+    // return attack id based on code - 1 - right attack 2 - central attack 3 - right attack
+    public int GetAttackId(int myAttack)    
+    {
+        switch(myAttack)
+        {
+            case 1:
+                return leftArrowEmpty.GetComponent<ArrowController>().AttackId;
+            case 2:
+                return forwardArrowEmpty.GetComponent<ArrowController>().AttackId;
+            case 3:
+                return rightArrowEmpty.GetComponent<ArrowController>().AttackId;
+        }
+        return -1;
     }
 }

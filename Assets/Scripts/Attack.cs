@@ -14,8 +14,9 @@ public abstract class Attack
     protected List<int> activatesAttacks;
     protected List<int> deactivatesAttacks;
     protected int keyFieldId;
+    protected Vector3 arrowPosition;    // współrzędne pozycji strzałki przedstawiającej ten atak
 
-    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId) // konstruktor
+    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) // konstruktor
     {
         attackId = aId;
         isActiveState = state;
@@ -26,6 +27,7 @@ public abstract class Attack
         keyFieldId = keyField;
         targetId = tId;
         target = null;
+        arrowPosition = p;
     }
 
     protected Attack(Attack pattern, Unit o) // konstruktor kopiujący
@@ -47,6 +49,7 @@ public abstract class Attack
         owner = o;
         targetId = pattern.targetId;
         target = null;
+        arrowPosition = pattern.arrowPosition;
     }
 
     public void Activate()
@@ -81,7 +84,7 @@ public abstract class Attack
         deactivatesAttacks.Add(i);
     }
 
-    public bool CheckAndSetTarget( Unit u)    // sprawdza czy podana jednostka ma id takie jak id celu ataku, jeżeli tak to ustawia referencję na cel ataku i zwraca true jeżeli nie zwraca false
+    public bool CheckAndSetTarget( Unit u)    // sprawdza czy podana jednostka ma id takie jak id celu ataku, jeżeli tak to ustawia referencję na cel ataku i zwraca true jeżeli nie, zwraca false
     {
         if (u.MyId(targetId))
         {
@@ -89,6 +92,11 @@ public abstract class Attack
             return true;
         }
         else return false;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return arrowPosition;
     }
 
     public abstract StateChange MakeAttack();

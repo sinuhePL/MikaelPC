@@ -9,12 +9,12 @@ public class BoardState
     private Army player1;
     private Army player2;
 
-    public BoardState(int startingArmyMorale, int diceSize)
+    public BoardState(Army army1, Army army2)
     {
         units = new List<Unit>();
         keyFields = new List<KeyField>();
-        player1 = new Army(1, startingArmyMorale, 0, diceSize);
-        player2 = new Army(2, startingArmyMorale, 0, diceSize);
+        player1 = army1;
+        player2 = army2;
     }
 
     public BoardState(BoardState pattern)   // konstruktor kopiujący
@@ -61,6 +61,17 @@ public class BoardState
         return null;
     }
 
+    public Attack GetAttack(int idAttack)
+    {
+        Attack tempAttack = null;
+        foreach(Unit u in units)
+        {
+            tempAttack = u.GetAttack(idAttack);
+            if (tempAttack != null) return tempAttack;
+        }
+        return null;
+    }
+
     public int ChangeState(StateChange change)  // zmienia stan planszy zgodnie z definicją zmiany
     {
         Unit u;
@@ -95,5 +106,10 @@ public class BoardState
             if (kf.GetFieldId() == change.keyFieldChangeId) kf.SetOccupant(change.keyFieldNewOccupantId);
         }
         return change.winnerId;
+    }
+
+    public void AddUnit(Unit u)
+    {
+        units.Add(u);
     }
 }

@@ -63,9 +63,9 @@ public class PanZoom : MonoBehaviour
         Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
         Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));
         Ray rtRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, Screen.height));
-        if (!Physics.Raycast(lbRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(0.2f, 0.0f, 0.2f), 4 * smoothing * Time.deltaTime);
-        if (!Physics.Raycast(ltRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(0.2f, 0.0f, -0.2f), 4 * smoothing * Time.deltaTime);
-        if (!Physics.Raycast(rbRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, 0.2f), 4 * smoothing * Time.deltaTime);
-        if (!Physics.Raycast(rtRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, -0.2f), 4 * smoothing * Time.deltaTime);
+        if (!Physics.Raycast(lbRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(0.2f, 0.0f, 0.2f), 6 * smoothing * Time.deltaTime);
+        if (!Physics.Raycast(ltRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
+        if (!Physics.Raycast(rbRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, 0.2f), 6 * smoothing * Time.deltaTime);
+        if (!Physics.Raycast(rtRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
     }
 }

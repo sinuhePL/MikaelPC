@@ -31,4 +31,10 @@ public class EventManager : MonoBehaviour
     {
         if (onAttackClicked != null) onAttackClicked(idAttack);
     }
+
+    public static event Action<int> onTileClicked;
+    public static void RaiseEventOnTileClicked(int idTile)
+    {
+        if (onTileClicked != null) onTileClicked(idTile);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ArrowController : MonoBehaviour
 {
@@ -12,12 +13,13 @@ public class ArrowController : MonoBehaviour
     {
         EventManager.RaiseEventOnAttackClicked(_attackId);
     }
+    // dodać obsługę zdarzenia kliknięcia na strzałkę ataku, dodać dodanych ataku współrzędne każdego ataku. usunąć poprzednie rozwiązanie
 
-    public void Start()
+    public void Awake()
     {
         myRenderer = GetComponent<Renderer>();
         myRenderer.enabled = false;
-        _isArrowActive = true;
+        _isArrowActive = false;
     }
 
     public int AttackId
@@ -51,7 +53,10 @@ public class ArrowController : MonoBehaviour
 
     public void HideArrow()
     {
-        if(isArrowActive) myRenderer.enabled = false;
+        if (isArrowActive)
+        {
+            myRenderer.enabled = false;
+        }
     }
 
     public void ShowArrow(int aId)
@@ -62,6 +67,9 @@ public class ArrowController : MonoBehaviour
 
     public void HideArrow(int aId)
     {
-        if (isArrowActive && AttackId == aId) myRenderer.enabled = false;
+        if (isArrowActive && AttackId == aId)
+        {
+            myRenderer.enabled = false;
+        }
     }
 }
