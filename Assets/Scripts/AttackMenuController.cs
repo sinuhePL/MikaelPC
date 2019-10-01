@@ -7,25 +7,29 @@ using DG.Tweening;
 public class AttackMenuController : MonoBehaviour
 {
     private Camera myCamera;
+    private bool isVisible;
 
     private void AttackClicked(int idAttack)
     {
         Sequence mySequence = DOTween.Sequence();
         Vector3 endPosition;
-        endPosition = myCamera.WorldToScreenPoint(BattleManager.Instance.GetAttack(idAttack).GetPosition()) + new Vector3(2.0f, 0.0f, 0.0f);
-        mySequence.Append(transform.DOScale(0.0f, 0.5f).SetEase(Ease.InElastic));
+        endPosition = myCamera.WorldToScreenPoint(BattleManager.Instance.GetAttack(idAttack).GetPosition());
+        if(isVisible) mySequence.Append(transform.DOScale(0.0f, 0.3f).SetEase(Ease.InBack));
         mySequence.Append(transform.DOMove(endPosition, 0.01f));
-        mySequence.Append(transform.DOScale(0.45f, 0.5f).SetEase(Ease.OutElastic));
+        mySequence.Append(transform.DOScale(0.45f, 0.3f).SetEase(Ease.OutBack));
+        isVisible = true;
     }
 
     private void UnitClicked(int idUnit)
     {
-        transform.DOScale(0.0f, 0.5f).SetEase(Ease.InElastic);
+        transform.DOScale(0.0f, 0.3f).SetEase(Ease.InBack);
+        isVisible = false;
     }
 
     private void TileClicked(int idTile)
     {
-        transform.DOScale(0.0f, 0.5f).SetEase(Ease.InElastic);
+        transform.DOScale(0.0f, 0.3f).SetEase(Ease.InBack);
+        isVisible = false;
     }
 
     private void OnDestroy()
@@ -39,9 +43,9 @@ public class AttackMenuController : MonoBehaviour
     void Start()
     {
         myCamera = Camera.main;
-        gameObject.SetActive(false);
         EventManager.onAttackClicked += AttackClicked;
         EventManager.onUnitClicked += UnitClicked;
         EventManager.onTileClicked += TileClicked;
+        isVisible = false;
     }
 }

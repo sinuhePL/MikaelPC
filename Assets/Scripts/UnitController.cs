@@ -243,22 +243,52 @@ public class UnitController : MonoBehaviour
 
     public void ActivateAttack(int attackId)
     {
-        forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
+        if (forwardArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        {
+            forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
+            forwardArrow.GetComponent<ArrowController>().isArrowActive = true;
+        }
+        if (leftArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        {
+            leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
+            leftArrow.GetComponent<ArrowController>().isArrowActive = true;
+        }
+        if (rightArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        {
+            rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
+            rightArrow.GetComponent<ArrowController>().isArrowActive = true;
+        }
+        /*forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
         leftArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
         rightArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
         forwardArrow.GetComponent<ArrowController>().ShowArrow(attackId);
         leftArrow.GetComponent<ArrowController>().ShowArrow(attackId);
-        rightArrow.GetComponent<ArrowController>().ShowArrow(attackId);
+        rightArrow.GetComponent<ArrowController>().ShowArrow(attackId);*/
     }
 
     public void DeactivateAttack(int attackId)
     {
-        forwardArrowEmpty.GetComponent<ArrowController>().HideArrow(attackId);
+        if (forwardArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        {
+            forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            forwardArrow.GetComponent<ArrowController>().isArrowActive = false;
+        }
+        if (leftArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        {
+            leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            leftArrow.GetComponent<ArrowController>().isArrowActive = false;
+        }
+        if (rightArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        {
+            rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            rightArrow.GetComponent<ArrowController>().isArrowActive = false;
+        }
+        /*forwardArrowEmpty.GetComponent<ArrowController>().HideArrow(attackId);
         leftArrowEmpty.GetComponent<ArrowController>().HideArrow(attackId);
         rightArrowEmpty.GetComponent<ArrowController>().HideArrow(attackId);
         forwardArrow.GetComponent<ArrowController>().HideArrow(attackId);
         leftArrow.GetComponent<ArrowController>().HideArrow(attackId);
-        rightArrow.GetComponent<ArrowController>().HideArrow(attackId);
+        rightArrow.GetComponent<ArrowController>().HideArrow(attackId);*/
     }
 
     // return attack id based on code - 1 - right attack 2 - central attack 3 - right attack

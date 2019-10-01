@@ -16,6 +16,7 @@ public abstract class Attack
     protected int keyFieldId;
     protected Vector3 arrowPosition;    // współrzędne pozycji strzałki przedstawiającej ten atak
 
+
     public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) // konstruktor
     {
         attackId = aId;

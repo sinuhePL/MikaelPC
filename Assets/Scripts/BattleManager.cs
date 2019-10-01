@@ -103,6 +103,7 @@ public class BattleManager : MonoBehaviour {
         Unit myUnit;
         Army army1, army2;
         Attack tempAttack;
+        Vector3 menuRightPositionShift, menuCentralPositionShift, menuLeftPositionShift;
         int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile, leftAttackTargetId, centralAttackTargetId, rightAttackTargetId;
 
         // counts morale of army
@@ -151,22 +152,34 @@ public class BattleManager : MonoBehaviour {
                 if (uc2.UnitTileId == rightAttackTile) rightAttackTargetId = uc2.UnitTileId;
 
             }
+            if(uc.ArmyId == 1)
+            {
+                menuLeftPositionShift = new Vector3(1.0f, 0.0f, 5.0f);
+                menuCentralPositionShift = new Vector3(3.0f, 0.0f, 5.0f);
+                menuRightPositionShift = new Vector3(5.0f, 0.0f, 5.0f);
+            }
+            else
+            {
+                menuLeftPositionShift = new Vector3(1.0f, 0.0f, -3.0f);
+                menuCentralPositionShift = new Vector3(3.0f, 0.0f, -3.0f);
+                menuRightPositionShift = new Vector3(5.0f, 0.0f, -3.0f);
+            }
             if (leftAttackTargetId > 0)
             {
-                tempAttack = new Attack(uc.GetAttackId(1), true, uc.ArmyId, uc, 0, leftAttackTargetId, uc.transform.position + new Vector3(-1.0f, 0.0, 2.0f));
-                uc.ActivateAttack(uc.GetAttackId(1));
+                tempAttack = new ChargeAttack(uc.GetAttackId(1), true, uc.ArmyId, myUnit, 0, leftAttackTargetId, uc.transform.position + menuLeftPositionShift);
+                uc.ActivateAttack(uc.GetAttackId(1)); // testowo, docelowo tylko central attack jest aktywnyna początku
                 myUnit.AddAttack(tempAttack);
             }
             if (centralAttackTargetId > 0)
             {
-                tempAttack = new Attack(uc.GetAttackId(2), true, uc.ArmyId, uc, 0, centralAttackTargetId, uc.transform.position + new Vector3(1.0f, 0.0, 2.0f));
+                tempAttack = new ChargeAttack(uc.GetAttackId(2), true, uc.ArmyId, myUnit, 0, centralAttackTargetId, uc.transform.position + menuCentralPositionShift);
                 uc.ActivateAttack(uc.GetAttackId(2));
                 myUnit.AddAttack(tempAttack);
             }
             if (leftAttackTargetId > 0)
             {
-                tempAttack = new Attack(uc.GetAttackId(3), true, uc.ArmyId, uc, 0, rightAttackTargetId, uc.transform.position + new Vector3(2.0f, 0.0, 2.0f));
-                uc.ActivateAttack(uc.GetAttackId(3));
+                tempAttack = new ChargeAttack(uc.GetAttackId(3), true, uc.ArmyId, myUnit, 0, rightAttackTargetId, uc.transform.position + menuRightPositionShift);
+                uc.ActivateAttack(uc.GetAttackId(3)); // testowo, docelowo tylko central attack jest aktywnyna początku
                 myUnit.AddAttack(tempAttack);
             }
 
