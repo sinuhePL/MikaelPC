@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8098927023049770155}
   - component: {fileID: 8098927023049770156}
   - component: {fileID: 8262453227370926125}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: tile_town
   m_TagString: Untagged
   m_Icon: {fileID: 0}

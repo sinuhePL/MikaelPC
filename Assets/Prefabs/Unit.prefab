@@ -67,3 +67,5 @@ MonoBehaviour:
     type: 3}
   arrowRightRedEmptyPrefab: {fileID: 6632720676485160200, guid: 01d00b4d3d0d5784bb2e7bbb89480f33,
     type: 3}
+  unitCaptionPrefab: {fileID: 3338071679186534467, guid: ccc636e1748d8884d9fc07378d74119b,
+    type: 3}

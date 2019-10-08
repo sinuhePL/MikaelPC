@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UnitController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class UnitController : MonoBehaviour
     private GameObject leftArrowEmpty;
     private GameObject rightArrow;
     private GameObject rightArrowEmpty;
+    private GameObject unitCaption;
     [SerializeField] private GameObject arrowForwardBluePrefab;
     [SerializeField] private GameObject arrowForwardBlueEmptyPrefab;
     [SerializeField] private GameObject arrowForwardRedPrefab;
@@ -33,6 +35,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] private GameObject arrowRightBlueEmptyPrefab;
     [SerializeField] private GameObject arrowRightRedPrefab;
     [SerializeField] private GameObject arrowRightRedEmptyPrefab;
+    [SerializeField] private GameObject unitCaptionPrefab;
 
     // called when arrow is clicked
     private void myAttackClicked(int idAttack)
@@ -147,6 +150,7 @@ public class UnitController : MonoBehaviour
     public void InitializeUnit(int squadNumber, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red
     {
         Vector3 tempPos;
+        Color myColor;
 
         if (!isInitialized)
         {
@@ -164,12 +168,7 @@ public class UnitController : MonoBehaviour
             _armyId = armyId;
             _unitTileId = tileId;
             _squads = new GameObject[_squadNumber];
-            switch(unitType)
-            {
-                case "French Cavalery":
-                    _morale = 5;
-                    break;
-            }
+            
             // set position based on id tile which it sits on 
             float xpos = (tileId % BattleManager.boardWidth) * BattleManager.boardFieldWitdth + BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth*0.25f;
             float zpos = (tileId % BattleManager.boardHeight) * -1.0f * BattleManager.boardFieldHeight - BattleManager.boardFieldHeight /*- BattleManager.boardFieldHeight * 0.4f*/;
@@ -183,6 +182,10 @@ public class UnitController : MonoBehaviour
                 leftArrowEmpty = Instantiate(arrowLeftBlueEmptyPrefab, transform.position + new Vector3(-0.5f, 0.0f, 4.0f), arrowLeftBlueEmptyPrefab.transform.rotation);
                 rightArrow = Instantiate(arrowRightBluePrefab, transform.position + new Vector3(2.5f, 0.0f, 4.0f), arrowRightBluePrefab.transform.rotation);
                 rightArrowEmpty = Instantiate(arrowRightBlueEmptyPrefab, transform.position + new Vector3(2.5f, 0.0f, 4.0f), arrowRightBlueEmptyPrefab.transform.rotation);
+                unitCaption = Instantiate(unitCaptionPrefab, transform.position + new Vector3(0.7f, 0.0f, -1.3f), unitCaptionPrefab.transform.rotation);
+                ColorUtility.TryParseHtmlString("#4158f3", out myColor);
+                unitCaption.GetComponent<TextMeshPro>().color = myColor;
+
             }
             else
             {
@@ -192,6 +195,16 @@ public class UnitController : MonoBehaviour
                 leftArrowEmpty = Instantiate(arrowLeftRedEmptyPrefab, transform.position + new Vector3(2.5f, 0.0f, -4.0f), arrowLeftRedEmptyPrefab.transform.rotation);
                 rightArrow = Instantiate(arrowRightRedPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightRedPrefab.transform.rotation);
                 rightArrowEmpty = Instantiate(arrowRightRedEmptyPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightRedEmptyPrefab.transform.rotation);
+                unitCaption = Instantiate(unitCaptionPrefab, transform.position + new Vector3(1.3f, 0.0f, 1.2f), unitCaptionPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                ColorUtility.TryParseHtmlString("#ff4722", out myColor);
+                unitCaption.GetComponent<TextMeshPro>().color = myColor;
+            }
+            switch (unitType)
+            {
+                case "French Cavalery":
+                    _morale = 5;
+                    unitCaption.GetComponent<TextMeshPro>().text = "French Cavalery";
+                    break;
             }
             forwardArrow.GetComponent<ArrowController>().AttackId = forwardAttackId;
             forwardArrowEmpty.GetComponent<ArrowController>().AttackId = forwardAttackId;
@@ -258,12 +271,6 @@ public class UnitController : MonoBehaviour
             rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
             rightArrow.GetComponent<ArrowController>().isArrowActive = true;
         }
-        /*forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
-        leftArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
-        rightArrowEmpty.GetComponent<ArrowController>().ShowArrow(attackId);
-        forwardArrow.GetComponent<ArrowController>().ShowArrow(attackId);
-        leftArrow.GetComponent<ArrowController>().ShowArrow(attackId);
-        rightArrow.GetComponent<ArrowController>().ShowArrow(attackId);*/
     }
 
     public void DeactivateAttack(int attackId)
@@ -283,12 +290,6 @@ public class UnitController : MonoBehaviour
             rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
             rightArrow.GetComponent<ArrowController>().isArrowActive = false;
         }
-        /*forwardArrowEmpty.GetComponent<ArrowController>().HideArrow(attackId);
-        leftArrowEmpty.GetComponent<ArrowController>().HideArrow(attackId);
-        rightArrowEmpty.GetComponent<ArrowController>().HideArrow(attackId);
-        forwardArrow.GetComponent<ArrowController>().HideArrow(attackId);
-        leftArrow.GetComponent<ArrowController>().HideArrow(attackId);
-        rightArrow.GetComponent<ArrowController>().HideArrow(attackId);*/
     }
 
     // return attack id based on code - 1 - right attack 2 - central attack 3 - right attack

@@ -45,8 +45,8 @@ public class PawnController : MonoBehaviour
     // called whenever user clicks on unit
     public void EnableOutline()
     {
-        transform.DOPunchScale(new Vector3(0.05f, 0.05f, 0.05f), 0.75f, 10, 1);
-        GetComponent<Renderer>().materials[0].SetFloat("_Outline", 0.003f);
+        transform.DOPunchScale(new Vector3(1.5f, 1.5f, 1.5f), 0.5f, 10, 1);
+        GetComponent<Renderer>().materials[0].SetFloat("_Outline", 0.2f);
     }
 
     // called whenever user clicks on another unit

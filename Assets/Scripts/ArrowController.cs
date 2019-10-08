@@ -11,7 +11,7 @@ public class ArrowController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        EventManager.RaiseEventOnAttackClicked(_attackId);
+        if(_isArrowActive) EventManager.RaiseEventOnAttackClicked(_attackId);
     }
     // dodać obsługę zdarzenia kliknięcia na strzałkę ataku, dodać dodanych ataku współrzędne każdego ataku. usunąć poprzednie rozwiązanie
 
