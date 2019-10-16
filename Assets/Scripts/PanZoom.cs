@@ -7,7 +7,7 @@ public class PanZoom : MonoBehaviour
 {
     private Vector3 touchStart;
     private Camera myCamera;
-    private float smoothing = 10.0f;
+    private float smoothing = 50.0f;
 
     public float zoomOutMin = 3;
     public float zoomOutMax = 6;

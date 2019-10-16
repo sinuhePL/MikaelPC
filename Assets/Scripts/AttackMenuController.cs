@@ -33,11 +33,18 @@ public class AttackMenuController : MonoBehaviour
         isVisible = false;
     }
 
+    private void ActionButtonPressed(int idTile)
+    {
+        transform.DOScale(0.0f, 0.3f).SetEase(Ease.InBack);
+        isVisible = false;
+    }
+
     private void OnDestroy()
     {
         EventManager.onAttackClicked -= AttackClicked;
         EventManager.onUnitClicked -= UnitClicked;
         EventManager.onTileClicked -= TileClicked;
+        EventManager.onActionButtonPressed -= ActionButtonPressed;
     }
 
     // Start is called before the first frame update
@@ -47,6 +54,7 @@ public class AttackMenuController : MonoBehaviour
         EventManager.onAttackClicked += AttackClicked;
         EventManager.onUnitClicked += UnitClicked;
         EventManager.onTileClicked += TileClicked;
+        EventManager.onActionButtonPressed += ActionButtonPressed;
         isVisible = false;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TileController : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class TileController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        EventManager.RaiseEventOnTileClicked(tileId);
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            EventManager.RaiseEventOnTileClicked(tileId);
+        }
     }
 }

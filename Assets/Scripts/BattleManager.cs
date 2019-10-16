@@ -187,6 +187,138 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
+    private IEnumerator WaitForDice(int diceCount1, int diceCount2)
+    {
+        while(Dice.rolling)
+        {
+            yield return null;
+        }
+        string result = Dice.AsString("d6");
+        if (!result.Contains("?"))
+        {
+            int attackMoraleResult = 0, attackStrengthResult = 0, defenceMoraleResult = 0, defenceStrengthResult = 0;
+            Debug.Log(result);
+            result = result.Substring(result.IndexOf(':') + 1);
+            string[] resultTable = result.Substring(0, result.IndexOf("=") - 1).Split('+');
+            if (diceCount1 == 2)
+            {
+                if (resultTable[0].Trim() == "5" || resultTable[0].Trim() == "6")
+                {
+                    if (resultTable[1].Trim() == "5" || resultTable[1].Trim() == "6") attackStrengthResult++;
+                }
+                if (resultTable[0].Trim() == "2" || resultTable[0].Trim() == "3" || resultTable[0].Trim() == "4")
+                {
+                    if (resultTable[1].Trim() == "2" || resultTable[1].Trim() == "3" || resultTable[1].Trim() == "4") attackMoraleResult++;
+                }
+                if (diceCount2 == 2)
+                {
+                    if (resultTable[2].Trim() == "5" || resultTable[2].Trim() == "6")
+                    {
+                        if (resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6") defenceStrengthResult++;
+                    }
+                    if (resultTable[2].Trim() == "2" || resultTable[2].Trim() == "3" || resultTable[2].Trim() == "4")
+                    {
+                        if (resultTable[3].Trim() == "2" || resultTable[3].Trim() == "3" || resultTable[3].Trim() == "4") defenceMoraleResult++;
+                    }
+                }
+                if (diceCount2 == 3)
+                {
+                    if (resultTable[2].Trim() == "5" || resultTable[2].Trim() == "6")
+                    {
+                        if (resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6" || resultTable[4].Trim() == "5" || resultTable[4].Trim() == "6") attackStrengthResult++;
+                    }
+                    else if (resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6")
+                    {
+                        if (resultTable[4].Trim() == "5" || resultTable[4].Trim() == "6") attackStrengthResult++;
+                    }
+                    if (resultTable[2].Trim() == "2" || resultTable[2].Trim() == "3" || resultTable[2].Trim() == "4")
+                    {
+                        if (resultTable[3].Trim() == "2" || resultTable[3].Trim() == "3" || resultTable[3].Trim() == "4" || resultTable[4].Trim() == "2" || resultTable[4].Trim() == "3" || resultTable[4].Trim() == "4") attackMoraleResult++;
+                    }
+                    else if (resultTable[3].Trim() == "2" || resultTable[3].Trim() == "3" || resultTable[3].Trim() == "4")
+                    {
+                        if (resultTable[4].Trim() == "2" || resultTable[4].Trim() == "3" || resultTable[4].Trim() == "4") attackMoraleResult++;
+                    }
+                }
+            }
+            if (diceCount1 == 3)
+            {
+                if (resultTable[0].Trim() == "5" || resultTable[0].Trim() == "6")
+                {
+                    if (resultTable[1].Trim() == "5" || resultTable[1].Trim() == "6" || resultTable[2].Trim() == "5" || resultTable[2].Trim() == "6") attackStrengthResult++;
+                }
+                else if (resultTable[1].Trim() == "5" || resultTable[1].Trim() == "6")
+                {
+                    if (resultTable[2].Trim() == "5" || resultTable[2].Trim() == "6") attackStrengthResult++;
+                }
+                if (resultTable[0].Trim() == "2" || resultTable[0].Trim() == "3" || resultTable[0].Trim() == "4")
+                {
+                    if (resultTable[1].Trim() == "2" || resultTable[1].Trim() == "3" || resultTable[1].Trim() == "4" || resultTable[2].Trim() == "2" || resultTable[2].Trim() == "3" || resultTable[2].Trim() == "4") attackMoraleResult++;
+                }
+                else if (resultTable[1].Trim() == "2" || resultTable[1].Trim() == "3" || resultTable[1].Trim() == "4")
+                {
+                    if (resultTable[2].Trim() == "2" || resultTable[2].Trim() == "3" || resultTable[2].Trim() == "4") attackMoraleResult++;
+                }
+                if (diceCount2 == 2)
+                {
+                    if (resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6")
+                    {
+                        if (resultTable[4].Trim() == "5" || resultTable[4].Trim() == "6") defenceStrengthResult++;
+                    }
+                    if (resultTable[3].Trim() == "2" || resultTable[3].Trim() == "3" || resultTable[3].Trim() == "4")
+                    {
+                        if (resultTable[4].Trim() == "2" || resultTable[4].Trim() == "3" || resultTable[4].Trim() == "4") defenceMoraleResult++;
+                    }
+                }
+                if (diceCount2 == 3)
+                {
+                    if (resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6")
+                    {
+                        if (resultTable[4].Trim() == "5" || resultTable[4].Trim() == "6" || resultTable[5].Trim() == "5" || resultTable[5].Trim() == "6") attackStrengthResult++;
+                    }
+                    else if (resultTable[4].Trim() == "5" || resultTable[4].Trim() == "6")
+                    {
+                        if (resultTable[5].Trim() == "5" || resultTable[5].Trim() == "6") attackStrengthResult++;
+                    }
+                    if (resultTable[3].Trim() == "2" || resultTable[3].Trim() == "3" || resultTable[3].Trim() == "4")
+                    {
+                        if (resultTable[4].Trim() == "2" || resultTable[4].Trim() == "3" || resultTable[4].Trim() == "4" || resultTable[5].Trim() == "2" || resultTable[5].Trim() == "3" || resultTable[5].Trim() == "4") attackMoraleResult++;
+                    }
+                    else if (resultTable[4].Trim() == "2" || resultTable[4].Trim() == "3" || resultTable[4].Trim() == "4")
+                    {
+                        if (resultTable[5].Trim() == "2" || resultTable[5].Trim() == "3" || resultTable[5].Trim() == "4") attackMoraleResult++;
+                    }
+                }
+            }
+            if(diceCount1 == 4)
+            {
+                if (resultTable[0].Trim() == "5" || resultTable[0].Trim() == "6")
+                {
+                    if (resultTable[1].Trim() == "5" || resultTable[1].Trim() == "6" || resultTable[2].Trim() == "5" || resultTable[2].Trim() == "6" || resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6") attackStrengthResult++;
+                }
+                else if (resultTable[1].Trim() == "5" || resultTable[1].Trim() == "6")
+                {
+                    if (resultTable[2].Trim() == "5" || resultTable[2].Trim() == "6" || resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6") attackStrengthResult++;
+                }
+                else if(resultTable[2].Trim() == "5" || resultTable[2].Trim() == "6")
+                {
+                    if(resultTable[3].Trim() == "5" || resultTable[3].Trim() == "6") attackStrengthResult++;
+                }
+                if (resultTable[0].Trim() == "2" || resultTable[0].Trim() == "3" || resultTable[0].Trim() == "4")
+                {
+                    if (resultTable[1].Trim() == "2" || resultTable[1].Trim() == "3" || resultTable[1].Trim() == "4" || resultTable[2].Trim() == "2" || resultTable[2].Trim() == "3" || resultTable[2].Trim() == "4") attackMoraleResult++;
+                }
+                else if (resultTable[1].Trim() == "2" || resultTable[1].Trim() == "3" || resultTable[1].Trim() == "4")
+                {
+                    if (resultTable[2].Trim() == "2" || resultTable[2].Trim() == "3" || resultTable[2].Trim() == "4") attackMoraleResult++;
+                }
+            }
+            Debug.Log("Attack inflicted " + attackStrengthResult + " strength casualty and " + attackMoraleResult + " morale loss for defender.");
+            Debug.Log("Defence inflicted " + defenceStrengthResult + " strength casualty and " + defenceMoraleResult + " morale loss for attacker.");
+        }
+        else Debug.Log("Błąd przy rzucie");
+    }
+
     /*private int MinMax(BoardState bs)
     {
         // dodać ciało funkcji
@@ -211,5 +343,18 @@ public class BattleManager : MonoBehaviour {
     public Attack GetAttack(int aId)
     {
         return myBoardState.GetAttack(aId);
+    }
+
+
+
+    public void MakeAttack(int idAttack)
+    {
+        Attack myAttack;
+
+        myAttack = myBoardState.GetAttack(idAttack);
+        Dice.Clear();
+        Dice.Roll("3d6", "d6-blue", myAttack.GetPosition() + new Vector3(0.0f, 2.0f, -2.0f), new Vector3(0.1f, Random.value, 0.1f));
+        Dice.Roll("2d6", "d6-red", myAttack.GetPosition() + new Vector3(0.0f, 2.0f, -3.0f), new Vector3(0.1f, Random.value, 0.1f));
+        StartCoroutine(WaitForDice(3, 2));
     }
 }

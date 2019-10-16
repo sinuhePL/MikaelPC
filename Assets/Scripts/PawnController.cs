@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 public class PawnController : MonoBehaviour
 {
@@ -21,8 +22,10 @@ public class PawnController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        //Debug.Log("Clicked me! Id: " + _unitId);
-        EventManager.RaiseEventOnUnitClicked(_unitId);
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            EventManager.RaiseEventOnUnitClicked(_unitId);
+        }
     }
 
     /*private void OnMouseOver()
