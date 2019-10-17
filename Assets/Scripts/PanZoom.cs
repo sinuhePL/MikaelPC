@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 [RequireComponent(typeof(Camera))]
 public class PanZoom : MonoBehaviour
@@ -11,6 +12,17 @@ public class PanZoom : MonoBehaviour
 
     public float zoomOutMin = 3;
     public float zoomOutMax = 6;
+
+    private IEnumerator ZoomAtDice(float duration)
+    {
+        float t;
+        for (t = 0; t < duration; t += Time.deltaTime)
+        {
+            myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, 3.0f, t / duration);
+            yield return 0;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,7 +68,7 @@ public class PanZoom : MonoBehaviour
         zoom(Input.GetAxis("Mouse ScrollWheel"));
     }
 
-    void zoom(float increment)
+    public void zoom(float increment)
     {
         Camera.main.orthographicSize = Mathf.Clamp(Mathf.Lerp(myCamera.orthographicSize, myCamera.orthographicSize - increment, smoothing * Time.deltaTime), zoomOutMin, zoomOutMax);
         Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f, 0.0f));
@@ -67,5 +79,25 @@ public class PanZoom : MonoBehaviour
         if (!Physics.Raycast(ltRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
         if (!Physics.Raycast(rbRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, 0.2f), 6 * smoothing * Time.deltaTime);
         if (!Physics.Raycast(rtRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
+    }
+
+    public void LookAtDice(Vector3 target)
+    {
+        int groundMask;
+        Ray camRay;
+        RaycastHit groundHit;
+        Vector3 dif, newpos, campos;
+
+        StartCoroutine(ZoomAtDice(0.5f));
+        groundMask = LayerMask.GetMask("Ground");
+        camRay = myCamera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+        if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
+        {
+            campos = myCamera.transform.position;
+            dif = target - groundHit.point;
+            newpos = campos + dif;
+            myCamera.transform.DOMove(newpos - new Vector3(0.0f, 10.0f, 0.0f), 0.5f).SetEase(Ease.OutQuint);
+        }
+
     }
 }
