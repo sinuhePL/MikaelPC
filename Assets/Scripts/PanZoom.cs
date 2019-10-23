@@ -18,7 +18,7 @@ public class PanZoom : MonoBehaviour
         float t;
         for (t = 0; t < duration; t += Time.deltaTime)
         {
-            myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, 3.0f, t / duration);
+            myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, 2.0f, t / duration);
             yield return 0;
         }
     }

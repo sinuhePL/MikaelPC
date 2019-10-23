@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5088977903147563881}
   - component: {fileID: 5088977903147563880}
   - component: {fileID: 5088977903147563887}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: marginTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}

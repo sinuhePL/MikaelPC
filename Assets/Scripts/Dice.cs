@@ -16,6 +16,7 @@
  */ 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// This dice dupporting class has some 'static' methods to help you throwning dice
@@ -55,7 +56,8 @@ public class Dice : MonoBehaviour {
 	// reference to the dice that are rolling
     private static ArrayList rollingDice = new ArrayList();
 
-    //private static GameObject myDiceCage = null;
+    private static int throwCounter = 0;
+
 
 	//------------------------------------------------------------------------------------------------------------------------------
 	// public methods
@@ -64,7 +66,7 @@ public class Dice : MonoBehaviour {
 	/// <summary>
 	/// This method will create/instance a prefab at a specific position with a specific rotation and a specific scale and assign a material
 	/// </summary>
-	public static GameObject prefab(string name, Vector3 position, Vector3 rotation, Vector3 scale, string mat) 
+	public static GameObject prefab(string name, Vector3 position, Vector3 rotation, Vector3 scale, string mat, int throwId) 
 	{		
 		// load the prefab from Resources
         Object pf = Resources.Load("Prefabs/" + name);
@@ -79,6 +81,7 @@ public class Dice : MonoBehaviour {
 				inst.transform.position = position;
 				inst.transform.Rotate(rotation);
 				inst.transform.localScale = scale;
+                inst.GetComponent<Die>().throwId = throwId;
 				// return the created instance (GameObject)
 				return inst;
 			}
@@ -133,16 +136,13 @@ public class Dice : MonoBehaviour {
 	/// format dice 			: 	({count}){die type}	, exmpl.  d6, 4d4, 12d8 , 1d20
 	/// possible die types 	:	d4, d6, d8 , d10, d12, d20
 	/// </summary>
-	public static void Roll(string dice, string mat, Vector3 spawnPoint, Vector3 force)
+	public static int Roll(string dice, string mat, Vector3 spawnPoint, Vector3 force)
 	{
         rolling = true;
 		// sotring dice to lowercase for comparing purposes
 		dice = dice.ToLower();				
 		int count = 1;
 		string dieType = "d6";
-
-        /*Object dcpf = Resources.Load("Prefabs/DiceCage");
-        myDiceCage = (GameObject)GameObject.Instantiate(dcpf, spawnPoint, Quaternion.identity);*/
 
         // 'd' must be present for a valid 'dice' specification
         int p = dice.IndexOf("d");
@@ -163,7 +163,7 @@ public class Dice : MonoBehaviour {
 			}
 			else
 				dieType = dice;
-			
+            throwCounter++;
 			// instantiate the dice
 			for (int d=0; d<count; d++)
 			{
@@ -172,7 +172,7 @@ public class Dice : MonoBehaviour {
 				spawnPoint.y = spawnPoint.y - 1 + Random.value * 2;
                 spawnPoint.y = spawnPoint.y - 1 + Random.value * 2;
 				// create the die prefab/gameObject
-                GameObject die = prefab(dieType, spawnPoint, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f), mat);
+                GameObject die = prefab(dieType, spawnPoint, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f), mat, throwCounter);
 				// give it a random rotation
 				die.transform.Rotate(new Vector3(Random.value * 360, Random.value * 360, Random.value * 360));
 				// inactivate this gameObject because activating it will be handeled using the rollQueue and at the apropriate time
@@ -184,7 +184,9 @@ public class Dice : MonoBehaviour {
 				// add RollingDie to the rolling queue
                 rollQueue.Add(rDie);
 			}
+            return throwCounter;
 		}
+        return 0;
 	}
 
 	/// <summary>
@@ -207,7 +209,7 @@ public class Dice : MonoBehaviour {
 	/// <summary>
 	/// Get number of all ( dieType = "" ) dice or dieType specific dice.
 	/// </summary>
-    public static int Count(string dieType)
+    public static int Count(string dieType, int throwId)
     {
         int v = 0;
 		// loop all dice
@@ -215,7 +217,7 @@ public class Dice : MonoBehaviour {
         {
             RollingDie rDie = (RollingDie)allDice[d];
 			// check the type
-            if (rDie.name == dieType || dieType == "")
+            if ((rDie.name == dieType || dieType == "") && throwId == rDie.die.throwId)
                 v++;
         }
         return v;
@@ -224,10 +226,10 @@ public class Dice : MonoBehaviour {
 	/// <summary>
 	/// Get rolling status of all ( dieType = "" ) dice or dieType specific dice.
 	/// </summary>
-    public static string AsString(string dieType)
+    public static string AsString(string dieType, int throwId)
     {
 		// count the dice
-        string v = ""+Count(dieType);
+        string v = ""+Count(dieType, throwId);
         if (dieType == "")
             v += " dice | ";
         else
@@ -236,8 +238,8 @@ public class Dice : MonoBehaviour {
         if (dieType == "")
         {
 			// no dieType specified to cumulate values per dieType ( if they are available )
-            if (Count("d6") > 0) v += AsString("d6") + " | ";
-            if (Count("d10") > 0) v += AsString("d10") + " | ";
+            if (Count("d6", throwId) > 0) v += AsString("d6", throwId) + " | ";
+            if (Count("d10", throwId) > 0) v += AsString("d10", throwId) + " | ";
         }
         else
         {
@@ -247,7 +249,7 @@ public class Dice : MonoBehaviour {
             {
                 RollingDie rDie = (RollingDie)allDice[d];
 				// check type
-                if (rDie.name == dieType || dieType == "")
+                if ((rDie.name == dieType || dieType == "") && rDie.die.throwId == throwId)
                 {
                     if (hasValue) v += " + ";
 					// if the value of the die is 0 , no value could be determined
@@ -259,6 +261,54 @@ public class Dice : MonoBehaviour {
             v += " = " + Value(dieType);
         }
         return v;
+    }
+
+    // return throw result - checking for pair of M or pair of S
+    public static string[] ResultForThrow(string dieType, int throwId)
+    {
+        List<string> hitList = new List<string>();
+        if (rolling) return null;
+        else
+        {
+            for (int d = 0; d < allDice.Count; d++) // for every dice
+            {
+                RollingDie rDie = (RollingDie)allDice[d];
+                // check type and if die comes from relevant throw and if was checked
+                if ((rDie.name == dieType || dieType == "") && rDie.die.throwId == throwId && !rDie.isChecked)
+                {
+                    if (rDie.die.value == 0) return null;
+                    rDie.isChecked = true;
+                    for (int e = d+1; e < allDice.Count; e++)   // for every dice left in the list
+                    {
+                        RollingDie rDie2 = (RollingDie)allDice[e];
+                        if ((rDie2.name == dieType || dieType == "") && rDie2.die.throwId == throwId && !rDie2.isChecked)
+                        {
+                            if (rDie2.die.value == 0) return null;
+                            else
+                            {
+                                if((rDie.die.value == 5 || rDie.die.value == 6) && (rDie2.die.value == 5 || rDie2.die.value == 6)) //detects Strength hit
+                                {
+                                    rDie2.isChecked = true; 
+                                    hitList.Add("S");
+                                    rDie.die.Highlight();
+                                    rDie2.die.Highlight();
+                                    break;  // stops searching for pair
+                                }
+                                if ((rDie.die.value == 2 || rDie.die.value == 3 || rDie.die.value == 4) && (rDie2.die.value == 2 || rDie2.die.value == 3 || rDie2.die.value == 4)) //detects Morale hit
+                                {
+                                    rDie2.isChecked = true;
+                                    hitList.Add("M");
+                                    rDie.die.Highlight();
+                                    rDie2.die.Highlight();
+                                    break;  // stops searching for pair
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return hitList.ToArray();
+        }
     }
 
 
@@ -349,6 +399,7 @@ class RollingDie
     public string mat;						// die material (asString)
     public Vector3 spawnPoint;			// die spawnPoiunt
     public Vector3 force;					// die initial force impuls
+    public bool isChecked = false;
 
 	// rolling attribute specifies if this die is still rolling
     public bool rolling

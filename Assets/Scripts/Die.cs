@@ -16,6 +16,8 @@
  */  
 using UnityEngine;
 using System.Collections;
+using TMPro;
+using DG.Tweening;
 
 /// <summary>
 /// Die base class to determine if a die is rolling and to calculate it's current value
@@ -27,7 +29,8 @@ public class Die : MonoBehaviour {
 	//------------------------------------------------------------------------------------------------------------------------------
 	
 	// current value, 0 is undetermined (die is rolling) or invalid.
-	public int value = 0;	
+	public int value = 0;
+    public int throwId = 0;
 
 	//------------------------------------------------------------------------------------------------------------------------------
 	// protected and private attributes
@@ -38,12 +41,22 @@ public class Die : MonoBehaviour {
 	// hitVector check margin
     protected float validMargin = 0.45F;
 
+    private IEnumerator IncreaseGlow(float duration, Transform symbol)
+    {
+        float t;
+        for (t = 0; t < duration; t += Time.deltaTime)
+        {
+            symbol.GetComponent<TextMeshPro>().fontSharedMaterial.SetFloat(ShaderUtilities.ID_GlowPower, Mathf.Lerp(0.0f, 1.0f, t / duration));
+            yield return 0;
+        }
+    }
+
 	// true is die is still rolling
     public bool rolling
     {
         get
         {
-            return !(GetComponent<Rigidbody>().velocity.sqrMagnitude < .1F && GetComponent<Rigidbody>().angularVelocity.sqrMagnitude < .1F);
+            return !(GetComponent<Rigidbody>().velocity.sqrMagnitude < .01F && GetComponent<Rigidbody>().angularVelocity.sqrMagnitude < .01F);
         }
     }
 
@@ -104,6 +117,14 @@ public class Die : MonoBehaviour {
             side++;
 			// if we got a Vector.zero as the testHitVector we have checked all sides of this die
         } while (testHitVector != Vector3.zero);
+    }
+
+    public void Highlight()
+    {
+        Transform t = transform.Find(value.ToString());
+        t.gameObject.SetActive(true);
+        //t.DOScale(1.1f, 1.0f);
+        StartCoroutine(IncreaseGlow(1.0f, t));
     }
 
     void Update()
