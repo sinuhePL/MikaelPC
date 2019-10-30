@@ -15,21 +15,9 @@ public abstract class Attack
     protected List<int> deactivatesAttacks;
     protected int keyFieldId;
     protected Vector3 arrowPosition;    // współrzędne pozycji strzałki przedstawiającej ten atak
-
-
-    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) // konstruktor
-    {
-        attackId = aId;
-        isActiveState = state;
-        armyId = army;
-        owner = o;
-        activatesAttacks = new List<int>();
-        deactivatesAttacks = new List<int>();
-        keyFieldId = keyField;
-        targetId = tId;
-        target = null;
-        arrowPosition = p;
-    }
+    protected string attackName;
+    protected int attackDiceNumber;
+    protected int defenceDiceNumber;
 
     protected Attack(Attack pattern, Unit o) // konstruktor kopiujący
     {
@@ -51,6 +39,35 @@ public abstract class Attack
         targetId = pattern.targetId;
         target = null;
         arrowPosition = pattern.arrowPosition;
+    }
+
+    public string GetName()
+    {
+        return attackName;
+    }
+
+    public int GetAttackDiceNumber()
+    {
+        return attackDiceNumber;
+    }
+
+    public int GetDefenceDiceNumber()
+    {
+        return defenceDiceNumber;
+    }
+
+    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) // konstruktor
+    {
+        attackId = aId;
+        isActiveState = state;
+        armyId = army;
+        owner = o;
+        activatesAttacks = new List<int>();
+        deactivatesAttacks = new List<int>();
+        keyFieldId = keyField;
+        targetId = tId;
+        target = null;
+        arrowPosition = p;
     }
 
     public void Activate()
@@ -98,6 +115,26 @@ public abstract class Attack
     public Vector3 GetPosition()
     {
         return arrowPosition;
+    }
+
+    public int GetArmyId()
+    {
+        return armyId;
+    }
+
+    public Unit GetTarget()
+    {
+        return target;
+    }
+    //tymczasowo
+    public int GetTargetId()
+    {
+        return targetId;
+    }
+
+    public Unit GetAttacker()
+    {
+        return owner;
     }
 
     public abstract StateChange MakeAttack();

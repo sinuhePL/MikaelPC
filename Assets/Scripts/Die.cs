@@ -123,7 +123,7 @@ public class Die : MonoBehaviour {
     {
         Transform t = transform.Find(value.ToString());
         t.gameObject.SetActive(true);
-        //t.DOScale(1.1f, 1.0f);
+        //t.DOPunchScale(new Vector3(1.0f, 1.0f, 1.0f), 1.0f);
         StartCoroutine(IncreaseGlow(1.0f, t));
     }
 

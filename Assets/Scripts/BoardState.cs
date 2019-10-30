@@ -112,4 +112,18 @@ public class BoardState
     {
         units.Add(u);
     }
+
+    public int GetArmyMorale(int armyId)
+    {
+        if (armyId == 1) return player1.GetMorale();
+        else if (armyId == 2) return player2.GetMorale();
+        else return 0;
+    }
+
+    public Army GetArmy(int armyId)
+    {
+        if (armyId == 1) return player1;
+        else if (armyId == 2) return player2;
+        else return null;
+    }
 }

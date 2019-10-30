@@ -13,20 +13,35 @@ public class PanZoom : MonoBehaviour
     public float zoomOutMin = 3;
     public float zoomOutMax = 6;
 
-    private IEnumerator ZoomAtDice(float duration)
+    private IEnumerator ZoomAtDice(float duration, float zoom)
     {
         float t;
         for (t = 0; t < duration; t += Time.deltaTime)
         {
-            myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, 2.0f, t / duration);
+            myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, zoom, t / duration);
             yield return 0;
         }
+    }
+
+    private void ZoomOut(ThrowResult r)
+    {
+        StartCoroutine(ZoomAtDice(0.5f, 4.0f));
+    }
+
+    private void OnEnable()
+    {
+        EventManager.onDiceThrow += ZoomOut;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         myCamera = Camera.main;
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.onDiceThrow -= ZoomOut;
     }
 
     // Update is called once per frame
@@ -88,7 +103,7 @@ public class PanZoom : MonoBehaviour
         RaycastHit groundHit;
         Vector3 dif, newpos, campos;
 
-        StartCoroutine(ZoomAtDice(0.5f));
+        StartCoroutine(ZoomAtDice(0.5f, 2.0f));
         groundMask = LayerMask.GetMask("Ground");
         camRay = myCamera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
         if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))

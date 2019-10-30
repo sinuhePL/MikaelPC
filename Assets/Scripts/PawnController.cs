@@ -41,7 +41,7 @@ public class PawnController : MonoBehaviour
     // called when unit receives casualty
     public void Disable()
     {
-        transform.DOScale(0.0f, 0.75f).SetEase(Ease.InElastic);
+        transform.DOScale(0.0f, 0.75f).SetEase(Ease.InBack);
         //this.GetComponent<Renderer>().enabled = false;
     }
 

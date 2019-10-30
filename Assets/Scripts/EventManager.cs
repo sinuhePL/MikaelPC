@@ -41,6 +41,18 @@ public class EventManager : MonoBehaviour
     public static event Action<int> onActionButtonPressed;
     public static void RaiseEventOnActionButtonPressed(int idAttack)
     {
-        if (onTileClicked != null) onActionButtonPressed(idAttack);
+        if (onActionButtonPressed != null) onActionButtonPressed(idAttack);
+    }
+
+    public static event Action<ThrowResult> onDiceThrow;
+    public static void RaiseEventOnDiceThrow(ThrowResult result)
+    {
+        if (onDiceThrow != null) onDiceThrow(result);
+    }
+
+    public static event Action onUpdateBoard;
+    public static void RaiseEventUpdateBoard()
+    {
+        if (onUpdateBoard != null) onUpdateBoard();
     }
 }

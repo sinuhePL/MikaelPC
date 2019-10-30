@@ -26,9 +26,13 @@ public class CaptionController : MonoBehaviour
         EventManager.onUnitClicked -= UnitClicked;
     }
 
+    private void OnEnable()
+    {
+        EventManager.onUnitClicked += UnitClicked;
+    }
+
     void Start()
     {
         myImage = GetComponent<Image>();
-        EventManager.onUnitClicked += UnitClicked;
     }
 }

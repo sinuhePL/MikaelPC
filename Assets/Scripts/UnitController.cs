@@ -110,11 +110,32 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    private void KillSquads(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (_aliveSquadNumer - 1 >= 0)
+            {
+                _squads[_aliveSquadNumer - 1].GetComponentInChildren<PawnController>().Disable();
+                _aliveSquadNumer--;
+            }
+        }
+    }
+
+    private void UpdateMe()
+    {
+        Unit myUnit;
+        myUnit = BattleManager.Instance.GetUnit(UnitId);
+        KillSquads(_aliveSquadNumer - myUnit.strength);
+        _aliveSquadNumer = myUnit.strength;
+    }
+
     private void OnDestroy()
     {
         EventManager.onAttackClicked -= myAttackClicked;
         EventManager.onUnitClicked -= myUnitClicked;
         EventManager.onTileClicked -= myTileClicked;
+        EventManager.onUpdateBoard -= UpdateMe;
     }
 
     public int UnitId
@@ -145,6 +166,14 @@ public class UnitController : MonoBehaviour
     public int UnitTileId
     {
         get { return _unitTileId; }
+    }
+
+    private void OnEnable()
+    {
+        EventManager.onAttackClicked += myAttackClicked;
+        EventManager.onUnitClicked += myUnitClicked;
+        EventManager.onTileClicked += myTileClicked;
+        EventManager.onUpdateBoard += UpdateMe;
     }
 
     public void InitializeUnit(int squadNumber, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red
@@ -183,7 +212,7 @@ public class UnitController : MonoBehaviour
                 rightArrow = Instantiate(arrowRightBluePrefab, transform.position + new Vector3(2.5f, 0.0f, 4.0f), arrowRightBluePrefab.transform.rotation);
                 rightArrowEmpty = Instantiate(arrowRightBlueEmptyPrefab, transform.position + new Vector3(2.5f, 0.0f, 4.0f), arrowRightBlueEmptyPrefab.transform.rotation);
                 unitCaption = Instantiate(unitCaptionPrefab, transform.position + new Vector3(0.7f, 0.0f, -1.3f), unitCaptionPrefab.transform.rotation);
-                ColorUtility.TryParseHtmlString("#4158f3", out myColor);
+                ColorUtility.TryParseHtmlString(BattleManager.Army1Color, out myColor);
                 unitCaption.GetComponent<TextMeshPro>().color = myColor;
 
             }
@@ -196,7 +225,7 @@ public class UnitController : MonoBehaviour
                 rightArrow = Instantiate(arrowRightRedPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightRedPrefab.transform.rotation);
                 rightArrowEmpty = Instantiate(arrowRightRedEmptyPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightRedEmptyPrefab.transform.rotation);
                 unitCaption = Instantiate(unitCaptionPrefab, transform.position + new Vector3(1.3f, 0.0f, 1.2f), unitCaptionPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
-                ColorUtility.TryParseHtmlString("#ff4722", out myColor);
+                ColorUtility.TryParseHtmlString(BattleManager.Army2Color, out myColor);
                 unitCaption.GetComponent<TextMeshPro>().color = myColor;
             }
             switch (unitType)
@@ -231,28 +260,10 @@ public class UnitController : MonoBehaviour
                 _squads[i] = Instantiate(unitSquadPrefab, tempPos, transform.rotation);
                 _squads[i].GetComponentInChildren<PawnController>().UnitId = _unitId;
             }
-            EventManager.onAttackClicked += myAttackClicked;
-            EventManager.onUnitClicked += myUnitClicked;
-            EventManager.onTileClicked += myTileClicked;
         }
         else Debug.Log("Tried to initialized CavaleryController again! Id: " + _unitId);
-
-        // test attack
-        //forwardArrow.GetComponent<ArrowController>().isArrowActive = true;
-        //forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
     }
 
-    public void KillSquads(int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            if (_aliveSquadNumer - 1 >= 0)
-            {
-                _squads[_aliveSquadNumer - 1].GetComponentInChildren<PawnController>().Disable();
-                _aliveSquadNumer--;
-            }
-        }
-    }
 
     public void ActivateAttack(int attackId)
     {

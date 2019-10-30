@@ -24,20 +24,20 @@ public class PictureController : MonoBehaviour
         }
         if (unitId != lastClickedUnit || isHidden)
         {
-            transform.DOMoveX(230.0f, 0.3f).SetEase(Ease.OutCirc);
+            transform.DOMoveX(230.0f, 0.3f).SetEase(Ease.OutBack);
             lastClickedUnit = unitId;
             isHidden = false;
         }
         else
         {
-            transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InCirc);
+            transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
             isHidden = true;
         }
     }
 
     private void TileClicked(int idTile)
     {
-        transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InCirc);
+        transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
         isHidden = true;
     }
 
@@ -47,11 +47,15 @@ public class PictureController : MonoBehaviour
         EventManager.onTileClicked -= TileClicked;
     }
 
+    private void OnEnable()
+    {
+        EventManager.onUnitClicked += UnitClicked;
+        EventManager.onTileClicked += TileClicked;
+    }
+
     void Start()
     {
         myImage = GetComponent<Image>();
-        EventManager.onUnitClicked += UnitClicked;
-        EventManager.onTileClicked += TileClicked;
         lastClickedUnit = -1;
         isHidden = true;
     }

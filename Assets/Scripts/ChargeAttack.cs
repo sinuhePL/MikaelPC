@@ -6,7 +6,9 @@ public class ChargeAttack : Attack
 {
     public ChargeAttack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) : base(aId, state, army, o, keyField, tId, p)
     {
-
+        attackName = "Charge!";
+        attackDiceNumber = 3;
+        defenceDiceNumber = 3;
     }
 
     public override StateChange MakeAttack()

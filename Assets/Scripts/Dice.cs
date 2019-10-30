@@ -17,6 +17,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 
 /// <summary>
 /// This dice dupporting class has some 'static' methods to help you throwning dice
@@ -290,6 +291,8 @@ public class Dice : MonoBehaviour {
                                 {
                                     rDie2.isChecked = true; 
                                     hitList.Add("S");
+                                    rDie.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
+                                    rDie2.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
                                     rDie.die.Highlight();
                                     rDie2.die.Highlight();
                                     break;  // stops searching for pair
@@ -298,6 +301,8 @@ public class Dice : MonoBehaviour {
                                 {
                                     rDie2.isChecked = true;
                                     hitList.Add("M");
+                                    rDie.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
+                                    rDie2.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
                                     rDie.die.Highlight();
                                     rDie2.die.Highlight();
                                     break;  // stops searching for pair
