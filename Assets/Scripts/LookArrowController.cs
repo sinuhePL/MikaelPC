@@ -37,11 +37,11 @@ public class LookArrowController : MonoBehaviour
                 //obraca kamerę wokół punktu na który patrzy, kierunekj zalezy od kierunku aktualnego
                 if (direction == "left")
                 {
-                    StartCoroutine(SmoothRotate(groundHit.point, 60.0f, 0.5f));
+                    StartCoroutine(SmoothRotate(groundHit.point, 90.0f, 0.5f));
                 }
                 else
                 {
-                    StartCoroutine(SmoothRotate(groundHit.point, -60.0f, 0.5f));
+                    StartCoroutine(SmoothRotate(groundHit.point, -90.0f, 0.5f));
                 }
                 otherButton.GetComponent<LookArrowController>().isActive = true;
                 isActive = false;

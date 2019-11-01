@@ -69,3 +69,5 @@ MonoBehaviour:
     type: 3}
   unitCaptionPrefab: {fileID: 3338071679186534467, guid: ccc636e1748d8884d9fc07378d74119b,
     type: 3}
+  flagPrefab: {fileID: 3380117939483841733, guid: 1ace6681da8345f4da95305c92ff4ba0,
+    type: 3}

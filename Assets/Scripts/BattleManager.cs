@@ -123,11 +123,11 @@ public class BattleManager : MonoBehaviour {
         units = new List<GameObject>();
         // create test unit
         tempObj = Instantiate(unitPrefab, new Vector3(-10.0f, 0.05f, 10.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(5, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3, "French Cavalery", 19);
+        tempObj.GetComponent<UnitController>().InitializeUnit(5, 6, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3, "French Cavalery", 19);
         units.Add(tempObj);
 
         tempObj = Instantiate(unitPrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(4, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6, "French Cavalery", 7);
+        tempObj.GetComponent<UnitController>().InitializeUnit(4, 6, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6, "French Cavalery", 7);
         units.Add(tempObj);
         // end test unit
     }

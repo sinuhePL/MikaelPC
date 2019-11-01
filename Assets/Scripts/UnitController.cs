@@ -8,8 +8,9 @@ public class UnitController : MonoBehaviour
 {
     private bool isInitialized = false;
     private bool isOutlined;
-    private int _squadNumber;
-    private int _aliveSquadNumer;
+    private int _initialSquadCount;
+    private int _squadCount;
+    private int _initialMorale;
     private int _morale;
     private int _armyId;
     private string _unitType;
@@ -23,6 +24,7 @@ public class UnitController : MonoBehaviour
     private GameObject rightArrow;
     private GameObject rightArrowEmpty;
     private GameObject unitCaption;
+    private GameObject flag;
     [SerializeField] private GameObject arrowForwardBluePrefab;
     [SerializeField] private GameObject arrowForwardBlueEmptyPrefab;
     [SerializeField] private GameObject arrowForwardRedPrefab;
@@ -36,6 +38,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] private GameObject arrowRightRedPrefab;
     [SerializeField] private GameObject arrowRightRedEmptyPrefab;
     [SerializeField] private GameObject unitCaptionPrefab;
+    [SerializeField] private GameObject flagPrefab;
 
     // called when arrow is clicked
     private void myAttackClicked(int idAttack)
@@ -45,11 +48,16 @@ public class UnitController : MonoBehaviour
         rightArrow.GetComponent<ArrowController>().ShowArrow(idAttack);
     }
 
+    private void AttackResolved()
+    {
+        myTileClicked(0);
+    }
+
     private void myTileClicked(int idTile)
     {
         if (isOutlined)
         {
-            for (int i = 0; i < _aliveSquadNumer; i++)
+            for (int i = 0; i < _squadCount; i++)
             {
                 _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
             }
@@ -79,7 +87,7 @@ public class UnitController : MonoBehaviour
             leftArrowEmpty.SetActive(true);
             rightArrow.SetActive(true);
             rightArrowEmpty.SetActive(true);
-            for (int i = 0; i < _aliveSquadNumer; i++)
+            for (int i = 0; i < _squadCount; i++)
             {
                 _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
             }
@@ -90,7 +98,7 @@ public class UnitController : MonoBehaviour
         }
         else if(isOutlined)
         {
-            for (int i = 0; i < _aliveSquadNumer; i++)
+            for (int i = 0; i < _squadCount; i++)
             {
                 _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
             }
@@ -114,10 +122,10 @@ public class UnitController : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            if (_aliveSquadNumer - 1 >= 0)
+            if (_squadCount - 1 >= 0)
             {
-                _squads[_aliveSquadNumer - 1].GetComponentInChildren<PawnController>().Disable();
-                _aliveSquadNumer--;
+                _squads[_squadCount - 1].GetComponentInChildren<PawnController>().Disable();
+                _squadCount--;
             }
         }
     }
@@ -126,8 +134,16 @@ public class UnitController : MonoBehaviour
     {
         Unit myUnit;
         myUnit = BattleManager.Instance.GetUnit(UnitId);
-        KillSquads(_aliveSquadNumer - myUnit.strength);
-        _aliveSquadNumer = myUnit.strength;
+        if (_squadCount > myUnit.strength)
+        {
+            KillSquads(_squadCount - myUnit.strength);
+            _squadCount = myUnit.strength;
+        }
+        if (_morale > myUnit.morale)
+        {
+            flag.GetComponent<FlagController>().ChangeBannerHeight(_initialMorale, myUnit.morale);
+            _morale = myUnit.morale;
+        }
     }
 
     private void OnDestroy()
@@ -136,6 +152,7 @@ public class UnitController : MonoBehaviour
         EventManager.onUnitClicked -= myUnitClicked;
         EventManager.onTileClicked -= myTileClicked;
         EventManager.onUpdateBoard -= UpdateMe;
+        EventManager.onUpdateBoard -= AttackResolved;
     }
 
     public int UnitId
@@ -150,12 +167,12 @@ public class UnitController : MonoBehaviour
 
     public int InitialStrength
     {
-        get { return _squadNumber; }
+        get { return _initialSquadCount; }
     }
 
     public int InitialMorale
     {
-        get { return _morale; }
+        get { return _initialMorale; }
     }
 
     public int ArmyId
@@ -174,9 +191,10 @@ public class UnitController : MonoBehaviour
         EventManager.onUnitClicked += myUnitClicked;
         EventManager.onTileClicked += myTileClicked;
         EventManager.onUpdateBoard += UpdateMe;
+        EventManager.onUpdateBoard += AttackResolved;
     }
 
-    public void InitializeUnit(int squadNumber, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red
+    public void InitializeUnit(int squadNumber, int initialMorale, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red
     {
         Vector3 tempPos;
         Color myColor;
@@ -192,11 +210,13 @@ public class UnitController : MonoBehaviour
             isOutlined = false;
             _unitType = unitType;
             _unitId = unitId;
-            _squadNumber = squadNumber;
-            _aliveSquadNumer = squadNumber;
+            _initialSquadCount = squadNumber;
+            _squadCount = squadNumber;
+            _initialMorale = initialMorale;
+            _morale = initialMorale;
             _armyId = armyId;
             _unitTileId = tileId;
-            _squads = new GameObject[_squadNumber];
+            _squads = new GameObject[_squadCount];
             
             // set position based on id tile which it sits on 
             float xpos = (tileId % BattleManager.boardWidth) * BattleManager.boardFieldWitdth + BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth*0.25f;
@@ -214,6 +234,7 @@ public class UnitController : MonoBehaviour
                 unitCaption = Instantiate(unitCaptionPrefab, transform.position + new Vector3(0.7f, 0.0f, -1.3f), unitCaptionPrefab.transform.rotation);
                 ColorUtility.TryParseHtmlString(BattleManager.Army1Color, out myColor);
                 unitCaption.GetComponent<TextMeshPro>().color = myColor;
+                flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, -0.35f), flagPrefab.transform.rotation);
 
             }
             else
@@ -227,11 +248,11 @@ public class UnitController : MonoBehaviour
                 unitCaption = Instantiate(unitCaptionPrefab, transform.position + new Vector3(1.3f, 0.0f, 1.2f), unitCaptionPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 ColorUtility.TryParseHtmlString(BattleManager.Army2Color, out myColor);
                 unitCaption.GetComponent<TextMeshPro>().color = myColor;
+                flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, 0.35f), flagPrefab.transform.rotation * Quaternion.Euler(0.0f, 180.0f, 0.0f));
             }
             switch (unitType)
             {
                 case "French Cavalery":
-                    _morale = 5;
                     unitCaption.GetComponent<TextMeshPro>().text = "French Cavalery";
                     break;
             }
@@ -248,7 +269,7 @@ public class UnitController : MonoBehaviour
             rightArrow.SetActive(false);
             rightArrowEmpty.SetActive(false);
             // inicjalizacja squadów
-            for (int i = 0; i< _squadNumber; i++)
+            for (int i = 0; i< _squadCount; i++)
             {
                 tempPos = transform.position;
                 tempPos.x = tempPos.x + i % 3;
