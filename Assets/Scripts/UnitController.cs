@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class UnitController : MonoBehaviour
 {
@@ -48,12 +49,8 @@ public class UnitController : MonoBehaviour
         rightArrow.GetComponent<ArrowController>().ShowArrow(idAttack);
     }
 
-    private void AttackResolved()
-    {
-        myTileClicked(0);
-    }
-
-    private void myTileClicked(int idTile)
+    // deselects unit after any tile is clicked
+    private void anyTileClicked(int idTile)
     {
         if (isOutlined)
         {
@@ -118,6 +115,30 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    private void onUnitDestroyed(int uId)
+    {
+        if (uId == UnitId) return;
+        List<int> attacksToDisable = BattleManager.Instance.GetAttacksOnUnit(uId);
+        foreach (int i in attacksToDisable)
+        {
+            if (i == forwardArrow.GetComponent<ArrowController>().AttackId)
+            {
+                forwardArrow.GetComponent<ArrowController>().isArrowActive = false;
+                forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            }
+            else if (i == rightArrow.GetComponent<ArrowController>().AttackId)
+            {
+                rightArrow.GetComponent<ArrowController>().isArrowActive = false;
+                rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            }
+            else if (i == leftArrow.GetComponent<ArrowController>().AttackId)
+            {
+                leftArrow.GetComponent<ArrowController>().isArrowActive = false;
+                leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            }
+        }
+    }
+
     private void KillSquads(int count)
     {
         for (int i = 0; i < count; i++)
@@ -128,6 +149,24 @@ public class UnitController : MonoBehaviour
                 _squadCount--;
             }
         }
+    }
+
+    private IEnumerator DisableUnit()
+    {
+        foreach (GameObject g in _squads)
+        {
+            g.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.75f).SetEase(Ease.InBack);
+        }
+        unitCaption.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.75f).SetEase(Ease.InBack);
+        flag.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.75f).SetEase(Ease.InBack);
+        yield return new WaitForSeconds(0.75f);
+        unitCaption.SetActive(false);
+        flag.SetActive(false);
+        foreach (GameObject g in _squads)
+        {
+            g.SetActive(false);
+        }
+        gameObject.SetActive(false);
     }
 
     private void UpdateMe()
@@ -144,15 +183,22 @@ public class UnitController : MonoBehaviour
             flag.GetComponent<FlagController>().ChangeBannerHeight(_initialMorale, myUnit.morale);
             _morale = myUnit.morale;
         }
+        anyTileClicked(0);
+        if (myUnit.strength <= 0 || myUnit.morale <= 0)
+        {
+            EventManager.RaiseEventOnUnitDestroyed(UnitId);
+            StartCoroutine(DisableUnit());
+            BattleManager.Instance.DeleteUnit(myUnit.GetUnitId());
+        }
     }
 
     private void OnDestroy()
     {
         EventManager.onAttackClicked -= myAttackClicked;
         EventManager.onUnitClicked -= myUnitClicked;
-        EventManager.onTileClicked -= myTileClicked;
+        EventManager.onTileClicked -= anyTileClicked;
         EventManager.onUpdateBoard -= UpdateMe;
-        EventManager.onUpdateBoard -= AttackResolved;
+        EventManager.onUnitDestroyed -= onUnitDestroyed;
     }
 
     public int UnitId
@@ -189,9 +235,9 @@ public class UnitController : MonoBehaviour
     {
         EventManager.onAttackClicked += myAttackClicked;
         EventManager.onUnitClicked += myUnitClicked;
-        EventManager.onTileClicked += myTileClicked;
+        EventManager.onTileClicked += anyTileClicked;
         EventManager.onUpdateBoard += UpdateMe;
-        EventManager.onUpdateBoard += AttackResolved;
+        EventManager.onUnitDestroyed += onUnitDestroyed;
     }
 
     public void InitializeUnit(int squadNumber, int initialMorale, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red

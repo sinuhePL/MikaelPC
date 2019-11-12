@@ -24,7 +24,7 @@ public class PictureController : MonoBehaviour
         }
         if (unitId != lastClickedUnit || isHidden)
         {
-            transform.DOMoveX(230.0f, 0.3f).SetEase(Ease.OutBack);
+            transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.OutBack);
             lastClickedUnit = unitId;
             isHidden = false;
         }
@@ -41,16 +41,23 @@ public class PictureController : MonoBehaviour
         isHidden = true;
     }
 
+    private void UpdateBoard()
+    {
+        TileClicked(0);
+    }
+
     private void OnDestroy()
     {
         EventManager.onUnitClicked -= UnitClicked;
         EventManager.onTileClicked -= TileClicked;
+        EventManager.onUpdateBoard -= UpdateBoard;
     }
 
     private void OnEnable()
     {
         EventManager.onUnitClicked += UnitClicked;
         EventManager.onTileClicked += TileClicked;
+        EventManager.onUpdateBoard += UpdateBoard;
     }
 
     void Start()

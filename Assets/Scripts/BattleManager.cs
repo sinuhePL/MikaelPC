@@ -32,6 +32,8 @@ public class BattleManager : MonoBehaviour {
     public static float boardFieldWitdth = 4.0f;
     public static float boardFieldHeight = 4.0f;
     public static int maxSquads = 6;
+    public static int turnOwnerId = 1;
+    public static bool playerAttacked = false;
 
     public const string Army1Color = "#4158f3";
     public const string Army2Color = "#ff4722";
@@ -123,11 +125,11 @@ public class BattleManager : MonoBehaviour {
         units = new List<GameObject>();
         // create test unit
         tempObj = Instantiate(unitPrefab, new Vector3(-10.0f, 0.05f, 10.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(5, 6, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3, "French Cavalery", 19);
+        tempObj.GetComponent<UnitController>().InitializeUnit(1, 2, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3, "French Cavalery", 19);
         units.Add(tempObj);
 
         tempObj = Instantiate(unitPrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(4, 6, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6, "French Cavalery", 7);
+        tempObj.GetComponent<UnitController>().InitializeUnit(1, 2, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6, "French Cavalery", 7);
         units.Add(tempObj);
         // end test unit
     }
@@ -263,6 +265,7 @@ public class BattleManager : MonoBehaviour {
                 result.defenderMoraleHits = defenceMoraleHit;
                 Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
+                playerAttacked = true;
                 yield return new WaitForSeconds(1.5f);
                 EventManager.RaiseEventOnDiceThrow(result);
                 Dice.Clear();
@@ -312,23 +315,36 @@ public class BattleManager : MonoBehaviour {
         int throw1, throw2;
 
         myAttack = myBoardState.GetAttack(idAttack);
-        Dice.Clear();
-        if (myAttack.GetArmyId() == 1)
+        if (myAttack.GetArmyId() == turnOwnerId && !playerAttacked)
         {
-            throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString()+"d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-            throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString()+"d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+            Dice.Clear();
+            if (myAttack.GetArmyId() == 1)
+            {
+                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+            }
+            else
+            {
+                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+            }
+            myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() + new Vector3(0.0f, 10.0f, 0.0f));
+            StartCoroutine(WaitForDice(throw1, throw2, idAttack));
         }
-        else
-        {
-            throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-            throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-        }
-        myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() + new Vector3(0.0f, 10.0f, 0.0f));
-        StartCoroutine(WaitForDice(throw1, throw2, idAttack));
     }
 
     public int GetArmyMorale(int armyId)
     {
         return myBoardState.GetArmyMorale(armyId);
+    }
+
+    public void DeleteUnit(int unitId)
+    {
+        myBoardState.DeleteUnit(unitId);
+    }
+
+    public List<int> GetAttacksOnUnit(int uId)
+    {
+        return myBoardState.GetAttacksOnUnit(uId);
     }
 }

@@ -187,4 +187,13 @@ public class Unit
         }
         return null;
     }
+
+    public int GetAttackOnUnit(int uId)
+    {
+        foreach(Attack a in unitAttacks)
+        {
+            if (a.GetTargetId() == uId) return a.GetId();
+        }
+        return 0;
+    }
 }

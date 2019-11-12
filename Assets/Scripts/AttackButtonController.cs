@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActionButtonController : MonoBehaviour
+public class AttackButtonController : MonoBehaviour
 {
     private int lastClickedAttack;
 
@@ -11,13 +11,13 @@ public class ActionButtonController : MonoBehaviour
 
     public void ButtonPressed()
     {
-        EventManager.RaiseEventOnActionButtonPressed(LastClickedAttack);
-        if (LastClickedAttack > 0) BattleManager.Instance.MakeAttack(LastClickedAttack);
-        else EventManager.RaiseEventUpdateBoard();
+        EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
+        BattleManager.Instance.MakeAttack(LastClickedAttack);   
     }
 
+
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
         LastClickedAttack = 0;
     }

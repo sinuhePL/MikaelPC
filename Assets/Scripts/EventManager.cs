@@ -38,10 +38,10 @@ public class EventManager : MonoBehaviour
         if (onTileClicked != null) onTileClicked(idTile);
     }
 
-    public static event Action<int> onActionButtonPressed;
-    public static void RaiseEventOnActionButtonPressed(int idAttack)
+    public static event Action<int> onAttackOrdered;
+    public static void RaiseEventOnAttackOrdered(int idAttack)
     {
-        if (onActionButtonPressed != null) onActionButtonPressed(idAttack);
+        if (onAttackOrdered != null) onAttackOrdered(idAttack);
     }
 
     public static event Action<ThrowResult> onDiceThrow;
@@ -54,5 +54,17 @@ public class EventManager : MonoBehaviour
     public static void RaiseEventUpdateBoard()
     {
         if (onUpdateBoard != null) onUpdateBoard();
+    }
+
+    public static event Action onAttackResultClosed;
+    public static void RaiseEventAttackResultClosed()
+    {
+        if (onAttackResultClosed != null) onAttackResultClosed();
+    }
+
+    public static event Action<int> onUnitDestroyed;
+    public static void RaiseEventOnUnitDestroyed(int unitId)
+    {
+        if (onUnitDestroyed != null) onUnitDestroyed(unitId);
     }
 }

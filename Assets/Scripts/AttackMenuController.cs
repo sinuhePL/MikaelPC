@@ -26,7 +26,7 @@ public class AttackMenuController : MonoBehaviour
         mySequence.Append(transform.DOMove(endPosition, 0.01f));
         mySequence.Append(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
         isVisible = true;
-        GetComponentInChildren<ActionButtonController>().LastClickedAttack = idAttack;
+        GetComponentInChildren<AttackButtonController>().LastClickedAttack = idAttack;
         tempAttack = BattleManager.Instance.GetAttack(idAttack);
         attackNameText.text = tempAttack.GetName();
         ColorUtility.TryParseHtmlString(BattleManager.Army1Color, out a1Color);
@@ -63,35 +63,19 @@ public class AttackMenuController : MonoBehaviour
         isVisible = false;
     }
 
-    private void ActionButtonPressed(int idAttack)
+    private void AttackButtonPressed(int idAttack)
     {
         transform.DOScale(0.0f, 0.3f).SetEase(Ease.InBack);
         isVisible = false;
     }
 
-    private void DiceThrown(ThrowResult result)
-    {
-        GetComponentInChildren<ActionButtonController>().LastClickedAttack = 0;
-        attackNameText.text = "Result";
-        attackText.text = "Attacker:";
-        attackDiceNumberText.text = "";
-        if (result.defenderStrengthHits > 0) attackDiceNumberText.text = "Strength: -" + result.defenderStrengthHits.ToString();
-        if(result.defenderMoraleHits > 0) attackDiceNumberText.text += " Morale: -"+result.defenderMoraleHits.ToString();
-        defenceText.text = "Defender:";
-        defenceDiceNumberText.text = "";
-        if (result.attackerStrengthHits > 0) defenceDiceNumberText.text = "Strength: -" + result.attackerStrengthHits.ToString();
-        if (result.attackerMoraleHits > 0) defenceDiceNumberText.text += " Morale: -" + result.attackerMoraleHits.ToString();
-        transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack);
-        isVisible = true;
-    }
 
     private void OnDestroy()
     {
         EventManager.onAttackClicked -= AttackClicked;
         EventManager.onUnitClicked -= UnitClicked;
         EventManager.onTileClicked -= TileClicked;
-        EventManager.onActionButtonPressed -= ActionButtonPressed;
-        EventManager.onDiceThrow -= DiceThrown;
+        EventManager.onAttackOrdered -= AttackButtonPressed;
     }
 
     private void OnEnable()
@@ -99,8 +83,7 @@ public class AttackMenuController : MonoBehaviour
         EventManager.onAttackClicked += AttackClicked;
         EventManager.onUnitClicked += UnitClicked;
         EventManager.onTileClicked += TileClicked;
-        EventManager.onActionButtonPressed += ActionButtonPressed;
-        EventManager.onDiceThrow += DiceThrown;
+        EventManager.onAttackOrdered += AttackButtonPressed;
     }
 
     // Start is called before the first frame update

@@ -126,4 +126,26 @@ public class BoardState
         else if (armyId == 2) return player2;
         else return null;
     }
+
+    public void DeleteUnit(int unitId)
+    {
+        Unit tempUnit = null;
+        foreach (Unit u in units)
+        {
+            if (u.MyId(unitId)) tempUnit = u;
+        }
+        if (tempUnit != null) units.Remove(tempUnit);
+    }
+
+    public List<int> GetAttacksOnUnit(int unitId)
+    {
+        int temp;
+        List<int> resultList = new List<int>();
+        foreach(Unit u in units)
+        {
+            temp = u.GetAttackOnUnit(unitId);
+            if (temp > 0) resultList.Add(temp);
+        }
+        return resultList;
+    }
 }

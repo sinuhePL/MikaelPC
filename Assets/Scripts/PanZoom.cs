@@ -9,6 +9,7 @@ public class PanZoom : MonoBehaviour
     private Vector3 touchStart;
     private Camera myCamera;
     private float smoothing = 50.0f;
+    private int lookDirection; // army 1: left 1, right 2 army 2: left 3 right 4
 
     public float zoomOutMin = 3;
     public float zoomOutMax = 6;
@@ -19,6 +20,17 @@ public class PanZoom : MonoBehaviour
         for (t = 0; t < duration; t += Time.deltaTime)
         {
             myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, zoom, t / duration);
+            yield return 0;
+        }
+    }
+
+    private IEnumerator SmoothRotate(Vector3 rotatePoint, float angle, float duration)
+    {
+        float t, lastAngle = 0;
+        for (t = 0; Mathf.Abs(lastAngle) < Mathf.Abs(angle); t += Time.deltaTime)
+        {
+            myCamera.transform.RotateAround(rotatePoint, new Vector3(0.0f, 1.0f, 0.0f), Mathf.Lerp(0.0f, angle, ((float)t )/ duration) - lastAngle);
+            lastAngle = Mathf.Lerp(0.0f, angle, ((float)t) / duration);
             yield return 0;
         }
     }
@@ -37,7 +49,7 @@ public class PanZoom : MonoBehaviour
     void Start()
     {
         myCamera = Camera.main;
-    }
+        lookDirection = 1;    }
 
     private void OnDestroy()
     {
@@ -114,5 +126,78 @@ public class PanZoom : MonoBehaviour
             myCamera.transform.DOMove(newpos - new Vector3(0.0f, 10.0f, 0.0f), 0.5f).SetEase(Ease.OutQuint);
         }
 
+    }
+
+    // zmienia kąt patrzenia kamery obracajac ją wokół punktu na który aktualnie patrzy kamera
+    public void ChangeViewAngle(string caller)
+    {
+        int groundMask;
+        Ray camRay;
+        RaycastHit groundHit;
+        groundMask = LayerMask.GetMask("Ground");
+        // wyznacza punkt na mapie na który patrzy kamera
+        camRay = myCamera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+        if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
+        {
+            //obraca kamerę wokół punktu na który patrzy, kierunekj zalezy od kierunku aktualnego
+            if (BattleManager.turnOwnerId == 1)
+            {
+                if(lookDirection == 1)
+                {
+                    if(caller == "arrow")
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, -90.0f, 0.5f));
+                        lookDirection = 2;
+                    }
+                    else
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, 90.0f, 0.5f));
+                        lookDirection = 4;
+                    }
+                }
+                else if(lookDirection == 2)
+                {
+                    if (caller == "arrow")
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, 90.0f, 0.5f));
+                        lookDirection = 1;
+                    }
+                    else
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, -90.0f, 0.5f));
+                        lookDirection = 3;
+                    }
+                }
+            }
+            else
+            {
+                if (lookDirection == 3)
+                {
+                    if (caller == "arrow")
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, -90.0f, 0.5f));
+                        lookDirection = 4;
+                    }
+                    else
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, 90.0f, 0.5f));
+                        lookDirection = 2;
+                    }
+                }
+                else if (lookDirection == 4)
+                {
+                    if (caller == "arrow")
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, 90.0f, 0.5f));
+                        lookDirection = 3;
+                    }
+                    else
+                    {
+                        StartCoroutine(SmoothRotate(groundHit.point, -90.0f, 0.5f));
+                        lookDirection = 1;
+                    }
+                }
+            }
+        }
     }
 }

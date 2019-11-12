@@ -11,10 +11,11 @@ public class SMController : MonoBehaviour
 
     private void UnitClicked(int unitId)
     {
-        Unit tempUnit;
+        Unit tempUnit = null;
         if (unitId > 0)
         {
             tempUnit = BattleManager.Instance.GetUnit(unitId);
+            if (tempUnit == null) return;
             if (isStrength) myText.text = tempUnit.strength.ToString();
             else myText.text = tempUnit.morale.ToString();
             presentedUnitId = unitId;
