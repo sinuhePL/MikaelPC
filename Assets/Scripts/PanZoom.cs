@@ -42,7 +42,7 @@ public class PanZoom : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.onDiceThrow += ZoomOut;
+        EventManager.onDiceResult += ZoomOut;
     }
 
     // Start is called before the first frame update
@@ -53,7 +53,7 @@ public class PanZoom : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.onDiceThrow -= ZoomOut;
+        EventManager.onDiceResult -= ZoomOut;
     }
 
     // Update is called once per frame

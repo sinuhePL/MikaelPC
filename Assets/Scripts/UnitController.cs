@@ -115,30 +115,6 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    private void onUnitDestroyed(int uId)
-    {
-        if (uId == UnitId) return;
-        List<int> attacksToDisable = BattleManager.Instance.GetAttacksOnUnit(uId);
-        foreach (int i in attacksToDisable)
-        {
-            if (i == forwardArrow.GetComponent<ArrowController>().AttackId)
-            {
-                forwardArrow.GetComponent<ArrowController>().isArrowActive = false;
-                forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
-            }
-            else if (i == rightArrow.GetComponent<ArrowController>().AttackId)
-            {
-                rightArrow.GetComponent<ArrowController>().isArrowActive = false;
-                rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
-            }
-            else if (i == leftArrow.GetComponent<ArrowController>().AttackId)
-            {
-                leftArrow.GetComponent<ArrowController>().isArrowActive = false;
-                leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
-            }
-        }
-    }
-
     private void KillSquads(int count)
     {
         for (int i = 0; i < count; i++)
@@ -172,23 +148,44 @@ public class UnitController : MonoBehaviour
     private void UpdateMe()
     {
         Unit myUnit;
+        Attack tempAttack;
+
         myUnit = BattleManager.Instance.GetUnit(UnitId);
-        if (_squadCount > myUnit.strength)
+        anyTileClicked(0);
+        if (!myUnit.IsAvialable)    // check if unit killed
+        {
+            EventManager.RaiseEventOnUnitDestroyed(UnitId);
+            StartCoroutine(DisableUnit());
+            return;
+        }
+        if (_squadCount > myUnit.strength)  // check if unit lost strength
         {
             KillSquads(_squadCount - myUnit.strength);
             _squadCount = myUnit.strength;
         }
-        if (_morale > myUnit.morale)
+        if (_morale > myUnit.morale)    // check if unit lost morale
         {
             flag.GetComponent<FlagController>().ChangeBannerHeight(_initialMorale, myUnit.morale);
             _morale = myUnit.morale;
         }
-        anyTileClicked(0);
-        if (myUnit.strength <= 0 || myUnit.morale <= 0)
+        //check if unit attacks are still active
+        tempAttack = myUnit.GetAttack(forwardArrow.GetComponent<ArrowController>().AttackId);
+        if (tempAttack != null && !tempAttack.IsActive())
         {
-            EventManager.RaiseEventOnUnitDestroyed(UnitId);
-            StartCoroutine(DisableUnit());
-            BattleManager.Instance.DeleteUnit(myUnit.GetUnitId());
+            forwardArrow.GetComponent<ArrowController>().isArrowActive = false;
+            forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+        }
+        tempAttack = myUnit.GetAttack(rightArrow.GetComponent<ArrowController>().AttackId);
+        if (tempAttack != null && !tempAttack.IsActive())
+        {
+            rightArrow.GetComponent<ArrowController>().isArrowActive = false;
+            rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+        }
+        tempAttack = myUnit.GetAttack(leftArrow.GetComponent<ArrowController>().AttackId);
+        if (tempAttack != null && !tempAttack.IsActive())
+        {
+            leftArrow.GetComponent<ArrowController>().isArrowActive = false;
+            leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
         }
     }
 
@@ -198,7 +195,6 @@ public class UnitController : MonoBehaviour
         EventManager.onUnitClicked -= myUnitClicked;
         EventManager.onTileClicked -= anyTileClicked;
         EventManager.onUpdateBoard -= UpdateMe;
-        EventManager.onUnitDestroyed -= onUnitDestroyed;
     }
 
     public int UnitId
@@ -237,7 +233,6 @@ public class UnitController : MonoBehaviour
         EventManager.onUnitClicked += myUnitClicked;
         EventManager.onTileClicked += anyTileClicked;
         EventManager.onUpdateBoard += UpdateMe;
-        EventManager.onUnitDestroyed += onUnitDestroyed;
     }
 
     public void InitializeUnit(int squadNumber, int initialMorale, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red

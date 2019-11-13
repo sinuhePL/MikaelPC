@@ -12,7 +12,6 @@ public class AttackButtonController : MonoBehaviour
     public void ButtonPressed()
     {
         EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
-        BattleManager.Instance.MakeAttack(LastClickedAttack);   
     }
 
 

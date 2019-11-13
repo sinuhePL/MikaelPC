@@ -37,6 +37,9 @@ public class Unit
         get { return _morale; }
         set { _morale = value; }
     }
+
+    public bool IsAvialable { get => isAvialable; set => isAvialable = value; }
+
     public string GetUnitType()
     {
         return unitType;
@@ -137,11 +140,6 @@ public class Unit
         return owner.GetRouteTestModifier();
     }
 
-    public bool IsActive()
-    {
-        return isAvialable;
-    }
-
     public bool ArmyTestSuccessful()
     {
         return owner.MoraleTestSuccessful();
@@ -188,12 +186,11 @@ public class Unit
         return null;
     }
 
-    public int GetAttackOnUnit(int uId)
+    public void DeactivateAttackOnUnit(int uId)
     {
         foreach(Attack a in unitAttacks)
         {
-            if (a.GetTargetId() == uId) return a.GetId();
+            if (a.GetTargetId() == uId) a.Deactivate();
         }
-        return 0;
     }
 }

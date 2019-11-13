@@ -127,25 +127,11 @@ public class BoardState
         else return null;
     }
 
-    public void DeleteUnit(int unitId)
-    {
-        Unit tempUnit = null;
-        foreach (Unit u in units)
-        {
-            if (u.MyId(unitId)) tempUnit = u;
-        }
-        if (tempUnit != null) units.Remove(tempUnit);
-    }
-
-    public List<int> GetAttacksOnUnit(int unitId)
-    {
-        int temp;
-        List<int> resultList = new List<int>();
+    public void DeactivateAttacksOnUnit(int unitId)
+    { 
         foreach(Unit u in units)
         {
-            temp = u.GetAttackOnUnit(unitId);
-            if (temp > 0) resultList.Add(temp);
+            u.DeactivateAttackOnUnit(unitId);
         }
-        return resultList;
     }
 }

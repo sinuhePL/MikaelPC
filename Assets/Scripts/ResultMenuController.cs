@@ -35,12 +35,12 @@ public class ResultMenuController : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.onDiceThrow -= DiceThrown;
+        EventManager.onDiceResult -= DiceThrown;
     }
 
     private void OnEnable()
     {
-        EventManager.onDiceThrow += DiceThrown;
+        EventManager.onDiceResult += DiceThrown;
     }
 
     public void AttackResultClosed()

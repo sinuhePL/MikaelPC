@@ -44,10 +44,10 @@ public class EventManager : MonoBehaviour
         if (onAttackOrdered != null) onAttackOrdered(idAttack);
     }
 
-    public static event Action<ThrowResult> onDiceThrow;
-    public static void RaiseEventOnDiceThrow(ThrowResult result)
+    public static event Action<ThrowResult> onDiceResult;
+    public static void RaiseEventOnDiceResult(ThrowResult result)
     {
-        if (onDiceThrow != null) onDiceThrow(result);
+        if (onDiceResult != null) onDiceResult(result);
     }
 
     public static event Action onUpdateBoard;

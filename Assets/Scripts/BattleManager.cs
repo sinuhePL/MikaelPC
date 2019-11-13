@@ -56,7 +56,8 @@ public class BattleManager : MonoBehaviour {
 
     private void OnEnable()
     {
-        EventManager.onDiceThrow += DiceThrown;
+        EventManager.onDiceResult += DiceThrown;
+        EventManager.onAttackOrdered += MakeAttack;
     }
 
     private void Start()
@@ -68,27 +69,6 @@ public class BattleManager : MonoBehaviour {
     {
         // dodać ciało metody 
     }*/
-
-    private void DiceThrown(ThrowResult result)
-    {
-        Unit attacker;
-        Unit defender;
-        Attack tempAttack;
-        int targetId;
-
-        tempAttack = myBoardState.GetAttack(result.attackId);
-        attacker = tempAttack.GetAttacker();
-        attacker.strength -= result.defenderStrengthHits;
-        attacker.morale -= result.defenderMoraleHits;
-        targetId = tempAttack.GetTargetId();
-        defender = myBoardState.GetUnit(targetId);
-        defender.strength -= result.attackerStrengthHits;
-        defender.morale -= result.attackerMoraleHits;
-        int attackerArmy = attacker.GetArmyId();
-        int defenderArmy = defender.GetArmyId();
-        myBoardState.GetArmy(attacker.GetArmyId()).ChangeMorale(-1 * result.defenderMoraleHits);
-        myBoardState.GetArmy(defender.GetArmyId()).ChangeMorale(-1 * result.attackerMoraleHits);
-    }
 
     private void InitiateManager(int _boardWidth, int _boardHeight)
     {
@@ -224,6 +204,38 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
+    // updated in memory state of board
+    private void DiceThrown(ThrowResult result)
+    {
+        Unit attacker;
+        Unit defender;
+        Attack tempAttack;
+        int targetId;
+
+        tempAttack = myBoardState.GetAttack(result.attackId);
+        attacker = tempAttack.GetAttacker();
+        attacker.strength -= result.defenderStrengthHits;
+        attacker.morale -= result.defenderMoraleHits;
+        targetId = tempAttack.GetTargetId();
+        defender = myBoardState.GetUnit(targetId);
+        defender.strength -= result.attackerStrengthHits;
+        defender.morale -= result.attackerMoraleHits;
+        int attackerArmy = attacker.GetArmyId();
+        int defenderArmy = defender.GetArmyId();
+        myBoardState.GetArmy(attacker.GetArmyId()).ChangeMorale(-1 * result.defenderMoraleHits);
+        myBoardState.GetArmy(defender.GetArmyId()).ChangeMorale(-1 * result.attackerMoraleHits);
+        if(attacker.strength <= 0 || attacker.morale <= 0)
+        {
+            attacker.IsAvialable = false;
+            myBoardState.DeactivateAttacksOnUnit(attacker.GetUnitId());
+        }
+        if (defender.strength <= 0 || defender.morale <= 0)
+        {
+            defender.IsAvialable = false;
+            myBoardState.DeactivateAttacksOnUnit(defender.GetUnitId());
+        }
+    }
+
     private IEnumerator WaitForDice(int throw1Id, int throw2Id, int attackId)
     {
         while(Dice.rolling)
@@ -267,7 +279,7 @@ public class BattleManager : MonoBehaviour {
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
                 playerAttacked = true;
                 yield return new WaitForSeconds(1.5f);
-                EventManager.RaiseEventOnDiceThrow(result);
+                EventManager.RaiseEventOnDiceResult(result);
                 Dice.Clear();
             }
         }
@@ -278,9 +290,34 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
+    private void MakeAttack(int idAttack)
+    {
+        Attack myAttack;
+        int throw1, throw2;
+
+        myAttack = myBoardState.GetAttack(idAttack);
+        if (myAttack.GetArmyId() == turnOwnerId && !playerAttacked)
+        {
+            Dice.Clear();
+            if (myAttack.GetArmyId() == 1)
+            {
+                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+            }
+            else
+            {
+                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+            }
+            myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() + new Vector3(0.0f, 10.0f, 0.0f));
+            StartCoroutine(WaitForDice(throw1, throw2, idAttack));
+        }
+    }
+
     private void OnDestroy()
     {
-        EventManager.onDiceThrow -= DiceThrown;
+        EventManager.onDiceResult -= DiceThrown;
+        EventManager.onAttackOrdered -= MakeAttack;
     }
 
     /*private int MinMax(BoardState bs)
@@ -309,42 +346,8 @@ public class BattleManager : MonoBehaviour {
         return myBoardState.GetAttack(aId);
     }
 
-    public void MakeAttack(int idAttack)
-    {
-        Attack myAttack;
-        int throw1, throw2;
-
-        myAttack = myBoardState.GetAttack(idAttack);
-        if (myAttack.GetArmyId() == turnOwnerId && !playerAttacked)
-        {
-            Dice.Clear();
-            if (myAttack.GetArmyId() == 1)
-            {
-                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-            }
-            else
-            {
-                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-            }
-            myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() + new Vector3(0.0f, 10.0f, 0.0f));
-            StartCoroutine(WaitForDice(throw1, throw2, idAttack));
-        }
-    }
-
     public int GetArmyMorale(int armyId)
     {
         return myBoardState.GetArmyMorale(armyId);
-    }
-
-    public void DeleteUnit(int unitId)
-    {
-        myBoardState.DeleteUnit(unitId);
-    }
-
-    public List<int> GetAttacksOnUnit(int uId)
-    {
-        return myBoardState.GetAttacksOnUnit(uId);
     }
 }
