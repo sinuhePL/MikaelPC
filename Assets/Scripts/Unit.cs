@@ -38,7 +38,11 @@ public class Unit
         set { _morale = value; }
     }
 
-    public bool IsAvialable { get => isAvialable; set => isAvialable = value; }
+    public bool IsAvialable
+    {
+        get => isAvialable;
+        set => isAvialable = value;
+    }
 
     public string GetUnitType()
     {
@@ -77,7 +81,7 @@ public class Unit
         owner = a;
     }
 
-    public StateChange MakeAttack(int aId) // wykonuje atak wskazany przez id ataku przekazane do metody
+    /*public StateChange MakeAttack(int aId) // wykonuje atak wskazany przez id ataku przekazane do metody
     {
         StateChange tempCS = new StateChange();
         Attack myAttack = null;
@@ -85,17 +89,19 @@ public class Unit
         myAttack = FindAttack(aId);
         if (myAttack != null) return myAttack.MakeAttack();   // zwraca opis zmiany stanu planszy wynikający z przeprowadzonego ataku
         else return tempCS;
-    }
+    }*/
 
     public void ChangeStrength(int sc)  //zmienia siłę jednostki o wskazaną wartość
     {
         strength += sc;
+        if (strength <= 0) isAvialable = false;
     }
 
     public void ChangeMorale(int mc)    //zmienia morale jednostki o wskazaną wartość
     {
         morale += mc;
         owner.ChangeMorale(mc);
+        if (morale <= 0) isAvialable = false;
     }
 
     public List<StateChange> GetAttackOutcomes()    // zwraca wszystkie rezultaty wszystkich aktywnych ataków jednostki.
@@ -104,7 +110,7 @@ public class Unit
 
         foreach(Attack a in unitAttacks)    // szuka aktywnych ataków
         {
-            if(a.IsActive()) tempSTList.AddRange(a.getOutcomes());
+            if(a.IsActive()) tempSTList.AddRange(a.GetOutcomes());
         }
         return tempSTList;
     }
@@ -151,11 +157,6 @@ public class Unit
         else return false;
     }
 
-    public void ChangeArmyTestModifier(int modifier)
-    {
-        owner.ChangeRouteTestModifier(modifier);
-    }
-
     public int GetArmyId()
     {
         return owner.GetArmyId();
@@ -166,7 +167,7 @@ public class Unit
         return unitId;
     }
 
-    public void SetAttacksTargets(List<Unit> _unitList) // ustawia referencję celów ataków na odpowiednie jednostki bazując na id celu ataku
+    /*public void SetAttacksTargets(List<Unit> _unitList) // ustawia referencję celów ataków na odpowiednie jednostki bazując na id celu ataku
     {
         foreach(Attack _attack in unitAttacks)
         {
@@ -175,7 +176,7 @@ public class Unit
                 if (_attack.CheckAndSetTarget(_unit)) break;
             }
         }
-    }
+    }*/
 
     public Attack GetAttack(int idAttack)
     {
@@ -192,5 +193,15 @@ public class Unit
         {
             if (a.GetTargetId() == uId) a.Deactivate();
         }
+    }
+
+    public List<int> GetActiveAttacksIds()
+    {
+        List<int> resultList = new List<int>();
+        foreach(Attack a in unitAttacks)
+        {
+            if (a.IsActive()) resultList.Add(a.GetId());
+        }
+        return resultList;
     }
 }

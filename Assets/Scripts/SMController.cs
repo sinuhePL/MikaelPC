@@ -30,13 +30,13 @@ public class SMController : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.onUnitClicked -= UnitClicked;
-        EventManager.onUpdateBoard -= UpdateMe;
+        EventManager.onResultMenuClosed -= UpdateMe;
     }
 
     private void OnEnable()
     {
         EventManager.onUnitClicked += UnitClicked;
-        EventManager.onUpdateBoard += UpdateMe;
+        EventManager.onResultMenuClosed += UpdateMe;
     }
 
     void Start()

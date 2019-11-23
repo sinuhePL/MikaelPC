@@ -11,6 +11,7 @@ public class BattleManager : MonoBehaviour {
     private List<GameObject> units;
     private List<GameObject> tiles;
     private Camera myCamera;
+    private bool playerAttacked;
 
     public static BattleManager Instance { get { return _instance; } }
     [SerializeField] private Transform marginBottom;
@@ -33,7 +34,8 @@ public class BattleManager : MonoBehaviour {
     public static float boardFieldHeight = 4.0f;
     public static int maxSquads = 6;
     public static int turnOwnerId = 1;
-    public static bool playerAttacked = false;
+    public static bool isPlayer1Human = true;
+    public static bool isPlayer2Human = false;
 
     public const string Army1Color = "#4158f3";
     public const string Army2Color = "#ff4722";
@@ -58,17 +60,13 @@ public class BattleManager : MonoBehaviour {
     {
         EventManager.onDiceResult += DiceThrown;
         EventManager.onAttackOrdered += MakeAttack;
+        EventManager.onTurnEnd += TurnEnd;
     }
 
     private void Start()
     {
-        EventManager.RaiseEventUpdateBoard();
+        EventManager.RaiseEventGameStart();
     }
-
-    /*private int EvaluateBoardState(BoardState bs)
-    {
-        // dodać ciało metody 
-    }*/
 
     private void InitiateManager(int _boardWidth, int _boardHeight)
     {
@@ -77,8 +75,9 @@ public class BattleManager : MonoBehaviour {
 
         Random.InitState(System.Environment.TickCount);
         tiles = new List<GameObject>();
+        playerAttacked = false;
         //inicjalizacja elementów graficznych planszy
-        for(int i=0; i< _boardWidth+4; i++)
+        for (int i=0; i< _boardWidth+4; i++)
         {
             for(int j=0;j<_boardHeight+4;j++)
             {
@@ -105,11 +104,11 @@ public class BattleManager : MonoBehaviour {
         units = new List<GameObject>();
         // create test unit
         tempObj = Instantiate(unitPrefab, new Vector3(-10.0f, 0.05f, 10.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(1, 2, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3, "French Cavalery", 19);
+        tempObj.GetComponent<UnitController>().InitializeUnit(5, 5, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3, "French Cavalery", 19);
         units.Add(tempObj);
 
         tempObj = Instantiate(unitPrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(1, 2, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6, "French Cavalery", 7);
+        tempObj.GetComponent<UnitController>().InitializeUnit(4, 6, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6, "French Cavalery", 7);
         units.Add(tempObj);
         // end test unit
     }
@@ -183,19 +182,19 @@ public class BattleManager : MonoBehaviour {
             }
             if (leftAttackTargetId > 0)
             {
-                tempAttack = new ChargeAttack(uc.GetAttackId(1), true, uc.ArmyId, myUnit, 0, leftAttackTargetId, uc.transform.position + menuLeftPositionShift);
+                tempAttack = new ChargeAttack(uc.GetAttackId(1), true, uc.ArmyId, myUnit, 0, leftAttackTargetId, uc.transform.position + menuLeftPositionShift, 3, 3);
                 uc.ActivateAttack(uc.GetAttackId(1)); // testowo, docelowo tylko central attack jest aktywnyna początku
                 myUnit.AddAttack(tempAttack);
             }
             if (centralAttackTargetId > 0)
             {
-                tempAttack = new ChargeAttack(uc.GetAttackId(2), true, uc.ArmyId, myUnit, 0, centralAttackTargetId, uc.transform.position + menuCentralPositionShift);
+                tempAttack = new ChargeAttack(uc.GetAttackId(2), true, uc.ArmyId, myUnit, 0, centralAttackTargetId, uc.transform.position + menuCentralPositionShift, 3, 3);
                 uc.ActivateAttack(uc.GetAttackId(2));
                 myUnit.AddAttack(tempAttack);
             }
-            if (leftAttackTargetId > 0)
+            if (rightAttackTargetId > 0)
             {
-                tempAttack = new ChargeAttack(uc.GetAttackId(3), true, uc.ArmyId, myUnit, 0, rightAttackTargetId, uc.transform.position + menuRightPositionShift);
+                tempAttack = new ChargeAttack(uc.GetAttackId(3), true, uc.ArmyId, myUnit, 0, rightAttackTargetId, uc.transform.position + menuRightPositionShift, 3, 3);
                 uc.ActivateAttack(uc.GetAttackId(3)); // testowo, docelowo tylko central attack jest aktywnyna początku
                 myUnit.AddAttack(tempAttack);
             }
@@ -205,39 +204,17 @@ public class BattleManager : MonoBehaviour {
     }
 
     // updated in memory state of board
-    private void DiceThrown(ThrowResult result)
+    private void DiceThrown(StateChange result)
     {
-        Unit attacker;
-        Unit defender;
-        Attack tempAttack;
-        int targetId;
+        int winnerId;
 
-        tempAttack = myBoardState.GetAttack(result.attackId);
-        attacker = tempAttack.GetAttacker();
-        attacker.strength -= result.defenderStrengthHits;
-        attacker.morale -= result.defenderMoraleHits;
-        targetId = tempAttack.GetTargetId();
-        defender = myBoardState.GetUnit(targetId);
-        defender.strength -= result.attackerStrengthHits;
-        defender.morale -= result.attackerMoraleHits;
-        int attackerArmy = attacker.GetArmyId();
-        int defenderArmy = defender.GetArmyId();
-        myBoardState.GetArmy(attacker.GetArmyId()).ChangeMorale(-1 * result.defenderMoraleHits);
-        myBoardState.GetArmy(defender.GetArmyId()).ChangeMorale(-1 * result.attackerMoraleHits);
-        if(attacker.strength <= 0 || attacker.morale <= 0)
-        {
-            attacker.IsAvialable = false;
-            myBoardState.DeactivateAttacksOnUnit(attacker.GetUnitId());
-        }
-        if (defender.strength <= 0 || defender.morale <= 0)
-        {
-            defender.IsAvialable = false;
-            myBoardState.DeactivateAttacksOnUnit(defender.GetUnitId());
-        }
+        winnerId = myBoardState.ChangeState(result);
+        if (winnerId != 0) EventManager.RaiseEventGameOver(winnerId);
     }
 
     private IEnumerator WaitForDice(int throw1Id, int throw2Id, int attackId)
     {
+        Attack tempAttack;
         while(Dice.rolling)
         {
             yield return null;
@@ -246,12 +223,13 @@ public class BattleManager : MonoBehaviour {
         string result2 = Dice.AsString("d6", throw2Id);
         Debug.Log(result1);
         Debug.Log(result2);
-        ThrowResult result = new ThrowResult();
-        result.attackId = 0;
+        //ThrowResult result = new ThrowResult();
+        StateChange result = new StateChange();
+        /*result.attackId = 0;
         result.attackerStrengthHits = 0;
         result.attackerMoraleHits = 0;
         result.defenderStrengthHits = 0;
-        result.defenderMoraleHits = 0;
+        result.defenderMoraleHits = 0;*/
         string[] throw1Hits, throw2Hits;
         int attackStrengthHit=0, attackMoraleHit=0, defenceStrengthHit=0, defenceMoraleHit=0;
         if (!(result1.Contains("?") || result2.Contains("?") || result1.Length < 13 || result2.Length < 12))    // sprawdzenie czy rzut był udany/bezbłędny
@@ -270,11 +248,18 @@ public class BattleManager : MonoBehaviour {
                     if (throw2Hits[i] == "S") defenceStrengthHit++;
                     if (throw2Hits[i] == "M") defenceMoraleHit++;
                 }
-                result.attackId = attackId;
+                /*result.attackId = attackId;
                 result.attackerStrengthHits = attackStrengthHit;
                 result.attackerMoraleHits = attackMoraleHit;
                 result.defenderStrengthHits = defenceStrengthHit;
-                result.defenderMoraleHits = defenceMoraleHit;
+                result.defenderMoraleHits = defenceMoraleHit;*/
+                tempAttack = myBoardState.GetAttack(attackId);
+                result.attackerId = tempAttack.GetOwner().GetUnitId();
+                result.defenderId = tempAttack.GetTargetId();
+                result.attackerMoraleChanged = -defenceMoraleHit;
+                result.attackerStrengthChange = -defenceStrengthHit;
+                result.defenderMoraleChanged = -attackMoraleHit;
+                result.defenderStrengthChange = -attackStrengthHit;
                 Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
                 playerAttacked = true;
@@ -314,27 +299,97 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
+    private void TurnEnd()
+    {
+        playerAttacked = false;
+        if (turnOwnerId == 1 && !isPlayer1Human || turnOwnerId == 2 && !isPlayer2Human)
+        {
+            ComputeBestAttack();
+        }
+    }
+
+    private float ExpectiMinMaxBoardState(BoardState inBoardState, float limit, int armyId)
+    {
+        float score = 0;
+        float maxScore = -1000.0f;
+        int otherArmyId, possibleOutcomesCount;
+
+        if (armyId == 1) otherArmyId = 2;
+        else otherArmyId = 1;
+        List<int> avialableAttacks = new List<int>();
+        if (limit < 1.0) return inBoardState.EvaluateBoard(otherArmyId);
+        avialableAttacks = inBoardState.GetPossibleAttacks(otherArmyId);
+        if (avialableAttacks.Count == 0) return -500.0f;
+        else
+        {
+            possibleOutcomesCount = 0;
+            foreach (int i in avialableAttacks)
+            {
+                possibleOutcomesCount += inBoardState.GetPossibleOutcomes(otherArmyId).Count;
+            }
+            foreach (int i in avialableAttacks)
+            {
+                score = -ExpectiMinMaxAttack(inBoardState, i, limit / possibleOutcomesCount, otherArmyId);
+                if (score > maxScore)
+                {
+                    maxScore = score;
+                }
+            }
+            return maxScore;
+        }
+    }
+
+    private float ExpectiMinMaxAttack(BoardState inBoardState, int attackId, float limit, int armyId)
+    {
+        float attackValue = 0;
+        Attack myAttack;
+        BoardState outBoardState;
+        myAttack = inBoardState.GetAttack(attackId);
+        foreach (StateChange sc in myAttack.GetOutcomes())
+        {
+            outBoardState = new BoardState(inBoardState);
+            outBoardState.ChangeState(sc);
+            attackValue += sc.changeProbability * ExpectiMinMaxBoardState(outBoardState, limit, armyId);
+        }
+        return attackValue;
+    }
+
+    private void ComputeBestAttack()
+    {
+        List<int> avialableAttacks = new List<int>();
+        int bestAttack = 0;
+        float score, maxScore;
+
+        maxScore = -1000.0f;
+        avialableAttacks = myBoardState.GetPossibleAttacks(turnOwnerId);
+        if (avialableAttacks.Count > 0)
+        {
+            foreach (int i in avialableAttacks)
+            {
+                score = -ExpectiMinMaxAttack(myBoardState, i, 30.0f, turnOwnerId);
+                if (score > maxScore)
+                {
+                    maxScore = score;
+                    bestAttack = i;
+                }
+            }
+            if (bestAttack > 0)
+            {
+                EventManager.RaiseEventOnUnitClicked(myBoardState.GetAttack(bestAttack).GetOwner().GetUnitId());
+                EventManager.RaiseEventOnAttackClicked(bestAttack);
+                MakeAttack(bestAttack);
+            }
+        }
+    }
+
     private void OnDestroy()
     {
         EventManager.onDiceResult -= DiceThrown;
         EventManager.onAttackOrdered -= MakeAttack;
+        EventManager.onTurnEnd -= TurnEnd;
     }
 
-    /*private int MinMax(BoardState bs)
-    {
-        // dodać ciało funkcji
-    }
-
-    public void MakeAttack(int un, int at)
-    {
-        Unit tempUnit;
-        StateChange tempStateChange;
-
-        //tempUnit = myBoardState.GetUnit(un);
-        tempStateChange = tempUnit.MakeAttack(at);
-        myBoardState.ChangeState(tempStateChange);
-        // dodać wywołanie zmian w widoku na podstawie otrzymanego StateChange
-    }*/
+    
 
     public Unit GetUnit(int unitId)
     {

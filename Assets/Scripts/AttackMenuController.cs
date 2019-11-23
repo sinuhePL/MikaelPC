@@ -21,6 +21,7 @@ public class AttackMenuController : MonoBehaviour
         Attack tempAttack;
         Color a1Color, a2Color;
 
+        if (BattleManager.turnOwnerId == 1 && !BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && !BattleManager.isPlayer2Human) return;
         endPosition = myCamera.WorldToScreenPoint(BattleManager.Instance.GetAttack(idAttack).GetPosition());
         if(isVisible) mySequence.Append(transform.DOScale(0.0f, 0.3f).SetEase(Ease.InBack));
         mySequence.Append(transform.DOMove(endPosition, 0.01f));

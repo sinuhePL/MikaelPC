@@ -20,27 +20,29 @@ public class ResultMenuController : MonoBehaviour
         defenceText = transform.Find("DefenceCaption").GetComponent<Text>();
     }
 
-    private void DiceThrown(ThrowResult result)
+    private void DiceThrown(StateChange result)
     {
         attackText.text = "Attacker:";
         attackResultText.text = "";
-        if (result.defenderStrengthHits > 0) attackResultText.text = "Strength: -" + result.defenderStrengthHits.ToString();
-        if (result.defenderMoraleHits > 0) attackResultText.text += " Morale: -" + result.defenderMoraleHits.ToString();
+        if (result.attackerStrengthChange != 0) attackResultText.text = "Strength: " + result.attackerStrengthChange.ToString();
+        if (result.attackerMoraleChanged != 0) attackResultText.text += " Morale: " + result.attackerMoraleChanged.ToString();
         defenceText.text = "Defender:";
         defenceResultText.text = "";
-        if (result.attackerStrengthHits > 0) defenceResultText.text = "Strength: -" + result.attackerStrengthHits.ToString();
-        if (result.attackerMoraleHits > 0) defenceResultText.text += " Morale: -" + result.attackerMoraleHits.ToString();
+        if (result.defenderStrengthChange != 0) defenceResultText.text = "Strength: " + result.defenderStrengthChange.ToString();
+        if (result.defenderMoraleChanged != 0) defenceResultText.text += " Morale: " + result.defenderMoraleChanged.ToString();
         transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack);
     }
 
     private void OnDestroy()
     {
         EventManager.onDiceResult -= DiceThrown;
+        EventManager.onResultMenuClosed -= AttackResultClosed;
     }
 
     private void OnEnable()
     {
         EventManager.onDiceResult += DiceThrown;
+        EventManager.onResultMenuClosed += AttackResultClosed;
     }
 
     public void AttackResultClosed()

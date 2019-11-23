@@ -17,18 +17,20 @@ public class ArmyMoraleController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.onUpdateBoard += UpdateMe;
+        EventManager.onResultMenuClosed += UpdateMe;
+        EventManager.onGameStart += UpdateMe;
         myText = GetComponent<Text>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-     
+
     }
 
     private void OnDestroy()
     {
-        EventManager.onUpdateBoard -= UpdateMe;
+        EventManager.onResultMenuClosed -= UpdateMe;
+        EventManager.onGameStart -= UpdateMe;
     }
 }

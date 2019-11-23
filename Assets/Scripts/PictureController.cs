@@ -50,14 +50,14 @@ public class PictureController : MonoBehaviour
     {
         EventManager.onUnitClicked -= UnitClicked;
         EventManager.onTileClicked -= TileClicked;
-        EventManager.onUpdateBoard -= UpdateBoard;
+        EventManager.onResultMenuClosed -= UpdateBoard;
     }
 
     private void OnEnable()
     {
         EventManager.onUnitClicked += UnitClicked;
         EventManager.onTileClicked += TileClicked;
-        EventManager.onUpdateBoard += UpdateBoard;
+        EventManager.onResultMenuClosed += UpdateBoard;
     }
 
     void Start()

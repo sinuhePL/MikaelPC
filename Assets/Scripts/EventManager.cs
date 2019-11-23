@@ -44,16 +44,16 @@ public class EventManager : MonoBehaviour
         if (onAttackOrdered != null) onAttackOrdered(idAttack);
     }
 
-    public static event Action<ThrowResult> onDiceResult;
-    public static void RaiseEventOnDiceResult(ThrowResult result)
+    public static event Action<StateChange> onDiceResult;
+    public static void RaiseEventOnDiceResult(StateChange result)
     {
         if (onDiceResult != null) onDiceResult(result);
     }
 
-    public static event Action onUpdateBoard;
-    public static void RaiseEventUpdateBoard()
+    public static event Action onResultMenuClosed;
+    public static void RaiseEventResultMenuClosed()
     {
-        if (onUpdateBoard != null) onUpdateBoard();
+        if (onResultMenuClosed != null) onResultMenuClosed();
     }
 
     public static event Action onAttackResultClosed;
@@ -66,5 +66,23 @@ public class EventManager : MonoBehaviour
     public static void RaiseEventOnUnitDestroyed(int unitId)
     {
         if (onUnitDestroyed != null) onUnitDestroyed(unitId);
+    }
+
+    public static event Action onTurnEnd;
+    public static void RaiseEventOnTurnEnd()
+    {
+        if (onTurnEnd != null) onTurnEnd();
+    }
+
+    public static event Action onGameStart;
+    public static void RaiseEventGameStart()
+    {
+        if (onGameStart != null) onGameStart();
+    }
+
+    public static event Action<int> onGameOver;
+    public static void RaiseEventGameOver(int winnerId)
+    {
+        if (onGameOver != null) onGameOver(winnerId);
     }
 }

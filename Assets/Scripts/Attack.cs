@@ -7,7 +7,7 @@ public abstract class Attack
 {
     protected int attackId;
     protected int targetId;
-    protected Unit target;
+    //protected Unit target;
     protected bool isActiveState;
     protected int armyId;
     protected Unit owner;
@@ -37,8 +37,10 @@ public abstract class Attack
         keyFieldId = pattern.keyFieldId;
         owner = o;
         targetId = pattern.targetId;
-        target = null;
+        //target = null;
         arrowPosition = pattern.arrowPosition;
+        attackDiceNumber = pattern.attackDiceNumber;
+        defenceDiceNumber = pattern.defenceDiceNumber;
     }
 
     public string GetName()
@@ -56,7 +58,7 @@ public abstract class Attack
         return defenceDiceNumber;
     }
 
-    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) // konstruktor
+    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p, int aDiceNum, int dDiceNum) // konstruktor
     {
         attackId = aId;
         isActiveState = state;
@@ -66,8 +68,10 @@ public abstract class Attack
         deactivatesAttacks = new List<int>();
         keyFieldId = keyField;
         targetId = tId;
-        target = null;
+        //target = null;
         arrowPosition = p;
+        attackDiceNumber = aDiceNum;
+        defenceDiceNumber = dDiceNum;
     }
 
     public void Activate()
@@ -102,7 +106,7 @@ public abstract class Attack
         deactivatesAttacks.Add(i);
     }
 
-    public bool CheckAndSetTarget( Unit u)    // sprawdza czy podana jednostka ma id takie jak id celu ataku, jeżeli tak to ustawia referencję na cel ataku i zwraca true jeżeli nie, zwraca false
+    /*public bool CheckAndSetTarget( Unit u)    // sprawdza czy podana jednostka ma id takie jak id celu ataku, jeżeli tak to ustawia referencję na cel ataku i zwraca true jeżeli nie, zwraca false
     {
         if (u.MyId(targetId))
         {
@@ -110,7 +114,7 @@ public abstract class Attack
             return true;
         }
         else return false;
-    }
+    }*/
 
     public Vector3 GetPosition()
     {
@@ -122,23 +126,24 @@ public abstract class Attack
         return armyId;
     }
 
-    public Unit GetTarget()
+    /*public Unit GetTarget()
     {
         return target;
-    }
+    }*/
+
     //tymczasowo
     public int GetTargetId()
     {
         return targetId;
     }
 
-    public Unit GetAttacker()
+    public Unit GetOwner()
     {
         return owner;
     }
 
-    public abstract StateChange MakeAttack();
-    public abstract List<StateChange> getOutcomes();
+    public abstract StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner);
+    public abstract List<StateChange> GetOutcomes();
     public abstract Attack GetCopy(Unit o);
 
 }

@@ -194,7 +194,7 @@ public class UnitController : MonoBehaviour
         EventManager.onAttackClicked -= myAttackClicked;
         EventManager.onUnitClicked -= myUnitClicked;
         EventManager.onTileClicked -= anyTileClicked;
-        EventManager.onUpdateBoard -= UpdateMe;
+        EventManager.onResultMenuClosed -= UpdateMe;
     }
 
     public int UnitId
@@ -232,7 +232,7 @@ public class UnitController : MonoBehaviour
         EventManager.onAttackClicked += myAttackClicked;
         EventManager.onUnitClicked += myUnitClicked;
         EventManager.onTileClicked += anyTileClicked;
-        EventManager.onUpdateBoard += UpdateMe;
+        EventManager.onResultMenuClosed += UpdateMe;
     }
 
     public void InitializeUnit(int squadNumber, int initialMorale, int unitId, GameObject unitSquadPrefab, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, string unitType, int tileId)   //   armyId == 1 then blue else red

@@ -35,14 +35,22 @@ public class PanZoom : MonoBehaviour
         }
     }
 
-    private void ZoomOut(ThrowResult r)
+    private void ZoomOut(StateChange r)
     {
         StartCoroutine(ZoomAtDice(0.5f, 4.0f));
+    }
+
+    private void TurnEnd()
+    {
+        if(BattleManager.isPlayer1Human && BattleManager.isPlayer2Human) ChangeViewAngle("button");
+        if (BattleManager.turnOwnerId == 1) BattleManager.turnOwnerId = 2;
+        else BattleManager.turnOwnerId = 1;
     }
 
     private void OnEnable()
     {
         EventManager.onDiceResult += ZoomOut;
+        EventManager.onTurnEnd += TurnEnd;
     }
 
     // Start is called before the first frame update
@@ -54,6 +62,7 @@ public class PanZoom : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.onDiceResult -= ZoomOut;
+        EventManager.onTurnEnd -= TurnEnd;
     }
 
     // Update is called once per frame

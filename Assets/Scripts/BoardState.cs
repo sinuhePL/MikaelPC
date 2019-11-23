@@ -8,6 +8,15 @@ public class BoardState
     private List<KeyField> keyFields;
     private Army player1;
     private Army player2;
+    private int winnerId;
+
+    private void DeactivateAttacksOnUnit(int unitId)
+    {
+        foreach (Unit u in units)
+        {
+            u.DeactivateAttackOnUnit(unitId);
+        }
+    }
 
     public BoardState(Army army1, Army army2)
     {
@@ -15,6 +24,7 @@ public class BoardState
         keyFields = new List<KeyField>();
         player1 = army1;
         player2 = army2;
+        winnerId = 0;
     }
 
     public BoardState(BoardState pattern)   // konstruktor kopiujący
@@ -35,21 +45,40 @@ public class BoardState
         {
             keyFields.Add(new KeyField(_keyField));
         }
+        winnerId = pattern.winnerId;
         // ustawia referenceje celów ataków
-        foreach(Unit _unit in units)
+        /*foreach(Unit _unit in units)
         {
             _unit.SetAttacksTargets(units);
+        }*/
+    }
+
+    public List<int> GetPossibleAttacks(int attackingPlayer)
+    {
+        List<int> resultList = new List<int>();
+        if (winnerId != 0) return resultList;
+        else
+        {
+            foreach (Unit _unit in units)
+            {
+                if (_unit.GetArmyId() == attackingPlayer && _unit.IsAvialable) resultList.AddRange(_unit.GetActiveAttacksIds());
+            }
+            return resultList;
         }
     }
 
-    public List<StateChange> GetPossibleChanges(int attackingPlayer)   // zwraca wszystkie możliwe wyniki wszystkich aktywnych ataków gracza który 
+    public List<StateChange> GetPossibleOutcomes(int attackingPlayer)   // zwraca wszystkie możliwe wyniki wszystkich aktywnych ataków gracza 
     {
         List<StateChange> resultList = new List<StateChange>();
-        foreach(Unit _unit in units)
+        if (winnerId != 0) return resultList;
+        else
         {
-            if(_unit.GetArmyId() == attackingPlayer) resultList.AddRange(_unit.GetAttackOutcomes());
+            foreach (Unit _unit in units)
+            {
+                if (_unit.GetArmyId() == attackingPlayer) resultList.AddRange(_unit.GetAttackOutcomes());
+            }
+            return resultList;
         }
-        return resultList;
     }
 
     public Unit GetUnit(int idUnit)
@@ -75,37 +104,70 @@ public class BoardState
     public int ChangeState(StateChange change)  // zmienia stan planszy zgodnie z definicją zmiany
     {
         Unit u;
+        int army1ActiveCount, army2ActiveCount;
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId); 
         u.ChangeStrength(change.attackerStrengthChange);
         u.ChangeMorale(change.attackerMoraleChanged);
-        u.ChangeArmyTestModifier(change.attackerRouteTestModifierChange);
-        foreach(int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+        if(!u.IsAvialable) DeactivateAttacksOnUnit(u.GetUnitId());
+        if (change.activatedAttacks != null)
         {
-            u.ActivateAttack(i);
+            foreach (int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+            {
+                u.ActivateAttack(i);
+            }
         }
-        foreach(int i in change.deactivatedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+        if (change.deactivatedAttacks != null)
         {
-            u.DeactivateAttack(i);
+            foreach (int i in change.deactivatedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+            {
+                u.DeactivateAttack(i);
+            }
         }
+        if (u.GetArmyId() == 1) player1.ChangeMorale(change.attackerMoraleChanged);
+        else player2.ChangeMorale(change.attackerMoraleChanged);
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
         u.ChangeStrength(change.defenderStrengthChange);
         u.ChangeMorale(change.defenderMoraleChanged);
-        u.ChangeArmyTestModifier(change.defenderRouteTestModifierChange);
-        foreach (int i in change.activatedAttacks)  // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+        if (!u.IsAvialable) DeactivateAttacksOnUnit(u.GetUnitId());
+        if (change.activatedAttacks != null)
         {
-            u.ActivateAttack(i);
+            foreach (int i in change.activatedAttacks)  // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+            {
+                u.ActivateAttack(i);
+            }
         }
-        foreach (int i in change.deactivatedAttacks)    // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+        if (change.deactivatedAttacks != null)
         {
-            u.DeactivateAttack(i);
+            foreach (int i in change.deactivatedAttacks)    // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+            {
+                u.DeactivateAttack(i);
+            }
         }
-        foreach(KeyField kf in keyFields)   // wprowadza zmianę własiciela pola kluczowego
+        if (u.GetArmyId() == 1) player1.ChangeMorale(change.defenderMoraleChanged);
+        else player2.ChangeMorale(change.defenderMoraleChanged);
+        if (keyFields != null)
         {
-            if (kf.GetFieldId() == change.keyFieldChangeId) kf.SetOccupant(change.keyFieldNewOccupantId);
+            foreach (KeyField kf in keyFields)   // wprowadza zmianę własiciela pola kluczowego
+            {
+                if (kf.GetFieldId() == change.keyFieldChangeId) kf.SetOccupant(change.keyFieldNewOccupantId);
+            }
         }
-        return change.winnerId;
+        army1ActiveCount = 0;
+        army2ActiveCount = 0;
+        if (units != null)
+        {
+            foreach (Unit un in units)
+            {
+                if (un.IsAvialable && un.GetArmyId() == 1) army1ActiveCount++;
+                if (un.IsAvialable && un.GetArmyId() == 2) army2ActiveCount++;
+            }
+        }
+        if (army1ActiveCount == 0 && army2ActiveCount == 0) winnerId = -1;
+        else if (army1ActiveCount == 0) winnerId = 2;
+        else if (army2ActiveCount == 0) winnerId = 1;
+        return winnerId;
     }
 
     public void AddUnit(Unit u)
@@ -127,11 +189,27 @@ public class BoardState
         else return null;
     }
 
-    public void DeactivateAttacksOnUnit(int unitId)
-    { 
+    public float EvaluateBoard(int armyId)
+    {
+        float score;
+
+        score = 0.0f;
         foreach(Unit u in units)
         {
-            u.DeactivateAttackOnUnit(unitId);
+            if (u.GetArmyId() == armyId) score += 4.0f;
+            else score -= 4.0f;
         }
+        if(armyId == 1)
+        {
+            score += player1.GetMorale();
+            score -= player2.GetMorale();
+        }
+        else
+        {
+            score -= player1.GetMorale();
+            score += player2.GetMorale();
+        }
+        
+        return score;
     }
 }

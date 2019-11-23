@@ -5,7 +5,6 @@ using DG.Tweening;
 
 public class EndTurnController : MonoBehaviour
 {
-    private Camera myCamera;
     private bool isClicked;
 
     [SerializeField] private GameObject leftArrow;
@@ -21,25 +20,32 @@ public class EndTurnController : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        EventManager.onResultMenuClosed += AttackResolved;
+    }
+
     private void Start()
     {
-        myCamera = Camera.main;
         isClicked = false;
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.onResultMenuClosed -= AttackResolved;
     }
 
     public void ButtonPressed()
     {
         isClicked = true;
-        myCamera.GetComponent<PanZoom>().ChangeViewAngle("button");
-        if (BattleManager.turnOwnerId == 1) BattleManager.turnOwnerId = 2;
-        else BattleManager.turnOwnerId = 1;
-        BattleManager.playerAttacked = false;
         leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
         rightArrow.GetComponent<LookArrowController>().ChangeActivityState();
+        EventManager.RaiseEventOnTurnEnd();
     }
 
     public void AttackResolved()
     {
-        StartCoroutine(WaitForClick());
+        if (BattleManager.turnOwnerId == 1 && !BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && !BattleManager.isPlayer2Human) ButtonPressed();
+        else StartCoroutine(WaitForClick());
     }
 }
