@@ -129,8 +129,8 @@ public class BattleManager : MonoBehaviour {
             if (uc.ArmyId == 1) army1morale += uc.InitialMorale;
             else army2morale += uc.InitialMorale;
         }
-        army1 = new Army(1, army1morale, 0, 6);
-        army2 = new Army(2, army2morale, 0, 6);
+        army1 = new Army(1, army1morale, 0, 6, "France");
+        army2 = new Army(2, army2morale, 0, 6, "HRE");
         myBoardState = new BoardState(army1, army2);
 
         // creates in memory representation of each unit on screen
@@ -404,5 +404,25 @@ public class BattleManager : MonoBehaviour {
     public int GetArmyMorale(int armyId)
     {
         return myBoardState.GetArmyMorale(armyId);
+    }
+
+    public string GetArmyName(string army, Attack a)
+    {
+        int i = 0;
+
+        if (army == "attacker")
+        {
+            i = a.GetOwner().GetArmyId();
+        }
+        else if(army == "defender")
+        {
+            i = myBoardState.GetUnit(a.GetTargetId()).GetArmyId();
+        }
+        if (i > 0) return myBoardState.GetArmyName(i);
+        else return null;
+    }
+    public string GetArmyName(int unitId)
+    {
+        return myBoardState.GetArmyName(myBoardState.GetUnit(unitId).GetArmyId());
     }
 }

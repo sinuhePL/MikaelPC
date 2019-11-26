@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Army
 {
+    private string armyName;
     private int idArmy;
     private int morale;
     private int routeTestModifier;
@@ -15,14 +16,16 @@ public class Army
         morale = pattern.morale;
         routeTestModifier = pattern.routeTestModifier;
         testDiceSize = pattern.testDiceSize;
+        armyName = pattern.armyName;
     }
 
-    public Army(int i, int m, int rtm, int ts)  // kontruktor
+    public Army(int i, int m, int rtm, int ts, string n)  // kontruktor
     {
         idArmy = i;
         morale = m;
         routeTestModifier = rtm;
         testDiceSize = ts;
+        armyName = n;
     }
 
     public int GetMorale()
@@ -58,5 +61,10 @@ public class Army
     public int GetArmyId()
     {
         return idArmy;
+    }
+
+    public string GetArmyName()
+    {
+        return armyName;
     }
 }

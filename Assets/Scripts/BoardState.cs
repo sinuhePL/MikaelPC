@@ -212,4 +212,10 @@ public class BoardState
         
         return score;
     }
+
+    public string GetArmyName(int armyId)
+    {
+        if (armyId == 1) return player1.GetArmyName();
+        else return player2.GetArmyName();
+    }
 }

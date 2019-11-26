@@ -16,21 +16,26 @@ public class ResultMenuController : MonoBehaviour
     {
         attackResultText = transform.Find("AttackResult").GetComponent<Text>();
         defenceResultText = transform.Find("DefenceResult").GetComponent<Text>();
-        attackText = transform.Find("AttackCaption").GetComponent<Text>();
-        defenceText = transform.Find("DefenceCaption").GetComponent<Text>();
+        attackText = transform.Find("AttackingArmyName").GetComponent<Text>();
+        defenceText = transform.Find("DefendingArmyName").GetComponent<Text>();
     }
 
     private void DiceThrown(StateChange result)
     {
-        attackText.text = "Attacker:";
+        Vector3 endPosition;
+        Sequence mySequence = DOTween.Sequence();
+
+        attackText.text = BattleManager.Instance.GetArmyName(result.attackerId) + ":";
         attackResultText.text = "";
         if (result.attackerStrengthChange != 0) attackResultText.text = "Strength: " + result.attackerStrengthChange.ToString();
         if (result.attackerMoraleChanged != 0) attackResultText.text += " Morale: " + result.attackerMoraleChanged.ToString();
-        defenceText.text = "Defender:";
+        defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":"; 
         defenceResultText.text = "";
         if (result.defenderStrengthChange != 0) defenceResultText.text = "Strength: " + result.defenderStrengthChange.ToString();
         if (result.defenderMoraleChanged != 0) defenceResultText.text += " Morale: " + result.defenderMoraleChanged.ToString();
-        transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack);
+        endPosition = new Vector3(Screen.width/2, Screen.height/2);
+        mySequence.Append(transform.DOMove(endPosition, 0.01f));
+        mySequence.Append(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
     }
 
     private void OnDestroy()
