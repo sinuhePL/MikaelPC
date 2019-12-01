@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5288714367772063744}
   m_Layer: 8
   m_Name: tile_hill2
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

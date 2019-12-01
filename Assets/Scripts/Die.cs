@@ -22,6 +22,8 @@ using DG.Tweening;
 /// <summary>
 /// Die base class to determine if a die is rolling and to calculate it's current value
 /// </summary>
+/// 
+[RequireComponent(typeof(AudioSource))]
 public class Die : MonoBehaviour {
 
 	//------------------------------------------------------------------------------------------------------------------------------
@@ -31,6 +33,8 @@ public class Die : MonoBehaviour {
 	// current value, 0 is undetermined (die is rolling) or invalid.
 	public int value = 0;
     public int throwId = 0;
+    public AudioClip[] dieSounds;
+    public AudioClip die2dieSound;
 
 	//------------------------------------------------------------------------------------------------------------------------------
 	// protected and private attributes
@@ -40,6 +44,9 @@ public class Die : MonoBehaviour {
     protected Vector3 localHitNormalized;
 	// hitVector check margin
     protected float validMargin = 0.45F;
+    protected int touchCounter = 0;
+    protected AudioSource myAudioSource;
+    private bool isRolling = true;
 
     private IEnumerator IncreaseGlow(float duration, Transform symbol)
     {
@@ -56,11 +63,21 @@ public class Die : MonoBehaviour {
     {
         get
         {
+            if(!(GetComponent<Rigidbody>().velocity.sqrMagnitude < .01F && GetComponent<Rigidbody>().angularVelocity.sqrMagnitude < .01F) && isRolling)
+            {
+                isRolling = false;
+                myAudioSource.PlayOneShot(dieSounds[6]);
+            }
             return !(GetComponent<Rigidbody>().velocity.sqrMagnitude < .01F && GetComponent<Rigidbody>().angularVelocity.sqrMagnitude < .01F);
         }
     }
 
-	// calculate the normalized hit vector and should always return true
+    protected void Start()
+    {
+        myAudioSource = GetComponent<AudioSource>();
+    }
+
+    // calculate the normalized hit vector and should always return true
     protected bool localHit
     {
         get
@@ -81,7 +98,21 @@ public class Die : MonoBehaviour {
         }
     }
 
-	// calculate this die's value
+    protected void OnCollisionEnter(Collision collision)
+    {
+        //int groundMask = LayerMask.GetMask("Ground");
+        if (collision.gameObject.tag == "Tile")
+        {
+            myAudioSource.PlayOneShot(dieSounds[touchCounter]);
+            if (touchCounter < 6) touchCounter++;
+        }
+        else if(collision.gameObject.tag == "Die")
+        {
+            myAudioSource.PlayOneShot(die2dieSound);
+        }
+    }
+
+    // calculate this die's value
     void GetValue()
     {
 		// value = 0 -> undetermined or invalid

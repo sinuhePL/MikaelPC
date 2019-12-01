@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2787020397020539013}
   m_Layer: 8
   m_Name: marginCornerLeftBottom
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -212,6 +212,7 @@ public class BattleManager : MonoBehaviour {
         if (winnerId != 0) EventManager.RaiseEventGameOver(winnerId);
     }
 
+    // Waits for dice to stop rolling
     private IEnumerator WaitForDice(int throw1Id, int throw2Id, int attackId)
     {
         Attack tempAttack;
@@ -223,13 +224,7 @@ public class BattleManager : MonoBehaviour {
         string result2 = Dice.AsString("d6", throw2Id);
         Debug.Log(result1);
         Debug.Log(result2);
-        //ThrowResult result = new ThrowResult();
         StateChange result = new StateChange();
-        /*result.attackId = 0;
-        result.attackerStrengthHits = 0;
-        result.attackerMoraleHits = 0;
-        result.defenderStrengthHits = 0;
-        result.defenderMoraleHits = 0;*/
         string[] throw1Hits, throw2Hits;
         int attackStrengthHit=0, attackMoraleHit=0, defenceStrengthHit=0, defenceMoraleHit=0;
         if (!(result1.Contains("?") || result2.Contains("?") || result1.Length < 13 || result2.Length < 12))    // sprawdzenie czy rzut był udany/bezbłędny
@@ -248,11 +243,6 @@ public class BattleManager : MonoBehaviour {
                     if (throw2Hits[i] == "S") defenceStrengthHit++;
                     if (throw2Hits[i] == "M") defenceMoraleHit++;
                 }
-                /*result.attackId = attackId;
-                result.attackerStrengthHits = attackStrengthHit;
-                result.attackerMoraleHits = attackMoraleHit;
-                result.defenderStrengthHits = defenceStrengthHit;
-                result.defenderMoraleHits = defenceMoraleHit;*/
                 tempAttack = myBoardState.GetAttack(attackId);
                 result.attackerId = tempAttack.GetOwner().GetUnitId();
                 result.defenderId = tempAttack.GetTargetId();
@@ -270,7 +260,9 @@ public class BattleManager : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Błąd przy rzucie");
+            Debug.Log("Błąd przy rzucie: ");
+            Debug.Log(result1);
+            Debug.Log(result2);
             MakeAttack(attackId);
         }
     }
