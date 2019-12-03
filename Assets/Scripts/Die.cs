@@ -63,11 +63,6 @@ public class Die : MonoBehaviour {
     {
         get
         {
-            if(!(GetComponent<Rigidbody>().velocity.sqrMagnitude < .01F && GetComponent<Rigidbody>().angularVelocity.sqrMagnitude < .01F) && isRolling)
-            {
-                isRolling = false;
-                myAudioSource.PlayOneShot(dieSounds[6]);
-            }
             return !(GetComponent<Rigidbody>().velocity.sqrMagnitude < .01F && GetComponent<Rigidbody>().angularVelocity.sqrMagnitude < .01F);
         }
     }
@@ -100,7 +95,6 @@ public class Die : MonoBehaviour {
 
     protected void OnCollisionEnter(Collision collision)
     {
-        //int groundMask = LayerMask.GetMask("Ground");
         if (collision.gameObject.tag == "Tile")
         {
             myAudioSource.PlayOneShot(dieSounds[touchCounter]);
@@ -160,9 +154,16 @@ public class Die : MonoBehaviour {
 
     void Update()
     {
-		// determine the value is the die is not rolling
+        // determine the value is the die is not rolling
         if (!rolling && localHit)
+        {
             GetValue();
+            if (isRolling && touchCounter > 0)
+            {
+                isRolling = false;
+                myAudioSource.PlayOneShot(dieSounds[6]);
+            }
+        }
     }
 
 

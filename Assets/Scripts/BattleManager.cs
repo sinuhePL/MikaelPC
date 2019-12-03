@@ -11,7 +11,6 @@ public class BattleManager : MonoBehaviour {
     private List<GameObject> units;
     private List<GameObject> tiles;
     private Camera myCamera;
-    private bool playerAttacked;
 
     public static BattleManager Instance { get { return _instance; } }
     [SerializeField] private Transform marginBottom;
@@ -36,6 +35,7 @@ public class BattleManager : MonoBehaviour {
     public static int turnOwnerId = 1;
     public static bool isPlayer1Human = true;
     public static bool isPlayer2Human = false;
+    public static bool hasTurnOwnerAttacked = false;
 
     public const string Army1Color = "#4158f3";
     public const string Army2Color = "#ff4722";
@@ -75,7 +75,6 @@ public class BattleManager : MonoBehaviour {
 
         Random.InitState(System.Environment.TickCount);
         tiles = new List<GameObject>();
-        playerAttacked = false;
         //inicjalizacja elementów graficznych planszy
         for (int i=0; i< _boardWidth+4; i++)
         {
@@ -182,19 +181,19 @@ public class BattleManager : MonoBehaviour {
             }
             if (leftAttackTargetId > 0)
             {
-                tempAttack = new ChargeAttack(uc.GetAttackId(1), true, uc.ArmyId, myUnit, 0, leftAttackTargetId, uc.transform.position + menuLeftPositionShift, 3, 3);
+                tempAttack = new ChargeAttack(uc.GetAttackId(1), true, uc.ArmyId, myUnit, 0, leftAttackTargetId, uc.transform.position + menuLeftPositionShift, 3, 2);
                 uc.ActivateAttack(uc.GetAttackId(1)); // testowo, docelowo tylko central attack jest aktywnyna początku
                 myUnit.AddAttack(tempAttack);
             }
             if (centralAttackTargetId > 0)
             {
-                tempAttack = new ChargeAttack(uc.GetAttackId(2), true, uc.ArmyId, myUnit, 0, centralAttackTargetId, uc.transform.position + menuCentralPositionShift, 3, 3);
+                tempAttack = new ChargeAttack(uc.GetAttackId(2), true, uc.ArmyId, myUnit, 0, centralAttackTargetId, uc.transform.position + menuCentralPositionShift, 3, 2);
                 uc.ActivateAttack(uc.GetAttackId(2));
                 myUnit.AddAttack(tempAttack);
             }
             if (rightAttackTargetId > 0)
             {
-                tempAttack = new ChargeAttack(uc.GetAttackId(3), true, uc.ArmyId, myUnit, 0, rightAttackTargetId, uc.transform.position + menuRightPositionShift, 3, 3);
+                tempAttack = new ChargeAttack(uc.GetAttackId(3), true, uc.ArmyId, myUnit, 0, rightAttackTargetId, uc.transform.position + menuRightPositionShift, 3, 2);
                 uc.ActivateAttack(uc.GetAttackId(3)); // testowo, docelowo tylko central attack jest aktywnyna początku
                 myUnit.AddAttack(tempAttack);
             }
@@ -216,21 +215,25 @@ public class BattleManager : MonoBehaviour {
     private IEnumerator WaitForDice(int throw1Id, int throw2Id, int attackId)
     {
         Attack tempAttack;
-        while(Dice.rolling)
+        string result1 = "", result2 = "";
+
+        while (Dice.rolling)
         {
             yield return null;
         }
-        string result1 = Dice.AsString("d6", throw1Id);
-        string result2 = Dice.AsString("d6", throw2Id);
+        if(throw1Id > 0) result1 = Dice.AsString("d6", throw1Id);
+        if(throw2Id > 0) result2 = Dice.AsString("d6", throw2Id);
         Debug.Log(result1);
         Debug.Log(result2);
         StateChange result = new StateChange();
         string[] throw1Hits, throw2Hits;
         int attackStrengthHit=0, attackMoraleHit=0, defenceStrengthHit=0, defenceMoraleHit=0;
-        if (!(result1.Contains("?") || result2.Contains("?") || result1.Length < 13 || result2.Length < 12))    // sprawdzenie czy rzut był udany/bezbłędny
+        if (!(result1.Contains("?") || result2.Contains("?") || result1.Length < 13 && result1.Length > 0 || result2.Length < 12 && result2.Length > 0))    // sprawdzenie czy rzut był udany/bezbłędny
         {
-            throw1Hits = Dice.ResultForThrow("d6", throw1Id);
-            throw2Hits = Dice.ResultForThrow("d6", throw2Id);
+            if (throw1Id > 0) throw1Hits = Dice.ResultForThrow("d6", throw1Id);
+            else throw1Hits = new string[0];
+            if (throw2Id > 0) throw2Hits = Dice.ResultForThrow("d6", throw2Id);
+            else throw2Hits = new string[0];
             if (throw1Hits != null && throw2Hits != null)
             {
                 for (int i = 0; i < throw1Hits.Length; i++)
@@ -252,7 +255,7 @@ public class BattleManager : MonoBehaviour {
                 result.defenderStrengthChange = -attackStrengthHit;
                 Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
-                playerAttacked = true;
+                hasTurnOwnerAttacked = true;
                 yield return new WaitForSeconds(1.5f);
                 EventManager.RaiseEventOnDiceResult(result);
                 Dice.Clear();
@@ -260,9 +263,7 @@ public class BattleManager : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Błąd przy rzucie: ");
-            Debug.Log(result1);
-            Debug.Log(result2);
+            Debug.Log("Błąd przy rzucie");
             MakeAttack(attackId);
         }
     }
@@ -270,21 +271,21 @@ public class BattleManager : MonoBehaviour {
     private void MakeAttack(int idAttack)
     {
         Attack myAttack;
-        int throw1, throw2;
+        int throw1 = 0, throw2 = 0;
 
         myAttack = myBoardState.GetAttack(idAttack);
-        if (myAttack.GetArmyId() == turnOwnerId && !playerAttacked)
+        if (myAttack.GetArmyId() == turnOwnerId && !hasTurnOwnerAttacked)
         {
             Dice.Clear();
             if (myAttack.GetArmyId() == 1)
             {
-                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if(myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if(myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
             }
             else
             {
-                throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-                throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
             }
             myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() + new Vector3(0.0f, 10.0f, 0.0f));
             StartCoroutine(WaitForDice(throw1, throw2, idAttack));
@@ -293,7 +294,7 @@ public class BattleManager : MonoBehaviour {
 
     private void TurnEnd()
     {
-        playerAttacked = false;
+        hasTurnOwnerAttacked = false;
         if (turnOwnerId == 1 && !isPlayer1Human || turnOwnerId == 2 && !isPlayer2Human)
         {
             ComputeBestAttack();
@@ -369,6 +370,7 @@ public class BattleManager : MonoBehaviour {
             {
                 EventManager.RaiseEventOnUnitClicked(myBoardState.GetAttack(bestAttack).GetOwner().GetUnitId());
                 EventManager.RaiseEventOnAttackClicked(bestAttack);
+                SoundManagerController.Instance.PlayThrowSound(0);
                 MakeAttack(bestAttack);
             }
         }

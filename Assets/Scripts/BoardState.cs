@@ -124,8 +124,6 @@ public class BoardState
                 u.DeactivateAttack(i);
             }
         }
-        if (u.GetArmyId() == 1) player1.ChangeMorale(change.attackerMoraleChanged);
-        else player2.ChangeMorale(change.attackerMoraleChanged);
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
         u.ChangeStrength(change.defenderStrengthChange);
@@ -145,8 +143,6 @@ public class BoardState
                 u.DeactivateAttack(i);
             }
         }
-        if (u.GetArmyId() == 1) player1.ChangeMorale(change.defenderMoraleChanged);
-        else player2.ChangeMorale(change.defenderMoraleChanged);
         if (keyFields != null)
         {
             foreach (KeyField kf in keyFields)   // wprowadza zmianę własiciela pola kluczowego

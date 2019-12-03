@@ -231,6 +231,10 @@ public class Dice : MonoBehaviour {
     {
 		// count the dice
         string v = ""+Count(dieType, throwId);
+        if (v == "0")
+        {
+            Debug.Log("B³¹d");
+        }
         if (dieType == "")
             v += " dice | ";
         else
