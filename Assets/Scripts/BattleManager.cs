@@ -38,7 +38,7 @@ public class BattleManager : MonoBehaviour {
     public static bool hasTurnOwnerAttacked = false;
 
     public const string Army1Color = "#4158f3";
-    public const string Army2Color = "#ff4722";
+    public const string Army2Color = "#ecc333";
 
     private void Awake()
     {
@@ -280,11 +280,11 @@ public class BattleManager : MonoBehaviour {
             if (myAttack.GetArmyId() == 1)
             {
                 if(myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-                if(myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if(myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
             }
             else
             {
-                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-red", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
                 if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
             }
             myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() + new Vector3(0.0f, 10.0f, 0.0f));

@@ -146,10 +146,9 @@ public class Die : MonoBehaviour {
 
     public void Highlight()
     {
-        Transform t = transform.Find(value.ToString());
+        /*Transform t = transform.Find(value.ToString());
         t.gameObject.SetActive(true);
-        //t.DOPunchScale(new Vector3(1.0f, 1.0f, 1.0f), 1.0f);
-        StartCoroutine(IncreaseGlow(1.0f, t));
+        StartCoroutine(IncreaseGlow(1.0f, t));*/
     }
 
     void Update()

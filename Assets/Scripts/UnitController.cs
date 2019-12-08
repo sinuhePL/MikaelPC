@@ -30,14 +30,21 @@ public class UnitController : MonoBehaviour
     [SerializeField] private GameObject arrowForwardBlueEmptyPrefab;
     [SerializeField] private GameObject arrowForwardRedPrefab;
     [SerializeField] private GameObject arrowForwardRedEmptyPrefab;
+    [SerializeField] private GameObject arrowForwardYellowPrefab;
+    [SerializeField] private GameObject arrowForwardYellowEmptyPrefab;
     [SerializeField] private GameObject arrowLeftBluePrefab;
     [SerializeField] private GameObject arrowLeftBlueEmptyPrefab;
     [SerializeField] private GameObject arrowLeftRedPrefab;
     [SerializeField] private GameObject arrowLeftRedEmptyPrefab;
+    [SerializeField] private GameObject arrowLeftYellowPrefab;
+    [SerializeField] private GameObject arrowLeftYellowEmptyPrefab;
     [SerializeField] private GameObject arrowRightBluePrefab;
     [SerializeField] private GameObject arrowRightBlueEmptyPrefab;
     [SerializeField] private GameObject arrowRightRedPrefab;
     [SerializeField] private GameObject arrowRightRedEmptyPrefab;
+    [SerializeField] private GameObject arrowRightYellowPrefab;
+    [SerializeField] private GameObject arrowRightYellowEmptyPrefab;
+
     [SerializeField] private GameObject unitCaptionPrefab;
     [SerializeField] private GameObject flagPrefab;
 
@@ -280,12 +287,12 @@ public class UnitController : MonoBehaviour
             }
             else
             {
-                forwardArrow = Instantiate(arrowForwardRedPrefab, transform.position + new Vector3(1.0f, 0.0f, -4.0f), arrowForwardRedPrefab.transform.rotation);
-                forwardArrowEmpty = Instantiate(arrowForwardRedEmptyPrefab, transform.position + new Vector3(1.0f, 0.0f, -4.0f), arrowForwardRedEmptyPrefab.transform.rotation);
-                leftArrow = Instantiate(arrowLeftRedPrefab, transform.position + new Vector3(2.5f, 0.0f, -4.0f), arrowLeftRedPrefab.transform.rotation);
-                leftArrowEmpty = Instantiate(arrowLeftRedEmptyPrefab, transform.position + new Vector3(2.5f, 0.0f, -4.0f), arrowLeftRedEmptyPrefab.transform.rotation);
-                rightArrow = Instantiate(arrowRightRedPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightRedPrefab.transform.rotation);
-                rightArrowEmpty = Instantiate(arrowRightRedEmptyPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightRedEmptyPrefab.transform.rotation);
+                forwardArrow = Instantiate(arrowForwardYellowPrefab, transform.position + new Vector3(1.0f, 0.0f, -4.0f), arrowForwardYellowPrefab.transform.rotation);
+                forwardArrowEmpty = Instantiate(arrowForwardYellowEmptyPrefab, transform.position + new Vector3(1.0f, 0.0f, -4.0f), arrowForwardYellowEmptyPrefab.transform.rotation);
+                leftArrow = Instantiate(arrowLeftYellowPrefab, transform.position + new Vector3(2.5f, 0.0f, -4.0f), arrowLeftYellowPrefab.transform.rotation);
+                leftArrowEmpty = Instantiate(arrowLeftYellowEmptyPrefab, transform.position + new Vector3(2.5f, 0.0f, -4.0f), arrowLeftYellowEmptyPrefab.transform.rotation);
+                rightArrow = Instantiate(arrowRightYellowPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightYellowPrefab.transform.rotation);
+                rightArrowEmpty = Instantiate(arrowRightYellowEmptyPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowRightYellowEmptyPrefab.transform.rotation);
                 unitCaption = Instantiate(unitCaptionPrefab, transform.position + new Vector3(1.3f, 0.0f, 1.2f), unitCaptionPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 ColorUtility.TryParseHtmlString(BattleManager.Army2Color, out myColor);
                 unitCaption.GetComponent<TextMeshPro>().color = myColor;
