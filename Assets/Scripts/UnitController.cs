@@ -46,7 +46,10 @@ public class UnitController : MonoBehaviour
     [SerializeField] private GameObject arrowRightYellowEmptyPrefab;
 
     [SerializeField] private GameObject unitCaptionPrefab;
-    [SerializeField] private GameObject flagPrefab;
+    [SerializeField] private GameObject gendarmesFlagPrefab;
+    [SerializeField] private GameObject yellowInfrantryFlagPrefab;
+    [SerializeField] private GameObject blueInfrantryFlagPrefab;
+    [SerializeField] private GameObject blueSwissFlagPrefab;
 
     // called when arrow is clicked
     private void myAttackClicked(int idAttack)
