@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class CaptionController : MonoBehaviour
 {
-    [SerializeField] private Sprite frenchCavalery;
+    [SerializeField] private Sprite gendarmes;
+    [SerializeField] private Sprite landsknechte;
     private Image myImage;
     // Start is called before the first frame update
 
@@ -15,8 +16,11 @@ public class CaptionController : MonoBehaviour
         tempUnit = BattleManager.Instance.GetUnit(unitId);
         switch(tempUnit.GetUnitType())
         {
-            case "French Cavalery":
-                myImage.sprite = frenchCavalery;
+            case "Gendarmes":
+                myImage.sprite = gendarmes;
+                break;
+            case "Landsknechte":
+                myImage.sprite = landsknechte;
                 break;
         }
     }

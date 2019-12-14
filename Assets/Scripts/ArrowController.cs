@@ -8,7 +8,15 @@ public class ArrowController : MonoBehaviour
 {
     private int _attackId;
     private bool _isArrowActive;
-    private Renderer myRenderer;
+    private MeshRenderer myRenderer;
+    public const string YellowColor = "#766800";
+    public const string RedColor = "#6A0006";
+    [SerializeField] private Texture arrowRightTexture;
+    [SerializeField] private Texture arrowForwardTexture;
+    [SerializeField] private Texture arrowLeftTexture;
+    [SerializeField] private Texture arrowRightEmptyTexture;
+    [SerializeField] private Texture arrowForwardEmptyTexture;
+    [SerializeField] private Texture arrowLeftEmptyTexture;
 
     private void OnMouseDown()
     {
@@ -21,9 +29,46 @@ public class ArrowController : MonoBehaviour
 
     public void Awake()
     {
-        myRenderer = GetComponent<Renderer>();
+        myRenderer = GetComponent<MeshRenderer>();
         myRenderer.enabled = false;
         _isArrowActive = false;
+        
+    }
+
+    public void InitializeArrow(string direction, string color, string type)
+    {
+        Color myColor;
+
+        if (direction == "right")
+        {
+            if (type == "solid") myRenderer.material.mainTexture = arrowRightTexture;
+            else if(type == "empty") myRenderer.material.mainTexture = arrowRightEmptyTexture;
+        }
+        else if(direction == "forward")
+        {
+            if (type == "solid") myRenderer.material.mainTexture = arrowForwardTexture;
+            else if (type == "empty") myRenderer.material.mainTexture = arrowForwardEmptyTexture;
+        }
+        else if(direction == "left")
+        {
+            if (type == "solid") myRenderer.material.mainTexture = arrowLeftTexture;
+            else if (type == "empty") myRenderer.material.mainTexture = arrowLeftEmptyTexture;
+        }
+        myRenderer.material.EnableKeyword("_EmisColor");
+        if (color == "red")
+        {
+            ColorUtility.TryParseHtmlString(RedColor, out myColor);
+            myRenderer.material.SetColor("_EmisColor", Color.red);
+        }
+        else if (color == "blue")
+        {
+            myRenderer.material.SetColor("_EmisColor", Color.blue);
+        }
+        else if (color == "yellow")
+        {
+            ColorUtility.TryParseHtmlString(YellowColor, out myColor);
+            myRenderer.material.SetColor("_EmisColor", myColor);
+        }
     }
 
     public int AttackId

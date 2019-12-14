@@ -1552,15 +1552,15 @@ RectTransform:
   m_GameObject: {fileID: 1014370252}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.792, y: 0.792, z: 1}
+  m_LocalScale: {x: 0.795, y: 0.817, z: 1}
   m_Children: []
   m_Father: {fileID: 227061751}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 218.51007, y: -359.76}
-  m_SizeDelta: {x: 385, y: 130}
+  m_AnchoredPosition: {x: 221.9, y: -364.3}
+  m_SizeDelta: {x: 412, y: 155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1014370254
 MonoBehaviour:
@@ -1582,7 +1582,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 19e341b7b2b3acf4aaeea8e914115216, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 655838c1d1336f047bf005d01c674845, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1611,7 +1611,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906a07010a1e5c84cada7f2aef91cfba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frenchCavalery: {fileID: 21300000, guid: 19e341b7b2b3acf4aaeea8e914115216, type: 3}
+  gendarmes: {fileID: 21300000, guid: 655838c1d1336f047bf005d01c674845, type: 3}
+  landsknechte: {fileID: 21300000, guid: d6f2e6c252a619a45a33d4cbee4dd851, type: 3}
 --- !u!1 &1014987539
 GameObject:
   m_ObjectHideFlags: 0
@@ -1915,11 +1916,9 @@ MonoBehaviour:
   - {fileID: 7628703217314901033, guid: aef8696bff8974a46b1a76f6ec15f07a, type: 3}
   - {fileID: 2208145734809997645, guid: 82f68a3b2c0e14f4c82758703382be11, type: 3}
   - {fileID: 8098927023049770157, guid: e4c43b93763fc18459751778409c8592, type: 3}
-  unitPrefab: {fileID: 319731512460961604, guid: a9ac4cb676925c84e92d8a39556a27c1,
+  gendarmesPrefab: {fileID: 319731512460961604, guid: a9ac4cb676925c84e92d8a39556a27c1,
     type: 3}
-  cavalerySquadArmy1Prefab: {fileID: 4949005357050187562, guid: d3844162088de664a935e5416372db08,
-    type: 3}
-  cavalerySquadArmy2Prefab: {fileID: 4332561230818777294, guid: c1b6f0683879f264eb8e4325e04cef6c,
+  landsknechtePrefab: {fileID: 2983453476021083486, guid: 4d2b07b0ead4214419fc3232be009c6e,
     type: 3}
 --- !u!4 &1185829298
 Transform:

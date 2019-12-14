@@ -23,15 +23,15 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private Transform marginTop;
     [SerializeField] private Transform marginAround;
     [SerializeField] private GameObject[] boardFields;
-    [SerializeField] private GameObject unitPrefab;
-    [SerializeField] private GameObject cavalerySquadArmy1Prefab;
-    [SerializeField] private GameObject cavalerySquadArmy2Prefab;
+    [SerializeField] private GameObject gendarmesPrefab;
+    [SerializeField] private GameObject landsknechtePrefab;
+
 
     public static int boardWidth = 6;
     public static int boardHeight = 5;
     public static float boardFieldWitdth = 4.0f;
     public static float boardFieldHeight = 4.0f;
-    public static int maxSquads = 6;
+    public static int maxSquads = 12;
     public static int turnOwnerId = 1;
     public static bool isPlayer1Human = true;
     public static bool isPlayer2Human = false;
@@ -102,12 +102,12 @@ public class BattleManager : MonoBehaviour {
         //inicjalizacja jednostek
         units = new List<GameObject>();
         // create test unit
-        tempObj = Instantiate(unitPrefab, new Vector3(-10.0f, 0.05f, 10.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(5, 5, 1, cavalerySquadArmy1Prefab, 1, 1, 2, 3, "French Cavalery", 19);
+        tempObj = Instantiate(gendarmesPrefab, new Vector3(-10.0f, 0.05f, 10.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(1, 1, 1, 2, 3, 19);
         units.Add(tempObj);
 
-        tempObj = Instantiate(unitPrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(4, 6, 2, cavalerySquadArmy2Prefab, 2, 4, 5, 6, "French Cavalery", 7);
+        tempObj = Instantiate(landsknechtePrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(2, 2, 4, 5, 6, 7);
         units.Add(tempObj);
         // end test unit
     }
