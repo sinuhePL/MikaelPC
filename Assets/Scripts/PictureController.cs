@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class PictureController : MonoBehaviour
 {
-    [SerializeField] private Sprite cavalery;
+    [SerializeField] private Sprite heavyCavalery;
+    [SerializeField] private Sprite landsknechte;
+    [SerializeField] private Sprite suisse;
     private Image myImage;
 
     private void UnitClicked(int unitId)
@@ -14,8 +16,17 @@ public class PictureController : MonoBehaviour
         tempUnit = BattleManager.Instance.GetUnit(unitId);
         switch (tempUnit.GetUnitType())
         {
-            case "French Cavalery":
-                myImage.sprite = cavalery;
+            case "Gendarmes":
+                myImage.sprite = heavyCavalery;
+                break;
+            case "Landsknechte":
+                myImage.sprite = landsknechte;
+                break;
+            case "Suisse":
+                myImage.sprite = suisse;
+                break;
+            case "Imperial Cavalery":
+                myImage.sprite = heavyCavalery;
                 break;
         }
     }

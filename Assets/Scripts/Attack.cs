@@ -58,7 +58,7 @@ public abstract class Attack
         return defenceDiceNumber;
     }
 
-    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p, int aDiceNum, int dDiceNum) // konstruktor
+    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) // konstruktor
     {
         attackId = aId;
         isActiveState = state;
@@ -70,8 +70,8 @@ public abstract class Attack
         targetId = tId;
         //target = null;
         arrowPosition = p;
-        attackDiceNumber = aDiceNum;
-        defenceDiceNumber = dDiceNum;
+        attackDiceNumber = 0;
+        defenceDiceNumber = 0;
     }
 
     public void Activate()

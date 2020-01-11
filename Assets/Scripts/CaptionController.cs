@@ -7,6 +7,8 @@ public class CaptionController : MonoBehaviour
 {
     [SerializeField] private Sprite gendarmes;
     [SerializeField] private Sprite landsknechte;
+    [SerializeField] private Sprite suisse;
+    [SerializeField] private Sprite manatarms;
     private Image myImage;
     // Start is called before the first frame update
 
@@ -21,6 +23,12 @@ public class CaptionController : MonoBehaviour
                 break;
             case "Landsknechte":
                 myImage.sprite = landsknechte;
+                break;
+            case "Suisse":
+                myImage.sprite = suisse;
+                break;
+            case "Imperial Cavalery":
+                myImage.sprite = manatarms;
                 break;
         }
     }

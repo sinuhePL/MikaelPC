@@ -4,9 +4,103 @@ using UnityEngine;
 
 public class ChargeAttack : Attack
 {
-    public ChargeAttack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p, int aDiceNum, int dDiceNum) : base(aId, state, army, o, keyField, tId, p, aDiceNum, dDiceNum)
+    public ChargeAttack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p, string aType, string dType) : base(aId, state, army, o, keyField, tId, p)
     {
         attackName = "Charge!";
+        switch(aType)
+        {
+            case "Gendarmes":
+                switch(dType)
+                {
+                    case "Gendarmes":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Landsknechte":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Suisse":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Imperial Cavalery":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 2;
+                        break;
+                }
+                break;
+            case "Landsknechte":
+                switch (dType)
+                {
+                    case "Gendarmes":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 2;
+                        break;
+                    case "Landsknechte":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Suisse":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Imperial Cavalery":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 2;
+                        break;
+                }
+                break;
+            case "Suisse":
+                switch (dType)
+                {
+                    case "Gendarmes":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 2;
+                        break;
+                    case "Landsknechte":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Suisse":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Imperial Cavalery":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 2;
+                        break;
+                }
+                break;
+            case "Imperial Cavalery":
+                switch (dType)
+                {
+                    case "Gendarmes":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Landsknechte":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Suisse":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 3;
+                        break;
+                    case "Imperial Cavalery":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        break;
+                }
+                break;
+        }
+    }
+
+    public ChargeAttack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p, int aNum, int dNum) : base(aId, state, army, o, keyField, tId, p)
+    {
+        attackName = "Charge!";
+        attackDiceNumber = aNum;
+        defenceDiceNumber = dNum;
     }
 
     public override StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner)

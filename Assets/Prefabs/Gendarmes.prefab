@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7aaf1de96b72e9d4d87ec9881aa020d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialStrength: 5
+  initialStrength: 6
   initialMorale: 6
   arrowPrefab: {fileID: 3757254920715771083, guid: 2e7b4573427006241833f1a7d2b892b2,
     type: 3}
@@ -270,11 +270,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 319731512460961602}
     m_Modifications:
-    - target: {fileID: 3338071679186534467, guid: ccc636e1748d8884d9fc07378d74119b,
-        type: 3}
-      propertyPath: m_Name
-      value: Text (TMP)
-      objectReference: {fileID: 0}
     - target: {fileID: 3338071679186534478, guid: ccc636e1748d8884d9fc07378d74119b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -380,16 +375,10 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3338071679186534479, guid: ccc636e1748d8884d9fc07378d74119b,
+    - target: {fileID: 3338071679186534467, guid: ccc636e1748d8884d9fc07378d74119b,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: -5716421861202904456, guid: a7feb0f451a7c13479773ec772b9bff5,
-        type: 2}
-    - target: {fileID: 3338071679186534476, guid: ccc636e1748d8884d9fc07378d74119b,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
+      propertyPath: m_Name
+      value: Text (TMP)
       objectReference: {fileID: 0}
     - target: {fileID: 3338071679186534466, guid: ccc636e1748d8884d9fc07378d74119b,
         type: 3}
@@ -415,6 +404,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3338071679186534479, guid: ccc636e1748d8884d9fc07378d74119b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -5716421861202904456, guid: a7feb0f451a7c13479773ec772b9bff5,
+        type: 2}
+    - target: {fileID: 3338071679186534476, guid: ccc636e1748d8884d9fc07378d74119b,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ccc636e1748d8884d9fc07378d74119b, type: 3}

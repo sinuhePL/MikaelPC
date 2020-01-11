@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 219598121858332448}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.0499, z: 0}
-  m_LocalScale: {x: 0.4644779, y: 0.31195104, z: 1.0724}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1.0724}
   m_Children: []
   m_Father: {fileID: 219598123635717357}
   m_RootOrder: 1
@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 219598122928812173}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.049000002, z: 0}
-  m_LocalScale: {x: 0.42529383, y: 0.27403906, z: 1.07}
+  m_LocalScale: {x: 0.64, y: 0.64, z: 1.07}
   m_Children: []
   m_Father: {fileID: 219598123635717357}
   m_RootOrder: 0
@@ -194,7 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 219598123635717357}
   m_Layer: 0
-  m_Name: YellowInfrantrySquad
+  m_Name: InfrantrySquadYellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,12 +312,12 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 0a7bd2d9ccbbbb14f8636e974cf225bd,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 18.6588
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0a7bd2d9ccbbbb14f8636e974cf225bd,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 0a7bd2d9ccbbbb14f8636e974cf225bd,
         type: 3}

@@ -24,7 +24,10 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private Transform marginAround;
     [SerializeField] private GameObject[] boardFields;
     [SerializeField] private GameObject gendarmesPrefab;
-    [SerializeField] private GameObject landsknechtePrefab;
+    [SerializeField] private GameObject imperialLandsknechtePrefab;
+    [SerializeField] private GameObject frenchLandsknechtePrefab;
+    [SerializeField] private GameObject suissePrefab;
+    [SerializeField] private GameObject imperialCavaleryPrefab;
 
 
     public static int boardWidth = 6;
@@ -102,12 +105,24 @@ public class BattleManager : MonoBehaviour {
         //inicjalizacja jednostek
         units = new List<GameObject>();
         // create test unit
-        tempObj = Instantiate(gendarmesPrefab, new Vector3(-10.0f, 0.05f, 10.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(1, 1, 1, 2, 3, 19);
+        tempObj = Instantiate(gendarmesPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(1, 1, 1, 2, 3, 9);
         units.Add(tempObj);
 
-        tempObj = Instantiate(landsknechtePrefab, new Vector3(11.0f, 0.05f, -12.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(2, 2, 4, 5, 6, 7);
+        tempObj = Instantiate(frenchLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(2, 1, 4, 5, 6, 14);
+        units.Add(tempObj);
+
+        /*tempObj = Instantiate(suissePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(3, 1, 7, 8, 9, 19);
+        units.Add(tempObj);*/
+
+        tempObj = Instantiate(imperialLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(4, 2, 10, 11, 12, 7);
+        units.Add(tempObj);
+
+        tempObj = Instantiate(imperialCavaleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        tempObj.GetComponent<UnitController>().InitializeUnit(5, 2, 13, 14, 15, 12);
         units.Add(tempObj);
         // end test unit
     }
@@ -141,33 +156,22 @@ public class BattleManager : MonoBehaviour {
             //looks for tiles ids which attack arrows point at
             if (uc.ArmyId == 1)
             {
-                leftAttackTile = uc.UnitTileId - 13;
+                leftAttackTile = uc.UnitTileId - 7;
                 if (leftAttackTile % BattleManager.boardWidth == 5) leftAttackTile = 0;
-                centralAttackTile = uc.UnitTileId - 12;
-                rightAttackTile = uc.UnitTileId - 11;
+                centralAttackTile = uc.UnitTileId - 2;
+                rightAttackTile = uc.UnitTileId + 3;
                 if (rightAttackTile % BattleManager.boardWidth == 0) rightAttackTile = 0;
             }
             else
             {
-                leftAttackTile = uc.UnitTileId + 13;
+                leftAttackTile = uc.UnitTileId +7;
                 if (leftAttackTile % BattleManager.boardWidth == 0) leftAttackTile = 0;
-                centralAttackTile = uc.UnitTileId + 12;
-                rightAttackTile = uc.UnitTileId + 11;
+                centralAttackTile = uc.UnitTileId + 2;
+                rightAttackTile = uc.UnitTileId - 3;
                 if (rightAttackTile % BattleManager.boardWidth == 5) rightAttackTile = 0;
             }
-            //looks for units ids which sits on tiles pointed at attack arrows
-            leftAttackTargetId = 0;
-            centralAttackTargetId = 0;
-            rightAttackTargetId = 0;
-            foreach (GameObject g2 in units)
-            {
-                uc2 = g2.GetComponent<UnitController>();
-                if (uc2.UnitTileId == leftAttackTile) leftAttackTargetId = uc2.UnitId;
-                if (uc2.UnitTileId == centralAttackTile) centralAttackTargetId = uc2.UnitId;
-                if (uc2.UnitTileId == rightAttackTile) rightAttackTargetId = uc2.UnitId;
-
-            }
-            if(uc.ArmyId == 1)
+            // sets arrow position depending on direction of attack (left, central right)
+            if (uc.ArmyId == 1)
             {
                 menuLeftPositionShift = new Vector3(1.0f, 0.0f, 5.0f);
                 menuCentralPositionShift = new Vector3(3.0f, 0.0f, 5.0f);
@@ -179,23 +183,29 @@ public class BattleManager : MonoBehaviour {
                 menuCentralPositionShift = new Vector3(3.0f, 0.0f, -3.0f);
                 menuRightPositionShift = new Vector3(5.0f, 0.0f, -3.0f);
             }
-            if (leftAttackTargetId > 0)
+            //looks for units ids which sits on tiles pointed at attack arrows
+            foreach (GameObject g2 in units)
             {
-                tempAttack = new ChargeAttack(uc.GetAttackId(1), true, uc.ArmyId, myUnit, 0, leftAttackTargetId, uc.transform.position + menuLeftPositionShift, 3, 2);
-                uc.ActivateAttack(uc.GetAttackId(1)); // testowo, docelowo tylko central attack jest aktywnyna początku
-                myUnit.AddAttack(tempAttack);
-            }
-            if (centralAttackTargetId > 0)
-            {
-                tempAttack = new ChargeAttack(uc.GetAttackId(2), true, uc.ArmyId, myUnit, 0, centralAttackTargetId, uc.transform.position + menuCentralPositionShift, 3, 2);
-                uc.ActivateAttack(uc.GetAttackId(2));
-                myUnit.AddAttack(tempAttack);
-            }
-            if (rightAttackTargetId > 0)
-            {
-                tempAttack = new ChargeAttack(uc.GetAttackId(3), true, uc.ArmyId, myUnit, 0, rightAttackTargetId, uc.transform.position + menuRightPositionShift, 3, 2);
-                uc.ActivateAttack(uc.GetAttackId(3)); // testowo, docelowo tylko central attack jest aktywnyna początku
-                myUnit.AddAttack(tempAttack);
+                uc2 = g2.GetComponent<UnitController>();
+                if (uc2.UnitTileId == leftAttackTile)
+                {
+                    tempAttack = new ChargeAttack(uc.GetAttackId("right"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuLeftPositionShift, uc.UnitType, uc2.UnitType);
+                    //uc.ActivateAttack(uc.GetAttackId("right")); // testowo, docelowo tylko central attack jest aktywnyna początku
+                    myUnit.AddAttack(tempAttack);
+                }
+                if (uc2.UnitTileId == centralAttackTile)
+                {
+                    tempAttack = new ChargeAttack(uc.GetAttackId("central"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuCentralPositionShift, uc.UnitType, uc2.UnitType);
+                    uc.ActivateAttack(uc.GetAttackId("central"));
+                    myUnit.AddAttack(tempAttack);
+                }
+                if (uc2.UnitTileId == rightAttackTile)
+                {
+                    tempAttack = new ChargeAttack(uc.GetAttackId("left"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuRightPositionShift, uc.UnitType, uc2.UnitType);
+                    //uc.ActivateAttack(uc.GetAttackId("left")); // testowo, docelowo tylko central attack jest aktywnyna początku
+                    myUnit.AddAttack(tempAttack);
+                }
+
             }
 
             myBoardState.AddUnit(myUnit);

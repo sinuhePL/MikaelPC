@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class TileController : MonoBehaviour
 {
-    private int tileId;
+    public int tileId;
     // Start is called before the first frame update
 
     public void InitializeTile(int i)

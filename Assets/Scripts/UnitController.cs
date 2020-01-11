@@ -9,6 +9,7 @@ public class UnitController : MonoBehaviour
 {
     protected bool isInitialized = false;
     protected bool isOutlined;
+    protected bool isDisabled = false;
     protected int _strength;
     protected string _unitType;
     protected int _morale;
@@ -140,8 +141,9 @@ public class UnitController : MonoBehaviour
 
         myUnit = BattleManager.Instance.GetUnit(UnitId);
         anyTileClicked(0);
-        if (!myUnit.IsAvialable)    // check if unit killed
+        if (!myUnit.IsAvialable && !isDisabled)    // check if unit killed
         {
+            isDisabled = true;
             EventManager.RaiseEventOnUnitDestroyed(UnitId);
             StartCoroutine(DisableUnit());
             return;
@@ -243,10 +245,10 @@ public class UnitController : MonoBehaviour
             _unitTileId = tileId;
             _squads = new GameObject[initialStrength];
             _unitCaption = GetComponentInChildren<TextMeshPro>();
-            
-            // set position based on id tile which it sits on 
-            float xpos = (tileId % BattleManager.boardWidth) * BattleManager.boardFieldWitdth + BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth*0.25f;
-            float zpos = (tileId % BattleManager.boardHeight) * -1.0f * BattleManager.boardFieldHeight - BattleManager.boardFieldHeight /*- BattleManager.boardFieldHeight * 0.4f*/;
+
+            // set position based on id tile which it sits on
+            float xpos = (tileId / BattleManager.boardHeight + 2) * BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth*0.25f;
+            float zpos = (tileId % BattleManager.boardHeight) * -1.0f * BattleManager.boardFieldHeight - BattleManager.boardFieldHeight;
             transform.position = new Vector3(xpos, 0.05f, zpos);
 
             if (_armyId == 1)
@@ -263,7 +265,6 @@ public class UnitController : MonoBehaviour
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "blue", "solid");
                 rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.0f, 4.0f), arrowPrefab.transform.rotation);
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "blue", "empty");
-                _unitCaption.transform.position = transform.position + new Vector3(0.7f, 0.0f, -1.3f);
                 ColorUtility.TryParseHtmlString(BattleManager.Army1Color, out myColor);
                 _unitCaption.color = myColor;
                 flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, -0.35f), flagPrefab.transform.rotation);
@@ -283,8 +284,6 @@ public class UnitController : MonoBehaviour
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "solid");
                 rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "empty");
-                _unitCaption.transform.position = transform.position + new Vector3(1.3f, 0.0f, 1.2f);
-                _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
                 ColorUtility.TryParseHtmlString(BattleManager.Army2Color, out myColor);
                 _unitCaption.color = myColor;
                 flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, 0.35f), flagPrefab.transform.rotation * Quaternion.Euler(0.0f, 180.0f, 0.0f));
@@ -344,16 +343,15 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    // return attack id based on code - 1 - right attack 2 - central attack 3 - right attack
-    public int GetAttackId(int myAttack)    
+    public int GetAttackId(string myAttack)    
     {
         switch(myAttack)
         {
-            case 1:
+            case "right":
                 return leftArrowEmpty.GetComponent<ArrowController>().AttackId;
-            case 2:
+            case "central":
                 return forwardArrowEmpty.GetComponent<ArrowController>().AttackId;
-            case 3:
+            case "left":
                 return rightArrowEmpty.GetComponent<ArrowController>().AttackId;
         }
         return -1;
