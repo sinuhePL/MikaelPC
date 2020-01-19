@@ -15,21 +15,24 @@ public class CaptionController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit;
-        tempUnit = BattleManager.Instance.GetUnit(unitId);
-        switch(tempUnit.GetUnitType())
+        if (!BattleManager.isInputBlocked)
         {
-            case "Gendarmes":
-                myImage.sprite = gendarmes;
-                break;
-            case "Landsknechte":
-                myImage.sprite = landsknechte;
-                break;
-            case "Suisse":
-                myImage.sprite = suisse;
-                break;
-            case "Imperial Cavalery":
-                myImage.sprite = manatarms;
-                break;
+            tempUnit = BattleManager.Instance.GetUnit(unitId);
+            switch (tempUnit.GetUnitType())
+            {
+                case "Gendarmes":
+                    myImage.sprite = gendarmes;
+                    break;
+                case "Landsknechte":
+                    myImage.sprite = landsknechte;
+                    break;
+                case "Suisse":
+                    myImage.sprite = suisse;
+                    break;
+                case "Imperial Cavalery":
+                    myImage.sprite = manatarms;
+                    break;
+            }
         }
     }
 

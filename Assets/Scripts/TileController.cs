@@ -15,7 +15,7 @@ public class TileController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && !BattleManager.isInputBlocked)
         {
             EventManager.RaiseEventOnTileClicked(tileId);
         }

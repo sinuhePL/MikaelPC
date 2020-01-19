@@ -21,16 +21,19 @@ public class UnitUIController : MonoBehaviour
 
     private void UnitClicked(int unitId)
     {
-        if (unitId != lastClickedUnit || isHidden)
+        if (!BattleManager.isInputBlocked)
         {
-            transform.DOMoveX(190.0f, 0.3f).SetEase(Ease.OutBack);
-            lastClickedUnit = unitId;
-            isHidden = false;
-        }
-        else
-        {
-            transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
-            isHidden = true;
+            if(unitId != lastClickedUnit || isHidden)
+            {
+                transform.DOMoveX(190.0f, 0.3f).SetEase(Ease.OutBack);
+                lastClickedUnit = unitId;
+                isHidden = false;
+            }
+            else
+            {
+                transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
+                isHidden = true;
+            }
         }
     }
 

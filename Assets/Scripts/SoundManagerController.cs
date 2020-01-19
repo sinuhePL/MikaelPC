@@ -26,7 +26,7 @@ public class SoundManagerController : MonoBehaviour
 
     public void PlayThrowSound(int a)
     {
-        myAudioSource.PlayOneShot(throwDiceSound);
+        if(BattleManager.isSoundEnabled) myAudioSource.PlayOneShot(throwDiceSound, BattleManager.soundLevel);
     }
 
     // Start is called before the first frame update

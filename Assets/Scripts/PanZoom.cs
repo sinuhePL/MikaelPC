@@ -68,40 +68,43 @@ public class PanZoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!BattleManager.isInputBlocked)
         {
-            touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
-        }
-        if (Input.touchCount == 2)
-        {
-            Touch touchZero = Input.GetTouch(0);
-            Touch touchOne = Input.GetTouch(1);
-
-            Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-            Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
-
-            float prevMagnitude = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-            float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
-
-            float difference = currentMagnitude - prevMagnitude;
-
-            zoom(difference * 0.01f);
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            Vector3 direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 tempPos = myCamera.transform.position;
-            myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + direction, smoothing * Time.deltaTime);
-            Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f,0.0f));
-            Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
-            Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));
-            Ray rtRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, Screen.height));
-            if (!Physics.Raycast(lbRay) || !Physics.Raycast(ltRay) || !Physics.Raycast(rbRay) || !Physics.Raycast(rtRay))
+            if (Input.GetMouseButtonDown(0))
             {
-                myCamera.transform.position = tempPos;
+                touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
             }
+            if (Input.touchCount == 2)
+            {
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
+
+                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+                float prevMagnitude = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+                float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
+
+                float difference = currentMagnitude - prevMagnitude;
+
+                zoom(difference * 0.01f);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                Vector3 direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 tempPos = myCamera.transform.position;
+                myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + direction, smoothing * Time.deltaTime);
+                Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f, 0.0f));
+                Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
+                Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));
+                Ray rtRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, Screen.height));
+                if (!Physics.Raycast(lbRay) || !Physics.Raycast(ltRay) || !Physics.Raycast(rbRay) || !Physics.Raycast(rtRay))
+                {
+                    myCamera.transform.position = tempPos;
+                }
+            }
+            zoom(Input.GetAxis("Mouse ScrollWheel"));
         }
-        zoom(Input.GetAxis("Mouse ScrollWheel"));
     }
 
     public void zoom(float increment)

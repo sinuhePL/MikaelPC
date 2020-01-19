@@ -95,14 +95,17 @@ public class Die : MonoBehaviour {
 
     protected void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Tile")
+        if (BattleManager.isSoundEnabled)
         {
-            myAudioSource.PlayOneShot(dieSounds[touchCounter]);
-            if (touchCounter < 6) touchCounter++;
-        }
-        else if(collision.gameObject.tag == "Die")
-        {
-            myAudioSource.PlayOneShot(die2dieSound);
+            if (collision.gameObject.tag == "Tile")
+            {
+                myAudioSource.PlayOneShot(dieSounds[touchCounter], BattleManager.soundLevel);
+                if (touchCounter < 6) touchCounter++;
+            }
+            else if (collision.gameObject.tag == "Die")
+            {
+                myAudioSource.PlayOneShot(die2dieSound, BattleManager.soundLevel - 0.2f);
+            }
         }
     }
 
@@ -160,7 +163,7 @@ public class Die : MonoBehaviour {
             if (isRolling && touchCounter > 0)
             {
                 isRolling = false;
-                myAudioSource.PlayOneShot(dieSounds[6]);
+                if(BattleManager.isSoundEnabled) myAudioSource.PlayOneShot(dieSounds[6], BattleManager.soundLevel);
             }
         }
     }

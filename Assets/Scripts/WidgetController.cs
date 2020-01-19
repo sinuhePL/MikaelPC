@@ -14,9 +14,12 @@ public class WidgetController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit;
-        tempUnit = BattleManager.Instance.GetUnit(unitId);
-        if (tempUnit.GetArmyId() == 1) myImage.sprite = widgetArmy1;
-        else myImage.sprite = widgetArmy2;
+        if (!BattleManager.isInputBlocked)
+        {
+            tempUnit = BattleManager.Instance.GetUnit(unitId);
+            if (tempUnit.GetArmyId() == 1) myImage.sprite = widgetArmy1;
+            else myImage.sprite = widgetArmy2;
+        }
     }
 
     private void OnDestroy()

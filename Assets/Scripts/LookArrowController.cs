@@ -13,7 +13,7 @@ public class LookArrowController : MonoBehaviour
     // zmienia kąt patrzenia kamery obracajac ją wokół punktu na który aktualnie patrzy kamera
     public void ChangeViewAngle()
     {
-        if (isActive)
+        if (isActive && !BattleManager.isInputBlocked)
         {
             myCamera.GetComponent<PanZoom>().ChangeViewAngle("arrow");
             otherButton.GetComponent<LookArrowController>().isActive = true;

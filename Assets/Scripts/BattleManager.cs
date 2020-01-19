@@ -39,6 +39,12 @@ public class BattleManager : MonoBehaviour {
     public static bool isPlayer1Human = true;
     public static bool isPlayer2Human = false;
     public static bool hasTurnOwnerAttacked = false;
+    public static bool isSoundEnabled = true;
+    public static bool isMusicEnabled = true;
+    public static float soundLevel = 0.9f;
+    public static float musicLevel = 0.7f;
+    public static float minimaxLimit = 20.0f;
+    public static bool isInputBlocked = false;
 
     public const string Army1Color = "#4158f3";
     public const string Army2Color = "#ecc333";
@@ -369,7 +375,7 @@ public class BattleManager : MonoBehaviour {
         {
             foreach (int i in avialableAttacks)
             {
-                score = -ExpectiMinMaxAttack(myBoardState, i, 30.0f, turnOwnerId);
+                score = -ExpectiMinMaxAttack(myBoardState, i, minimaxLimit, turnOwnerId);
                 if (score > maxScore)
                 {
                     maxScore = score;

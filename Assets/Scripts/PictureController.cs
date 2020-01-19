@@ -13,21 +13,24 @@ public class PictureController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit = null;
-        tempUnit = BattleManager.Instance.GetUnit(unitId);
-        switch (tempUnit.GetUnitType())
+        if (!BattleManager.isInputBlocked)
         {
-            case "Gendarmes":
-                myImage.sprite = heavyCavalery;
-                break;
-            case "Landsknechte":
-                myImage.sprite = landsknechte;
-                break;
-            case "Suisse":
-                myImage.sprite = suisse;
-                break;
-            case "Imperial Cavalery":
-                myImage.sprite = heavyCavalery;
-                break;
+            tempUnit = BattleManager.Instance.GetUnit(unitId);
+            switch (tempUnit.GetUnitType())
+            {
+                case "Gendarmes":
+                    myImage.sprite = heavyCavalery;
+                    break;
+                case "Landsknechte":
+                    myImage.sprite = landsknechte;
+                    break;
+                case "Suisse":
+                    myImage.sprite = suisse;
+                    break;
+                case "Imperial Cavalery":
+                    myImage.sprite = heavyCavalery;
+                    break;
+            }
         }
     }
 

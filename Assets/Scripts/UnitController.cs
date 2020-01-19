@@ -66,42 +66,45 @@ public class UnitController : MonoBehaviour
 
     protected void myUnitClicked(int idUnit)
     {
-        if(idUnit == UnitId && !isOutlined)
+        if(!BattleManager.isInputBlocked)
         {
-            forwardArrow.SetActive(true);
-            forwardArrowEmpty.SetActive(true);
-            leftArrow.SetActive(true);
-            leftArrowEmpty.SetActive(true);
-            rightArrow.SetActive(true);
-            rightArrowEmpty.SetActive(true);
-            for (int i = 0; i < _strength; i++)
+            if (idUnit == UnitId && !isOutlined)
             {
-                _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+                forwardArrow.SetActive(true);
+                forwardArrowEmpty.SetActive(true);
+                leftArrow.SetActive(true);
+                leftArrowEmpty.SetActive(true);
+                rightArrow.SetActive(true);
+                rightArrowEmpty.SetActive(true);
+                for (int i = 0; i < _strength; i++)
+                {
+                    _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+                }
+                forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
+                leftArrowEmpty.GetComponent<ArrowController>().ShowArrow();
+                rightArrowEmpty.GetComponent<ArrowController>().ShowArrow();
+                isOutlined = true;
             }
-            forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-            leftArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-            rightArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-            isOutlined = true;
-        }
-        else if(isOutlined)
-        {
-            for (int i = 0; i < _strength; i++)
+            else if (isOutlined)
             {
-                _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+                for (int i = 0; i < _strength; i++)
+                {
+                    _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+                }
+                forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
+                leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
+                rightArrowEmpty.GetComponent<ArrowController>().HideArrow();
+                forwardArrow.GetComponent<ArrowController>().HideArrow();
+                leftArrow.GetComponent<ArrowController>().HideArrow();
+                rightArrow.GetComponent<ArrowController>().HideArrow();
+                forwardArrow.SetActive(false);
+                forwardArrowEmpty.SetActive(false);
+                leftArrow.SetActive(false);
+                leftArrowEmpty.SetActive(false);
+                rightArrow.SetActive(false);
+                rightArrowEmpty.SetActive(false);
+                isOutlined = false;
             }
-            forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
-            leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
-            rightArrowEmpty.GetComponent<ArrowController>().HideArrow();
-            forwardArrow.GetComponent<ArrowController>().HideArrow();
-            leftArrow.GetComponent<ArrowController>().HideArrow();
-            rightArrow.GetComponent<ArrowController>().HideArrow();
-            forwardArrow.SetActive(false);
-            forwardArrowEmpty.SetActive(false);
-            leftArrow.SetActive(false);
-            leftArrowEmpty.SetActive(false);
-            rightArrow.SetActive(false);
-            rightArrowEmpty.SetActive(false);
-            isOutlined = false;
         }
     }
 

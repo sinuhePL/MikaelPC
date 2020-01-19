@@ -55,24 +55,27 @@ public class EndTurnController : MonoBehaviour
 
     public void ButtonPressed()
     {
-        DOTween.Clear();
-        transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
-        if (mode == 1)
+        if (!BattleManager.isInputBlocked)
         {
-            isClicked = true;
-            leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
-            rightArrow.GetComponent<LookArrowController>().ChangeActivityState();
-            EventManager.RaiseEventOnTurnEnd();
-            return;
-        }
-        if(mode == 2)
-        {
-            EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
-            myText.text = "";
-        }
-        if(mode == 3)
-        {
-            EventManager.RaiseEventResultMenuClosed();
+            DOTween.Clear();
+            transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
+            if (mode == 1)
+            {
+                isClicked = true;
+                leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
+                rightArrow.GetComponent<LookArrowController>().ChangeActivityState();
+                EventManager.RaiseEventOnTurnEnd();
+                return;
+            }
+            if (mode == 2)
+            {
+                EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
+                myText.text = "";
+            }
+            if (mode == 3)
+            {
+                EventManager.RaiseEventResultMenuClosed();
+            }
         }
     }
 
