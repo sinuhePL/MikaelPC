@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ToggleController : MonoBehaviour
 {
-    private Toggle myToggle;
+    private Toggle myToggle = null;
 
     public enum difficultyEnum { easy, medium, hard};
     [SerializeField] private difficultyEnum difficultyType;
@@ -18,7 +18,7 @@ public class ToggleController : MonoBehaviour
 
     public void ToggleChanged()
     {
-        if(myToggle.isOn)
+        if(myToggle != null && myToggle.isOn)
         {
             if (difficultyType == difficultyEnum.easy) BattleManager.minimaxLimit = 10.0f;
             else if (difficultyType == difficultyEnum.medium) BattleManager.minimaxLimit = 20.0f;

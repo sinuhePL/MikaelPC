@@ -9,8 +9,7 @@ public class WidgetController : MonoBehaviour
     [SerializeField] private Sprite widgetArmy1;
     [SerializeField] private Sprite widgetArmy2;
     private Image myImage;
-    // Start is called before the first frame update
-
+    
     private void UnitClicked(int unitId)
     {
         Unit tempUnit;

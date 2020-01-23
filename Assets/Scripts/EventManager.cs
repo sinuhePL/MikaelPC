@@ -68,6 +68,12 @@ public class EventManager : MonoBehaviour
         if (onUnitDestroyed != null) onUnitDestroyed(unitId);
     }
 
+    public static event Action onTurnStart;
+    public static void RaiseEventOnTurnStart()
+    {
+        if (onTurnStart != null) onTurnStart();
+    }
+
     public static event Action onTurnEnd;
     public static void RaiseEventOnTurnEnd()
     {

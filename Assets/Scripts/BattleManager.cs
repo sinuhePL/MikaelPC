@@ -69,7 +69,7 @@ public class BattleManager : MonoBehaviour {
     {
         EventManager.onDiceResult += DiceThrown;
         EventManager.onAttackOrdered += MakeAttack;
-        EventManager.onTurnEnd += TurnEnd;
+        EventManager.onTurnStart += TurnStart;
     }
 
     private void Start()
@@ -295,7 +295,7 @@ public class BattleManager : MonoBehaviour {
             Dice.Clear();
             if (myAttack.GetArmyId() == 1)
             {
-                if(myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if(myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.3f + Random.value * 0.7f, 0.1f));
                 if(myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
             }
             else
@@ -308,7 +308,7 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
-    private void TurnEnd()
+    private void TurnStart()
     {
         hasTurnOwnerAttacked = false;
         if (turnOwnerId == 1 && !isPlayer1Human || turnOwnerId == 2 && !isPlayer2Human)
@@ -396,7 +396,7 @@ public class BattleManager : MonoBehaviour {
     {
         EventManager.onDiceResult -= DiceThrown;
         EventManager.onAttackOrdered -= MakeAttack;
-        EventManager.onTurnEnd -= TurnEnd;
+        EventManager.onTurnStart -= TurnStart;
     }
 
     

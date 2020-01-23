@@ -43,8 +43,6 @@ public class PanZoom : MonoBehaviour
     private void TurnEnd()
     {
         if(BattleManager.isPlayer1Human && BattleManager.isPlayer2Human) ChangeViewAngle("button");
-        if (BattleManager.turnOwnerId == 1) BattleManager.turnOwnerId = 2;
-        else BattleManager.turnOwnerId = 1;
     }
 
     private void OnEnable()

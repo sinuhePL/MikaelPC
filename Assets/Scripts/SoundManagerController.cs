@@ -8,6 +8,7 @@ public class SoundManagerController : MonoBehaviour
     private static SoundManagerController _instance;
     private AudioSource myAudioSource;
     [SerializeField] private AudioClip throwDiceSound;
+    [SerializeField] private AudioClip turnStartSound;
 
 
     public static SoundManagerController Instance { get { return _instance; } }
@@ -39,5 +40,9 @@ public class SoundManagerController : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.onAttackOrdered -= PlayThrowSound;
+    }
+    public void PlayStartTurn()
+    {
+        if (BattleManager.isSoundEnabled) myAudioSource.PlayOneShot(turnStartSound, BattleManager.soundLevel-0.4f);
     }
 }
