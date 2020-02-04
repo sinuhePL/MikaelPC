@@ -28,6 +28,7 @@ public class MenuController : MonoBehaviour
         Sequence mySequence = DOTween.Sequence();
         mySequence.Append(resumeButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mySequence.Append(transform.DOScale(0.0f, 0.25f).SetEase(Ease.InBack));
+        BattleManager.isInputBlocked = false;
     }
 
     public void OpenMenuClicked()

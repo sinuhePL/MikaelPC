@@ -45,6 +45,7 @@ public class BattleManager : MonoBehaviour {
     public static float musicLevel = 0.7f;
     public static float minimaxLimit = 20.0f;
     public static bool isInputBlocked = false;
+    public static string viewType = "perspective";
 
     public const string Army1Color = "#4158f3";
     public const string Army2Color = "#ecc333";
@@ -295,15 +296,15 @@ public class BattleManager : MonoBehaviour {
             Dice.Clear();
             if (myAttack.GetArmyId() == 1)
             {
-                if(myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.3f + Random.value * 0.7f, 0.1f));
-                if(myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if(myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
+                if(myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
             }
             else
             {
-                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
-                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.1f, 0.2f + Random.value * 0.75f, 0.1f));
+                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
+                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
             }
-            myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() + new Vector3(0.0f, 10.0f, 0.0f));
+            myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() /*+ new Vector3(0.0f, 10.0f, 0.0f)*/);
             StartCoroutine(WaitForDice(throw1, throw2, idAttack));
         }
     }

@@ -173,7 +173,7 @@ public class Dice : MonoBehaviour {
 				spawnPoint.y = spawnPoint.y - 1 + Random.value * 2;
                 spawnPoint.y = spawnPoint.y - 1 + Random.value * 2;
 				// create the die prefab/gameObject
-                GameObject die = prefab(dieType, spawnPoint, Vector3.zero, new Vector3(0.1f, 0.1f, 0.1f), mat, throwCounter);
+                GameObject die = prefab(dieType, spawnPoint, Vector3.zero, new Vector3(0.2f, 0.2f, 0.2f), mat, throwCounter);
 				// give it a random rotation
 				die.transform.Rotate(new Vector3(Random.value * 360, Random.value * 360, Random.value * 360));
 				// inactivate this gameObject because activating it will be handeled using the rollQueue and at the apropriate time

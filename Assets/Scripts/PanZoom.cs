@@ -7,12 +7,20 @@ using DG.Tweening;
 public class PanZoom : MonoBehaviour
 {
     private Vector3 touchStart;
+    private Vector3 prevCamPosition;
+    private float prevEulerY;
     private Camera myCamera;
     private float smoothing = 50.0f;
     private int lookDirection; // army 1: left 1, right 2 army 2: left 3 right 4
+    private bool stopRotate;
 
     public float zoomOutMin = 3;
     public float zoomOutMax = 6;
+    public float zoomOutMinPerspective = 3.0f;
+    public float zoomOutMaxPerspective = 9.0f;
+    public float zoomMinAngle = 15.0f;
+    public float zoomMaxAngle = 55.0f;
+    public float rotateTime = 2.0f;
 
     private IEnumerator ZoomAtDice(float duration, float zoom)
     {
@@ -22,6 +30,10 @@ public class PanZoom : MonoBehaviour
             myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, zoom, t / duration);
             yield return 0;
         }
+/*
+                myCamera.transform.position = new Vector3(myCamera.transform.position.x, Mathf.Lerp(myCamera.transform.position.y, zoom*2.0f, t / duration), myCamera.transform.position.z);
+                yield return 0;
+                */
     }
 
     private IEnumerator SmoothRotate(Vector3 rotatePoint, float angle, float duration)
@@ -29,6 +41,11 @@ public class PanZoom : MonoBehaviour
         float t, lastAngle = 0;
         for (t = 0; Mathf.Abs(lastAngle) < Mathf.Abs(angle); t += Time.deltaTime)
         {
+            if (stopRotate)
+            {
+                stopRotate = false;
+                yield break;
+            }
             myCamera.transform.RotateAround(rotatePoint, new Vector3(0.0f, 1.0f, 0.0f), Mathf.Lerp(0.0f, angle, ((float)t )/ duration) - lastAngle);
             lastAngle = Mathf.Lerp(0.0f, angle, ((float)t) / duration);
             yield return 0;
@@ -37,7 +54,12 @@ public class PanZoom : MonoBehaviour
 
     private void ZoomOut(StateChange r)
     {
-        StartCoroutine(ZoomAtDice(0.5f, 4.0f));
+        if(BattleManager.viewType == "isometric") StartCoroutine(ZoomAtDice(0.5f, 4.0f));
+        else
+        {
+            myCamera.transform.DOMove(prevCamPosition, 0.5f).SetEase(Ease.OutQuint);
+            myCamera.transform.DORotateQuaternion(Quaternion.Euler(Mathf.Lerp(zoomMinAngle, zoomMaxAngle, (prevCamPosition.y - zoomOutMinPerspective) / (zoomOutMaxPerspective - zoomOutMinPerspective)), prevEulerY, 0.0f), 0.5f);
+        }
     }
 
     private void TurnEnd()
@@ -55,7 +77,9 @@ public class PanZoom : MonoBehaviour
     void Start()
     {
         myCamera = Camera.main;
-        lookDirection = 1;    }
+        lookDirection = 1;
+        stopRotate = false;
+    }
 
     private void OnDestroy()
     {
@@ -70,7 +94,8 @@ public class PanZoom : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
+                if(BattleManager.viewType == "isometric") touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
+                else if (BattleManager.viewType == "perspective") touchStart = GetCursorWorldPosition();
             }
             if (Input.touchCount == 2)
             {
@@ -85,29 +110,87 @@ public class PanZoom : MonoBehaviour
 
                 float difference = currentMagnitude - prevMagnitude;
 
-                zoom(difference * 0.01f);
+                if (BattleManager.viewType == "isometric") zoom(difference * 0.01f);
+                else if (BattleManager.viewType == "perspective") zoomPerspective(difference * 0.1f);
             }
             else if (Input.GetMouseButton(0))
             {
-                Vector3 direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
-                Vector3 tempPos = myCamera.transform.position;
-                myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + direction, smoothing * Time.deltaTime);
-                Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f, 0.0f));
-                Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
-                Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));
-                Ray rtRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, Screen.height));
-                if (!Physics.Raycast(lbRay) || !Physics.Raycast(ltRay) || !Physics.Raycast(rbRay) || !Physics.Raycast(rtRay))
+                Vector3 direction, tempPosition;
+                if (BattleManager.viewType == "isometric") direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
+                else if (BattleManager.viewType == "perspective") direction = touchStart - GetCursorWorldPosition();
+                else direction = new Vector3(0.0f, 0.0f, 0.0f);
+                Vector3 previousCamPosition = myCamera.transform.position;
+                // limits camera movement
+                if (BattleManager.viewType == "perspective")
                 {
-                    myCamera.transform.position = tempPos;
+                    direction = new Vector3(direction.x, 0.0f, direction.z + direction.y);
+                    tempPosition = myCamera.transform.position + direction * 0.1f;
+                    if (tempPosition.x > 4.0f 
+                        && tempPosition.z < -8.0f 
+                        && tempPosition.x < BattleManager.boardFieldWitdth * BattleManager.boardWidth + 8.0f 
+                        && tempPosition.z > -1.0f * BattleManager.boardFieldHeight * BattleManager.boardHeight - 8.0f)
+                    {
+                        myCamera.transform.position += direction * 0.1f;
+                    }
+                }
+                else
+                {
+                    myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + direction, smoothing * Time.deltaTime);
+                    /*  Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f, 0.0f));
+                      Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
+                      Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));
+                      Ray rtRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, Screen.height));
+                      if (!Physics.Raycast(lbRay) || !Physics.Raycast(ltRay) || !Physics.Raycast(rbRay) || !Physics.Raycast(rtRay))*/
+                    if (lookDirection == 1 && (myCamera.transform.position.x < -2.0f
+                        || myCamera.transform.position.z > -16.0f
+                        || myCamera.transform.position.x > BattleManager.boardFieldWitdth * BattleManager.boardWidth - 4.0f
+                        || myCamera.transform.position.z < -1.0f * BattleManager.boardFieldHeight * BattleManager.boardHeight - 18.0f))
+                    {
+                        myCamera.transform.position = previousCamPosition;
+                    }
+                    else if (lookDirection == 2 && (myCamera.transform.position.x < 22.0f
+                        || myCamera.transform.position.z > -22.0f
+                        || myCamera.transform.position.x > BattleManager.boardFieldWitdth * BattleManager.boardWidth + 16.0f
+                        || myCamera.transform.position.z < -1.0f * BattleManager.boardFieldHeight * BattleManager.boardHeight - 20.0f))
+                    {
+                        myCamera.transform.position = previousCamPosition;
+                    }
                 }
             }
-            zoom(Input.GetAxis("Mouse ScrollWheel"));
+            float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
+            if (mouseScrollWheel != 0)
+            {
+                if (BattleManager.viewType == "isometric") zoom(mouseScrollWheel);
+                else if (BattleManager.viewType == "perspective") zoomPerspective(mouseScrollWheel * 80.0f);
+            }
+        }
+    }
+
+    private Vector3 GetCursorWorldPosition()
+    {
+        Vector2 tempMousePos = Input.mousePosition;
+        Ray tempRay = myCamera.ScreenPointToRay(tempMousePos);
+        Plane ground = new Plane(myCamera.transform.forward, new Vector3(0, 0, 1.0f));
+        float distance;
+        ground.Raycast(tempRay, out distance);
+        tempRay.GetPoint(distance);
+        return tempRay.GetPoint(distance);
+    }
+
+    public void zoomPerspective(float increment)
+    {
+        Vector3 newPosition;
+        newPosition = new Vector3(myCamera.transform.position.x, myCamera.transform.position.y - increment * Time.deltaTime, myCamera.transform.position.z);
+        if (newPosition.y >= zoomOutMinPerspective && newPosition.y <= zoomOutMaxPerspective)
+        {
+            myCamera.transform.position = newPosition;
+            myCamera.transform.rotation = Quaternion.Euler(Mathf.Lerp(zoomMinAngle, zoomMaxAngle, (newPosition.y - zoomOutMinPerspective) / (zoomOutMaxPerspective - zoomOutMinPerspective)), myCamera.transform.localEulerAngles.y, 0.0f );
         }
     }
 
     public void zoom(float increment)
     {
-        Camera.main.orthographicSize = Mathf.Clamp(Mathf.Lerp(myCamera.orthographicSize, myCamera.orthographicSize - increment, smoothing * Time.deltaTime), zoomOutMin, zoomOutMax);
+        myCamera.orthographicSize = Mathf.Clamp(Mathf.Lerp(myCamera.orthographicSize, myCamera.orthographicSize - increment, smoothing * Time.deltaTime), zoomOutMin, zoomOutMax);
         Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f, 0.0f));
         Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
         Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));
@@ -125,17 +208,53 @@ public class PanZoom : MonoBehaviour
         RaycastHit groundHit;
         Vector3 dif, newpos, campos;
 
-        StartCoroutine(ZoomAtDice(0.5f, 2.0f));
+        if (BattleManager.viewType == "isometric")
+        {
+            StartCoroutine(ZoomAtDice(0.5f, 3.0f));
+            groundMask = LayerMask.GetMask("Ground");
+            camRay = myCamera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
+            if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
+            {
+                campos = myCamera.transform.position;
+                dif = target - groundHit.point;
+                newpos = campos + dif;
+                myCamera.transform.DOMove(newpos + new Vector3(2.0f, 0.0f, -2.0f), 0.5f).SetEase(Ease.OutQuint);
+            }
+        }
+        else
+        {
+            prevCamPosition = myCamera.transform.position;
+            prevEulerY = myCamera.transform.localEulerAngles.y;
+            target.y = 4.0f;
+            myCamera.transform.DOMove(target - new Vector3(3.0f, 0.0f, 5.0f), 0.5f).SetEase(Ease.OutQuint);
+            myCamera.transform.DORotateQuaternion(Quaternion.Euler(Mathf.Lerp(zoomMinAngle, zoomMaxAngle, (4.0f - zoomOutMinPerspective) / (zoomOutMaxPerspective - zoomOutMinPerspective)), 30.0f, 0.0f), 0.5f);
+        }
+
+    }
+
+    public void StopRotate()
+    {
+        stopRotate = true;
+    }
+
+    public void ArrowPressed(string type)
+    {
+        int groundMask;
+        Ray camRay;
+        RaycastHit groundHit;
+        stopRotate = false;
         groundMask = LayerMask.GetMask("Ground");
+        // wyznacza punkt na mapie na który patrzy kamera
         camRay = myCamera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
         if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
         {
-            campos = myCamera.transform.position;
-            dif = target - groundHit.point;
-            newpos = campos + dif;
-            myCamera.transform.DOMove(newpos - new Vector3(0.0f, 10.0f, 0.0f), 0.5f).SetEase(Ease.OutQuint);
+            if(type == "right")
+                if(myCamera.transform.localEulerAngles.y <= 30.1f && myCamera.transform.localEulerAngles.y > 0.0f) StartCoroutine(SmoothRotate(groundHit.point, -(30.0f + myCamera.transform.localEulerAngles.y), rotateTime*(30.0f + myCamera.transform.localEulerAngles.y)/60.0f));
+                else StartCoroutine(SmoothRotate(groundHit.point, -(myCamera.transform.localEulerAngles.y - 330.0f), rotateTime*(myCamera.transform.localEulerAngles.y - 330.0f)/60.0f));
+            if (type == "left")
+                if (myCamera.transform.localEulerAngles.y <= 30.1f && myCamera.transform.localEulerAngles.y > 0.0f) StartCoroutine(SmoothRotate(groundHit.point, 30.0f - myCamera.transform.localEulerAngles.y, rotateTime*(30.0f - myCamera.transform.localEulerAngles.y)/60.0f));
+                else StartCoroutine(SmoothRotate(groundHit.point, 360.0f - myCamera.transform.localEulerAngles.y + 30.0f, rotateTime*(360.0f - myCamera.transform.localEulerAngles.y + 30.0f)/60.0f));
         }
-
     }
 
     // zmienia kąt patrzenia kamery obracajac ją wokół punktu na który aktualnie patrzy kamera
