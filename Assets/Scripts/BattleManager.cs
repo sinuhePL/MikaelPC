@@ -196,19 +196,19 @@ public class BattleManager : MonoBehaviour {
                 uc2 = g2.GetComponent<UnitController>();
                 if (uc2.UnitTileId == leftAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("right"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuLeftPositionShift, uc.UnitType, uc2.UnitType);
+                    tempAttack = new ChargeAttack(uc.GetAttackId("right"), false, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuLeftPositionShift, uc.UnitType, uc2.UnitType, false);
                     //uc.ActivateAttack(uc.GetAttackId("right")); // testowo, docelowo tylko central attack jest aktywnyna początku
                     myUnit.AddAttack(tempAttack);
                 }
                 if (uc2.UnitTileId == centralAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("central"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuCentralPositionShift, uc.UnitType, uc2.UnitType);
+                    tempAttack = new ChargeAttack(uc.GetAttackId("central"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuCentralPositionShift, uc.UnitType, uc2.UnitType, true);
                     uc.ActivateAttack(uc.GetAttackId("central"));
                     myUnit.AddAttack(tempAttack);
                 }
                 if (uc2.UnitTileId == rightAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("left"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuRightPositionShift, uc.UnitType, uc2.UnitType);
+                    tempAttack = new ChargeAttack(uc.GetAttackId("left"), false, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuRightPositionShift, uc.UnitType, uc2.UnitType, false);
                     //uc.ActivateAttack(uc.GetAttackId("left")); // testowo, docelowo tylko central attack jest aktywnyna początku
                     myUnit.AddAttack(tempAttack);
                 }
@@ -304,7 +304,7 @@ public class BattleManager : MonoBehaviour {
                 if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
                 if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
             }
-            myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() /*+ new Vector3(0.0f, 10.0f, 0.0f)*/);
+            //myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() /*+ new Vector3(0.0f, 10.0f, 0.0f)*/);
             StartCoroutine(WaitForDice(throw1, throw2, idAttack));
         }
     }
@@ -387,6 +387,7 @@ public class BattleManager : MonoBehaviour {
             {
                 EventManager.RaiseEventOnUnitClicked(myBoardState.GetAttack(bestAttack).GetOwner().GetUnitId());
                 EventManager.RaiseEventOnAttackClicked(bestAttack);
+                EventManager.RaiseEventOnAttackOrdered(bestAttack);
                 SoundManagerController.Instance.PlayThrowSound(0);
                 MakeAttack(bestAttack);
             }

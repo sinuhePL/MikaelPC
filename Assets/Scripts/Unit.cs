@@ -94,14 +94,31 @@ public class Unit
     public void ChangeStrength(int sc)  //zmienia siłę jednostki o wskazaną wartość
     {
         strength += sc;
-        if (strength <= 0) isAvialable = false;
+        if (strength <= 0)
+        {
+            isAvialable = false;
+            owner.ChangeMorale(-morale);
+            morale = 0;
+            foreach(Attack a in unitAttacks)
+            {
+                if(a.IsActive()) a.Deactivate();
+            }
+        }
     }
 
     public void ChangeMorale(int mc)    //zmienia morale jednostki o wskazaną wartość
     {
         morale += mc;
         owner.ChangeMorale(mc);
-        if (morale <= 0) isAvialable = false;
+        if (morale <= 0)
+        {
+            isAvialable = false;
+            strength = 0;
+            foreach (Attack a in unitAttacks)
+            {
+                if(a.IsActive()) a.Deactivate();
+            }
+        }
     }
 
     public List<StateChange> GetAttackOutcomes()    // zwraca wszystkie rezultaty wszystkich aktywnych ataków jednostki.
@@ -120,7 +137,7 @@ public class Unit
         Attack tempAttack;
 
         tempAttack = FindAttack(a);
-        if(tempAttack != null) tempAttack.Activate();
+        if(tempAttack != null && !tempAttack.IsActive()) tempAttack.Activate();
     }
 
     public void DeactivateAttack(int a)     // deaktywuje atak o podanym Id
@@ -128,7 +145,7 @@ public class Unit
         Attack tempAttack;
 
         tempAttack = FindAttack(a);
-        if(tempAttack != null) tempAttack.Deactivate();
+        if(tempAttack != null && tempAttack.IsActive()) tempAttack.Deactivate();
     }
 
     public void AddAttack(Attack newAttack)  // dodaje nowy atak
@@ -191,7 +208,7 @@ public class Unit
     {
         foreach(Attack a in unitAttacks)
         {
-            if (a.GetTargetId() == uId) a.Deactivate();
+            if (a.GetTargetId() == uId && a.IsActive()) a.Deactivate();
         }
     }
 
@@ -203,5 +220,26 @@ public class Unit
             if (a.IsActive()) resultList.Add(a.GetId());
         }
         return resultList;
+    }
+
+    public bool CheckIfForwardAttackOn(int unitId)
+    {
+        foreach(Attack a in unitAttacks)
+        {
+            if (a.IsAttackForward() && a.GetTargetId() == unitId) return true;
+        }
+        return false;
+    }
+
+    public void ActivateNotForwardAttacks()
+    {
+        foreach (Attack a in unitAttacks)
+        {
+            if (!a.IsAttackForward())
+            {
+                a.Activate();
+                a.IncreaseAttack();
+            }
+        }
     }
 }

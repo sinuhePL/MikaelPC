@@ -18,6 +18,7 @@ public abstract class Attack
     protected string attackName;
     protected int attackDiceNumber;
     protected int defenceDiceNumber;
+    protected bool isAttackForward;
 
     protected Attack(Attack pattern, Unit o) // konstruktor kopiujący
     {
@@ -41,6 +42,7 @@ public abstract class Attack
         arrowPosition = pattern.arrowPosition;
         attackDiceNumber = pattern.attackDiceNumber;
         defenceDiceNumber = pattern.defenceDiceNumber;
+        isAttackForward = pattern.isAttackForward;
     }
 
     public string GetName()
@@ -58,7 +60,12 @@ public abstract class Attack
         return defenceDiceNumber;
     }
 
-    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p) // konstruktor
+    public bool IsAttackForward()
+    {
+        return isAttackForward;
+    }
+
+    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p, bool f) // konstruktor
     {
         attackId = aId;
         isActiveState = state;
@@ -72,6 +79,17 @@ public abstract class Attack
         arrowPosition = p;
         attackDiceNumber = 0;
         defenceDiceNumber = 0;
+        isAttackForward = f;
+    }
+
+    public void IncreaseAttack()
+    {
+        attackDiceNumber++;
+    }
+
+    public void IncreaseDefence()
+    {
+        defenceDiceNumber++;
     }
 
     public void Activate()

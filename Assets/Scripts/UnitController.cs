@@ -165,20 +165,29 @@ public class UnitController : MonoBehaviour
         tempAttack = myUnit.GetAttack(forwardArrow.GetComponent<ArrowController>().AttackId);
         if (tempAttack != null && !tempAttack.IsActive())
         {
-            forwardArrow.GetComponent<ArrowController>().isArrowActive = false;
-            forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            DeactivateAttack(tempAttack.GetId());
+        }
+        else if(tempAttack != null && tempAttack.IsActive())
+        {
+            ActivateAttack(tempAttack.GetId());
         }
         tempAttack = myUnit.GetAttack(rightArrow.GetComponent<ArrowController>().AttackId);
         if (tempAttack != null && !tempAttack.IsActive())
         {
-            rightArrow.GetComponent<ArrowController>().isArrowActive = false;
-            rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            DeactivateAttack(tempAttack.GetId());
+        }
+        else if (tempAttack != null && tempAttack.IsActive())
+        {
+            ActivateAttack(tempAttack.GetId());
         }
         tempAttack = myUnit.GetAttack(leftArrow.GetComponent<ArrowController>().AttackId);
         if (tempAttack != null && !tempAttack.IsActive())
         {
-            leftArrow.GetComponent<ArrowController>().isArrowActive = false;
-            leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
+            DeactivateAttack(tempAttack.GetId());
+        }
+        else if (tempAttack != null && tempAttack.IsActive())
+        {
+            ActivateAttack(tempAttack.GetId());
         }
     }
 

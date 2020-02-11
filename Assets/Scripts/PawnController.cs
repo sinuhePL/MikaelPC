@@ -22,10 +22,19 @@ public class PawnController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!EventSystem.current.IsPointerOverGameObject() && (BattleManager.turnOwnerId == 1 && BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && BattleManager.isPlayer2Human))
+        if (!IsPointerOverGameObject() && (BattleManager.turnOwnerId == 1 && BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && BattleManager.isPlayer2Human))
         {
             EventManager.RaiseEventOnUnitClicked(_unitId);
         }
+    }
+
+    private bool IsPointerOverGameObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
     }
 
     /*private void OnMouseOver()

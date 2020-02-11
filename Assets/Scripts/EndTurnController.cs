@@ -29,7 +29,6 @@ public class EndTurnController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.onResultMenuClosed += AttackResolved;
         EventManager.onAttackClicked += AttackClicked;
         EventManager.onDiceResult += DiceThrown;
         EventManager.onTileClicked += Reset;
@@ -46,7 +45,6 @@ public class EndTurnController : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.onResultMenuClosed -= AttackResolved;
         EventManager.onAttackClicked -= AttackClicked;
         EventManager.onDiceResult -= DiceThrown;
         EventManager.onTileClicked -= Reset;
@@ -76,6 +74,7 @@ public class EndTurnController : MonoBehaviour
             }
             if (mode == 3)
             {
+                AttackResolved();
                 EventManager.RaiseEventResultMenuClosed();
             }
         }

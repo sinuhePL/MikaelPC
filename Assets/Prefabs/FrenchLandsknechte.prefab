@@ -249,8 +249,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26a7ec9cc3810724999eadc9df666fd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialStrength: 4
-  initialMorale: 6
+  initialStrength: 1
+  initialMorale: 2
   arrowPrefab: {fileID: 3757254920715771083, guid: 2e7b4573427006241833f1a7d2b892b2,
     type: 3}
   flagPrefab: {fileID: 8004879779770221973, guid: aec7e2d58dc9e194d9267da7b5fd151b,

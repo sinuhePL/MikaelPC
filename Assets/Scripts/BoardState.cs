@@ -18,6 +18,15 @@ public class BoardState
         }
     }
 
+    public Unit GetForwardAttacker(int unitId)
+    {
+        foreach (Unit u in units)
+        {
+            if (u.CheckIfForwardAttackOn(unitId)) return u;
+        }
+        return null;
+    }
+
     public BoardState(Army army1, Army army2)
     {
         units = new List<Unit>();
@@ -109,7 +118,11 @@ public class BoardState
         u = GetUnit(change.attackerId); 
         u.ChangeStrength(change.attackerStrengthChange);
         u.ChangeMorale(change.attackerMoraleChanged);
-        if(!u.IsAvialable) DeactivateAttacksOnUnit(u.GetUnitId());
+        if (!u.IsAvialable)
+        {
+            DeactivateAttacksOnUnit(u.GetUnitId());
+            GetForwardAttacker(u.GetUnitId()).ActivateNotForwardAttacks();
+        }
         if (change.activatedAttacks != null)
         {
             foreach (int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
@@ -128,7 +141,11 @@ public class BoardState
         u = GetUnit(change.defenderId);
         u.ChangeStrength(change.defenderStrengthChange);
         u.ChangeMorale(change.defenderMoraleChanged);
-        if (!u.IsAvialable) DeactivateAttacksOnUnit(u.GetUnitId());
+        if (!u.IsAvialable)
+        {
+            DeactivateAttacksOnUnit(u.GetUnitId());
+            GetForwardAttacker(u.GetUnitId()).ActivateNotForwardAttacks();
+        }
         if (change.activatedAttacks != null)
         {
             foreach (int i in change.activatedAttacks)  // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące

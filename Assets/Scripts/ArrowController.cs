@@ -20,12 +20,21 @@ public class ArrowController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (_isArrowActive && !EventSystem.current.IsPointerOverGameObject())
+        if (_isArrowActive && !IsPointerOverGameObject())
         {
             EventManager.RaiseEventOnAttackClicked(_attackId);
         }
     }
     // dodać obsługę zdarzenia kliknięcia na strzałkę ataku, dodać dodanych ataku współrzędne każdego ataku. usunąć poprzednie rozwiązanie
+
+    private bool IsPointerOverGameObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
 
     public void Awake()
     {

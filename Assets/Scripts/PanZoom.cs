@@ -30,10 +30,6 @@ public class PanZoom : MonoBehaviour
             myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, zoom, t / duration);
             yield return 0;
         }
-/*
-                myCamera.transform.position = new Vector3(myCamera.transform.position.x, Mathf.Lerp(myCamera.transform.position.y, zoom*2.0f, t / duration), myCamera.transform.position.z);
-                yield return 0;
-                */
     }
 
     private IEnumerator SmoothRotate(Vector3 rotatePoint, float angle, float duration)
@@ -71,6 +67,7 @@ public class PanZoom : MonoBehaviour
     {
         EventManager.onDiceResult += ZoomOut;
         EventManager.onTurnEnd += TurnEnd;
+        EventManager.onAttackOrdered += LookAtDice;
     }
 
     // Start is called before the first frame update
@@ -85,6 +82,7 @@ public class PanZoom : MonoBehaviour
     {
         EventManager.onDiceResult -= ZoomOut;
         EventManager.onTurnEnd -= TurnEnd;
+        EventManager.onAttackOrdered -= LookAtDice;
     }
 
     // Update is called once per frame
@@ -201,13 +199,14 @@ public class PanZoom : MonoBehaviour
         if (!Physics.Raycast(rtRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
     }
 
-    public void LookAtDice(Vector3 target)
+    public void LookAtDice(/*Vector3 target*/ int attackId)
     {
         int groundMask;
         Ray camRay;
         RaycastHit groundHit;
-        Vector3 dif, newpos, campos;
+        Vector3 dif, newpos, campos, target;
 
+        target = BattleManager.Instance.GetAttack(attackId).GetPosition();
         if (BattleManager.viewType == "isometric")
         {
             StartCoroutine(ZoomAtDice(0.5f, 3.0f));
