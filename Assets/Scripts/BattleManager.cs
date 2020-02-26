@@ -11,6 +11,7 @@ public class BattleManager : MonoBehaviour {
     private List<GameObject> units;
     private List<GameObject> tiles;
     private Camera myCamera;
+    private int armyRouteTest;
 
     public static BattleManager Instance { get { return _instance; } }
     [SerializeField] private Transform marginBottom;
@@ -64,6 +65,7 @@ public class BattleManager : MonoBehaviour {
         InitiateManager(boardWidth, boardHeight);
         InitiateBoard();
         myCamera = Camera.main;
+        armyRouteTest = 0;
     }
 
     private void OnEnable()
@@ -71,6 +73,15 @@ public class BattleManager : MonoBehaviour {
         EventManager.onDiceResult += DiceThrown;
         EventManager.onAttackOrdered += MakeAttack;
         EventManager.onTurnStart += TurnStart;
+        EventManager.onResultMenuClosed += MakeRouteTest;
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.onDiceResult -= DiceThrown;
+        EventManager.onAttackOrdered -= MakeAttack;
+        EventManager.onTurnStart -= TurnStart;
+        EventManager.onResultMenuClosed -= MakeRouteTest;
     }
 
     private void Start()
@@ -228,6 +239,67 @@ public class BattleManager : MonoBehaviour {
         if (winnerId != 0) EventManager.RaiseEventGameOver(winnerId);
     }
 
+    private void MakeRouteTest()
+    {
+        int throwId;
+
+        if(armyRouteTest > 0)
+        {
+            if(armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 1)
+            {
+                throwId = Dice.Roll("3d10", "d10-blue",new Vector3(20.0f, 2.0f, -16.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
+                StartCoroutine(WaitForRouteTest(throwId, 1));
+            }
+            else if(armyRouteTest == 2 || armyRouteTest == 3 && turnOwnerId == 2)
+            {
+                throwId = Dice.Roll("3d10", "d10-yellow", new Vector3(20.0f, 2.0f, -16.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
+                StartCoroutine(WaitForRouteTest(throwId, 2));
+            }
+        }
+        else
+        {
+            EventManager.RaiseEventRouteTestOver(0);
+        }
+    }
+
+    private IEnumerator WaitForRouteTest(int throwId, int testingArmyId)
+    {
+        int throwResult;
+        string stringResult = "";
+        int result;
+
+        while (Dice.rolling)
+        {
+            yield return null;
+        }
+        stringResult = Dice.AsString("d10", throwId);
+        if (!stringResult.Contains("?"))
+        {
+            throwResult = Dice.Value("d10");
+            Debug.Log("Wynik testu morale: " + throwResult);
+            if (throwResult > myBoardState.GetArmyMorale(testingArmyId))
+            {
+                if (testingArmyId == 1) result = 1;
+                else result = 2;
+            }
+            else
+            {
+                if (testingArmyId == 1) result = 3;
+                else result = 4;
+            }
+            armyRouteTest = 0;
+            Debug.Log(result);
+            yield return new WaitForSeconds(1.5f);
+            EventManager.RaiseEventRouteTestOver(result);
+            Dice.Clear();
+        }
+        else
+        {
+            Debug.Log("Błąd przy route test");
+            MakeRouteTest();
+        }
+    }
+
     // Waits for dice to stop rolling
     private IEnumerator WaitForDice(int throw1Id, int throw2Id, int attackId)
     {
@@ -273,6 +345,17 @@ public class BattleManager : MonoBehaviour {
                 Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
                 hasTurnOwnerAttacked = true;
+                //check if route test needed
+                if (result.attackerStrengthChange < 0 && result.defenderStrengthChange < 0) armyRouteTest = 3;
+                else if (result.attackerStrengthChange < 0)
+                {
+                    armyRouteTest = turnOwnerId;
+                }
+                else if (result.defenderStrengthChange < 0)
+                {
+                    if (turnOwnerId == 1) armyRouteTest = 2;
+                    else armyRouteTest = 1;
+                }
                 yield return new WaitForSeconds(1.5f);
                 EventManager.RaiseEventOnDiceResult(result);
                 Dice.Clear();
@@ -304,7 +387,6 @@ public class BattleManager : MonoBehaviour {
                 if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
                 if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
             }
-            //myCamera.GetComponent<PanZoom>().LookAtDice(myAttack.GetPosition() /*+ new Vector3(0.0f, 10.0f, 0.0f)*/);
             StartCoroutine(WaitForDice(throw1, throw2, idAttack));
         }
     }
@@ -393,15 +475,6 @@ public class BattleManager : MonoBehaviour {
             }
         }
     }
-
-    private void OnDestroy()
-    {
-        EventManager.onDiceResult -= DiceThrown;
-        EventManager.onAttackOrdered -= MakeAttack;
-        EventManager.onTurnStart -= TurnStart;
-    }
-
-    
 
     public Unit GetUnit(int unitId)
     {

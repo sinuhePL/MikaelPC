@@ -21,7 +21,8 @@ public class EndTurnController : MonoBehaviour
         isClicked = false;
         while (!isClicked)
         {
-            DOTween.Clear();
+            //DOTween.Clear();  powoduje problemy przy braku route testu
+            transform.DOKill();
             transform.DOPunchScale(new Vector3(0.1f, 0.1f, 0.0f), 0.5f);
             yield return new WaitForSeconds(3.0f);
         }
@@ -33,6 +34,7 @@ public class EndTurnController : MonoBehaviour
         EventManager.onDiceResult += DiceThrown;
         EventManager.onTileClicked += Reset;
         EventManager.onUnitClicked += Reset;
+        EventManager.onRouteTestOver += RouteTestEnded;
     }
 
     private void Start()
@@ -49,15 +51,16 @@ public class EndTurnController : MonoBehaviour
         EventManager.onDiceResult -= DiceThrown;
         EventManager.onTileClicked -= Reset;
         EventManager.onUnitClicked -= Reset;
+        EventManager.onRouteTestOver -= RouteTestEnded;
     }
 
     public void ButtonPressed()
     {
         if (!BattleManager.isInputBlocked)
         {
-            DOTween.Clear();
+            transform.DOKill();
             transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
-            if (mode == 1)
+            if (mode == 1)  // if displays End Turn
             {
                 isClicked = true;
                 leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
@@ -67,16 +70,34 @@ public class EndTurnController : MonoBehaviour
                 EventManager.RaiseEventOnTurnEnd();
                 return;
             }
-            if (mode == 2)
+            if (mode == 2) // if displays Attack
             {
                 EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
                 myText.text = "";
             }
-            if (mode == 3)
+            if (mode == 3) // if displays Close Result
+            {
+                //AttackResolved();
+                myText.text = "";
+                EventManager.RaiseEventResultMenuClosed();
+            }
+            if(mode == 4)
             {
                 AttackResolved();
                 EventManager.RaiseEventResultMenuClosed();
             }
+        }
+    }
+
+    private void RouteTestEnded(int loserId)
+    {
+        if (loserId == 0) AttackResolved();
+        else
+        {
+            myText.text = "Close Result";
+            mode = 4;
+            if (loserId == 1) EventManager.RaiseEventGameOver(2);
+            else if (loserId == 2) EventManager.RaiseEventGameOver(1);
         }
     }
 

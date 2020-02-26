@@ -10,8 +10,6 @@ public class AttackMenuController : MonoBehaviour
     private Text attackNameText;
     private Text attackDiceNumberText;
     private Text defenceDiceNumberText;
-    //private Text attackerText;
-    //private Text defenderText;
 
     private void AttackClicked(int idAttack)
     {
@@ -24,8 +22,6 @@ public class AttackMenuController : MonoBehaviour
         isVisible = true;
         tempAttack = BattleManager.Instance.GetAttack(idAttack);
         attackNameText.text = tempAttack.GetName();
-        //attackerText.text = BattleManager.Instance.GetArmyName("attacker", tempAttack);
-        //defenderText.text = BattleManager.Instance.GetArmyName("defender", tempAttack);
         attackDiceNumberText.text = tempAttack.GetAttackDiceNumber().ToString();
         defenceDiceNumberText.text = tempAttack.GetDefenceDiceNumber().ToString();
     }
@@ -81,7 +77,5 @@ public class AttackMenuController : MonoBehaviour
         attackNameText = transform.Find("AttackName").GetComponent<Text>();
         attackDiceNumberText = transform.Find("AttackDiceNumber").GetComponent<Text>();
         defenceDiceNumberText = transform.Find("DefenceDiceNumber").GetComponent<Text>();
-        //attackerText = transform.Find("AttackingArmyName").GetComponent<Text>();
-        //defenderText = transform.Find("DefendingArmyName").GetComponent<Text>();
     }
 }

@@ -56,11 +56,11 @@ public class EventManager : MonoBehaviour
         if (onResultMenuClosed != null) onResultMenuClosed();
     }
 
-    public static event Action onAttackResultClosed;
+    /*public static event Action onAttackResultClosed;
     public static void RaiseEventAttackResultClosed()
     {
         if (onAttackResultClosed != null) onAttackResultClosed();
-    }
+    }*/
 
     public static event Action<int> onUnitDestroyed;
     public static void RaiseEventOnUnitDestroyed(int unitId)
@@ -90,5 +90,11 @@ public class EventManager : MonoBehaviour
     public static void RaiseEventGameOver(int winnerId)
     {
         if (onGameOver != null) onGameOver(winnerId);
+    }
+
+    public static event Action<int> onRouteTestOver;
+    public static void RaiseEventRouteTestOver(int loserId)
+    {
+        if (onRouteTestOver != null) onRouteTestOver(loserId);
     }
 }
