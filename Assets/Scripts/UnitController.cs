@@ -137,11 +137,12 @@ public class UnitController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    protected void UpdateMe()
+    protected void UpdateMe(string mode)
     {
         Unit myUnit;
         Attack tempAttack;
 
+        if (mode == "routtest") return;
         myUnit = BattleManager.Instance.GetUnit(UnitId);
         anyTileClicked(0);
         if (!myUnit.IsAvialable && !isDisabled)    // check if unit killed

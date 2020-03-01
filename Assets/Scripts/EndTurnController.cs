@@ -75,29 +75,30 @@ public class EndTurnController : MonoBehaviour
                 EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
                 myText.text = "";
             }
-            if (mode == 3) // if displays Close Result
+            if (mode == 3) // if displays Close Result (attack result)
             {
                 //AttackResolved();
                 myText.text = "";
-                EventManager.RaiseEventResultMenuClosed();
+                EventManager.RaiseEventResultMenuClosed("attack");
             }
-            if(mode == 4)
+            if(mode == 4) // if displays Close Result (rout test result)
             {
-                AttackResolved();
-                EventManager.RaiseEventResultMenuClosed();
+                //AttackResolved();
+                myText.text = "";
+                EventManager.RaiseEventResultMenuClosed("routtest");
             }
         }
     }
 
-    private void RouteTestEnded(int loserId)
+    private void RouteTestEnded(string resultDescription, int result, int morale)
     {
-        if (loserId == 0) AttackResolved();
+        if (resultDescription == "noResult") AttackResolved();
         else
         {
             myText.text = "Close Result";
             mode = 4;
-            if (loserId == 1) EventManager.RaiseEventGameOver(2);
-            else if (loserId == 2) EventManager.RaiseEventGameOver(1);
+            if (resultDescription == "frenchFlee") EventManager.RaiseEventGameOver(2);
+            else if (resultDescription == "imperialFlee") EventManager.RaiseEventGameOver(1);
         }
     }
 
@@ -129,7 +130,8 @@ public class EndTurnController : MonoBehaviour
 
     public void DiceThrown(StateChange st)
     {
-        myText.text = "Close Result";
+        if (st.attackerStrengthChange != 0 || st.defenderStrengthChange != 0) myText.text = "Rout Test";
+        else myText.text = "Close Result";
         mode = 3;
     }
 

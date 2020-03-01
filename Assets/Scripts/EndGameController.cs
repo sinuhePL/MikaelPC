@@ -31,7 +31,7 @@ public class EndGameController : MonoBehaviour
         quitButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
     }
 
-    private void ShowEndGamePanel()
+    private void ShowEndGamePanel(string mode)
     {
         if (winnerId != 0)
         {

@@ -6,18 +6,30 @@ using DG.Tweening;
 
 public class ResultMenuController : MonoBehaviour
 {
+    private Text header;
     private Text attackResultText;
     private Text defenceResultText;
     private Text attackText;
     private Text defenceText;
+    private Text attackerRoutText;
+    private Text defenderRoutText;
+    private Text attackerStarText;
+    private Text defenderStarText;
+    private Image Line2;
 
     // Start is called before the first frame update
     void Start()
     {
+        header = transform.Find("Header").GetComponent<Text>();
         attackResultText = transform.Find("AttackResult").GetComponent<Text>();
         defenceResultText = transform.Find("DefenceResult").GetComponent<Text>();
         attackText = transform.Find("AttackingArmyName").GetComponent<Text>();
         defenceText = transform.Find("DefendingArmyName").GetComponent<Text>();
+        attackerRoutText = transform.Find("AttackerRoutMessage").GetComponent<Text>();
+        defenderRoutText = transform.Find("DefenderRoutMessage").GetComponent<Text>();
+        attackerStarText = transform.Find("AttackerStarMessage").GetComponent<Text>();
+        defenderStarText = transform.Find("DefenderStarMessage").GetComponent<Text>();
+        Line2 = transform.Find("Line 2").GetComponent<Image>();
     }
 
     private void DiceThrown(StateChange result)
@@ -25,35 +37,62 @@ public class ResultMenuController : MonoBehaviour
         Vector3 endPosition;
         Sequence mySequence = DOTween.Sequence();
 
+        header.text = "Attack Result";
+        Line2.gameObject.SetActive(true);
+        defenceText.rectTransform.sizeDelta = new Vector2(386.0f, 71.0f);
+        attackResultText.rectTransform.sizeDelta = new Vector2(226.0f, 96.0f);
+        attackResultText.fontSize = 40;
         attackText.text = BattleManager.Instance.GetArmyName(result.attackerId) + ":";
+        Line2.gameObject.SetActive(true);
         attackResultText.text = "";
-        if (result.attackerStrengthChange != 0) attackResultText.text = "Strength: " + result.attackerStrengthChange.ToString();
+        if (result.attackerStrengthChange != 0)
+        {
+            attackResultText.text = "Strength: " + result.attackerStrengthChange.ToString();
+            attackerRoutText.text = "Rout test imminent!";
+        }
+        else attackerRoutText.text = "";
         if (result.attackerMoraleChanged != 0) attackResultText.text += " Morale: " + result.attackerMoraleChanged.ToString();
         defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":"; 
         defenceResultText.text = "";
-        if (result.defenderStrengthChange != 0) defenceResultText.text = "Strength: " + result.defenderStrengthChange.ToString();
+        if (result.defenderStrengthChange != 0)
+        {
+            defenceResultText.text = "Strength: " + result.defenderStrengthChange.ToString();
+            defenderRoutText.text = "Rout test imminent!";
+        }
+        else defenderRoutText.text = "";
         if (result.defenderMoraleChanged != 0) defenceResultText.text += " Morale: " + result.defenderMoraleChanged.ToString();
         endPosition = new Vector3(Screen.width/2, Screen.height/2);
         mySequence.Append(transform.DOMove(endPosition, 0.01f));
-        mySequence.Append(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
+        mySequence.Append(transform.DOScale(0.7f, 0.3f).SetEase(Ease.OutBack));
+        attackerStarText.text = "";
+        defenderStarText.text = "";
     }
 
-    private void RouteTestOver(int loserId)
+    private void RouteTestOver(string resultDesription, int result, int morale)
     {
         Vector3 endPosition;
         Sequence mySequence2 = DOTween.Sequence();
-        if (loserId > 0)
+        if (resultDesription != "noResult")
         {
-            attackText.text = "Route test result:";
-            if (loserId == 1) attackResultText.text = "French army flees!";
-            else if (loserId == 2) attackResultText.text = "Imperial army flees!";
-            else if (loserId == 3) attackResultText.text = "French army stands its ground!";
-            else if (loserId == 4) attackResultText.text = "Imperial army stands its ground!";
-            defenceText.text = "";
+            header.text = "Rout Test Result";
+            Line2.gameObject.SetActive(false);
+            attackResultText.rectTransform.sizeDelta = new Vector2(386.0f, 142.0f);
+            attackResultText.fontSize = 55;
+            attackResultText.text = "Test result: " + result.ToString() + " Army morale: " + morale.ToString();
+            defenceText.rectTransform.sizeDelta = new Vector2(386.0f, 142.0f);
+            if (resultDesription == "frenchFlee") defenceText.text = "French army flees!";
+            else if (resultDesription == "imperialFlee") defenceText.text = "Imperial army flees!";
+            else if (resultDesription == "frenchStays") defenceText.text = "French army stands its ground!";
+            else if (resultDesription == "imperialStays") defenceText.text = "Imperial army stands its ground!";
+            attackText.text = "";
             defenceResultText.text = "";
+            attackerStarText.text = "";
+            defenderStarText.text = "";
+            attackerRoutText.text = "";
+            defenderRoutText.text = "";
             endPosition = new Vector3(Screen.width / 2, Screen.height / 2);
             mySequence2.Append(transform.DOMove(endPosition, 0.01f));
-            mySequence2.Append(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
+            mySequence2.Append(transform.DOScale(0.7f, 0.3f).SetEase(Ease.OutBack));
         }
     }
 
@@ -71,7 +110,7 @@ public class ResultMenuController : MonoBehaviour
         EventManager.onRouteTestOver += RouteTestOver;
     }
 
-    public void AttackResultClosed()
+    public void AttackResultClosed(string mode)
     {
         transform.DOScale(0.0f, 0.3f).SetEase(Ease.InBack);
     }

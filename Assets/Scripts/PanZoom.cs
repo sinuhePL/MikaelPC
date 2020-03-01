@@ -58,6 +58,11 @@ public class PanZoom : MonoBehaviour
         }
     }
 
+    private void ZoomOutAfterRoutTest(string resultDescription, int result, int morale)
+    {
+        ZoomOut(new StateChange());
+    }
+
     private void TurnEnd()
     {
         if(BattleManager.isPlayer1Human && BattleManager.isPlayer2Human) ChangeViewAngle("button");
@@ -68,6 +73,7 @@ public class PanZoom : MonoBehaviour
         EventManager.onDiceResult += ZoomOut;
         EventManager.onTurnEnd += TurnEnd;
         EventManager.onAttackOrdered += LookAtDice;
+        EventManager.onRouteTestOver += ZoomOutAfterRoutTest;
     }
 
     // Start is called before the first frame update
@@ -83,6 +89,12 @@ public class PanZoom : MonoBehaviour
         EventManager.onDiceResult -= ZoomOut;
         EventManager.onTurnEnd -= TurnEnd;
         EventManager.onAttackOrdered -= LookAtDice;
+        EventManager.onRouteTestOver -= ZoomOutAfterRoutTest;
+    }
+
+    public void RoutTest(Vector3 testSpot)
+    {
+        ReallyLookAtDice(testSpot);
     }
 
     // Update is called once per frame
@@ -199,14 +211,12 @@ public class PanZoom : MonoBehaviour
         if (!Physics.Raycast(rtRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
     }
 
-    public void LookAtDice(/*Vector3 target*/ int attackId)
+    private void ReallyLookAtDice(Vector3 target)
     {
         int groundMask;
         Ray camRay;
         RaycastHit groundHit;
-        Vector3 dif, newpos, campos, target;
-
-        target = BattleManager.Instance.GetAttack(attackId).GetPosition();
+        Vector3 dif, newpos, campos;
         if (BattleManager.viewType == "isometric")
         {
             StartCoroutine(ZoomAtDice(0.5f, 3.0f));
@@ -228,7 +238,14 @@ public class PanZoom : MonoBehaviour
             myCamera.transform.DOMove(target - new Vector3(3.0f, 0.0f, 5.0f), 0.5f).SetEase(Ease.OutQuint);
             myCamera.transform.DORotateQuaternion(Quaternion.Euler(Mathf.Lerp(zoomMinAngle, zoomMaxAngle, (4.0f - zoomOutMinPerspective) / (zoomOutMaxPerspective - zoomOutMinPerspective)), 30.0f, 0.0f), 0.5f);
         }
+    }
 
+    public void LookAtDice(int attackId)
+    {
+        Vector3 target;
+
+        target = BattleManager.Instance.GetAttack(attackId).GetPosition();
+        ReallyLookAtDice(target);
     }
 
     public void StopRotate()

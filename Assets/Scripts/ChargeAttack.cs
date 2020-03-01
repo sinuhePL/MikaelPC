@@ -47,7 +47,7 @@ public class ChargeAttack : Attack
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
-                        defenceDiceNumber = 2;
+                        defenceDiceNumber = 3;
                         break;
                 }
                 break;
@@ -81,7 +81,7 @@ public class ChargeAttack : Attack
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 3;
-                        defenceDiceNumber = 2;
+                        defenceDiceNumber = 3;
                         break;
                     case "Suisse":
                         attackDiceNumber = 2;

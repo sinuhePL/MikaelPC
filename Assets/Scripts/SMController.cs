@@ -22,7 +22,7 @@ public class SMController : MonoBehaviour
         }
     }
 
-    private void UpdateMe()
+    private void UpdateMe(string mode)
     {
         UnitClicked(presentedUnitId);
     }

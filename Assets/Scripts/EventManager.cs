@@ -6,6 +6,7 @@ public class EventManager : MonoBehaviour
 {
     public delegate void Action();
     public delegate void Action<A>(A arg1);
+    public delegate void Action<A, B, C>(A arg1, B arg2, C arg3);
 
     /* Example use:
     public static event Action newEvent;
@@ -50,10 +51,10 @@ public class EventManager : MonoBehaviour
         if (onDiceResult != null) onDiceResult(result);
     }
 
-    public static event Action onResultMenuClosed;
-    public static void RaiseEventResultMenuClosed()
+    public static event Action<string> onResultMenuClosed;
+    public static void RaiseEventResultMenuClosed(string mode) // attack, routtest
     {
-        if (onResultMenuClosed != null) onResultMenuClosed();
+        if (onResultMenuClosed != null) onResultMenuClosed(mode);
     }
 
     /*public static event Action onAttackResultClosed;
@@ -92,9 +93,9 @@ public class EventManager : MonoBehaviour
         if (onGameOver != null) onGameOver(winnerId);
     }
 
-    public static event Action<int> onRouteTestOver;
-    public static void RaiseEventRouteTestOver(int loserId)
+    public static event Action<string, int,int> onRouteTestOver;
+    public static void RaiseEventRouteTestOver(string description, int result, int morale)
     {
-        if (onRouteTestOver != null) onRouteTestOver(loserId);
+        if (onRouteTestOver != null) onRouteTestOver(description, result, morale);
     }
 }

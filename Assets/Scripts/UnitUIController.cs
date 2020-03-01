@@ -14,7 +14,7 @@ public class UnitUIController : MonoBehaviour
         isHidden = true;
     }
 
-    private void UpdateBoard()
+    private void UpdateBoard(string mode)
     {
         TileClicked(0);
     }

@@ -8,6 +8,14 @@ public class ArmyMoraleController : MonoBehaviour
     private Text myText;
     [SerializeField] private int myArmyId;
 
+    private void ResultClosed(string mode)
+    {
+        if (mode == "attack")
+        {
+            UpdateMe();
+        }
+    }
+
     private void UpdateMe()
     {
         int m;
@@ -17,7 +25,7 @@ public class ArmyMoraleController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.onResultMenuClosed += UpdateMe;
+        EventManager.onResultMenuClosed += ResultClosed;
         EventManager.onGameStart += UpdateMe;
         myText = GetComponent<Text>();
     }
@@ -30,7 +38,7 @@ public class ArmyMoraleController : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventManager.onResultMenuClosed -= UpdateMe;
+        EventManager.onResultMenuClosed -= ResultClosed;
         EventManager.onGameStart -= UpdateMe;
     }
 }

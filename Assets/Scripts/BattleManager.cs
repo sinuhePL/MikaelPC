@@ -152,7 +152,7 @@ public class BattleManager : MonoBehaviour {
         Army army1, army2;
         Attack tempAttack;
         Vector3 menuRightPositionShift, menuCentralPositionShift, menuLeftPositionShift;
-        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile, leftAttackTargetId, centralAttackTargetId, rightAttackTargetId;
+        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile;
 
         // counts morale of army
         foreach (GameObject g in units)
@@ -239,64 +239,69 @@ public class BattleManager : MonoBehaviour {
         if (winnerId != 0) EventManager.RaiseEventGameOver(winnerId);
     }
 
-    private void MakeRouteTest()
+    private void MakeRouteTest(string closedMode)
     {
         int throwId;
+        Vector3 testSpot = new Vector3(20.0f, 2.0f, -16.0f);
 
-        if(armyRouteTest > 0)
+        if (armyRouteTest == 0 || armyRouteTest < 3 && closedMode == "routtest")
         {
-            if(armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 1)
-            {
-                throwId = Dice.Roll("3d10", "d10-blue",new Vector3(20.0f, 2.0f, -16.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-                StartCoroutine(WaitForRouteTest(throwId, 1));
-            }
-            else if(armyRouteTest == 2 || armyRouteTest == 3 && turnOwnerId == 2)
-            {
-                throwId = Dice.Roll("3d10", "d10-yellow", new Vector3(20.0f, 2.0f, -16.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-                StartCoroutine(WaitForRouteTest(throwId, 2));
-            }
+            EventManager.RaiseEventRouteTestOver("noResult", 0, 0);
         }
         else
         {
-            EventManager.RaiseEventRouteTestOver(0);
+            if(armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 2 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 1 && closedMode == "routtest")
+            {
+                throwId = Dice.Roll("3d10", "d10-blue", testSpot, new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
+                myCamera.GetComponent<PanZoom>().RoutTest(testSpot);
+                StartCoroutine(WaitForRouteTest(throwId, 1, closedMode));
+            }
+            else if(armyRouteTest == 2 || armyRouteTest == 3 && turnOwnerId == 1 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 2 && closedMode == "routtest")
+            {
+                throwId = Dice.Roll("3d10", "d10-yellow", testSpot, new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
+                myCamera.GetComponent<PanZoom>().RoutTest(testSpot);
+                StartCoroutine(WaitForRouteTest(throwId, 2, closedMode));
+            }
         }
+        if (armyRouteTest == 3 && closedMode == "routtest") armyRouteTest = 0;
     }
 
-    private IEnumerator WaitForRouteTest(int throwId, int testingArmyId)
+    private IEnumerator WaitForRouteTest(int throwId, int testingArmyId, string mode)
     {
-        int throwResult;
+        int throwResult, armyMorale;
         string stringResult = "";
-        int result;
+        string resultDescription;
 
         while (Dice.rolling)
         {
             yield return null;
         }
         stringResult = Dice.AsString("d10", throwId);
+        armyMorale = myBoardState.GetArmyMorale(testingArmyId);
         if (!stringResult.Contains("?"))
         {
             throwResult = Dice.Value("d10");
             Debug.Log("Wynik testu morale: " + throwResult);
-            if (throwResult > myBoardState.GetArmyMorale(testingArmyId))
+            if (throwResult > armyMorale)
             {
-                if (testingArmyId == 1) result = 1;
-                else result = 2;
+                if (testingArmyId == 1) resultDescription = "frenchFlee";
+                else resultDescription = "imperialFlee";
             }
             else
             {
-                if (testingArmyId == 1) result = 3;
-                else result = 4;
+                if (testingArmyId == 1) resultDescription = "frenchStays";
+                else resultDescription = "imperialStays";
             }
-            armyRouteTest = 0;
-            Debug.Log(result);
+            Debug.Log(resultDescription);
             yield return new WaitForSeconds(1.5f);
-            EventManager.RaiseEventRouteTestOver(result);
+            EventManager.RaiseEventRouteTestOver(resultDescription, throwResult, armyMorale);
             Dice.Clear();
         }
         else
         {
             Debug.Log("Błąd przy route test");
-            MakeRouteTest();
+            Dice.Clear();
+            MakeRouteTest(mode);
         }
     }
 
@@ -346,6 +351,7 @@ public class BattleManager : MonoBehaviour {
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
                 hasTurnOwnerAttacked = true;
                 //check if route test needed
+                armyRouteTest = 0;
                 if (result.attackerStrengthChange < 0 && result.defenderStrengthChange < 0) armyRouteTest = 3;
                 else if (result.attackerStrengthChange < 0)
                 {
