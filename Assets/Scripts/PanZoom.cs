@@ -245,7 +245,7 @@ public class PanZoom : MonoBehaviour
         Vector3 target;
 
         target = BattleManager.Instance.GetAttack(attackId).GetPosition();
-        ReallyLookAtDice(target);
+        ReallyLookAtDice(target + new Vector3(2.0f, 0.0f, 0.0f));
     }
 
     public void StopRotate()

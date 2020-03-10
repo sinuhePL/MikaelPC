@@ -12,6 +12,7 @@ public class BattleManager : MonoBehaviour {
     private List<GameObject> tiles;
     private Camera myCamera;
     private int armyRouteTest;
+    private float[] routProbabilityTable;
 
     public static BattleManager Instance { get { return _instance; } }
     [SerializeField] private Transform marginBottom;
@@ -86,6 +87,7 @@ public class BattleManager : MonoBehaviour {
 
     private void Start()
     {
+        routProbabilityTable = new float[] {1.0f, 1.0f, 1.0f, 0.999f, 0.996f, 0.99f, 0.98f, 0.965f, 0.944f, 0.916f, 0.88f, 0.835f, 0.78f, 0.717f, 0.648f, 0.575f, 0.5f, 0.425f, 0.352f, 0.283f, 0.22f, 0.165f, 0.12f, 0.084f, 0.056f, 0.035f, 0.02f, 0.01f, 0.004f, 0.001f, 0.0f};
         EventManager.RaiseEventGameStart();
     }
 
@@ -252,14 +254,16 @@ public class BattleManager : MonoBehaviour {
         {
             if(armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 2 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 1 && closedMode == "routtest")
             {
-                throwId = Dice.Roll("3d10", "d10-blue", testSpot, new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-                myCamera.GetComponent<PanZoom>().RoutTest(testSpot);
+                SoundManagerController.Instance.PlayThrowSound(0);
+                throwId = Dice.Roll("3d10", "d10-blue", testSpot, new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                myCamera.GetComponent<PanZoom>().RoutTest(testSpot + new Vector3(2.0f, 0.0f, 1.0f));
                 StartCoroutine(WaitForRouteTest(throwId, 1, closedMode));
             }
             else if(armyRouteTest == 2 || armyRouteTest == 3 && turnOwnerId == 1 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 2 && closedMode == "routtest")
             {
-                throwId = Dice.Roll("3d10", "d10-yellow", testSpot, new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-                myCamera.GetComponent<PanZoom>().RoutTest(testSpot);
+                SoundManagerController.Instance.PlayThrowSound(0);
+                throwId = Dice.Roll("3d10", "d10-yellow", testSpot, new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                myCamera.GetComponent<PanZoom>().RoutTest(testSpot + new Vector3(2.0f, 0.0f, 1.0f));
                 StartCoroutine(WaitForRouteTest(throwId, 2, closedMode));
             }
         }
@@ -302,6 +306,29 @@ public class BattleManager : MonoBehaviour {
             Debug.Log("Błąd przy route test");
             Dice.Clear();
             MakeRouteTest(mode);
+        }
+    }
+
+    private void MakeAttack(int idAttack)
+    {
+        Attack myAttack;
+        int throw1 = 0, throw2 = 0;
+
+        myAttack = myBoardState.GetAttack(idAttack);
+        if (myAttack.GetArmyId() == turnOwnerId && !hasTurnOwnerAttacked)
+        {
+            Dice.Clear();
+            if (myAttack.GetArmyId() == 1)
+            {
+                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+            }
+            else
+            {
+                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+            }
+            StartCoroutine(WaitForDice(throw1, throw2, idAttack));
         }
     }
 
@@ -374,29 +401,6 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
-    private void MakeAttack(int idAttack)
-    {
-        Attack myAttack;
-        int throw1 = 0, throw2 = 0;
-
-        myAttack = myBoardState.GetAttack(idAttack);
-        if (myAttack.GetArmyId() == turnOwnerId && !hasTurnOwnerAttacked)
-        {
-            Dice.Clear();
-            if (myAttack.GetArmyId() == 1)
-            {
-                if(myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-                if(myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-            }
-            else
-            {
-                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(0.05f, 0.1f + Random.value * 0.1f, 0.0f));
-            }
-            StartCoroutine(WaitForDice(throw1, throw2, idAttack));
-        }
-    }
-
     private void TurnStart()
     {
         hasTurnOwnerAttacked = false;
@@ -439,15 +443,30 @@ public class BattleManager : MonoBehaviour {
 
     private float ExpectiMinMaxAttack(BoardState inBoardState, int attackId, float limit, int armyId)
     {
-        float attackValue = 0;
+        float attackValue = 0, attackerRoutProbability, defenderRoutProbability;
         Attack myAttack;
         BoardState outBoardState;
+        int otherArmyId;
+        if (armyId == 1) otherArmyId = 2;
+        else otherArmyId = 1;
+        attackerRoutProbability = 0;
+        defenderRoutProbability = 0;
         myAttack = inBoardState.GetAttack(attackId);
         foreach (StateChange sc in myAttack.GetOutcomes())
         {
             outBoardState = new BoardState(inBoardState);
             outBoardState.ChangeState(sc);
-            attackValue += sc.changeProbability * ExpectiMinMaxBoardState(outBoardState, limit, armyId);
+            if(sc.defenderStrengthChange != 0 && outBoardState.GetArmyMorale(otherArmyId) < 30)  //defender looses rout test
+            {
+                defenderRoutProbability = routProbabilityTable[outBoardState.GetArmyMorale(otherArmyId)];
+                 attackValue += -500.0f * defenderRoutProbability * sc.changeProbability;
+            }
+            if(sc.attackerStrengthChange != 0 && outBoardState.GetArmyMorale(armyId) < 30) // attacker looses from test
+            {
+                attackerRoutProbability = routProbabilityTable[outBoardState.GetArmyMorale(armyId)];
+                attackValue += 500.0f * attackerRoutProbability * (1 - defenderRoutProbability) * sc.changeProbability;
+            }
+            attackValue += sc.changeProbability * (1 - defenderRoutProbability) * (1 - attackerRoutProbability) * ExpectiMinMaxBoardState(outBoardState, limit, armyId);
         }
         return attackValue;
     }
@@ -477,7 +496,6 @@ public class BattleManager : MonoBehaviour {
                 EventManager.RaiseEventOnAttackClicked(bestAttack);
                 EventManager.RaiseEventOnAttackOrdered(bestAttack);
                 SoundManagerController.Instance.PlayThrowSound(0);
-                MakeAttack(bestAttack);
             }
         }
     }
