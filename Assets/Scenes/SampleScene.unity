@@ -4680,13 +4680,8 @@ MonoBehaviour:
     type: 3}
   marginAround: {fileID: 6816812185374572968, guid: 7ae32c0a395afab42bab65dacecae18a,
     type: 3}
-  boardFields:
-  - {fileID: 7182045796629178848, guid: 20a36c3fc061a6a419f0fc7f71384b52, type: 3}
-  - {fileID: 1346435362757861427, guid: 7cfcbde94326b26408f5fef9ad337666, type: 3}
-  - {fileID: 5052533065490433438, guid: 5dd5e169093471440a243011d2f428c6, type: 3}
-  - {fileID: 7628703217314901033, guid: aef8696bff8974a46b1a76f6ec15f07a, type: 3}
-  - {fileID: 2208145734809997645, guid: 82f68a3b2c0e14f4c82758703382be11, type: 3}
-  - {fileID: 8098927023049770157, guid: e4c43b93763fc18459751778409c8592, type: 3}
+  tilePrefab: {fileID: 8098927023049770157, guid: e4c43b93763fc18459751778409c8592,
+    type: 3}
   gendarmesPrefab: {fileID: 319731512460961604, guid: a9ac4cb676925c84e92d8a39556a27c1,
     type: 3}
   imperialLandsknechtePrefab: {fileID: 2983453476021083486, guid: 4d2b07b0ead4214419fc3232be009c6e,

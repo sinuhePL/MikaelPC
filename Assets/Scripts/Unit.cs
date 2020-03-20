@@ -32,6 +32,7 @@ public class Unit
         get {return _strength;}
         set {_strength = value;}
     }
+
     public int morale
     {
         get { return _morale; }
@@ -241,5 +242,14 @@ public class Unit
                 a.IncreaseAttack();
             }
         }
+    }
+
+    public Attack GetAttackOnKeyField(int keyFieldId)
+    {
+        foreach (Attack a in unitAttacks)
+        {
+            if (a.GetKeyFieldId() == keyFieldId) return a;
+        }
+        return null;
     }
 }

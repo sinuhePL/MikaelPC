@@ -5,18 +5,18 @@ using UnityEngine;
 public class KeyField
 {
     private int occupantId;
-    private int boardFieldId;
+    private int keyFieldId;
 	
-    public KeyField(int fieldId)    // konstruktor
+    public KeyField(int fieldId, int ownerId)    // konstruktor
     {
-        occupantId = 0;
-        boardFieldId = fieldId;
+        occupantId = ownerId;
+        keyFieldId = fieldId;
     }
 
     public KeyField(KeyField pattern)
     {
         occupantId = pattern.occupantId;
-        boardFieldId = pattern.boardFieldId;
+        keyFieldId = pattern.keyFieldId;
     }
 
     public void SetOccupant(int id)
@@ -31,6 +31,6 @@ public class KeyField
 
     public int GetFieldId()
     {
-        return boardFieldId;
+        return keyFieldId;
     }
 }

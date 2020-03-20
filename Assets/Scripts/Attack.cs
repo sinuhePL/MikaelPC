@@ -19,6 +19,13 @@ public abstract class Attack
     protected int attackDiceNumber;
     protected int defenceDiceNumber;
     protected bool isAttackForward;
+    protected bool isKeyFieldTaken;
+
+    public bool keyFieldTaken
+    {
+        get { return isKeyFieldTaken; }
+        set { isKeyFieldTaken = value; }
+    }
 
     protected Attack(Attack pattern, Unit o) // konstruktor kopiujący
     {
@@ -43,6 +50,7 @@ public abstract class Attack
         attackDiceNumber = pattern.attackDiceNumber;
         defenceDiceNumber = pattern.defenceDiceNumber;
         isAttackForward = pattern.isAttackForward;
+        isKeyFieldTaken = pattern.isKeyFieldTaken;
     }
 
     public string GetName()
@@ -65,7 +73,7 @@ public abstract class Attack
         return isAttackForward;
     }
 
-    public Attack(int aId, bool state, int army, Unit o, int keyField, int tId, Vector3 p, bool f) // konstruktor
+    public Attack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, bool f) // konstruktor
     {
         attackId = aId;
         isActiveState = state;
@@ -74,6 +82,7 @@ public abstract class Attack
         activatesAttacks = new List<int>();
         deactivatesAttacks = new List<int>();
         keyFieldId = keyField;
+        isKeyFieldTaken = isKFTaken;
         targetId = tId;
         //target = null;
         arrowPosition = p;
@@ -88,6 +97,16 @@ public abstract class Attack
     }
 
     public void IncreaseDefence()
+    {
+        defenceDiceNumber++;
+    }
+
+    public void DecreaseAttack()
+    {
+        attackDiceNumber++;
+    }
+
+    public void DecreaseDefence()
     {
         defenceDiceNumber++;
     }
@@ -160,8 +179,13 @@ public abstract class Attack
         return owner;
     }
 
+    public int GetKeyFieldId()
+    {
+        return keyFieldId;
+    }
+
     public abstract StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner);
     public abstract List<StateChange> GetOutcomes();
     public abstract Attack GetCopy(Unit o);
-
+    public abstract void SpecialAttack(ref StateChange sc);
 }

@@ -99,6 +99,15 @@ public class BoardState
         return null;
     }
 
+    public KeyField GetKeyField(int idField)
+    {
+        foreach (KeyField k in keyFields)
+        {
+            if (k.GetFieldId() == idField) return k;
+        }
+        return null;
+    }
+
     public Attack GetAttack(int idAttack)
     {
         Attack tempAttack = null;
@@ -113,6 +122,8 @@ public class BoardState
     public int ChangeState(StateChange change)  // zmienia stan planszy zgodnie z definicją zmiany
     {
         Unit u;
+        KeyField kf;
+        Attack a;
         int army1ActiveCount, army2ActiveCount;
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId); 
@@ -137,6 +148,14 @@ public class BoardState
                 u.DeactivateAttack(i);
             }
         }
+        if(change.keyFieldChangeId !=0)
+        {
+            kf = GetKeyField(change.keyFieldChangeId);
+            kf.SetOccupant(u.GetArmyId());
+            a = u.GetAttackOnKeyField(change.keyFieldChangeId);
+            a.keyFieldTaken = true;
+            a.IncreaseAttack();
+        }
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
         u.ChangeStrength(change.defenderStrengthChange);
@@ -160,12 +179,11 @@ public class BoardState
                 u.DeactivateAttack(i);
             }
         }
-        if (keyFields != null)
+        if (change.keyFieldChangeId != 0)
         {
-            foreach (KeyField kf in keyFields)   // wprowadza zmianę własiciela pola kluczowego
-            {
-                if (kf.GetFieldId() == change.keyFieldChangeId) kf.SetOccupant(change.keyFieldNewOccupantId);
-            }
+            a = u.GetAttackOnKeyField(change.keyFieldChangeId);
+            a.keyFieldTaken = false;
+            a.DecreaseAttack();
         }
         army1ActiveCount = 0;
         army2ActiveCount = 0;
@@ -186,6 +204,11 @@ public class BoardState
     public void AddUnit(Unit u)
     {
         units.Add(u);
+    }
+
+    public void AddKeyField(KeyField kf)
+    {
+        keyFields.Add(kf);
     }
 
     public int GetArmyMorale(int armyId)

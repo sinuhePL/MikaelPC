@@ -24,7 +24,7 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private Transform marginRight;
     [SerializeField] private Transform marginTop;
     [SerializeField] private Transform marginAround;
-    [SerializeField] private GameObject[] boardFields;
+    [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GameObject gendarmesPrefab;
     [SerializeField] private GameObject imperialLandsknechtePrefab;
     [SerializeField] private GameObject frenchLandsknechtePrefab;
@@ -94,7 +94,7 @@ public class BattleManager : MonoBehaviour {
     private void InitiateManager(int _boardWidth, int _boardHeight)
     {
         GameObject tempObj;
-        int tileCounter = 0;
+        int tileCounter = 0, keyFieldCounter = 0, tempKeyFieldId;
 
         Random.InitState(System.Environment.TickCount);
         tiles = new List<GameObject>();
@@ -114,9 +114,26 @@ public class BattleManager : MonoBehaviour {
                 else if (i == _boardWidth + 2 && j == _boardHeight + 2) Instantiate(marginCornerRightBottom, new Vector3(i * 4.0f, 0.0f, j * -4.0f), marginCornerRightBottom.transform.rotation);
                 else
                 {
-                    int r = Random.Range(0, boardFields.Length);
-                    tempObj = Instantiate(boardFields[r], new Vector3(i * 4.0f, 0.0f, j * -4.0f), boardFields[r].transform.rotation);
-                    tempObj.GetComponent<TileController>().InitializeTile(++tileCounter);
+                    int r = Random.Range(0, 4);
+                    tempObj = Instantiate(tilePrefab, new Vector3(i * 4.0f, 0.0f, j * -4.0f), tilePrefab.transform.rotation);
+                    // add condition on creating key field
+                    if (j == 4 && (r < 3)) tempKeyFieldId = ++keyFieldCounter;
+                    else tempKeyFieldId = 0;
+                    switch(r)
+                    {
+                        case 0:
+                            tempObj.GetComponent<TileController>().InitializeTile(++tileCounter, tempKeyFieldId, "forest");
+                            break;
+                        case 1:
+                            tempObj.GetComponent<TileController>().InitializeTile(++tileCounter, tempKeyFieldId, "hill");
+                            break;
+                        case 2:
+                            tempObj.GetComponent<TileController>().InitializeTile(++tileCounter, tempKeyFieldId, "town");
+                            break;
+                        case 3:
+                            tempObj.GetComponent<TileController>().InitializeTile(++tileCounter, tempKeyFieldId, "field");
+                            break;
+                    }
                     tiles.Add(tempObj);
                 }
             }
@@ -150,11 +167,13 @@ public class BattleManager : MonoBehaviour {
     private void InitiateBoard()
     {
         UnitController uc, uc2;
+        TileController tc;
         Unit myUnit;
+        KeyField myKeyField;
         Army army1, army2;
         Attack tempAttack;
         Vector3 menuRightPositionShift, menuCentralPositionShift, menuLeftPositionShift;
-        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile;
+        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile, keyFieldTile, myKeyFieldId;
 
         // counts morale of army
         foreach (GameObject g in units)
@@ -203,25 +222,45 @@ public class BattleManager : MonoBehaviour {
                 menuCentralPositionShift = new Vector3(3.0f, 0.0f, -3.0f);
                 menuRightPositionShift = new Vector3(5.0f, 0.0f, -3.0f);
             }
+            //looks for tiles between unit and its oponent to set key field Id for central attack
+            myKeyFieldId = 0;
+            if(uc.ArmyId == 1)
+            {
+                keyFieldTile = uc.UnitTileId - 1;
+            }
+            else
+            {
+                keyFieldTile = uc.UnitTileId + 1;
+            }
+            foreach(GameObject t in tiles)
+            {
+                tc = t.GetComponent<TileController>();
+                if (tc.GetKeyFieldId() != 0)
+                {
+                    myKeyField = new KeyField(tc.GetKeyFieldId(), 0);
+                    myBoardState.AddKeyField(myKeyField);
+                }
+                if (tc.tileId == keyFieldTile) myKeyFieldId = tc.GetKeyFieldId();
+            }
             //looks for units ids which sits on tiles pointed at attack arrows
             foreach (GameObject g2 in units)
             {
                 uc2 = g2.GetComponent<UnitController>();
                 if (uc2.UnitTileId == leftAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("right"), false, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuLeftPositionShift, uc.UnitType, uc2.UnitType, false);
+                    tempAttack = new ChargeAttack(uc.GetAttackId("right"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + menuLeftPositionShift, uc.UnitType, uc2.UnitType, false);
                     //uc.ActivateAttack(uc.GetAttackId("right")); // testowo, docelowo tylko central attack jest aktywnyna początku
                     myUnit.AddAttack(tempAttack);
                 }
                 if (uc2.UnitTileId == centralAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("central"), true, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuCentralPositionShift, uc.UnitType, uc2.UnitType, true);
+                    tempAttack = new ChargeAttack(uc.GetAttackId("central"), true, uc.ArmyId, myUnit, myKeyFieldId, false, uc2.UnitId, uc.transform.position + menuCentralPositionShift, uc.UnitType, uc2.UnitType, true);
                     uc.ActivateAttack(uc.GetAttackId("central"));
                     myUnit.AddAttack(tempAttack);
                 }
                 if (uc2.UnitTileId == rightAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("left"), false, uc.ArmyId, myUnit, 0, uc2.UnitId, uc.transform.position + menuRightPositionShift, uc.UnitType, uc2.UnitType, false);
+                    tempAttack = new ChargeAttack(uc.GetAttackId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + menuRightPositionShift, uc.UnitType, uc2.UnitType, false);
                     //uc.ActivateAttack(uc.GetAttackId("left")); // testowo, docelowo tylko central attack jest aktywnyna początku
                     myUnit.AddAttack(tempAttack);
                 }
@@ -320,13 +359,13 @@ public class BattleManager : MonoBehaviour {
             Dice.Clear();
             if (myAttack.GetArmyId() == 1)
             {
-                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
-                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-attackblue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-defenceyellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
             }
             else
             {
-                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-yellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
-                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-blue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                if (myAttack.GetAttackDiceNumber() > 0) throw1 = Dice.Roll(myAttack.GetAttackDiceNumber().ToString() + "d6", "d6-attackyellow", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+                if (myAttack.GetDefenceDiceNumber() > 0) throw2 = Dice.Roll(myAttack.GetDefenceDiceNumber().ToString() + "d6", "d6-defenceblue", myAttack.GetPosition() + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
             }
             StartCoroutine(WaitForDice(throw1, throw2, idAttack));
         }
@@ -357,17 +396,18 @@ public class BattleManager : MonoBehaviour {
             else throw2Hits = new string[0];
             if (throw1Hits != null && throw2Hits != null)
             {
+                tempAttack = myBoardState.GetAttack(attackId);
                 for (int i = 0; i < throw1Hits.Length; i++)
                 {
                     if (throw1Hits[i] == "S") attackStrengthHit++;
                     if (throw1Hits[i] == "M") attackMoraleHit++;
+                    if (throw1Hits[i] == "*") tempAttack.SpecialAttack(ref result);
                 }
                 for (int i = 0; i < throw2Hits.Length; i++)
                 {
                     if (throw2Hits[i] == "S") defenceStrengthHit++;
                     if (throw2Hits[i] == "M") defenceMoraleHit++;
                 }
-                tempAttack = myBoardState.GetAttack(attackId);
                 result.attackerId = tempAttack.GetOwner().GetUnitId();
                 result.defenderId = tempAttack.GetTargetId();
                 result.attackerMoraleChanged = -defenceMoraleHit;

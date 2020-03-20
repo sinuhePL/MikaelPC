@@ -311,6 +311,16 @@ public class Dice : MonoBehaviour {
                                     rDie2.die.Highlight();
                                     break;  // stops searching for pair
                                 }
+                                if(rDie.die.value == 1 && rDie2.die.value == 1) // detects special hit
+                                {
+                                    rDie2.isChecked = true;
+                                    hitList.Add("*");
+                                    rDie.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
+                                    rDie2.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
+                                    rDie.die.Highlight();
+                                    rDie2.die.Highlight();
+                                    break;  // stops searching for pair
+                                }
                             }
                         }
                     }
