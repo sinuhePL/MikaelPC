@@ -15,6 +15,7 @@ public class StateChange
     public List<int> activatedAttacks;
     public List<int> deactivatedAttacks;
     public float changeProbability;
+    public string specialOutcomeDescription;
 
     public StateChange()
     {
@@ -29,6 +30,7 @@ public class StateChange
         activatedAttacks = null;
         deactivatedAttacks = null;
         changeProbability = 0.0f;
+        specialOutcomeDescription = "";
     }
 
     public StateChange(int ai, int di, int amc, int dmc, int asc, int dsc, int kfci, int kfnoi, List<int> aa, List<int> da, float cp)
@@ -44,5 +46,6 @@ public class StateChange
         activatedAttacks = aa;
         deactivatedAttacks = da;
         changeProbability = cp;
+        specialOutcomeDescription = "";
     }
 }

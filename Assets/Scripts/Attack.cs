@@ -20,6 +20,7 @@ public abstract class Attack
     protected int defenceDiceNumber;
     protected bool isAttackForward;
     protected bool isKeyFieldTaken;
+    protected int specialOutcomeType;
 
     public bool keyFieldTaken
     {
@@ -51,6 +52,7 @@ public abstract class Attack
         defenceDiceNumber = pattern.defenceDiceNumber;
         isAttackForward = pattern.isAttackForward;
         isKeyFieldTaken = pattern.isKeyFieldTaken;
+        specialOutcomeType = pattern.specialOutcomeType;
     }
 
     public string GetName()
@@ -187,5 +189,6 @@ public abstract class Attack
     public abstract StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner);
     public abstract List<StateChange> GetOutcomes();
     public abstract Attack GetCopy(Unit o);
-    public abstract void SpecialAttack(ref StateChange sc);
+    public abstract void SpecialOutcome(ref StateChange sc);
+    public abstract string GetSpecialOutcomeDescription();
 }

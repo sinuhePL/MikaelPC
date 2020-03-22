@@ -137,7 +137,10 @@ public class EndTurnController : MonoBehaviour
 
     public void Reset(int i)
     {
-        myText.text = "End Turn";
-        mode = 1;
+        if (mode == 2)
+        {
+            myText.text = "End Turn";
+            mode = 1;
+        }
     }
 }

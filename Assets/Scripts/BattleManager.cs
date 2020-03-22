@@ -237,7 +237,7 @@ public class BattleManager : MonoBehaviour {
                 tc = t.GetComponent<TileController>();
                 if (tc.GetKeyFieldId() != 0)
                 {
-                    myKeyField = new KeyField(tc.GetKeyFieldId(), 0);
+                    myKeyField = new KeyField(tc.GetKeyFieldId(), 0, tc.GetKeyFieldName());
                     myBoardState.AddKeyField(myKeyField);
                 }
                 if (tc.tileId == keyFieldTile) myKeyFieldId = tc.GetKeyFieldId();
@@ -376,6 +376,7 @@ public class BattleManager : MonoBehaviour {
     {
         Attack tempAttack;
         string result1 = "", result2 = "";
+        bool isSpecialOutcome;
 
         while (Dice.rolling)
         {
@@ -396,12 +397,13 @@ public class BattleManager : MonoBehaviour {
             else throw2Hits = new string[0];
             if (throw1Hits != null && throw2Hits != null)
             {
+                isSpecialOutcome = false;
                 tempAttack = myBoardState.GetAttack(attackId);
                 for (int i = 0; i < throw1Hits.Length; i++)
                 {
                     if (throw1Hits[i] == "S") attackStrengthHit++;
                     if (throw1Hits[i] == "M") attackMoraleHit++;
-                    if (throw1Hits[i] == "*") tempAttack.SpecialAttack(ref result);
+                    if (throw1Hits[i] == "*") isSpecialOutcome = true;
                 }
                 for (int i = 0; i < throw2Hits.Length; i++)
                 {
@@ -414,6 +416,7 @@ public class BattleManager : MonoBehaviour {
                 result.attackerStrengthChange = -defenceStrengthHit;
                 result.defenderMoraleChanged = -attackMoraleHit;
                 result.defenderStrengthChange = -attackStrengthHit;
+                if(isSpecialOutcome) tempAttack.SpecialOutcome(ref result);
                 Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
                 hasTurnOwnerAttacked = true;
@@ -570,8 +573,14 @@ public class BattleManager : MonoBehaviour {
         if (i > 0) return myBoardState.GetArmyName(i);
         else return null;
     }
+
     public string GetArmyName(int unitId)
     {
         return myBoardState.GetArmyName(myBoardState.GetUnit(unitId).GetArmyId());
+    }
+
+    public string GetKeyFieldName(int keyFieldId)
+    {
+        return myBoardState.GetKeyFieldName(keyFieldId);
     }
 }

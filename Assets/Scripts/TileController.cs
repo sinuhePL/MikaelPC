@@ -110,4 +110,9 @@ public class TileController : MonoBehaviour
     {
         return keyFieldId;
     }
+
+    public string GetKeyFieldName()
+    {
+        return fieldCaption.text;
+    }
 }

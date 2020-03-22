@@ -15,18 +15,22 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 1;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 2;
                         break;
                     case "Suisse":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 3;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
+                        specialOutcomeType = 4;
                         break;
                 }
                 break;
@@ -36,18 +40,22 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
+                        specialOutcomeType = 5;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 6;
                         break;
                     case "Suisse":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 7;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 7;
                         break;
                 }
                 break;
@@ -57,18 +65,22 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
+                        specialOutcomeType = 3;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 6;
                         break;
                     case "Suisse":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 8;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
+                        specialOutcomeType = 9;
                         break;
                 }
                 break;
@@ -78,18 +90,22 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 7;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 1;
                         break;
                     case "Suisse":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 5;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
+                        specialOutcomeType = 2;
                         break;
                 }
                 break;
@@ -119,13 +135,84 @@ public class ChargeAttack : Attack
 
     }
 
-    public override void SpecialAttack(ref StateChange sc)
+    public override void SpecialOutcome(ref StateChange sc)
     {
         if(keyFieldId != 0 && !isKeyFieldTaken)
         {
             sc.keyFieldChangeId = keyFieldId;
             sc.keyFieldNewOccupantId = owner.GetArmyId();
         }
+        else
+        {
+            if(specialOutcomeType == 1)
+            {
+                sc.attackerMoraleChanged = 0;
+                sc.attackerStrengthChange = 0;
+            }
+            if (specialOutcomeType == 2)
+            {
+                sc.attackerMoraleChanged = 0;
+                sc.attackerStrengthChange = 0;
+                sc.defenderMoraleChanged--;
+            }
+            if (specialOutcomeType == 3)
+            {
+                sc.attackerMoraleChanged = 1;
+                sc.attackerStrengthChange = 0;
+            }
+            if (specialOutcomeType == 4)
+            {
+                sc.attackerMoraleChanged = 0;
+                sc.attackerStrengthChange = 0;
+                sc.defenderStrengthChange--;
+            }
+            if (specialOutcomeType == 5)
+            {
+                sc.attackerMoraleChanged++;
+                sc.defenderMoraleChanged--;
+            }
+            if (specialOutcomeType == 6)
+            {
+                sc.defenderMoraleChanged = sc.defenderMoraleChanged - 2;
+            }
+            if (specialOutcomeType == 7)
+            {
+                sc.attackerMoraleChanged++;
+            }
+            if (specialOutcomeType == 8)
+            {
+                sc.defenderStrengthChange--;
+            }
+            if (specialOutcomeType == 9)
+            {
+                sc.attackerMoraleChanged = 1;
+                sc.attackerStrengthChange = 0;
+                sc.defenderMoraleChanged--;
+
+            }
+        }
+        sc.specialOutcomeDescription = GetSpecialOutcomeDescription();
+    }
+
+    public override string GetSpecialOutcomeDescription()
+    {
+        if (keyFieldId != 0 && !isKeyFieldTaken)
+        {
+            return BattleManager.Instance.GetKeyFieldName(keyFieldId) + " captured! \n (+1 attack die)";
+        }
+        else
+        {
+            if(specialOutcomeType == 1) return "Defender loses hits";
+            if (specialOutcomeType == 2) return "Defender loses hits and 1 morale";
+            if (specialOutcomeType == 3) return "Defender loses hits, attacker gains 1 morale";
+            if (specialOutcomeType == 4) return "Defender loses hits and 1 strength";
+            if (specialOutcomeType == 5) return "Attacker gains 1 morale, defender loses 1 morale";
+            if (specialOutcomeType == 6) return "Defender loses 2 morale";
+            if (specialOutcomeType == 7) return "Attacker gains 1 morale";
+            if (specialOutcomeType == 8) return "Defender loses 1 strength";
+            if (specialOutcomeType == 9) return "Attacker gains 1 morale, defender loses 1 morale and hits";
+        }
+        return "";
     }
 
     public override List<StateChange> GetOutcomes()
@@ -157,13 +244,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.006944f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.003086f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.017747f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
         }
         else if (attackDiceNumber == 3 && defenceDiceNumber == 2)
@@ -188,13 +275,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.017361f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.007716f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.044367f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
         }
         else if (attackDiceNumber == 2 && defenceDiceNumber == 3)
@@ -219,13 +306,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.013889f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.007202f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.006687f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
         }
         else if (attackDiceNumber == 3 && defenceDiceNumber == 3)
@@ -250,13 +337,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.034722f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.018004f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.016718f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
         }
         else if (attackDiceNumber == 4 && defenceDiceNumber == 2)
@@ -287,22 +374,22 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.01794f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.007973f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.045846f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.010417f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.00463f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.02662f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.003086f);
             stc.Add(sc);
@@ -311,13 +398,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -2, 0, 0, null, null, 0.007888f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.00463f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.002058f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.011831f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
         }
         else if (attackDiceNumber == 4 && defenceDiceNumber == 3)
@@ -336,13 +423,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.03588f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.018604f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.017275f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -2, 0, 0, 0, 0, null, null, 0.03125f);
             stc.Add(sc);
@@ -357,13 +444,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, -1, 0, 0, null, null, 0.040123f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.020833f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.010802f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.010031f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.006173f);
             stc.Add(sc);
@@ -372,13 +459,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -2, 0, 0, null, null, 0.002972f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.009259f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.004801f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.004458f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
         }
         else if (attackDiceNumber == 4 && defenceDiceNumber == 4)
@@ -397,13 +484,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.03289f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.016389f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.005149f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.026042f);
             stc.Add(sc);
@@ -418,13 +505,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.002591f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.004485f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.01196f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.000886f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -2, 0, 0, 0, 0, null, null, 0.028646f);
             stc.Add(sc);
@@ -451,22 +538,22 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, -1, 0, 0, null, null, 0.002058f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.019097f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.009516f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.00299f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.002604f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, -1, 0, 0, 0, null, null, 0.006944f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, 0, 0, 0, null, null, 0.000514f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.005658f);
             stc.Add(sc);
@@ -481,22 +568,22 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -2, 0, 0, null, null, 0.000152f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.008488f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.00423f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.001329f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, -1, 0, 0, null, null, 0.001157f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, -1, 0, 0, null, null, 0.003086f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.000229f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
         }
         else if (attackDiceNumber == 5 && defenceDiceNumber == 2)
@@ -515,13 +602,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.004694f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.002086f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.011996f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -2, 0, 0, 0, 0, null, null, 0.046875f);
             stc.Add(sc);
@@ -536,13 +623,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, -1, 0, 0, null, null, 0.236626f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.028935f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.01286f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.073945f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.011317f);
             stc.Add(sc);
@@ -551,13 +638,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -2, 0, 0, null, null, 0.028921f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.015432f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.006859f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.039438f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
         }
         else if (attackDiceNumber == 5 && defenceDiceNumber == 3)
@@ -576,13 +663,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.009388f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.004868f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.00452f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -2, 0, 0, 0, 0, null, null, 0.09375f);
             stc.Add(sc);
@@ -597,13 +684,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, -1, 0, 0, null, null, 0.089163f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.05787f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.030007f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.027864f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.022634f);
             stc.Add(sc);
@@ -612,13 +699,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -2, 0, 0, null, null, 0.010898f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.030864f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.016004f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.014861f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
         }
         else if (attackDiceNumber == 5 && defenceDiceNumber == 4)
@@ -637,13 +724,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.008606f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.004288f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.001347f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.008681f);
             stc.Add(sc);*/
@@ -658,13 +745,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.00076f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.001173f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.003129f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.00023f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -2, 0, 0, 0, 0, null, null, 0.085937f);
             stc.Add(sc);
@@ -691,22 +778,22 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, -1, 0, 0, null, null, 0.004572f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.053048f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.026435f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.008305f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.007234f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, -1, 0, 0, 0, null, null, 0.01929f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, 0, 0, 0, null, null, 0.001429f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.020748f);
             stc.Add(sc);
@@ -721,22 +808,22 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -2, 0, 0, null, null, 0.00056f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.028292f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.014098f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.00443f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, -1, 0, 0, null, null, 0.003858f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, -1, 0, 0, null, null, 0.010288f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.00076f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
         }
         else if (attackDiceNumber == 5 && defenceDiceNumber == 5)
@@ -755,13 +842,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.004781f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.002318f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.00035f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.026042f);
             stc.Add(sc);
@@ -776,13 +863,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.002794f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.00352f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.006954f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.00085f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -2, 0, 0, 0, 0, null, null, 0.047743f);
             stc.Add(sc);
@@ -809,22 +896,22 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, -1, 0, 0, null, null, 0.016766f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.029471f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.014289f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.002173f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.021701f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, -1, 0, 0, 0, null, null, 0.042867f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, 0, 0, 0, null, null, 0.005239f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.011526f);
             stc.Add(sc);
@@ -839,22 +926,22 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -2, 0, 0, null, null, 0.002049f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.015718f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.007621f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.001159f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, -1, 0, 0, null, null, 0.011574f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, -1, 0, 0, null, null, 0.022862f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.002794f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
         }
         else if (attackDiceNumber == 2 && defenceDiceNumber == 4)
@@ -872,13 +959,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.007973f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.012731f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.006344f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.001993f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.280093f);
             stc.Add(sc);
@@ -899,13 +986,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.001372f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.001736f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.00463f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.00034f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.038194f);
             stc.Add(sc);
@@ -929,13 +1016,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.002086f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.007073f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.003429f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.000522f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.155607f);
             stc.Add(sc);
@@ -956,13 +1043,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.00503f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.005208f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.010288f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.001257f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.114583f);
             stc.Add(sc);
@@ -986,13 +1073,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.018604f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.031829f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.015861f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.004983f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.078511f);
             stc.Add(sc);
@@ -1013,13 +1100,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.003201f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.00434f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.011574f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.00086f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.010706f);
             stc.Add(sc);
@@ -1043,13 +1130,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.004868f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.017683f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.008573f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.001304f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.043617f);
             stc.Add(sc);
@@ -1070,13 +1157,13 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.011736f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.013021f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.02572f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.003144f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.032118f);
             stc.Add(sc);
@@ -1101,13 +1188,13 @@ public class ChargeAttack : Attack
             stc.Add(sc);*/
             // adding result for special attack
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, 0, 0, 0, null, null, 0.018272f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, 0, 0, 0, null, null, 0.008859f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, 0, 0, 0, null, null, 0.001347f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.078125f);
             stc.Add(sc);
@@ -1122,13 +1209,13 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.009501f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, 0, 0, 0, null, null, 0.013455f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, 0, 0, 0, null, null, 0.026578f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, 0, 0, 0, null, null, 0.003248f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -2, 0, 0, 0, 0, null, null, 0.015914f);
             stc.Add(sc);
@@ -1155,22 +1242,22 @@ public class ChargeAttack : Attack
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, -1, 0, 0, null, null, 0.007545f);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, 0, 0, 0, 0, null, null, 0.01061f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -1, 0, 0, 0, null, null, 0.005144f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, 0, 0, 0, 0, null, null, 0.00078f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, -1, 0, 0, 0, 0, null, null, 0.007813f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             sc = new StateChange(owner.GetUnitId(), targetId, -1, -1, -1, 0, 0, 0, null, null, 0.015432f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             /*sc = new StateChange(owner.GetUnitId(), targetId, 0, -1, -2, 0, 0, 0, null, null, 0.001886f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
             /*sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -2, 0, 0, null, null, 0.003144f);
             stc.Add(sc);
@@ -1185,22 +1272,22 @@ public class ChargeAttack : Attack
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -2, 0, 0, null, null, 0.00056f);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, 0, -1, 0, 0, null, null, 0.004715f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -1, -1, 0, 0, null, null, 0.002286f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, 0, -1, 0, 0, null, null, 0.00035f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -2, 0, 0, -1, 0, 0, null, null, 0.003472f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, -1, 0, -1, -1, 0, 0, null, null, 0.006859f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);
             sc = new StateChange(owner.GetUnitId(), targetId, 0, 0, -2, -1, 0, 0, null, null, 0.00084f);
-            SpecialAttack(ref sc);
+            SpecialOutcome(ref sc);
             stc.Add(sc);*/
         }
         return stc;

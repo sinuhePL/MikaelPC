@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4332561230818777295}
   m_Layer: 0
-  m_Name: CavalerySquadRed
+  m_Name: CavalerySquadYellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -153,7 +153,7 @@ Transform:
   m_GameObject: {fileID: 4332561232730413826}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.0499, z: 0}
-  m_LocalScale: {x: 0.88, y: 0.29, z: 1}
+  m_LocalScale: {x: 0.948904, y: 0.31270698, z: 1.0783}
   m_Children: []
   m_Father: {fileID: 4332561230818777295}
   m_RootOrder: 1
@@ -329,6 +329,16 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: adb6d272c5b2d5743abf22e1a36a6771, type: 2}
+    - target: {fileID: -1504981713932161579, guid: 0a7bd2d9ccbbbb14f8636e974cf225bd,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 0a7bd2d9ccbbbb14f8636e974cf225bd,
+        type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a7bd2d9ccbbbb14f8636e974cf225bd, type: 3}
 --- !u!1 &6833781363103243666 stripped

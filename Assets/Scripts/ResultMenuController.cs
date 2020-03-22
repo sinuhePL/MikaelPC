@@ -14,7 +14,6 @@ public class ResultMenuController : MonoBehaviour
     private Text attackerRoutText;
     private Text defenderRoutText;
     private Text attackerStarText;
-    private Text defenderStarText;
     private Image Line2;
 
     // Start is called before the first frame update
@@ -28,7 +27,6 @@ public class ResultMenuController : MonoBehaviour
         attackerRoutText = transform.Find("AttackerRoutMessage").GetComponent<Text>();
         defenderRoutText = transform.Find("DefenderRoutMessage").GetComponent<Text>();
         attackerStarText = transform.Find("AttackerStarMessage").GetComponent<Text>();
-        defenderStarText = transform.Find("DefenderStarMessage").GetComponent<Text>();
         Line2 = transform.Find("Line 2").GetComponent<Image>();
     }
 
@@ -64,8 +62,7 @@ public class ResultMenuController : MonoBehaviour
         endPosition = new Vector3(Screen.width/2, Screen.height/2);
         mySequence.Append(transform.DOMove(endPosition, 0.01f));
         mySequence.Append(transform.DOScale(0.7f, 0.3f).SetEase(Ease.OutBack));
-        attackerStarText.text = "";
-        defenderStarText.text = "";
+        attackerStarText.text = result.specialOutcomeDescription;
     }
 
     private void RouteTestOver(string resultDesription, int result, int morale)
@@ -87,7 +84,6 @@ public class ResultMenuController : MonoBehaviour
             attackText.text = "";
             defenceResultText.text = "";
             attackerStarText.text = "";
-            defenderStarText.text = "";
             attackerRoutText.text = "";
             defenderRoutText.text = "";
             endPosition = new Vector3(Screen.width / 2, Screen.height / 2);

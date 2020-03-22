@@ -317,8 +317,11 @@ public class Dice : MonoBehaviour {
                                     hitList.Add("*");
                                     rDie.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
                                     rDie2.die.transform.DOPunchScale(new Vector3(0.02f, 0.02f, 0.02f), 1.0f, 2);
-                                    rDie.die.Highlight();
-                                    rDie2.die.Highlight();
+                                    if (throwId % 2 == 1)
+                                    {
+                                        rDie.die.Highlight();
+                                        rDie2.die.Highlight();
+                                    }
                                     break;  // stops searching for pair
                                 }
                             }

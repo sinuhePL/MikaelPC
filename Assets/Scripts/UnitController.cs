@@ -266,17 +266,17 @@ public class UnitController : MonoBehaviour
 
             if (_armyId == 1)
             {
-                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.0f, 4.0f), arrowPrefab.transform.rotation);
+                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 forwardArrow.GetComponent<ArrowController>().InitializeArrow("forward", "blue", "solid");
-                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.0f, 4.0f), arrowPrefab.transform.rotation);
+                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 forwardArrowEmpty.GetComponent<ArrowController>().InitializeArrow("forward", "blue", "empty");
-                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.0f, 4.0f), arrowPrefab.transform.rotation);
+                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 leftArrow.GetComponent<ArrowController>().InitializeArrow("left", "blue", "solid");
-                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.0f, 4.0f), arrowPrefab.transform.rotation);
+                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.02f, 4.0f), arrowPrefab.transform.rotation);
                 leftArrowEmpty.GetComponent<ArrowController>().InitializeArrow("left", "blue", "empty");
-                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.0f, 4.0f), arrowPrefab.transform.rotation);
+                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "blue", "solid");
-                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.0f, 4.0f), arrowPrefab.transform.rotation);
+                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "blue", "empty");
                 ColorUtility.TryParseHtmlString(BattleManager.Army1Color, out myColor);
                 _unitCaption.color = myColor;
@@ -285,17 +285,17 @@ public class UnitController : MonoBehaviour
             }
             else
             {
-                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.0f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 forwardArrow.GetComponent<ArrowController>().InitializeArrow("forward", "yellow", "solid");
-                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.0f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 forwardArrowEmpty.GetComponent<ArrowController>().InitializeArrow("forward", "yellow", "empty");
-                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.0f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 leftArrow.GetComponent<ArrowController>().InitializeArrow("left", "yellow", "solid");
-                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.0f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 leftArrowEmpty.GetComponent<ArrowController>().InitializeArrow("left", "yellow", "empty");
-                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "solid");
-                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.0f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "empty");
                 ColorUtility.TryParseHtmlString(BattleManager.Army2Color, out myColor);
                 _unitCaption.color = myColor;

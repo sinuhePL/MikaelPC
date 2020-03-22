@@ -254,4 +254,13 @@ public class BoardState
         if (armyId == 1) return player1.GetArmyName();
         else return player2.GetArmyName();
     }
+
+    public string GetKeyFieldName(int keyFieldId)
+    {
+        foreach(KeyField kf in keyFields)
+        {
+            if (kf.GetFieldId() == keyFieldId) return kf.GetFieldName();
+        }
+        return null;
+    }
 }
