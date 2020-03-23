@@ -105,12 +105,12 @@ public abstract class Attack
 
     public void DecreaseAttack()
     {
-        attackDiceNumber++;
+        attackDiceNumber--;
     }
 
     public void DecreaseDefence()
     {
-        defenceDiceNumber++;
+        defenceDiceNumber--;
     }
 
     public void Activate()

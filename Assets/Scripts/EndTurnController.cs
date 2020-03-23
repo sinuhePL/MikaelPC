@@ -77,13 +77,11 @@ public class EndTurnController : MonoBehaviour
             }
             if (mode == 3) // if displays Close Result (attack result)
             {
-                //AttackResolved();
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("attack");
             }
             if(mode == 4) // if displays Close Result (rout test result)
             {
-                //AttackResolved();
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("routtest");
             }

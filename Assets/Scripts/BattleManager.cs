@@ -294,27 +294,28 @@ public class BattleManager : MonoBehaviour {
             if(armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 2 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 1 && closedMode == "routtest")
             {
                 SoundManagerController.Instance.PlayThrowSound(0);
-                throwId = Dice.Roll("3d10", "d10-blue", testSpot, new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
                 myCamera.GetComponent<PanZoom>().RoutTest(testSpot + new Vector3(2.0f, 0.0f, 1.0f));
-                StartCoroutine(WaitForRouteTest(throwId, 1, closedMode));
+                StartCoroutine(WaitForRouteTest(1, closedMode, "d10-blue"));
             }
             else if(armyRouteTest == 2 || armyRouteTest == 3 && turnOwnerId == 1 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 2 && closedMode == "routtest")
             {
                 SoundManagerController.Instance.PlayThrowSound(0);
-                throwId = Dice.Roll("3d10", "d10-yellow", testSpot, new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
                 myCamera.GetComponent<PanZoom>().RoutTest(testSpot + new Vector3(2.0f, 0.0f, 1.0f));
-                StartCoroutine(WaitForRouteTest(throwId, 2, closedMode));
+                StartCoroutine(WaitForRouteTest(2, closedMode, "d10-yellow"));
             }
         }
         if (armyRouteTest == 3 && closedMode == "routtest") armyRouteTest = 0;
     }
 
-    private IEnumerator WaitForRouteTest(int throwId, int testingArmyId, string mode)
+    private IEnumerator WaitForRouteTest(int testingArmyId, string mode, string diceTexture)
     {
-        int throwResult, armyMorale;
+        int throwResult, armyMorale, throwId;
         string stringResult = "";
         string resultDescription;
+        Vector3 testSpot = new Vector3(20.0f, 2.0f, -16.0f);
 
+        yield return new WaitForSeconds(1.5f);
+        throwId = Dice.Roll("3d10", diceTexture, testSpot, new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
         while (Dice.rolling)
         {
             yield return null;

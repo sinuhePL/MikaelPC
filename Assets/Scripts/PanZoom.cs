@@ -22,9 +22,10 @@ public class PanZoom : MonoBehaviour
     public float zoomMaxAngle = 55.0f;
     public float rotateTime = 2.0f;
 
-    private IEnumerator ZoomAtDice(float duration, float zoom)
+    private IEnumerator ZoomAtDice(float duration, float zoom, float delay)
     {
         float t;
+        yield return new WaitForSeconds(delay);
         for (t = 0; t < duration; t += Time.deltaTime)
         {
             myCamera.orthographicSize = Mathf.Lerp(myCamera.orthographicSize, zoom, t / duration);
@@ -50,7 +51,7 @@ public class PanZoom : MonoBehaviour
 
     private void ZoomOut(StateChange r)
     {
-        if(BattleManager.viewType == "isometric") StartCoroutine(ZoomAtDice(0.5f, 4.0f));
+        if (BattleManager.viewType == "isometric") StartCoroutine(ZoomAtDice(0.5f, 4.0f, 0.0f));
         else
         {
             myCamera.transform.DOMove(prevCamPosition, 0.5f).SetEase(Ease.OutQuint);
@@ -94,7 +95,7 @@ public class PanZoom : MonoBehaviour
 
     public void RoutTest(Vector3 testSpot)
     {
-        ReallyLookAtDice(testSpot);
+        ReallyLookAtDice(testSpot, 1.5f);
     }
 
     // Update is called once per frame
@@ -211,15 +212,16 @@ public class PanZoom : MonoBehaviour
         if (!Physics.Raycast(rtRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
     }
 
-    private void ReallyLookAtDice(Vector3 target)
+    private void ReallyLookAtDice(Vector3 target, float delay)
     {
         int groundMask;
         Ray camRay;
         RaycastHit groundHit;
         Vector3 dif, newpos, campos;
+        Sequence cameraSequence = DOTween.Sequence();
         if (BattleManager.viewType == "isometric")
         {
-            StartCoroutine(ZoomAtDice(0.5f, 3.0f));
+            StartCoroutine(ZoomAtDice(0.5f, 3.0f, delay));
             groundMask = LayerMask.GetMask("Ground");
             camRay = myCamera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
             if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
@@ -227,7 +229,8 @@ public class PanZoom : MonoBehaviour
                 campos = myCamera.transform.position;
                 dif = target - groundHit.point;
                 newpos = campos + dif;
-                myCamera.transform.DOMove(newpos + new Vector3(2.0f, 0.0f, -2.0f), 0.5f).SetEase(Ease.OutQuint);
+                cameraSequence.AppendInterval(delay);
+                cameraSequence.Append(myCamera.transform.DOMove(newpos + new Vector3(2.0f, 0.0f, -2.0f), 0.5f).SetEase(Ease.OutQuint));
             }
         }
         else
@@ -235,8 +238,9 @@ public class PanZoom : MonoBehaviour
             prevCamPosition = myCamera.transform.position;
             prevEulerY = myCamera.transform.localEulerAngles.y;
             target.y = 4.0f;
-            myCamera.transform.DOMove(target - new Vector3(3.0f, 0.0f, 5.0f), 0.5f).SetEase(Ease.OutQuint);
-            myCamera.transform.DORotateQuaternion(Quaternion.Euler(Mathf.Lerp(zoomMinAngle, zoomMaxAngle, (4.0f - zoomOutMinPerspective) / (zoomOutMaxPerspective - zoomOutMinPerspective)), 30.0f, 0.0f), 0.5f);
+            cameraSequence.AppendInterval(delay);
+            cameraSequence.Append(myCamera.transform.DOMove(target - new Vector3(3.0f, 0.0f, 5.0f), 0.5f).SetEase(Ease.OutQuint));
+            cameraSequence.Insert(delay, myCamera.transform.DORotateQuaternion(Quaternion.Euler(Mathf.Lerp(zoomMinAngle, zoomMaxAngle, (4.0f - zoomOutMinPerspective) / (zoomOutMaxPerspective - zoomOutMinPerspective)), 30.0f, 0.0f), 0.5f));
         }
     }
 
@@ -245,7 +249,7 @@ public class PanZoom : MonoBehaviour
         Vector3 target;
 
         target = BattleManager.Instance.GetAttack(attackId).GetPosition();
-        ReallyLookAtDice(target + new Vector3(2.0f, 0.0f, 0.0f));
+        ReallyLookAtDice(target + new Vector3(2.0f, 0.0f, -1.0f), 0.0f);
     }
 
     public void StopRotate()
