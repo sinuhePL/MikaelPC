@@ -252,4 +252,23 @@ public class Unit
         }
         return null;
     }
+
+    public List<int> GetAttacksActivating(int myAttackId)
+    {
+        List<int> result = new List<int>();
+        
+        foreach(Attack a in unitAttacks)
+        {
+            if (a.CheckIfActivates(myAttackId)) result.Add(a.GetId());
+        }
+        return result;
+    }
+
+    public void DeactivateCounterAttacks()
+    {
+        foreach(Attack a in unitAttacks)
+        {
+            if (a.GetName() != "Charge!") a.Deactivate();
+        }
+    }
 }

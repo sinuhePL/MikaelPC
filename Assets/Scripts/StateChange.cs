@@ -27,8 +27,8 @@ public class StateChange
         defenderStrengthChange = 0;
         keyFieldChangeId = 0;
         keyFieldNewOccupantId = 0;
-        activatedAttacks = null;
-        deactivatedAttacks = null;
+        activatedAttacks = new List<int>();
+        deactivatedAttacks = new List<int>();
         changeProbability = 0.0f;
         specialOutcomeDescription = "";
     }

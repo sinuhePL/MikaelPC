@@ -32,11 +32,11 @@ public class UnitController : MonoBehaviour
     [SerializeField] protected GameObject unitSquadPrefab;
 
     // called when arrow is clicked
-    protected void myAttackClicked(int idAttack)
+    protected void anyAttackClicked(int idAttack, bool isCounterAttack)
     {
-        forwardArrow.GetComponent<ArrowController>().ShowArrow(idAttack);
-        leftArrow.GetComponent<ArrowController>().ShowArrow(idAttack);
-        rightArrow.GetComponent<ArrowController>().ShowArrow(idAttack);
+        forwardArrow.GetComponent<ArrowController>().ShowArrow(idAttack, isCounterAttack);
+        leftArrow.GetComponent<ArrowController>().ShowArrow(idAttack, isCounterAttack);
+        rightArrow.GetComponent<ArrowController>().ShowArrow(idAttack, isCounterAttack);
     }
 
     // deselects unit after any tile is clicked
@@ -48,20 +48,20 @@ public class UnitController : MonoBehaviour
             {
                 _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
             }
-            forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
-            leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
-            rightArrowEmpty.GetComponent<ArrowController>().HideArrow();
-            forwardArrow.GetComponent<ArrowController>().HideArrow();
-            leftArrow.GetComponent<ArrowController>().HideArrow();
-            rightArrow.GetComponent<ArrowController>().HideArrow();
-            forwardArrow.SetActive(false);
-            forwardArrowEmpty.SetActive(false);
-            leftArrow.SetActive(false);
-            leftArrowEmpty.SetActive(false);
-            rightArrow.SetActive(false);
-            rightArrowEmpty.SetActive(false);
             isOutlined = false;
         }
+        forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
+        leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
+        rightArrowEmpty.GetComponent<ArrowController>().HideArrow();
+        forwardArrow.GetComponent<ArrowController>().HideArrow();
+        leftArrow.GetComponent<ArrowController>().HideArrow();
+        rightArrow.GetComponent<ArrowController>().HideArrow();
+        forwardArrow.SetActive(false);
+        forwardArrowEmpty.SetActive(false);
+        leftArrow.SetActive(false);
+        leftArrowEmpty.SetActive(false);
+        rightArrow.SetActive(false);
+        rightArrowEmpty.SetActive(false);
     }
 
     protected void myUnitClicked(int idUnit)
@@ -85,11 +85,15 @@ public class UnitController : MonoBehaviour
                 rightArrowEmpty.GetComponent<ArrowController>().ShowArrow();
                 isOutlined = true;
             }
-            else if (isOutlined)
+            else
             {
-                for (int i = 0; i < _strength; i++)
+                if (isOutlined)
                 {
-                    _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+                    for (int i = 0; i < _strength; i++)
+                    {
+                        _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+                    }
+                    isOutlined = false;
                 }
                 forwardArrowEmpty.GetComponent<ArrowController>().HideArrow();
                 leftArrowEmpty.GetComponent<ArrowController>().HideArrow();
@@ -103,7 +107,6 @@ public class UnitController : MonoBehaviour
                 leftArrowEmpty.SetActive(false);
                 rightArrow.SetActive(false);
                 rightArrowEmpty.SetActive(false);
-                isOutlined = false;
             }
         }
     }
@@ -194,7 +197,7 @@ public class UnitController : MonoBehaviour
 
     protected void OnDestroy()
     {
-        EventManager.onAttackClicked -= myAttackClicked;
+        EventManager.onAttackClicked -= anyAttackClicked;
         EventManager.onUnitClicked -= myUnitClicked;
         EventManager.onTileClicked -= anyTileClicked;
         EventManager.onResultMenuClosed -= UpdateMe;
@@ -232,7 +235,7 @@ public class UnitController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.onAttackClicked += myAttackClicked;
+        EventManager.onAttackClicked += anyAttackClicked;
         EventManager.onUnitClicked += myUnitClicked;
         EventManager.onTileClicked += anyTileClicked;
         EventManager.onResultMenuClosed += UpdateMe;
@@ -356,17 +359,31 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    public int GetAttackId(string myAttack)    
+    public int GetAttackId(string direction)    
     {
-        switch(myAttack)
+        switch(direction)
         {
             case "right":
-                return leftArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return rightArrowEmpty.GetComponent<ArrowController>().AttackId;
             case "central":
                 return forwardArrowEmpty.GetComponent<ArrowController>().AttackId;
             case "left":
-                return rightArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return leftArrowEmpty.GetComponent<ArrowController>().AttackId;
         }
         return -1;
+    }
+
+    public ArrowController GetArrowController(string direction)
+    {
+        switch (direction)
+        {
+            case "right":
+                return rightArrowEmpty.GetComponent<ArrowController>();
+            case "central":
+                return forwardArrowEmpty.GetComponent<ArrowController>();
+            case "left":
+                return leftArrowEmpty.GetComponent<ArrowController>();
+        }
+        return null;
     }
 }

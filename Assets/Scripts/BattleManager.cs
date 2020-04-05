@@ -170,10 +170,12 @@ public class BattleManager : MonoBehaviour {
         TileController tc;
         Unit myUnit;
         KeyField myKeyField;
+        ArrowController ac;
         Army army1, army2;
         Attack tempAttack;
         Vector3 menuRightPositionShift, menuCentralPositionShift, menuLeftPositionShift;
-        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile, keyFieldTile, myKeyFieldId;
+        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile, keyFieldTile, myKeyFieldId, tempAttackId;
+        List<int> attackList;
 
         // counts morale of army
         foreach (GameObject g in units)
@@ -191,23 +193,23 @@ public class BattleManager : MonoBehaviour {
         {
             uc = g.GetComponent<UnitController>();
             myUnit = new Unit(uc.UnitId, uc.UnitType, uc.InitialStrength, uc.InitialMorale, uc.ArmyId == 1 ? army1 : army2);
-            
+
             //looks for tiles ids which attack arrows point at
             if (uc.ArmyId == 1)
             {
                 leftAttackTile = uc.UnitTileId - 7;
-                if (leftAttackTile % BattleManager.boardWidth == 5) leftAttackTile = 0;
+                if (leftAttackTile <= 5) leftAttackTile = 0;
                 centralAttackTile = uc.UnitTileId - 2;
                 rightAttackTile = uc.UnitTileId + 3;
-                if (rightAttackTile % BattleManager.boardWidth == 0) rightAttackTile = 0;
+                if (rightAttackTile > 15) rightAttackTile = 0;
             }
             else
             {
-                leftAttackTile = uc.UnitTileId +7;
-                if (leftAttackTile % BattleManager.boardWidth == 0) leftAttackTile = 0;
+                leftAttackTile = uc.UnitTileId + 7;
                 centralAttackTile = uc.UnitTileId + 2;
                 rightAttackTile = uc.UnitTileId - 3;
-                if (rightAttackTile % BattleManager.boardWidth == 5) rightAttackTile = 0;
+                if (leftAttackTile > 15) leftAttackTile = 0;
+                if (rightAttackTile <= 5) rightAttackTile = 0;
             }
             // sets arrow position depending on direction of attack (left, central right)
             if (uc.ArmyId == 1)
@@ -224,7 +226,7 @@ public class BattleManager : MonoBehaviour {
             }
             //looks for tiles between unit and its oponent to set key field Id for central attack
             myKeyFieldId = 0;
-            if(uc.ArmyId == 1)
+            if (uc.ArmyId == 1)
             {
                 keyFieldTile = uc.UnitTileId - 1;
             }
@@ -232,7 +234,7 @@ public class BattleManager : MonoBehaviour {
             {
                 keyFieldTile = uc.UnitTileId + 1;
             }
-            foreach(GameObject t in tiles)
+            foreach (GameObject t in tiles)
             {
                 tc = t.GetComponent<TileController>();
                 if (tc.GetKeyFieldId() != 0)
@@ -248,7 +250,8 @@ public class BattleManager : MonoBehaviour {
                 uc2 = g2.GetComponent<UnitController>();
                 if (uc2.UnitTileId == leftAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("right"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + menuLeftPositionShift, uc.UnitType, uc2.UnitType, false);
+                    // na podstawie typu jednostki wybrać rodzaj ataku
+                    tempAttack = new CounterAttack(uc.GetAttackId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + menuLeftPositionShift, uc.UnitType, uc2.UnitType, false);
                     //uc.ActivateAttack(uc.GetAttackId("right")); // testowo, docelowo tylko central attack jest aktywnyna początku
                     myUnit.AddAttack(tempAttack);
                 }
@@ -260,14 +263,68 @@ public class BattleManager : MonoBehaviour {
                 }
                 if (uc2.UnitTileId == rightAttackTile)
                 {
-                    tempAttack = new ChargeAttack(uc.GetAttackId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + menuRightPositionShift, uc.UnitType, uc2.UnitType, false);
+                    // na podstawie typu jednostki wybrać rodzaj ataku
+                    tempAttackId = uc.GetAttackId("right");
+                    tempAttack = new CounterAttack(tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + menuRightPositionShift, uc.UnitType, uc2.UnitType, false);
                     //uc.ActivateAttack(uc.GetAttackId("left")); // testowo, docelowo tylko central attack jest aktywnyna początku
                     myUnit.AddAttack(tempAttack);
                 }
 
             }
-
             myBoardState.AddUnit(myUnit);
+        }
+        //sets attack dependencies
+        foreach (GameObject g in units)
+        {
+            uc = g.GetComponent<UnitController>();
+            myUnit = myBoardState.GetUnit(uc.UnitId);
+            //looks for tiles ids which attack arrows point at
+            if (uc.ArmyId == 1)
+            {
+                leftAttackTile = uc.UnitTileId - 7;
+                if (leftAttackTile <= 5) leftAttackTile = 0;
+                centralAttackTile = uc.UnitTileId - 2;
+                rightAttackTile = uc.UnitTileId + 3;
+                if (rightAttackTile > 15) rightAttackTile = 0;
+            }
+            else
+            {
+                leftAttackTile = uc.UnitTileId + 7;
+                centralAttackTile = uc.UnitTileId + 2;
+                rightAttackTile = uc.UnitTileId - 3;
+                if (leftAttackTile > 15) leftAttackTile = 0;
+                if (rightAttackTile <= 5) rightAttackTile = 0;
+            }
+            //looks for units ids which sits on tiles pointed at attack arrows
+            foreach (GameObject g2 in units)
+            {
+                uc2 = g2.GetComponent<UnitController>();
+                if (uc2.UnitTileId == leftAttackTile)   // adds to central attack, attack  on the left unit, that is activated by this central attack
+                {
+                    myUnit.GetAttack(uc.GetAttackId("central")).AddActivatedAttackId(uc2.GetAttackId("left"));
+                }
+                if (uc2.UnitTileId == rightAttackTile) // adds to central attack, attack  on the right unit, that is activated by this central attack
+                {
+                    myUnit.GetAttack(uc.GetAttackId("central")).AddActivatedAttackId(uc2.GetAttackId("right"));
+                }
+            }
+        }
+        // sets activating attacs for attack arrows
+        foreach (GameObject g in units)
+        {
+            uc = g.GetComponent<UnitController>();
+            ac = uc.GetArrowController("left");
+            attackList = myBoardState.GetAttacksActivating(ac.AttackId);
+            foreach (int i in attackList)
+            {
+                ac.AddActivatingAttack(i);
+            }
+            ac = uc.GetArrowController("right");
+            attackList = myBoardState.GetAttacksActivating(ac.AttackId);
+            foreach (int i in attackList)
+            {
+                ac.AddActivatingAttack(i);
+            }
         }
     }
 
@@ -282,7 +339,6 @@ public class BattleManager : MonoBehaviour {
 
     private void MakeRouteTest(string closedMode)
     {
-        int throwId;
         Vector3 testSpot = new Vector3(20.0f, 2.0f, -16.0f);
 
         if (armyRouteTest == 0 || armyRouteTest < 3 && closedMode == "routtest")
@@ -418,6 +474,8 @@ public class BattleManager : MonoBehaviour {
                 result.defenderMoraleChanged = -attackMoraleHit;
                 result.defenderStrengthChange = -attackStrengthHit;
                 if(isSpecialOutcome) tempAttack.SpecialOutcome(ref result);
+                result.activatedAttacks = new List<int>(tempAttack.GetActivatedAttacks().ToArray());
+                result.deactivatedAttacks = new List<int>(tempAttack.GetDeactivatedAttacks().ToArray());
                 Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
                 Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
                 hasTurnOwnerAttacked = true;
@@ -537,7 +595,7 @@ public class BattleManager : MonoBehaviour {
             if (bestAttack > 0)
             {
                 EventManager.RaiseEventOnUnitClicked(myBoardState.GetAttack(bestAttack).GetOwner().GetUnitId());
-                EventManager.RaiseEventOnAttackClicked(bestAttack);
+                EventManager.RaiseEventOnAttackClicked(bestAttack, false);
                 EventManager.RaiseEventOnAttackOrdered(bestAttack);
                 SoundManagerController.Instance.PlayThrowSound(0);
             }

@@ -6,9 +6,12 @@ using UnityEngine.EventSystems;
 
 public class ArrowController : MonoBehaviour
 {
-    private int _attackId;
+    public int _attackId;
     private bool _isArrowActive;
     private MeshRenderer myRenderer;
+    private List<int> activatingAttacks;
+    private string arrowType;
+    private bool isShownAsCounterAttack;
     public const string YellowColor = "#766800";
     public const string RedColor = "#6A0006";
     [SerializeField] private Texture arrowRightTexture;
@@ -20,9 +23,9 @@ public class ArrowController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (_isArrowActive && !IsPointerOverGameObject())
+        if ((_isArrowActive || isShownAsCounterAttack) && !IsPointerOverGameObject())
         {
-            EventManager.RaiseEventOnAttackClicked(_attackId);
+            EventManager.RaiseEventOnAttackClicked(_attackId, !_isArrowActive);
         }
     }
     // dodać obsługę zdarzenia kliknięcia na strzałkę ataku, dodać dodanych ataku współrzędne każdego ataku. usunąć poprzednie rozwiązanie
@@ -36,18 +39,56 @@ public class ArrowController : MonoBehaviour
         return results.Count > 0;
     }
 
-    public void Awake()
+    private void CheckAndShowArrow(int aId, bool isCounterAttack)   // shows empty arrow when it represents counterattack
+    {
+        if (arrowType == "empty" && activatingAttacks.Contains(aId))
+        {
+            gameObject.SetActive(true);
+            myRenderer.enabled = true;
+            isShownAsCounterAttack = true;
+        }
+        else if(arrowType == "solid" && aId != AttackId)
+        {
+            myRenderer.enabled = false;
+        }
+        else if(arrowType == "empty" && !isArrowActive)
+        {
+            myRenderer.enabled = false;
+        }
+    }
+
+    private void AnyAttackOrdered(int aId)
+    {
+        if (aId != _attackId) myRenderer.enabled = false;
+    }
+
+    private void Awake()
     {
         myRenderer = GetComponent<MeshRenderer>();
         myRenderer.enabled = false;
         _isArrowActive = false;
-        
+        activatingAttacks = new List<int>();
+        arrowType = "";
+        isShownAsCounterAttack = false;
+    }
+
+    private void OnEnable()
+    {
+        EventManager.onAttackClicked += CheckAndShowArrow;
+        EventManager.onAttackOrdered += AnyAttackOrdered;
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.onAttackClicked -= CheckAndShowArrow;
+        EventManager.onAttackOrdered -= AnyAttackOrdered;
     }
 
     public void InitializeArrow(string direction, string color, string type)
     {
         Color myColor;
 
+        arrowType = type;
         if (direction == "right")
         {
             if (type == "solid") myRenderer.material.mainTexture = arrowRightTexture;
@@ -111,16 +152,19 @@ public class ArrowController : MonoBehaviour
 
     public void HideArrow()
     {
-        if (isArrowActive)
-        {
-            myRenderer.enabled = false;
-        }
+        myRenderer.enabled = false;
+        isShownAsCounterAttack = false;
     }
 
-    public void ShowArrow(int aId)
+    public void ShowArrow(int aId, bool isCounterAttack)
     {
+        if (isCounterAttack && arrowType == "solid" && AttackId == aId)
+        {
+            myRenderer.enabled = true;
+            gameObject.SetActive(true);
+            return;
+        }
         if (isArrowActive && AttackId == aId) myRenderer.enabled = true;
-        else myRenderer.enabled = false;
     }
 
     public void HideArrow(int aId)
@@ -129,5 +173,10 @@ public class ArrowController : MonoBehaviour
         {
             myRenderer.enabled = false;
         }
+    }
+
+    public void AddActivatingAttack(int a)
+    {
+        activatingAttacks.Add(a);
     }
 }

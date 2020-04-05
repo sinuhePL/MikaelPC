@@ -124,33 +124,21 @@ public class BoardState
         Unit u;
         KeyField kf;
         Attack a;
-        int army1ActiveCount, army2ActiveCount;
+        int army1ActiveCount, army2ActiveCount, oldKeyFieldOwner = 0;
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId); 
         u.ChangeStrength(change.attackerStrengthChange);
         u.ChangeMorale(change.attackerMoraleChanged);
+        u.DeactivateCounterAttacks();
         if (!u.IsAvialable)
         {
             DeactivateAttacksOnUnit(u.GetUnitId());
             GetForwardAttacker(u.GetUnitId()).ActivateNotForwardAttacks();
         }
-        if (change.activatedAttacks != null)
-        {
-            foreach (int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
-            {
-                u.ActivateAttack(i);
-            }
-        }
-        if (change.deactivatedAttacks != null)
-        {
-            foreach (int i in change.deactivatedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
-            {
-                u.DeactivateAttack(i);
-            }
-        }
         if(change.keyFieldChangeId !=0)
         {
             kf = GetKeyField(change.keyFieldChangeId);
+            oldKeyFieldOwner = kf.GetOccupant();
             kf.SetOccupant(u.GetArmyId());
             a = u.GetAttackOnKeyField(change.keyFieldChangeId);
             a.keyFieldTaken = true;
@@ -165,25 +153,32 @@ public class BoardState
             DeactivateAttacksOnUnit(u.GetUnitId());
             GetForwardAttacker(u.GetUnitId()).ActivateNotForwardAttacks();
         }
-        if (change.activatedAttacks != null)
-        {
-            foreach (int i in change.activatedAttacks)  // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
-            {
-                u.ActivateAttack(i);
-            }
-        }
-        if (change.deactivatedAttacks != null)
-        {
-            foreach (int i in change.deactivatedAttacks)    // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
-            {
-                u.DeactivateAttack(i);
-            }
-        }
         if (change.keyFieldChangeId != 0)
         {
             a = u.GetAttackOnKeyField(change.keyFieldChangeId);
             a.keyFieldTaken = false;
-            a.DecreaseAttack();
+            if(oldKeyFieldOwner != 0) a.DecreaseAttack();
+        }
+        // wprowadza rezultat dotyczący aktywowanych i dezaktywowanych ataków
+        if (change.activatedAttacks != null)
+        {
+            foreach (Unit u2 in units)
+            {
+                foreach (int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+                {
+                    u2.ActivateAttack(i);
+                }
+            }
+        }
+        if (change.deactivatedAttacks != null)
+        {
+            foreach (Unit u2 in units)
+            {
+                foreach (int i in change.deactivatedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+                {
+                    u2.DeactivateAttack(i);
+                }
+            }
         }
         army1ActiveCount = 0;
         army2ActiveCount = 0;
@@ -262,5 +257,15 @@ public class BoardState
             if (kf.GetFieldId() == keyFieldId) return kf.GetFieldName();
         }
         return null;
+    }
+
+    public List<int> GetAttacksActivating(int myAttackId)
+    {
+        List<int> result = new List<int>();
+        foreach(Unit u in units)
+        {
+            result.AddRange(u.GetAttacksActivating(myAttackId));
+        }
+        return result;
     }
 }

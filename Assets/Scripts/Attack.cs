@@ -121,7 +121,6 @@ public abstract class Attack
 
     public void Deactivate()
     {
-        Assert.IsTrue(isActiveState);
         isActiveState = false;
     }
 
@@ -184,6 +183,21 @@ public abstract class Attack
     public int GetKeyFieldId()
     {
         return keyFieldId;
+    }
+
+    public bool CheckIfActivates(int myAttackId)
+    {
+        return activatesAttacks.Contains(myAttackId);
+    }
+
+    public List<int> GetActivatedAttacks()
+    {
+        return activatesAttacks;
+    }
+
+    public List<int> GetDeactivatedAttacks()
+    {
+        return deactivatesAttacks;
     }
 
     public abstract StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner);

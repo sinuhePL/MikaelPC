@@ -60,6 +60,7 @@ public class EndTurnController : MonoBehaviour
         {
             transform.DOKill();
             transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
+            if (mode == 0) return;
             if (mode == 1)  // if displays End Turn
             {
                 isClicked = true;
@@ -108,8 +109,14 @@ public class EndTurnController : MonoBehaviour
         else StartCoroutine(WaitForClick());
     }
 
-    public void AttackClicked(int attackId)
+    public void AttackClicked(int attackId, bool isCounterAttack)
     {
+        if (isCounterAttack)
+        {
+            myText.text = "";
+            mode = 0;
+            return;
+        }
         if (BattleManager.turnOwnerId == BattleManager.Instance.GetAttack(attackId).GetOwner().GetArmyId() && !BattleManager.hasTurnOwnerAttacked)
         {
             if (BattleManager.turnOwnerId == 1 && BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && BattleManager.isPlayer2Human)
@@ -118,7 +125,11 @@ public class EndTurnController : MonoBehaviour
                 mode = 2;
                 lastClickedAttack = attackId;
             }
-            else myText.text = "";
+            else
+            {
+                myText.text = "";
+                mode = 0;
+            }
         }
         else
         {

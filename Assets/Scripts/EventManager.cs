@@ -6,6 +6,7 @@ public class EventManager : MonoBehaviour
 {
     public delegate void Action();
     public delegate void Action<A>(A arg1);
+    public delegate void Action<A, B>(A arg1, B arg2);
     public delegate void Action<A, B, C>(A arg1, B arg2, C arg3);
 
     /* Example use:
@@ -27,10 +28,10 @@ public class EventManager : MonoBehaviour
         if (onUnitClicked != null) onUnitClicked(idUnit);
     }
 
-    public static event Action<int> onAttackClicked;
-    public static void RaiseEventOnAttackClicked(int idAttack)
+    public static event Action<int, bool> onAttackClicked;
+    public static void RaiseEventOnAttackClicked(int idAttack, bool isCounterAttack)
     {
-        if (onAttackClicked != null) onAttackClicked(idAttack);
+        if (onAttackClicked != null) onAttackClicked(idAttack, isCounterAttack);
     }
 
     public static event Action<int> onTileClicked;

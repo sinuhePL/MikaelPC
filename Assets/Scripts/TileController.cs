@@ -23,6 +23,8 @@ public class TileController : MonoBehaviour
 
     private TextMeshPro fieldCaption;
     private int keyFieldId;
+    private bool isBlinking;
+    private int ownerId;
     // Start is called before the first frame update
 
     public void InitializeTile(int i, int id, string tileType)
@@ -32,6 +34,8 @@ public class TileController : MonoBehaviour
         keyFieldId = id;
         pawn.SetActive(false);
         fieldCaption = GetComponentInChildren<TextMeshPro>();
+        isBlinking = false;
+        ownerId = 0;
         if (keyFieldId == 0)
         {
             fieldCaption.text = "";
@@ -83,12 +87,13 @@ public class TileController : MonoBehaviour
     {
         if(sc.keyFieldChangeId == keyFieldId)
         {
-            if(sc.keyFieldNewOccupantId == 1)
+            ownerId = sc.keyFieldNewOccupantId;
+            if (ownerId == 1)
             {
                 pawn.SetActive(true);
                 pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
             }
-            else if(sc.keyFieldNewOccupantId == 2)
+            else if(ownerId == 2)
             {
                 pawn.SetActive(true);
                 pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
@@ -96,14 +101,69 @@ public class TileController : MonoBehaviour
         }
     }
 
+    private IEnumerator Blink()
+    {
+        while(isBlinking)
+        {
+            if (ownerId == 0) pawn.SetActive(true);
+            else if (ownerId == 1) pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            else if (ownerId == 2) pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
+            yield return new WaitForSeconds(0.5f);
+            if(ownerId == 0) pawn.SetActive(false);
+            else if (ownerId == 1) pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
+            else if (ownerId == 2) pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    private void BlinkKeyField(int idAttack, bool isCounterAttack)
+    {
+        Attack tempAttack;
+        tempAttack = BattleManager.Instance.GetAttack(idAttack);
+        if(tempAttack.GetKeyFieldId() == keyFieldId && keyFieldId != 0 && ownerId != tempAttack.GetArmyId())
+        {
+            isBlinking = true;
+            if (tempAttack.GetArmyId() == 1) pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
+            else pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            StartCoroutine(Blink());
+        }
+        else
+        {
+            isBlinking = false;
+        }
+    }
+
+    private void StopBlinking(int i)
+    {
+        isBlinking = false;
+        if (ownerId == 1)
+        {
+            pawn.SetActive(true);
+            pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
+        }
+        else if (ownerId == 2)
+        {
+            pawn.SetActive(true);
+            pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+        }
+    }
+
     private void OnEnable()
     {
         EventManager.onDiceResult += ChangeFieldOwner;
+        EventManager.onAttackClicked += BlinkKeyField;
+        EventManager.onTileClicked += StopBlinking;
+        EventManager.onUnitClicked += StopBlinking;
+        EventManager.onAttackOrdered += StopBlinking;
     }
 
     private void OnDestroy()
     {
         EventManager.onDiceResult -= ChangeFieldOwner;
+        EventManager.onAttackClicked -= BlinkKeyField;
+        EventManager.onTileClicked -= StopBlinking;
+        EventManager.onUnitClicked -= StopBlinking;
+        EventManager.onAttackOrdered -= StopBlinking;
     }
 
     public int GetKeyFieldId()

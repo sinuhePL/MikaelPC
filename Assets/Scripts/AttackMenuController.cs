@@ -13,7 +13,7 @@ public class AttackMenuController : MonoBehaviour
     private Text defenceDiceNumberText;
     private int lastClickedUnitId;
 
-    private void AttackClicked(int idAttack)
+    private void AttackClicked(int idAttack, bool isCounterAttack)
     {
         Sequence mySequence = DOTween.Sequence();
         Attack tempAttack;
