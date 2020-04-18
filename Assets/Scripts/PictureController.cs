@@ -13,7 +13,7 @@ public class PictureController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit = null;
-        if (!BattleManager.isInputBlocked)
+        if (!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
         {
             tempUnit = BattleManager.Instance.GetUnit(unitId);
             switch (tempUnit.GetUnitType())
@@ -34,6 +34,25 @@ public class PictureController : MonoBehaviour
         }
     }
 
+    public void InitialPicture(string pictureType)
+    {
+        switch (pictureType)
+        {
+            case "Gendarmes":
+                myImage.sprite = heavyCavalery;
+                break;
+            case "Landsknechte":
+                myImage.sprite = landsknechte;
+                break;
+            case "Suisse":
+                myImage.sprite = suisse;
+                break;
+            case "Imperial Cavalery":
+                myImage.sprite = heavyCavalery;
+                break;
+        }
+    }
+
     private void OnDestroy()
     {
         EventManager.onUnitClicked -= UnitClicked;
@@ -44,7 +63,7 @@ public class PictureController : MonoBehaviour
         EventManager.onUnitClicked += UnitClicked;
     }
 
-    void Start()
+    void Awake()
     {
         myImage = GetComponent<Image>();
     }

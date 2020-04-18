@@ -1872,7 +1872,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &308823805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2991,7 +2991,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &724529616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3567,7 +3567,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 24
+  m_Text: 
 --- !u!222 &872145363
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4948,7 +4948,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.2
-  m_Text: End Turn
+  m_Text: End Deployment
 --- !u!222 &1234986903
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6644,6 +6644,9 @@ MonoBehaviour:
   franceShield: {fileID: 21300000, guid: 04803641d26ea31488dbb72218884669, type: 3}
   hreCaption: {fileID: 21300000, guid: d988358fc56ce7a47a7d7cf9bbadfdf4, type: 3}
   franceCaption: {fileID: 21300000, guid: ac66ef2db1b9d334b823220aa7eb541a, type: 3}
+  hreDeployCaption: {fileID: 21300000, guid: 050cdd4f50840d94099829dc7a63f732, type: 3}
+  franceDeployCaption: {fileID: 21300000, guid: 44e7a2cc8c58cd043bca3cf09543dee5,
+    type: 3}
 --- !u!1 &1511832294
 GameObject:
   m_ObjectHideFlags: 0
@@ -6715,7 +6718,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 16
+  m_Text: 
 --- !u!222 &1511832297
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9426,7 +9429,7 @@ GameObject:
   - component: {fileID: 2093203781}
   - component: {fileID: 2093203780}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: uiCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

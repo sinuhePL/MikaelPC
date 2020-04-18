@@ -48,6 +48,7 @@ public class BattleManager : MonoBehaviour {
     public static float minimaxLimit = 20.0f;
     public static bool isInputBlocked = false;
     public static string viewType = "perspective";
+    public static string gameMode = "deploy";
 
     public const string Army1Color = "#4158f3";
     public const string Army2Color = "#ecc333";
@@ -62,11 +63,9 @@ public class BattleManager : MonoBehaviour {
         {
             _instance = this;
         }
-        DOTween.Init();
         InitiateManager(boardWidth, boardHeight);
-        InitiateBoard();
-        myCamera = Camera.main;
-        armyRouteTest = 0;
+        //EventManager.RaiseEventOnDeploymentStart(1);
+        //InitiateBoard();
     }
 
     private void OnEnable()
@@ -75,6 +74,7 @@ public class BattleManager : MonoBehaviour {
         EventManager.onAttackOrdered += MakeAttack;
         EventManager.onTurnStart += TurnStart;
         EventManager.onResultMenuClosed += MakeRouteTest;
+        EventManager.onDeploymentStart += DeployArmy;
     }
 
     private void OnDestroy()
@@ -83,12 +83,14 @@ public class BattleManager : MonoBehaviour {
         EventManager.onAttackOrdered -= MakeAttack;
         EventManager.onTurnStart -= TurnStart;
         EventManager.onResultMenuClosed -= MakeRouteTest;
+        EventManager.onDeploymentStart -= DeployArmy;
     }
 
     private void Start()
     {
         routProbabilityTable = new float[] {1.0f, 1.0f, 1.0f, 0.999f, 0.996f, 0.99f, 0.98f, 0.965f, 0.944f, 0.916f, 0.88f, 0.835f, 0.78f, 0.717f, 0.648f, 0.575f, 0.5f, 0.425f, 0.352f, 0.283f, 0.22f, 0.165f, 0.12f, 0.084f, 0.056f, 0.035f, 0.02f, 0.01f, 0.004f, 0.001f, 0.0f};
-        EventManager.RaiseEventGameStart();
+        //EventManager.RaiseEventGameStart();
+        EventManager.RaiseEventOnDeploymentStart(1);
     }
 
     private void InitiateManager(int _boardWidth, int _boardHeight)
@@ -96,8 +98,12 @@ public class BattleManager : MonoBehaviour {
         GameObject tempObj;
         int tileCounter = 0, keyFieldCounter = 0, tempKeyFieldId;
 
-        Random.InitState(System.Environment.TickCount);
+        units = new List<GameObject>();
         tiles = new List<GameObject>();
+        DOTween.Init();
+        Random.InitState(System.Environment.TickCount);
+        myCamera = Camera.main;
+        armyRouteTest = 0;
         //inicjalizacja elementów graficznych planszy
         for (int i=0; i< _boardWidth+4; i++)
         {
@@ -138,30 +144,47 @@ public class BattleManager : MonoBehaviour {
                 }
             }
         }
+    }
 
-        //inicjalizacja jednostek
-        units = new List<GameObject>();
-        // create test unit
-        tempObj = Instantiate(gendarmesPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(1, 1, 1, 2, 3, 9);
-        units.Add(tempObj);
+    private void DeployArmy(int armyId)
+    {
+        GameObject tempObj;
 
-        tempObj = Instantiate(frenchLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(2, 1, 4, 5, 6, 14);
-        units.Add(tempObj);
+        BattleManager.turnOwnerId = armyId;
+        if (armyId == 1)
+        {
+            tempObj = Instantiate(gendarmesPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(1, 1, 1, 2, 3, 1, 0);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
 
-        /*tempObj = Instantiate(suissePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(3, 1, 7, 8, 9, 19);
-        units.Add(tempObj);*/
+            tempObj = Instantiate(frenchLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(2, 1, 4, 5, 6, 1, 1);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
 
-        tempObj = Instantiate(imperialLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(4, 2, 10, 11, 12, 7);
-        units.Add(tempObj);
+            tempObj = Instantiate(suissePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(3, 1, 7, 8, 9, 1, 2);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
+        }
+        else if(armyId == 2)
+        {
+            tempObj = Instantiate(imperialLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(4, 2, 10, 11, 12, 1, 0);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
 
-        tempObj = Instantiate(imperialCavaleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-        tempObj.GetComponent<UnitController>().InitializeUnit(5, 2, 13, 14, 15, 12);
-        units.Add(tempObj);
-        // end test unit
+            tempObj = Instantiate(imperialCavaleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(5, 2, 13, 14, 15, 1, 1);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
+        }
+        else if(armyId == 3)
+        {
+            BattleManager.turnOwnerId = 1;
+            InitiateBoard();
+        }
     }
 
     private void InitiateBoard()
@@ -292,7 +315,7 @@ public class BattleManager : MonoBehaviour {
                 leftAttackTile = uc.UnitTileId + 7;
                 centralAttackTile = uc.UnitTileId + 2;
                 rightAttackTile = uc.UnitTileId - 3;
-                if (leftAttackTile > 15) leftAttackTile = 0;
+                if (leftAttackTile > 19) leftAttackTile = 0;
                 if (rightAttackTile <= 5) rightAttackTile = 0;
             }
             //looks for units ids which sits on tiles pointed at attack arrows
@@ -301,11 +324,13 @@ public class BattleManager : MonoBehaviour {
                 uc2 = g2.GetComponent<UnitController>();
                 if (uc2.UnitTileId == leftAttackTile)   // adds to central attack, attack  on the left unit, that is activated by this central attack
                 {
-                    myUnit.GetAttack(uc.GetAttackId("central")).AddActivatedAttackId(uc2.GetAttackId("left"));
+                    tempAttack = myUnit.GetAttack(uc.GetAttackId("central"));
+                    if(tempAttack != null) tempAttack.AddActivatedAttackId(uc2.GetAttackId("left"));
                 }
                 if (uc2.UnitTileId == rightAttackTile) // adds to central attack, attack  on the right unit, that is activated by this central attack
                 {
-                    myUnit.GetAttack(uc.GetAttackId("central")).AddActivatedAttackId(uc2.GetAttackId("right"));
+                    tempAttack = myUnit.GetAttack(uc.GetAttackId("central"));
+                    if(tempAttack != null) tempAttack.AddActivatedAttackId(uc2.GetAttackId("right"));
                 }
             }
         }
@@ -326,6 +351,8 @@ public class BattleManager : MonoBehaviour {
                 ac.AddActivatingAttack(i);
             }
         }
+        BattleManager.gameMode = "fight";
+        EventManager.RaiseEventGameStart();
     }
 
     // updated in memory state of board

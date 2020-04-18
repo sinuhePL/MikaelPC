@@ -12,7 +12,7 @@ public class SMController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit = null;
-        if (unitId > 0)
+        if (unitId > 0 && BattleManager.gameMode != "deploy")
         {
             tempUnit = BattleManager.Instance.GetUnit(unitId);
             if (tempUnit == null) return;
@@ -39,7 +39,13 @@ public class SMController : MonoBehaviour
         EventManager.onResultMenuClosed += UpdateMe;
     }
 
-    void Start()
+    public void InitialSM(int iStrength, int iMorale)
+    {
+        if (isStrength) myText.text = iStrength.ToString();
+        else myText.text = iMorale.ToString();
+    }
+
+    void Awake()
     {
         myText = GetComponent<Text>();
         presentedUnitId = 0;

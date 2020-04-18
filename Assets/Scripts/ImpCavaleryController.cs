@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ImpCavaleryController : UnitController
 {
-    public override void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId)
+    public override void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId, int deployPosition)
     {
         Vector3 tempPos;
 
-        base.InitializeUnit(unitId, armyId, forwardAttackId, leftAttackId, rightAttackId, tileId);
+        base.InitializeUnit(unitId, armyId, forwardAttackId, leftAttackId, rightAttackId, tileId, deployPosition);
         _unitType = "Imperial Cavalery";
         _unitCaption.text = "de Lannoy";
         if (_armyId == 1)
@@ -47,6 +47,8 @@ public class ImpCavaleryController : UnitController
             }
             _squads[i] = Instantiate(unitSquadPrefab, tempPos, transform.rotation);
             _squads[i].GetComponentInChildren<PawnController>().UnitId = _unitId;
+            _squads[i].transform.SetParent(transform);
         }
+        PlaceWidget(deployPosition);
     }
 }

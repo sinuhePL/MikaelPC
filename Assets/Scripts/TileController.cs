@@ -25,6 +25,8 @@ public class TileController : MonoBehaviour
     private int keyFieldId;
     private bool isBlinking;
     private int ownerId;
+    private int lastClickedUnit;
+    private int myDeployedUnitId;
     // Start is called before the first frame update
 
     public void InitializeTile(int i, int id, string tileType)
@@ -36,6 +38,8 @@ public class TileController : MonoBehaviour
         fieldCaption = GetComponentInChildren<TextMeshPro>();
         isBlinking = false;
         ownerId = 0;
+        myDeployedUnitId = 0;
+        lastClickedUnit = 0;
         if (keyFieldId == 0)
         {
             fieldCaption.text = "";
@@ -68,7 +72,14 @@ public class TileController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!IsPointerOverGameObject() && !BattleManager.isInputBlocked)
+        if(BattleManager.gameMode == "deploy")
+        {
+            if(!IsPointerOverGameObject() && myDeployedUnitId == 0)
+            {
+                EventManager.RaiseEventOnUnitDeployed(lastClickedUnit, tileId);
+            }
+        }
+        else if (!IsPointerOverGameObject() && !BattleManager.isInputBlocked)
         {
             EventManager.RaiseEventOnTileClicked(tileId);
         }
@@ -81,6 +92,20 @@ public class TileController : MonoBehaviour
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
+    }
+
+    private void SetLastClickedUnit(int a, int p, int uId)
+    {
+        lastClickedUnit = uId;
+    }
+
+    private void anyUnitDeployed(int uId, int tId)
+    {
+        if (uId == myDeployedUnitId)
+        {
+            if (tId != tileId) myDeployedUnitId = 0;
+            else myDeployedUnitId = uId;
+        }
     }
 
     private void ChangeFieldOwner(StateChange sc)
@@ -148,6 +173,7 @@ public class TileController : MonoBehaviour
         }
     }
 
+
     private void OnEnable()
     {
         EventManager.onDiceResult += ChangeFieldOwner;
@@ -155,6 +181,8 @@ public class TileController : MonoBehaviour
         EventManager.onTileClicked += StopBlinking;
         EventManager.onUnitClicked += StopBlinking;
         EventManager.onAttackOrdered += StopBlinking;
+        EventManager.onUIDeployPressed += SetLastClickedUnit;
+        EventManager.onUnitDeployed += anyUnitDeployed;
     }
 
     private void OnDestroy()
@@ -164,6 +192,8 @@ public class TileController : MonoBehaviour
         EventManager.onTileClicked -= StopBlinking;
         EventManager.onUnitClicked -= StopBlinking;
         EventManager.onAttackOrdered -= StopBlinking;
+        EventManager.onUIDeployPressed -= SetLastClickedUnit;
+        EventManager.onUnitDeployed -= anyUnitDeployed;
     }
 
     public int GetKeyFieldId()

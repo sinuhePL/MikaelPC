@@ -21,7 +21,7 @@ public class UnitUIController : MonoBehaviour
 
     private void UnitClicked(int unitId)
     {
-        if (!BattleManager.isInputBlocked)
+        if (!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
         {
             if(unitId != lastClickedUnit || isHidden)
             {

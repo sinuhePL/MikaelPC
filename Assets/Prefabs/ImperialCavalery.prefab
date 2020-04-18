@@ -52,6 +52,8 @@ MonoBehaviour:
     type: 3}
   unitSquadPrefab: {fileID: 4332561230818777294, guid: c1b6f0683879f264eb8e4325e04cef6c,
     type: 3}
+  deployUnitPrefab: {fileID: 8855599499367559341, guid: feb111ef0b93bde41912db14b887385c,
+    type: 3}
 --- !u!1 &7753337779483039503
 GameObject:
   m_ObjectHideFlags: 0

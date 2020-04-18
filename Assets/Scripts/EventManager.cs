@@ -99,4 +99,22 @@ public class EventManager : MonoBehaviour
     {
         if (onRouteTestOver != null) onRouteTestOver(description, result, morale);
     }
+
+    public static event Action<int, int, int> onUIDeployPressed;
+    public static void RaiseEventOnUIDeployPressed(int armyId, int position, int uId)
+    {
+        if (onUIDeployPressed != null) onUIDeployPressed(armyId, position, uId);
+    }
+
+    public static event Action<int, int> onUnitDeployed;
+    public static void RaiseEventOnUnitDeployed(int uId, int tId)
+    {
+        if (onUnitDeployed != null) onUnitDeployed(uId, tId);
+    }
+
+    public static event Action<int> onDeploymentStart;
+    public static void RaiseEventOnDeploymentStart(int aId)
+    {
+        if (onDeploymentStart != null) onDeploymentStart(aId);
+    }
 }

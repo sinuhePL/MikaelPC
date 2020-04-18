@@ -15,7 +15,7 @@ public class CaptionController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit;
-        if (!BattleManager.isInputBlocked)
+        if (!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
         {
             tempUnit = BattleManager.Instance.GetUnit(unitId);
             switch (tempUnit.GetUnitType())
@@ -46,7 +46,26 @@ public class CaptionController : MonoBehaviour
         EventManager.onUnitClicked += UnitClicked;
     }
 
-    void Start()
+    public void InitialCaption(string unitType)
+    {
+        switch (unitType)
+        {
+            case "Gendarmes":
+                myImage.sprite = gendarmes;
+                break;
+            case "Landsknechte":
+                myImage.sprite = landsknechte;
+                break;
+            case "Suisse":
+                myImage.sprite = suisse;
+                break;
+            case "Imperial Cavalery":
+                myImage.sprite = manatarms;
+                break;
+        }
+    }
+
+    void Awake()
     {
         myImage = GetComponent<Image>();
     }

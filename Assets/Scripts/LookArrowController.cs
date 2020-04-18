@@ -56,5 +56,6 @@ public class LookArrowController : MonoBehaviour
     {
         myCamera = Camera.main;
         myButton = GetComponent<Button>();
+        gameObject.SetActive(false);
     }
 }

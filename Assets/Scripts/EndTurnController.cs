@@ -35,6 +35,7 @@ public class EndTurnController : MonoBehaviour
         EventManager.onTileClicked += Reset;
         EventManager.onUnitClicked += Reset;
         EventManager.onRouteTestOver += RouteTestEnded;
+        EventManager.onGameStart += GameStart;
     }
 
     private void Start()
@@ -52,6 +53,7 @@ public class EndTurnController : MonoBehaviour
         EventManager.onTileClicked -= Reset;
         EventManager.onUnitClicked -= Reset;
         EventManager.onRouteTestOver -= RouteTestEnded;
+        EventManager.onGameStart -= GameStart;
     }
 
     public void ButtonPressed()
@@ -61,7 +63,21 @@ public class EndTurnController : MonoBehaviour
             transform.DOKill();
             transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
             if (mode == 0) return;
-            if (mode == 1)  // if displays End Turn
+            if (mode == 1) // if displays End Deployment
+            {
+                if(BattleManager.turnOwnerId == 1)
+                {
+                    EventManager.RaiseEventOnDeploymentStart(2);
+                }
+                else if(BattleManager.turnOwnerId == 2)
+                {
+                    EventManager.RaiseEventOnDeploymentStart(3);
+                    leftArrow.SetActive(true);
+                    rightArrow.SetActive(true);
+                }
+                return;
+            }
+            if (mode == 2)  // if displays End Turn
             {
                 isClicked = true;
                 leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
@@ -71,22 +87,28 @@ public class EndTurnController : MonoBehaviour
                 EventManager.RaiseEventOnTurnEnd();
                 return;
             }
-            if (mode == 2) // if displays Attack
+            if (mode == 3) // if displays Attack
             {
                 EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
                 myText.text = "";
             }
-            if (mode == 3) // if displays Close Result (attack result)
+            if (mode == 4) // if displays Close Result (attack result)
             {
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("attack");
             }
-            if(mode == 4) // if displays Close Result (rout test result)
+            if(mode == 5) // if displays Close Result (rout test result)
             {
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("routtest");
             }
         }
+    }
+
+    private void GameStart()
+    {
+        myText.text = "End Turn";
+        mode = 2;
     }
 
     private void RouteTestEnded(string resultDescription, int result, int morale)
@@ -95,7 +117,7 @@ public class EndTurnController : MonoBehaviour
         else
         {
             myText.text = "Close Result";
-            mode = 4;
+            mode = 5;
             if (resultDescription == "frenchFlee") EventManager.RaiseEventGameOver(2);
             else if (resultDescription == "imperialFlee") EventManager.RaiseEventGameOver(1);
         }
@@ -104,7 +126,7 @@ public class EndTurnController : MonoBehaviour
     public void AttackResolved()
     {
         myText.text = "End Turn";
-        mode = 1;
+        mode = 2;
         if (BattleManager.turnOwnerId == 1 && !BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && !BattleManager.isPlayer2Human) ButtonPressed();
         else StartCoroutine(WaitForClick());
     }
@@ -122,7 +144,7 @@ public class EndTurnController : MonoBehaviour
             if (BattleManager.turnOwnerId == 1 && BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && BattleManager.isPlayer2Human)
             {
                 myText.text = "Attack";
-                mode = 2;
+                mode = 3;
                 lastClickedAttack = attackId;
             }
             else
@@ -141,15 +163,14 @@ public class EndTurnController : MonoBehaviour
     {
         if (st.attackerStrengthChange != 0 || st.defenderStrengthChange != 0) myText.text = "Rout Test";
         else myText.text = "Close Result";
-        mode = 3;
+        mode = 4;
     }
 
     public void Reset(int i)
     {
-        if (mode == 2)
+        if (mode == 3)
         {
-            myText.text = "End Turn";
-            mode = 1;
+            GameStart();
         }
     }
 }

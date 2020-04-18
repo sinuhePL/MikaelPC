@@ -31,7 +31,13 @@ public class WidgetController : MonoBehaviour
         EventManager.onUnitClicked += UnitClicked;
     }
 
-    void Start()
+    public void InitalColor(int armyId)
+    {
+        if(armyId == 1 ) myImage.sprite = widgetArmy1;
+        else myImage.sprite = widgetArmy2;
+    }
+
+    void Awake()
     {
         myImage = GetComponent<Image>();
     }

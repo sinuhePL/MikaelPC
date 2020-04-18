@@ -25,11 +25,14 @@ public class UnitController : MonoBehaviour
     protected GameObject rightArrow;
     protected GameObject rightArrowEmpty;
     protected GameObject flag;
+    protected GameObject deployWidget;
+    protected GameObject uiCanvas;
     [SerializeField] protected int initialStrength;
     [SerializeField] protected int initialMorale;
     [SerializeField] protected GameObject arrowPrefab;
     [SerializeField] protected GameObject flagPrefab;
     [SerializeField] protected GameObject unitSquadPrefab;
+    [SerializeField] protected GameObject deployUnitPrefab;
 
     // called when arrow is clicked
     protected void anyAttackClicked(int idAttack, bool isCounterAttack)
@@ -66,7 +69,7 @@ public class UnitController : MonoBehaviour
 
     protected void myUnitClicked(int idUnit)
     {
-        if(!BattleManager.isInputBlocked)
+        if(!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
         {
             if (idUnit == UnitId && !isOutlined)
             {
@@ -195,12 +198,30 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    protected void ChangePosition(int tileId)
+    {
+        float xpos = (tileId / BattleManager.boardHeight + 2) * BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth * 0.25f;
+        float zpos = (tileId % BattleManager.boardHeight) * -1.0f * BattleManager.boardFieldHeight - BattleManager.boardFieldHeight;
+        transform.position = new Vector3(xpos, 0.05f, zpos);
+        _unitTileId = tileId;
+    }
+
+    protected void PlaceOnTile(int uId, int tId)
+    {
+        if(uId == _unitId)
+        {
+            ShowAll();
+            ChangePosition(tId);
+        }
+    }
+
     protected void OnDestroy()
     {
         EventManager.onAttackClicked -= anyAttackClicked;
         EventManager.onUnitClicked -= myUnitClicked;
         EventManager.onTileClicked -= anyTileClicked;
         EventManager.onResultMenuClosed -= UpdateMe;
+        EventManager.onUnitDeployed -= PlaceOnTile;
     }
 
     public int UnitId
@@ -233,15 +254,50 @@ public class UnitController : MonoBehaviour
         get { return _unitTileId; }
     }
 
+    private void Awake()
+    {
+        uiCanvas = GameObject.Find("uiCanvas");
+
+    }
+
     private void OnEnable()
     {
         EventManager.onAttackClicked += anyAttackClicked;
         EventManager.onUnitClicked += myUnitClicked;
         EventManager.onTileClicked += anyTileClicked;
         EventManager.onResultMenuClosed += UpdateMe;
+        EventManager.onUnitDeployed += PlaceOnTile;
     }
 
-    public virtual void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId)   //   armyId == 1 then blue else red
+    protected void PlaceWidget(int position)
+    {
+        deployWidget = Instantiate(deployUnitPrefab, deployUnitPrefab.transform.position, deployUnitPrefab.transform.rotation);
+        deployWidget.transform.SetParent(uiCanvas.transform);
+        deployWidget.GetComponent<RectTransform>().anchoredPosition = new Vector3(55.0f, -65.0f - position * 115.0f, 0.0f);
+        deployWidget.GetComponent<DeployUIController>().InitializeDeploy(_armyId, _unitType, _strength, _morale, position, _armyId, _unitId);
+    }
+
+    public void HideAll()
+    {
+        _unitCaption.gameObject.SetActive(false);
+        flag.gameObject.SetActive(false);
+        for(int i =0; i<_squads.Length; i++)
+        {
+            _squads[i].SetActive(false);
+        }
+    }
+
+    protected void ShowAll()
+    {
+        _unitCaption.gameObject.SetActive(true);
+        flag.gameObject.SetActive(true);
+        for (int i = 0; i < _squads.Length; i++)
+        {
+            _squads[i].SetActive(true);
+        }
+    }
+
+    public virtual void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId, int deployPosition)   //   armyId == 1 then blue else red
     {
         Color myColor;
 
@@ -258,51 +314,62 @@ public class UnitController : MonoBehaviour
             _strength = initialStrength;
             _morale = initialMorale;
             _armyId = armyId;
-            _unitTileId = tileId;
             _squads = new GameObject[initialStrength];
             _unitCaption = GetComponentInChildren<TextMeshPro>();
 
             // set position based on id tile which it sits on
-            float xpos = (tileId / BattleManager.boardHeight + 2) * BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth*0.25f;
-            float zpos = (tileId % BattleManager.boardHeight) * -1.0f * BattleManager.boardFieldHeight - BattleManager.boardFieldHeight;
-            transform.position = new Vector3(xpos, 0.05f, zpos);
+            ChangePosition(tileId);
 
             if (_armyId == 1)
             {
                 forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 forwardArrow.GetComponent<ArrowController>().InitializeArrow("forward", "blue", "solid");
+                forwardArrow.transform.SetParent(transform);
                 forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 forwardArrowEmpty.GetComponent<ArrowController>().InitializeArrow("forward", "blue", "empty");
+                forwardArrowEmpty.transform.SetParent(transform);
                 leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 leftArrow.GetComponent<ArrowController>().InitializeArrow("left", "blue", "solid");
+                leftArrow.transform.SetParent(transform);
                 leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.02f, 4.0f), arrowPrefab.transform.rotation);
                 leftArrowEmpty.GetComponent<ArrowController>().InitializeArrow("left", "blue", "empty");
+                leftArrowEmpty.transform.SetParent(transform);
                 rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "blue", "solid");
+                rightArrow.transform.SetParent(transform);
                 rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "blue", "empty");
+                rightArrowEmpty.transform.SetParent(transform);
                 ColorUtility.TryParseHtmlString(BattleManager.Army1Color, out myColor);
                 _unitCaption.color = myColor;
                 flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, -0.35f), flagPrefab.transform.rotation);
+                flag.transform.SetParent(transform);
 
             }
             else
             {
                 forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 forwardArrow.GetComponent<ArrowController>().InitializeArrow("forward", "yellow", "solid");
+                forwardArrow.transform.SetParent(transform);
                 forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 forwardArrowEmpty.GetComponent<ArrowController>().InitializeArrow("forward", "yellow", "empty");
+                forwardArrowEmpty.transform.SetParent(transform);
                 leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 leftArrow.GetComponent<ArrowController>().InitializeArrow("left", "yellow", "solid");
+                leftArrow.transform.SetParent(transform);
                 leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 leftArrowEmpty.GetComponent<ArrowController>().InitializeArrow("left", "yellow", "empty");
+                leftArrowEmpty.transform.SetParent(transform);
                 rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "solid");
+                rightArrow.transform.SetParent(transform);
                 rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "empty");
+                rightArrowEmpty.transform.SetParent(transform);
                 ColorUtility.TryParseHtmlString(BattleManager.Army2Color, out myColor);
                 _unitCaption.color = myColor;
                 flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, 0.35f), flagPrefab.transform.rotation * Quaternion.Euler(0.0f, 180.0f, 0.0f));
+                flag.transform.SetParent(transform);
             }
             forwardArrow.GetComponent<ArrowController>().AttackId = forwardAttackId;
             forwardArrowEmpty.GetComponent<ArrowController>().AttackId = forwardAttackId;
