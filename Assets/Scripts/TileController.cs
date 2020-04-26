@@ -14,12 +14,18 @@ public class TileController : MonoBehaviour
     [SerializeField] private GameObject pawn;
     [SerializeField] private GameObject border;
     [SerializeField] private GameObject floor;
+    [SerializeField] private ParticleSystem topParticleSystem;
+    [SerializeField] private ParticleSystem rightParticleSystem;
+    [SerializeField] private ParticleSystem bottomParticleSystem;
+    [SerializeField] private ParticleSystem leftParticleSystem;
     [SerializeField] private Texture forest1Texture;
     [SerializeField] private Texture hill1Texture;
     [SerializeField] private Texture hill2Texture;
     [SerializeField] private Texture town1Texture;
     [SerializeField] private Texture field1Texture;
     [SerializeField] private Texture field2Texture;
+    [SerializeField] private TextMeshPro tileInfluenceDescription;
+
 
     private TextMeshPro fieldCaption;
     private int keyFieldId;
@@ -27,46 +33,69 @@ public class TileController : MonoBehaviour
     private int ownerId;
     private int lastClickedUnit;
     private int myDeployedUnitId;
+    private int possibleArmyDeployment;
+    private string tileType;
     // Start is called before the first frame update
 
-    public void InitializeTile(int i, int id, string tileType)
+    public void InitializeTile(int ti, int kfid, string tType, int pArmDpl)
     {
+        int randomInt;
         myRenderer = GetComponent<MeshRenderer>();
-        tileId = i;
-        keyFieldId = id;
+        tileId = ti;
+        keyFieldId = kfid;
         pawn.SetActive(false);
         fieldCaption = GetComponentInChildren<TextMeshPro>();
         isBlinking = false;
         ownerId = 0;
         myDeployedUnitId = 0;
         lastClickedUnit = 0;
+        possibleArmyDeployment = pArmDpl;
+        tileType = tType;
+        tileInfluenceDescription.gameObject.SetActive(false);
+        if(possibleArmyDeployment > 0)
+        {
+            if(possibleArmyDeployment == 1)
+            {
+                topParticleSystem.startColor = Color.blue;
+                bottomParticleSystem.startColor = Color.blue;
+                rightParticleSystem.startColor = Color.blue;
+                leftParticleSystem.startColor = Color.blue;
+            }
+            else if (possibleArmyDeployment == 2)
+            {
+                topParticleSystem.startColor = Color.yellow;
+                bottomParticleSystem.startColor = Color.yellow;
+                rightParticleSystem.startColor = Color.yellow;
+                leftParticleSystem.startColor = Color.yellow;
+            }
+        }
         if (keyFieldId == 0)
         {
             fieldCaption.text = "";
             border.SetActive(false);
             floor.SetActive(false);
         }
-        else
+        randomInt = Random.Range(1, 3);
+        switch (tileType)
         {
-            switch (tileType)
-            {
-                case "town":
-                    fieldCaption.text = "Mirabello Castle";
-                    myRenderer.material.mainTexture = town1Texture;
-                    break;
-                case "forest":
-                    fieldCaption.text = "Deep Forest";
-                    myRenderer.material.mainTexture = forest1Texture;
-                    break;
-                case "field":
-                    fieldCaption.text = "Ogden's Field";
-                    myRenderer.material.mainTexture = field1Texture;
-                    break;
-                case "hill":
-                    fieldCaption.text = "Windy Peak";
-                    myRenderer.material.mainTexture = hill1Texture;
-                    break;
-            }
+            case "town":
+                myRenderer.material.mainTexture = town1Texture;
+                if(keyFieldId != 0) fieldCaption.text = "Mirabello Castle";
+                break;
+            case "forest":
+                myRenderer.material.mainTexture = forest1Texture;
+                if (keyFieldId != 0) fieldCaption.text = "Deep Forest";
+                break;
+            case "field":
+                if (randomInt == 1) myRenderer.material.mainTexture = field1Texture;
+                if (randomInt == 2) myRenderer.material.mainTexture = field2Texture;
+                if (keyFieldId != 0) fieldCaption.text = "Ogden's Field";
+                break;
+            case "hill":
+                if (randomInt == 1) myRenderer.material.mainTexture = hill1Texture;
+                if (randomInt == 2) myRenderer.material.mainTexture = hill2Texture;
+                if (keyFieldId != 0) fieldCaption.text = "Windy Peak";
+                break;
         }
     }
 
@@ -74,7 +103,7 @@ public class TileController : MonoBehaviour
     {
         if(BattleManager.gameMode == "deploy")
         {
-            if(!IsPointerOverGameObject() && myDeployedUnitId == 0)
+            if(!IsPointerOverGameObject() && myDeployedUnitId == 0 && BattleManager.turnOwnerId == possibleArmyDeployment)
             {
                 EventManager.RaiseEventOnUnitDeployed(lastClickedUnit, tileId);
             }
@@ -94,18 +123,43 @@ public class TileController : MonoBehaviour
         return results.Count > 0;
     }
 
-    private void SetLastClickedUnit(int a, int p, int uId)
+    private void SetLastClickedUnit(int a, int p, int uId, string uType)
     {
         lastClickedUnit = uId;
+        if(a == possibleArmyDeployment && myDeployedUnitId == 0)
+        {
+            tileInfluenceDescription.gameObject.SetActive(true);
+            tileInfluenceDescription.text = "";
+            if (tileType == "hill")
+            {
+                if (uType == "Imperial Cavalery" || uType == "Gendarmes") tileInfluenceDescription.text = "+1 Attack Die";
+                tileInfluenceDescription.text += "\n\n+1 Defence Die";
+            }
+            if(tileType == "forest")
+            {
+                if(uType == "Arquebusiers") tileInfluenceDescription.text = "+1 Attack Die";
+                if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers" || uType == "Artillery") tileInfluenceDescription.text += "\n\n+1 Defence Die against Cavalery";
+            }
+            if(tileType == "town")
+            {
+                if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") tileInfluenceDescription.text += "\n\n+1 Defence Die against Arquebusiers and Artillery";
+            }
+        }
+        else tileInfluenceDescription.gameObject.SetActive(false);
     }
 
     private void anyUnitDeployed(int uId, int tId)
     {
-        if (uId == myDeployedUnitId)
+        if (uId == myDeployedUnitId && tId != tileId)
         {
-            if (tId != tileId) myDeployedUnitId = 0;
-            else myDeployedUnitId = uId;
+            myDeployedUnitId = 0;
+            tileInfluenceDescription.gameObject.SetActive(true);
         }
+        if (myDeployedUnitId == 0 && tId == tileId)
+        {
+            myDeployedUnitId = uId;
+            tileInfluenceDescription.gameObject.SetActive(false);
+        }       
     }
 
     private void ChangeFieldOwner(StateChange sc)
@@ -173,6 +227,33 @@ public class TileController : MonoBehaviour
         }
     }
 
+    private void HighlightField(int aId)
+    {
+        if(aId == possibleArmyDeployment)
+        {
+            topParticleSystem.Play();
+            bottomParticleSystem.Play();
+            if(BattleManager.boardHeight + 2 == tileId && aId == 2 || BattleManager.boardHeight + 4 == tileId && aId == 1) leftParticleSystem.Play();
+            if ((BattleManager.boardHeight * BattleManager.boardWidth) - BattleManager.boardHeight - 1 == tileId && aId == 1 ||
+            (BattleManager.boardHeight * BattleManager.boardWidth) - BattleManager.boardHeight - 3 == tileId && aId == 2)
+            {
+                rightParticleSystem.Play();
+            }
+        }
+        else
+        {
+            topParticleSystem.Stop();
+            bottomParticleSystem.Stop();
+            rightParticleSystem.Stop();
+            leftParticleSystem.Stop();
+            topParticleSystem.Clear();
+            bottomParticleSystem.Clear();
+            rightParticleSystem.Clear();
+            leftParticleSystem.Clear();
+            tileInfluenceDescription.gameObject.SetActive(false);
+        }
+    }
+
 
     private void OnEnable()
     {
@@ -183,6 +264,7 @@ public class TileController : MonoBehaviour
         EventManager.onAttackOrdered += StopBlinking;
         EventManager.onUIDeployPressed += SetLastClickedUnit;
         EventManager.onUnitDeployed += anyUnitDeployed;
+        EventManager.onDeploymentStart += HighlightField;
     }
 
     private void OnDestroy()
@@ -194,6 +276,7 @@ public class TileController : MonoBehaviour
         EventManager.onAttackOrdered -= StopBlinking;
         EventManager.onUIDeployPressed -= SetLastClickedUnit;
         EventManager.onUnitDeployed -= anyUnitDeployed;
+        EventManager.onDeploymentStart -= HighlightField;
     }
 
     public int GetKeyFieldId()
@@ -204,5 +287,35 @@ public class TileController : MonoBehaviour
     public string GetKeyFieldName()
     {
         return fieldCaption.text;
+    }
+
+    public int ChangeAttackStrength(string uType)
+    {
+        if (tileType == "hill")
+        {
+            if (uType == "Imperial Cavalery" || uType == "Gendarmes") return 1;
+        }
+        if (tileType == "forest")
+        {
+            if (uType == "Arquebusiers") return 1;
+        }
+        return 0;
+    }
+
+    public int ChangeDefenceStrength(string defenderType, string attackerType)
+    {
+        if (tileType == "hill")
+        {
+            return 1;
+        }
+        if (tileType == "forest")
+        {
+            if ((defenderType == "Suisse" || defenderType == "Landsknechte" || defenderType == "Arquebusiers" || defenderType == "Artillery") && (attackerType == "Gendarmes" || attackerType == "Imperial Cavalery")) return 1;
+        }
+        if (tileType == "town")
+        {
+            if ((defenderType == "Suisse" || defenderType == "Landsknechte" || defenderType == "Arquebusiers") && (attackerType == "Arquebusiers" || attackerType == "Artillery")) return 1;
+        }
+        return 0;
     }
 }

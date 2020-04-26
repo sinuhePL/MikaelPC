@@ -13,7 +13,7 @@ public class WidgetController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit;
-        if (!BattleManager.isInputBlocked)
+        if (!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
         {
             tempUnit = BattleManager.Instance.GetUnit(unitId);
             if (tempUnit.GetArmyId() == 1) myImage.sprite = widgetArmy1;

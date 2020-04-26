@@ -12,8 +12,9 @@ public class DeployUIController : MonoBehaviour
     private SMController[] mySMControllers;
     private bool isEnlarged;
     private int myPosition;
-    private int armyId;
     private int unitId;
+    private int armyId;
+    private string unitType;
     private Vector3 startingPosition;
     // Start is called before the first frame update
     void Awake()
@@ -40,7 +41,7 @@ public class DeployUIController : MonoBehaviour
         EventManager.onDeploymentStart -= DeploymentStart;
     }
 
-    private void MoveDown(int aId, int p, int uId)
+    private void MoveDown(int aId, int p, int uId, string uType)
     {
         if (aId == armyId && p == myPosition) return;
         if (isEnlarged)
@@ -66,17 +67,18 @@ public class DeployUIController : MonoBehaviour
         if (aId > armyId) Destroy(gameObject);
     }
 
-    public void InitializeDeploy(int armyId, string unitType, int strength, int morale, int position, int aId, int myId)
+    public void InitializeDeploy(string uType, int strength, int morale, int position, int aId, int myId)
     {
-        myPictureController.InitialPicture(unitType);
-        myWidgetController.InitalColor(armyId);
-        myCaptionController.InitialCaption(unitType);
+        myPictureController.InitialPicture(uType);
+        myWidgetController.InitalColor(aId);
+        myCaptionController.InitialCaption(uType);
         mySMControllers[0].InitialSM(strength, morale);
         mySMControllers[1].InitialSM(strength, morale);
         myPosition = position;
         startingPosition = transform.position;
         armyId = aId;
         unitId = myId;
+        unitType = uType;
         if (position == 0)
         {
             WidgetPressed();
@@ -92,7 +94,7 @@ public class DeployUIController : MonoBehaviour
             transform.DOMoveX(75.0f, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveY(startingPosition.y - 25.0f, 0.25f).SetEase(Ease.OutBack);
             isEnlarged = true;
-            EventManager.RaiseEventOnUIDeployPressed(armyId, myPosition, unitId);
+            EventManager.RaiseEventOnUIDeployPressed(armyId, myPosition, unitId, unitType);
         }
     }
 }

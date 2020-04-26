@@ -10,6 +10,7 @@ public class UnitController : MonoBehaviour
     protected bool isInitialized = false;
     protected bool isOutlined;
     protected bool isDisabled = false;
+    protected bool _isPlaced = false;
     protected int _strength;
     protected string _unitType;
     protected int _morale;
@@ -212,7 +213,18 @@ public class UnitController : MonoBehaviour
         {
             ShowAll();
             ChangePosition(tId);
+            _isPlaced = true;
         }
+    }
+
+    protected void OnEnable()
+    {
+        EventManager.onAttackClicked += anyAttackClicked;
+        EventManager.onUnitClicked += myUnitClicked;
+        EventManager.onTileClicked += anyTileClicked;
+        EventManager.onResultMenuClosed += UpdateMe;
+        EventManager.onUnitDeployed += PlaceOnTile;
+        EventManager.onDeploymentStart += StartDeployment;
     }
 
     protected void OnDestroy()
@@ -222,11 +234,17 @@ public class UnitController : MonoBehaviour
         EventManager.onTileClicked -= anyTileClicked;
         EventManager.onResultMenuClosed -= UpdateMe;
         EventManager.onUnitDeployed -= PlaceOnTile;
+        EventManager.onDeploymentStart -= StartDeployment;
     }
 
     public int UnitId
     {
         get {return _unitId;}
+    }
+
+    public bool isPlaced
+    {
+        get { return _isPlaced; }
     }
 
     public string UnitType
@@ -257,24 +275,28 @@ public class UnitController : MonoBehaviour
     private void Awake()
     {
         uiCanvas = GameObject.Find("uiCanvas");
-
     }
 
-    private void OnEnable()
-    {
-        EventManager.onAttackClicked += anyAttackClicked;
-        EventManager.onUnitClicked += myUnitClicked;
-        EventManager.onTileClicked += anyTileClicked;
-        EventManager.onResultMenuClosed += UpdateMe;
-        EventManager.onUnitDeployed += PlaceOnTile;
-    }
-
-    protected void PlaceWidget(int position)
+    protected void PlaceWidget(int position)    // called from child
     {
         deployWidget = Instantiate(deployUnitPrefab, deployUnitPrefab.transform.position, deployUnitPrefab.transform.rotation);
         deployWidget.transform.SetParent(uiCanvas.transform);
         deployWidget.GetComponent<RectTransform>().anchoredPosition = new Vector3(55.0f, -65.0f - position * 115.0f, 0.0f);
-        deployWidget.GetComponent<DeployUIController>().InitializeDeploy(_armyId, _unitType, _strength, _morale, position, _armyId, _unitId);
+        deployWidget.GetComponent<DeployUIController>().InitializeDeploy(_unitType, _strength, _morale, position, _armyId, _unitId);
+    }
+
+    protected void StartDeployment(int aId)
+    {
+        if (aId < 3) HideAll();
+        else
+        {
+            ShowAll();
+            if (!isPlaced)
+            {
+                BattleManager.Instance.RemoveUnit(gameObject);
+                Destroy(gameObject);
+            }
+        }
     }
 
     public void HideAll()

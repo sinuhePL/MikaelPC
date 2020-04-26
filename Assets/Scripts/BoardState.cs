@@ -142,7 +142,7 @@ public class BoardState
             kf.SetOccupant(u.GetArmyId());
             a = u.GetAttackOnKeyField(change.keyFieldChangeId);
             a.keyFieldTaken = true;
-            a.IncreaseAttack();
+            a.ChangeAttack(1);
         }
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
@@ -157,7 +157,7 @@ public class BoardState
         {
             a = u.GetAttackOnKeyField(change.keyFieldChangeId);
             a.keyFieldTaken = false;
-            if(oldKeyFieldOwner != 0) a.DecreaseAttack();
+            if(oldKeyFieldOwner != 0) a.ChangeAttack(-1);
         }
         // wprowadza rezultat dotyczący aktywowanych i dezaktywowanych ataków
         if (change.activatedAttacks != null)

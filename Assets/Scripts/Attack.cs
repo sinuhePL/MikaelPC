@@ -93,24 +93,14 @@ public abstract class Attack
         isAttackForward = f;
     }
 
-    public void IncreaseAttack()
+    public void ChangeAttack(int amount)
     {
-        attackDiceNumber++;
+        attackDiceNumber += amount;
     }
 
-    public void IncreaseDefence()
+    public void ChangeDefence(int amount)
     {
-        defenceDiceNumber++;
-    }
-
-    public void DecreaseAttack()
-    {
-        attackDiceNumber--;
-    }
-
-    public void DecreaseDefence()
-    {
-        defenceDiceNumber--;
+        defenceDiceNumber += amount;
     }
 
     public void Activate()

@@ -22,7 +22,7 @@ public class PawnController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!IsPointerOverGameObject() && (BattleManager.turnOwnerId == 1 && BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && BattleManager.isPlayer2Human))
+        if (!IsPointerOverGameObject() && ((BattleManager.turnOwnerId == 1 && BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && BattleManager.isPlayer2Human) || BattleManager.gameMode == "deploy"))
         {
             EventManager.RaiseEventOnUnitClicked(_unitId);
         }

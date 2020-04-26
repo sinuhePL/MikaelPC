@@ -239,7 +239,7 @@ public class Unit
             if (!a.IsAttackForward())
             {
                 a.Activate();
-                a.IncreaseAttack();
+                a.ChangeAttack(1);
             }
         }
     }
