@@ -281,7 +281,7 @@ public class UnitController : MonoBehaviour
     {
         deployWidget = Instantiate(deployUnitPrefab, deployUnitPrefab.transform.position, deployUnitPrefab.transform.rotation);
         deployWidget.transform.SetParent(uiCanvas.transform);
-        deployWidget.GetComponent<RectTransform>().anchoredPosition = new Vector3(55.0f, -65.0f - position * 115.0f, 0.0f);
+        deployWidget.GetComponent<RectTransform>().anchoredPosition = new Vector3(485.0f, -65.0f - position * 115.0f, 0.0f);
         deployWidget.GetComponent<DeployUIController>().InitializeDeploy(_unitType, _strength, _morale, position, _armyId, _unitId);
     }
 

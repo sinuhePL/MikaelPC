@@ -194,7 +194,7 @@ public class BattleManager : MonoBehaviour {
     {
         UnitController uc, uc2;
         TileController tc;
-        Unit myUnit;
+        Unit myUnit, otherUnit;
         KeyField myKeyField;
         ArrowController ac;
         Army army1, army2;
@@ -342,10 +342,10 @@ public class BattleManager : MonoBehaviour {
                     tempAttack = myUnit.GetAttack(uc.GetAttackId("central"));
                     if(tempAttack != null) tempAttack.AddActivatedAttackId(uc2.GetAttackId("right"));
                 }
-                if(uc2.UnitTileId == centralAttackTile)
+                if(uc2.UnitTileId == centralAttackTile) // changes attack strength because of tile g2 unit sits on
                 {
-                    myUnit = myBoardState.GetUnit(uc2.UnitId);
-                    tempAttack = myUnit.GetAttack(uc2.GetAttackId("central"));
+                    otherUnit = myBoardState.GetUnit(uc2.UnitId);
+                    tempAttack = otherUnit.GetAttack(uc2.GetAttackId("central"));
                     tc = GetTile(uc.UnitTileId);
                     tempAttack.ChangeDefence(tc.ChangeDefenceStrength(uc.UnitType, uc2.UnitType));
                 }

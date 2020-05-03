@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class LookArrowController : MonoBehaviour
 {
@@ -12,6 +13,46 @@ public class LookArrowController : MonoBehaviour
     public enum directionEnum { left, right};
     [SerializeField] private directionEnum directionType;
     private Button myButton;
+    private bool isShifted;
+    private int lastClickedUnit;
+    private Vector3 startingPosition;
+
+    private void ArrowUnitClicked(int uId)
+    {
+        if (directionType == directionEnum.left)
+        {
+            if (lastClickedUnit == uId && isShifted)
+            {
+                transform.DOMoveX(startingPosition.x, 0.3f).SetEase(Ease.InOutQuint);
+                isShifted = false;
+            }
+            lastClickedUnit = uId;
+        }
+    }
+
+    private void TileClicked(int tId)
+    {
+        if (directionType == directionEnum.left)
+        {
+            transform.DOMoveX(startingPosition.x, 0.3f).SetEase(Ease.InOutQuint);
+            isShifted = false;
+        }
+    }
+
+    public void ShiftMe()
+    {
+        if (directionType == directionEnum.left)
+        {
+            if(!isShifted) transform.DOMoveX(startingPosition.x + 430.0f, 0.3f).SetEase(Ease.InOutQuint);
+            else transform.DOMoveX(startingPosition.x, 0.3f).SetEase(Ease.InOutQuint);
+            isShifted = !isShifted;
+        }
+    }
+
+    private void AttackClicked(int aId, bool b)
+    {
+        TileClicked(0);
+    }
 
     // zmienia kąt patrzenia kamery obracajac ją wokół punktu na który aktualnie patrzy kamera
     public void ChangeViewAngle()
@@ -52,10 +93,29 @@ public class LookArrowController : MonoBehaviour
         else isActive = true;
     }
 
+    private void OnDestroy()
+    {
+        if (directionType == directionEnum.left)
+        {
+            EventManager.onUnitClicked -= ArrowUnitClicked;
+            EventManager.onTileClicked -= TileClicked;
+            EventManager.onAttackClicked -= AttackClicked;
+        }
+    }
+
     public void Start()
     {
         myCamera = Camera.main;
         myButton = GetComponent<Button>();
         gameObject.SetActive(false);
+        isShifted = false;
+        lastClickedUnit = 0;
+        startingPosition = transform.position;
+        if (directionType == directionEnum.left)
+        {
+            EventManager.onUnitClicked += ArrowUnitClicked;
+            EventManager.onTileClicked += TileClicked;
+            EventManager.onAttackClicked += AttackClicked;
+        }
     }
 }

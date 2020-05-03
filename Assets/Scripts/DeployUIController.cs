@@ -31,7 +31,6 @@ public class DeployUIController : MonoBehaviour
         EventManager.onUIDeployPressed += MoveDown;
         EventManager.onUnitClicked += UnitClicked;
         EventManager.onDeploymentStart += DeploymentStart;
-
     }
 
     private void OnDestroy()
@@ -48,7 +47,7 @@ public class DeployUIController : MonoBehaviour
         {
             isEnlarged = false;
             transform.DOScale(0.28f, 0.25f).SetEase(Ease.OutBack);
-            transform.DOMoveX(55.0f, 0.25f).SetEase(Ease.OutBack);
+            transform.DOMoveX(485.0f, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveY(transform.position.y + 25.0f, 0.25f).SetEase(Ease.OutBack);
             if (aId == armyId && p < myPosition) transform.DOMoveY(startingPosition.y - 42.0f, 0.25f).SetEase(Ease.OutBack);
             return;
@@ -91,7 +90,7 @@ public class DeployUIController : MonoBehaviour
         if (!isEnlarged)
         {
             transform.DOScale(0.4f, 0.25f).SetEase(Ease.OutBack);
-            transform.DOMoveX(75.0f, 0.25f).SetEase(Ease.OutBack);
+            transform.DOMoveX(540.0f, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveY(startingPosition.y - 25.0f, 0.25f).SetEase(Ease.OutBack);
             isEnlarged = true;
             EventManager.RaiseEventOnUIDeployPressed(armyId, myPosition, unitId, unitType);
