@@ -59,7 +59,7 @@ public class LookArrowController : MonoBehaviour
     {
         if (isActive && !BattleManager.isInputBlocked)
         {
-            if (BattleManager.viewType == "isometric")
+            if (GameManagerController.viewType == "isometric")
             {
                 myCamera.GetComponent<PanZoom>().ChangeViewAngle("arrow");
                 otherButton.GetComponent<LookArrowController>().isActive = true;
@@ -70,7 +70,7 @@ public class LookArrowController : MonoBehaviour
 
     public void ArrowReleased()
     {
-        if (BattleManager.viewType == "perspective")
+        if (GameManagerController.viewType == "perspective")
         {
             myCamera.GetComponent<PanZoom>().StopRotate();
             BattleManager.isInputBlocked = false;
@@ -79,7 +79,7 @@ public class LookArrowController : MonoBehaviour
 
     public void ArrowPressed()
     {
-        if(BattleManager.viewType == "perspective")
+        if(GameManagerController.viewType == "perspective")
         {
             BattleManager.isInputBlocked = true;
             if (directionType == directionEnum.right) myCamera.GetComponent<PanZoom>().ArrowPressed("right");

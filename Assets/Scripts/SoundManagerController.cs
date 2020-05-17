@@ -23,11 +23,12 @@ public class SoundManagerController : MonoBehaviour
         {
             _instance = this;
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     public void PlayThrowSound(int a)
     {
-        if(BattleManager.isSoundEnabled) myAudioSource.PlayOneShot(throwDiceSound, BattleManager.soundLevel);
+        if(GameManagerController.isSoundEnabled) myAudioSource.PlayOneShot(throwDiceSound, GameManagerController.soundLevel);
     }
 
     // Start is called before the first frame update
@@ -43,6 +44,6 @@ public class SoundManagerController : MonoBehaviour
     }
     public void PlayStartTurn()
     {
-        if (BattleManager.isSoundEnabled) myAudioSource.PlayOneShot(turnStartSound, BattleManager.soundLevel-0.4f);
+        if (GameManagerController.isSoundEnabled) myAudioSource.PlayOneShot(turnStartSound, GameManagerController.soundLevel-0.4f);
     }
 }

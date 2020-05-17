@@ -26,6 +26,6 @@ public class SettingsController : MonoBehaviour
         mySequence3.Append(backButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mySequence3.Append(transform.DOScale(0.0f, 0.0f));
         mySequence3.Append(menuPanel.transform.DOScale(1.0f, 0.0f));
-        BattleManager.isInputBlocked = false;
+        //BattleManager.isInputBlocked = false;
     }
 }

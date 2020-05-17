@@ -17,6 +17,7 @@ public class BlackPanelController : MonoBehaviour
             myImage.material.color = c;
             yield return new WaitForSeconds(.01f);
         }
+        Destroy(gameObject);
     }
 
     // Start is called before the first frame update

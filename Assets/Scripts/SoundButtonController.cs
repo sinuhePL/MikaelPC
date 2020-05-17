@@ -6,11 +6,11 @@ public class SoundButtonController : MenuElementController
 {
     protected override void onElementEnabled()
     {
-        BattleManager.isSoundEnabled = true;
+        GameManagerController.isSoundEnabled = true;
     }
 
     protected override void onElementDisabled()
     {
-        BattleManager.isSoundEnabled = false;
+        GameManagerController.isSoundEnabled = false;
     }
 }

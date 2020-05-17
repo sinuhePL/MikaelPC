@@ -127,7 +127,7 @@ public class EndTurnController : MonoBehaviour
     {
         myText.text = "End Turn";
         mode = 2;
-        if (BattleManager.turnOwnerId == 1 && !BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && !BattleManager.isPlayer2Human) ButtonPressed();
+        if (BattleManager.turnOwnerId == 1 && !GameManagerController.isPlayer1Human || BattleManager.turnOwnerId == 2 && !GameManagerController.isPlayer2Human) ButtonPressed();
         else StartCoroutine(WaitForClick());
     }
 
@@ -141,7 +141,7 @@ public class EndTurnController : MonoBehaviour
         }
         if (BattleManager.turnOwnerId == BattleManager.Instance.GetAttack(attackId).GetOwner().GetArmyId() && !BattleManager.hasTurnOwnerAttacked)
         {
-            if (BattleManager.turnOwnerId == 1 && BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && BattleManager.isPlayer2Human)
+            if (BattleManager.turnOwnerId == 1 && GameManagerController.isPlayer1Human || BattleManager.turnOwnerId == 2 && GameManagerController.isPlayer2Human)
             {
                 myText.text = "Attack";
                 mode = 3;

@@ -51,7 +51,7 @@ public class PanZoom : MonoBehaviour
 
     private void ZoomOut(StateChange r)
     {
-        if (BattleManager.viewType == "isometric") StartCoroutine(ZoomAtDice(0.5f, 4.0f, 0.0f));
+        if (GameManagerController.viewType == "isometric") StartCoroutine(ZoomAtDice(0.5f, 4.0f, 0.0f));
         else
         {
             myCamera.transform.DOMove(prevCamPosition, 0.5f).SetEase(Ease.OutQuint);
@@ -66,7 +66,7 @@ public class PanZoom : MonoBehaviour
 
     private void TurnEnd()
     {
-        if(BattleManager.isPlayer1Human && BattleManager.isPlayer2Human) ChangeViewAngle("button");
+        if(GameManagerController.isPlayer1Human && GameManagerController.isPlayer2Human) ChangeViewAngle("button");
     }
 
     private void OnEnable()
@@ -105,8 +105,8 @@ public class PanZoom : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if(BattleManager.viewType == "isometric") touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
-                else if (BattleManager.viewType == "perspective") touchStart = GetCursorWorldPosition();
+                if(GameManagerController.viewType == "isometric") touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
+                else if (GameManagerController.viewType == "perspective") touchStart = GetCursorWorldPosition();
             }
             if (Input.touchCount == 2)
             {
@@ -121,18 +121,18 @@ public class PanZoom : MonoBehaviour
 
                 float difference = currentMagnitude - prevMagnitude;
 
-                if (BattleManager.viewType == "isometric") zoom(difference * 0.01f);
-                else if (BattleManager.viewType == "perspective") zoomPerspective(difference * 0.1f);
+                if (GameManagerController.viewType == "isometric") zoom(difference * 0.01f);
+                else if (GameManagerController.viewType == "perspective") zoomPerspective(difference * 0.1f);
             }
             else if (Input.GetMouseButton(0))
             {
                 Vector3 direction, tempPosition;
-                if (BattleManager.viewType == "isometric") direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
-                else if (BattleManager.viewType == "perspective") direction = touchStart - GetCursorWorldPosition();
+                if (GameManagerController.viewType == "isometric") direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
+                else if (GameManagerController.viewType == "perspective") direction = touchStart - GetCursorWorldPosition();
                 else direction = new Vector3(0.0f, 0.0f, 0.0f);
                 Vector3 previousCamPosition = myCamera.transform.position;
                 // limits camera movement
-                if (BattleManager.viewType == "perspective")
+                if (GameManagerController.viewType == "perspective")
                 {
                     direction = new Vector3(direction.x, 0.0f, direction.z + direction.y);
                     tempPosition = myCamera.transform.position + direction * 0.1f;
@@ -171,8 +171,8 @@ public class PanZoom : MonoBehaviour
             float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
             if (mouseScrollWheel != 0)
             {
-                if (BattleManager.viewType == "isometric") zoom(mouseScrollWheel);
-                else if (BattleManager.viewType == "perspective") zoomPerspective(mouseScrollWheel * 80.0f);
+                if (GameManagerController.viewType == "isometric") zoom(mouseScrollWheel);
+                else if (GameManagerController.viewType == "perspective") zoomPerspective(mouseScrollWheel * 80.0f);
             }
         }
     }
@@ -219,7 +219,7 @@ public class PanZoom : MonoBehaviour
         RaycastHit groundHit;
         Vector3 dif, newpos, campos;
         Sequence cameraSequence = DOTween.Sequence();
-        if (BattleManager.viewType == "isometric")
+        if (GameManagerController.viewType == "isometric")
         {
             StartCoroutine(ZoomAtDice(0.5f, 3.0f, delay));
             groundMask = LayerMask.GetMask("Ground");

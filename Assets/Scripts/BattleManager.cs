@@ -38,16 +38,9 @@ public class BattleManager : MonoBehaviour {
     public static float boardFieldHeight = 4.0f;
     public static int maxSquads = 12;
     public static int turnOwnerId = 1;
-    public static bool isPlayer1Human = true;
-    public static bool isPlayer2Human = false;
     public static bool hasTurnOwnerAttacked = false;
-    public static bool isSoundEnabled = true;
-    public static bool isMusicEnabled = true;
-    public static float soundLevel = 0.9f;
-    public static float musicLevel = 0.7f;
     public static float minimaxLimit = 20.0f;
     public static bool isInputBlocked = false;
-    public static string viewType = "perspective";
     public static string gameMode = "deploy";
 
     public const string Army1Color = "#4158f3";
@@ -100,7 +93,6 @@ public class BattleManager : MonoBehaviour {
 
         units = new List<GameObject>();
         tiles = new List<GameObject>();
-        DOTween.Init();
         Random.InitState(System.Environment.TickCount);
         myCamera = Camera.main;
         armyRouteTest = 0;
@@ -551,7 +543,7 @@ public class BattleManager : MonoBehaviour {
     private void TurnStart()
     {
         hasTurnOwnerAttacked = false;
-        if (turnOwnerId == 1 && !isPlayer1Human || turnOwnerId == 2 && !isPlayer2Human)
+        if (turnOwnerId == 1 && !GameManagerController.isPlayer1Human || turnOwnerId == 2 && !GameManagerController.isPlayer2Human)
         {
             ComputeBestAttack();
         }

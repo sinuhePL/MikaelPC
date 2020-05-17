@@ -18,7 +18,7 @@ public class AttackMenuController : MonoBehaviour
         Sequence mySequence = DOTween.Sequence();
         Attack tempAttack;
 
-        if (BattleManager.turnOwnerId == 1 && !BattleManager.isPlayer1Human || BattleManager.turnOwnerId == 2 && !BattleManager.isPlayer2Human) return;
+        if (BattleManager.turnOwnerId == 1 && !GameManagerController.isPlayer1Human || BattleManager.turnOwnerId == 2 && !GameManagerController.isPlayer2Human) return;
         if (isVisible)  // hide previous attack
         {
             mySequence.Append(transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack));

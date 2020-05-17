@@ -47,5 +47,6 @@ public class MenuController : MonoBehaviour
     public void QuitClicked()
     {
         quitButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
+        GameManagerController.Instance.LoadLevel("MenuScene");
     }
 }

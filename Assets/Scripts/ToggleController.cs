@@ -27,7 +27,7 @@ public class ToggleController : MonoBehaviour
             else if (enumType == toggleEnum.hard) BattleManager.minimaxLimit = 30.0f;
             else if (enumType == toggleEnum.perspective)
             {
-                BattleManager.viewType = "perspective";
+                GameManagerController.viewType = "perspective";
                 if (myCamera != null)
                 {
                     myCamera.orthographic = false;
@@ -37,7 +37,7 @@ public class ToggleController : MonoBehaviour
             }
             else if (enumType == toggleEnum.isometric)
             {
-                BattleManager.viewType = "isometric";
+                GameManagerController.viewType = "isometric";
                 if (myCamera != null)
                 {
                     myCamera.orthographic = true;
