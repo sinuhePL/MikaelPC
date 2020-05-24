@@ -70,7 +70,7 @@ public class UnitController : MonoBehaviour
 
     protected void myUnitClicked(int idUnit)
     {
-        if(!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
+        if(!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
             if (idUnit == UnitId && !isOutlined)
             {
@@ -201,8 +201,8 @@ public class UnitController : MonoBehaviour
 
     protected void ChangePosition(int tileId)
     {
-        float xpos = (tileId / BattleManager.boardHeight + 2) * BattleManager.boardFieldWitdth - BattleManager.boardFieldWitdth * 0.25f;
-        float zpos = (tileId % BattleManager.boardHeight) * -1.0f * BattleManager.boardFieldHeight - BattleManager.boardFieldHeight;
+        float xpos = (tileId / BattleManager.Instance.boardHeight + 2) * BattleManager.Instance.boardFieldWitdth - BattleManager.Instance.boardFieldWitdth * 0.25f;
+        float zpos = (tileId % BattleManager.Instance.boardHeight) * -1.0f * BattleManager.Instance.boardFieldHeight - BattleManager.Instance.boardFieldHeight;
         transform.position = new Vector3(xpos, 0.05f, zpos);
         _unitTileId = tileId;
     }
@@ -325,7 +325,7 @@ public class UnitController : MonoBehaviour
 
         if (!isInitialized)
         {
-            if (initialStrength > BattleManager.maxSquads)
+            if (initialStrength > BattleManager.Instance.maxSquads)
             {
                 Debug.Log("Tried to create too much squads in unit! Id: " + unitId);
                 return;

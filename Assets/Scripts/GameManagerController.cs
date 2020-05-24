@@ -6,14 +6,19 @@ using DG.Tweening;
 
 public class GameManagerController : MonoBehaviour
 {
+    public enum viewTypeEnum {perspective, isometric };
+    public enum diffLevelEnum {easy, medium, hard};
     private static GameManagerController _instance;
-    public static bool isSoundEnabled = true;
-    public static bool isMusicEnabled = true;
-    public static float soundLevel = 0.9f;
-    public static float musicLevel = 0.7f;
-    public static bool isPlayer1Human = true;
-    public static bool isPlayer2Human = true;
-    public static string viewType = "perspective";
+    public bool isSoundEnabled = true;
+    public bool isMusicEnabled = true;
+    [Range(0.0f, 1.0f)]
+    public float soundLevel = 0.9f;
+    [Range(0.0f, 1.0f)]
+    public float musicLevel = 0.7f;
+    public bool isPlayer1Human = true;
+    public bool isPlayer2Human = true;
+    public viewTypeEnum viewType = viewTypeEnum.perspective;
+    public diffLevelEnum difficultyLevel = diffLevelEnum.medium;
 
     private void Awake()
     {

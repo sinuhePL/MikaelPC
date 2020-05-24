@@ -643,7 +643,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -28}
+  m_AnchoredPosition: {x: -241, y: 68}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &104793600
@@ -1432,7 +1432,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 162, y: 150}
+  m_AnchoredPosition: {x: -79, y: 246}
   m_SizeDelta: {x: 167, y: 147}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &235594383
@@ -1808,7 +1808,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -165, y: -90}
+  m_AnchoredPosition: {x: -406, y: 6}
   m_SizeDelta: {x: 129.8, y: 37.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &306666510
@@ -1864,6 +1864,7 @@ GameObject:
   - component: {fileID: 308823803}
   - component: {fileID: 308823804}
   - component: {fileID: 308823805}
+  - component: {fileID: 308823806}
   m_Layer: 5
   m_Name: mediumToggle
   m_TagString: Untagged
@@ -1889,7 +1890,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -106, y: -189}
+  m_AnchoredPosition: {x: -347, y: -93}
   m_SizeDelta: {x: 160.3, y: 45.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &308823804
@@ -1937,18 +1938,7 @@ MonoBehaviour:
   m_Group: {fileID: 95734228}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 308823805}
-        m_MethodName: ToggleChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1
@@ -1965,6 +1955,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enumType: 0
+--- !u!114 &308823806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308823802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 308823805}
+          m_MethodName: ToggleChanged
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &321239371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1999,7 +2019,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 714}
+  m_AnchoredPosition: {x: 130.9, y: 689}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &321239373
@@ -2073,7 +2093,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 224, y: -28}
+  m_AnchoredPosition: {x: -17, y: 68}
   m_SizeDelta: {x: 104, y: 127}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &381280643
@@ -2147,7 +2167,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4.5, y: -81.7}
+  m_AnchoredPosition: {x: 56, y: -91.3}
   m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &382596825
@@ -2387,7 +2407,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -10, y: -30}
+  m_AnchoredPosition: {x: -251, y: 66}
   m_SizeDelta: {x: 440, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &492145176
@@ -2780,6 +2800,7 @@ GameObject:
   - component: {fileID: 703126951}
   - component: {fileID: 703126952}
   - component: {fileID: 703126953}
+  - component: {fileID: 703126954}
   m_Layer: 5
   m_Name: easyToggle
   m_TagString: Untagged
@@ -2805,7 +2826,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -127, y: -138}
+  m_AnchoredPosition: {x: -368, y: -42}
   m_SizeDelta: {x: 124.9, y: 45.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &703126952
@@ -2853,18 +2874,7 @@ MonoBehaviour:
   m_Group: {fileID: 95734228}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 703126953}
-        m_MethodName: ToggleChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
@@ -2881,6 +2891,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enumType: 0
+--- !u!114 &703126954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703126950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 703126953}
+          m_MethodName: ToggleChanged
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -2983,6 +3023,7 @@ GameObject:
   - component: {fileID: 724529614}
   - component: {fileID: 724529615}
   - component: {fileID: 724529616}
+  - component: {fileID: 724529617}
   m_Layer: 5
   m_Name: hardToggle
   m_TagString: Untagged
@@ -3008,7 +3049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -129, y: -240}
+  m_AnchoredPosition: {x: -370, y: -144}
   m_SizeDelta: {x: 142.6, y: 45.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &724529615
@@ -3056,18 +3097,7 @@ MonoBehaviour:
   m_Group: {fileID: 95734228}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 724529616}
-        m_MethodName: ToggleChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
@@ -3084,6 +3114,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enumType: 0
+--- !u!114 &724529617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724529613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 724529616}
+          m_MethodName: ToggleChanged
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &738691190
 GameObject:
   m_ObjectHideFlags: 0
@@ -3120,7 +3180,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -179, y: 150}
+  m_AnchoredPosition: {x: -420, y: 246}
   m_SizeDelta: {x: 167, y: 147}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &738691192
@@ -3241,6 +3301,7 @@ GameObject:
   - component: {fileID: 739196334}
   - component: {fileID: 739196336}
   - component: {fileID: 739196335}
+  - component: {fileID: 739196337}
   m_Layer: 5
   m_Name: perspectiveToggle
   m_TagString: Untagged
@@ -3266,7 +3327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 165, y: -192.83}
+  m_AnchoredPosition: {x: -76, y: -96.83}
   m_SizeDelta: {x: 182.1, y: 48.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &739196335
@@ -3327,21 +3388,40 @@ MonoBehaviour:
   m_Group: {fileID: 1091092373}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 739196335}
-        m_MethodName: ToggleChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
+--- !u!114 &739196337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739196333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 739196335}
+          m_MethodName: ToggleChanged
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &748443953
 GameObject:
   m_ObjectHideFlags: 0
@@ -3529,7 +3609,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 94, y: -90}
+  m_AnchoredPosition: {x: -147, y: 6}
   m_SizeDelta: {x: 129.8, y: 37.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &854905365
@@ -4504,8 +4584,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.5, y: 27.5}
-  m_SizeDelta: {x: -1255, y: -145}
+  m_AnchoredPosition: {x: 195, y: -15}
+  m_SizeDelta: {x: -770, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1060396343
 MonoBehaviour:
@@ -4669,7 +4749,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -241, y: 96}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1091092373
@@ -4971,7 +5051,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -10, y: 59}
+  m_AnchoredPosition: {x: -251, y: 155}
   m_SizeDelta: {x: 440, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1184935446
@@ -5111,6 +5191,15 @@ MonoBehaviour:
     type: 3}
   imperialCavaleryPrefab: {fileID: 1393855818835718730, guid: 07b980fb536eed9449e87fb6e53b723e,
     type: 3}
+  boardWidth: 6
+  boardHeight: 5
+  boardFieldWitdth: 4
+  boardFieldHeight: 4
+  maxSquads: 12
+  turnOwnerId: 1
+  hasTurnOwnerAttacked: 0
+  isInputBlocked: 0
+  gameMode: deploy
 --- !u!4 &1185829298
 Transform:
   m_ObjectHideFlags: 0
@@ -5184,7 +5273,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8, y: -609}
+  m_AnchoredPosition: {x: 8, y: -640}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1219945726
@@ -5574,7 +5663,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -240, y: -28}
+  m_AnchoredPosition: {x: -481, y: 68}
   m_SizeDelta: {x: 104, y: 127}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1259055521
@@ -6224,7 +6313,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.6, y: 77}
+  m_AnchoredPosition: {x: -220, y: 141}
   m_SizeDelta: {x: 446.3, y: 141.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1364845118
@@ -6262,7 +6351,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'Renaissance Battles:
 
-    Pavia'
+    Pavia 1525'
 --- !u!222 &1364845119
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6384,7 +6473,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -4.938}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28.55, y: -589}
+  m_AnchoredPosition: {x: 28.55, y: -620}
   m_SizeDelta: {x: 28.83, y: 46.77}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1385844382
@@ -6752,7 +6841,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.5, y: 275}
+  m_AnchoredPosition: {x: -219.90002, y: 339}
   m_SizeDelta: {x: 120.6, y: 68.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1432562096
@@ -7045,7 +7134,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 222, y: 58}
+  m_AnchoredPosition: {x: -19, y: 154}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1493418671
@@ -7426,7 +7515,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -8, y: 274}
+  m_AnchoredPosition: {x: -249, y: 370}
   m_SizeDelta: {x: 120.6, y: 68.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1556316767
@@ -7679,7 +7768,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: -280}
+  m_AnchoredPosition: {x: -189.40002, y: -216}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1621825477
@@ -7963,7 +8052,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: -76}
+  m_AnchoredPosition: {x: -189.40002, y: -12}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1710054396
@@ -8395,7 +8484,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 35, y: -352}
+  m_AnchoredPosition: {x: -206, y: -256}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1789393445
@@ -8874,8 +8963,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.5, y: 27.5}
-  m_SizeDelta: {x: -1255, y: -145}
+  m_AnchoredPosition: {x: 225, y: 0}
+  m_SizeDelta: {x: -896, y: -56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1866758883
 MonoBehaviour:
@@ -9202,7 +9291,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -241, y: 59}
+  m_AnchoredPosition: {x: -482, y: 155}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1980583297
@@ -9346,6 +9435,7 @@ GameObject:
   - component: {fileID: 1993111597}
   - component: {fileID: 1993111599}
   - component: {fileID: 1993111598}
+  - component: {fileID: 1993111600}
   m_Layer: 5
   m_Name: isometricToggle
   m_TagString: Untagged
@@ -9371,7 +9461,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 158, y: -138}
+  m_AnchoredPosition: {x: -83, y: -42}
   m_SizeDelta: {x: 169.95, y: 45.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1993111598
@@ -9432,21 +9522,40 @@ MonoBehaviour:
   m_Group: {fileID: 1091092373}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1993111598}
-        m_MethodName: ToggleChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 1
+--- !u!114 &1993111600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993111596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1993111598}
+          m_MethodName: ToggleChanged
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!1 &2010350005
 GameObject:
   m_ObjectHideFlags: 0
@@ -9835,7 +9944,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: -179}
+  m_AnchoredPosition: {x: -189.40002, y: -115}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2065170310

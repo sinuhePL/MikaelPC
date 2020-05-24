@@ -58,18 +58,18 @@ public class EndTurnController : MonoBehaviour
 
     public void ButtonPressed()
     {
-        if (!BattleManager.isInputBlocked)
+        if (!BattleManager.Instance.isInputBlocked)
         {
             transform.DOKill();
             transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
             if (mode == 0) return;
             if (mode == 1) // if displays End Deployment
             {
-                if(BattleManager.turnOwnerId == 1)
+                if(BattleManager.Instance.turnOwnerId == 1)
                 {
                     EventManager.RaiseEventOnDeploymentStart(2);
                 }
-                else if(BattleManager.turnOwnerId == 2)
+                else if(BattleManager.Instance.turnOwnerId == 2)
                 {
                     EventManager.RaiseEventOnDeploymentStart(3);
                     leftArrow.SetActive(true);
@@ -82,8 +82,8 @@ public class EndTurnController : MonoBehaviour
                 isClicked = true;
                 leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
                 rightArrow.GetComponent<LookArrowController>().ChangeActivityState();
-                if (BattleManager.turnOwnerId == 1) BattleManager.turnOwnerId = 2;
-                else BattleManager.turnOwnerId = 1;
+                if (BattleManager.Instance.turnOwnerId == 1) BattleManager.Instance.turnOwnerId = 2;
+                else BattleManager.Instance.turnOwnerId = 1;
                 EventManager.RaiseEventOnTurnEnd();
                 return;
             }
@@ -127,7 +127,7 @@ public class EndTurnController : MonoBehaviour
     {
         myText.text = "End Turn";
         mode = 2;
-        if (BattleManager.turnOwnerId == 1 && !GameManagerController.isPlayer1Human || BattleManager.turnOwnerId == 2 && !GameManagerController.isPlayer2Human) ButtonPressed();
+        if (BattleManager.Instance.turnOwnerId == 1 && !GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && !GameManagerController.Instance.isPlayer2Human) ButtonPressed();
         else StartCoroutine(WaitForClick());
     }
 
@@ -139,9 +139,9 @@ public class EndTurnController : MonoBehaviour
             mode = 0;
             return;
         }
-        if (BattleManager.turnOwnerId == BattleManager.Instance.GetAttack(attackId).GetOwner().GetArmyId() && !BattleManager.hasTurnOwnerAttacked)
+        if (BattleManager.Instance.turnOwnerId == BattleManager.Instance.GetAttack(attackId).GetOwner().GetArmyId() && !BattleManager.Instance.hasTurnOwnerAttacked)
         {
-            if (BattleManager.turnOwnerId == 1 && GameManagerController.isPlayer1Human || BattleManager.turnOwnerId == 2 && GameManagerController.isPlayer2Human)
+            if (BattleManager.Instance.turnOwnerId == 1 && GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && GameManagerController.Instance.isPlayer2Human)
             {
                 myText.text = "Attack";
                 mode = 3;

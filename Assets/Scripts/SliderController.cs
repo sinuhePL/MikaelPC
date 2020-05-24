@@ -17,7 +17,7 @@ public class SliderController : MonoBehaviour
 
     public void ValueChanged()
     {
-        if (controlObject == controlType.sound) GameManagerController.soundLevel = mySlider.value;
-        else if (controlObject == controlType.music) GameManagerController.musicLevel = mySlider.value;
+        if (controlObject == controlType.sound) GameManagerController.Instance.soundLevel = mySlider.value;
+        else if (controlObject == controlType.music) GameManagerController.Instance.musicLevel = mySlider.value;
     }
 }

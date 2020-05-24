@@ -13,7 +13,7 @@ public class PictureController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit = null;
-        if (!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
+        if (!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
             tempUnit = BattleManager.Instance.GetUnit(unitId);
             switch (tempUnit.GetUnitType())

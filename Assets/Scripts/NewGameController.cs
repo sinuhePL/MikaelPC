@@ -21,10 +21,11 @@ public class NewGameController : MonoBehaviour
         {
             if (b.name == "backButton") backButton = b;
         }
-        difficultyText.gameObject.SetActive(false);
+        DisplayDifficultyLevel(false);
+        /*difficultyText.gameObject.SetActive(false);
         easyToggle.gameObject.SetActive(false);
         mediumToggle.gameObject.SetActive(false);
-        hardToggle.gameObject.SetActive(false);
+        hardToggle.gameObject.SetActive(false);*/
     }
 
     public void BackClicked()
@@ -35,11 +36,25 @@ public class NewGameController : MonoBehaviour
         mmSequence2.Append(menuPanel.transform.DOScale(1.0f, 0.0f));
     }
 
-    public void DisplayDifficultyLevel(bool condition)
+    public void DisplayDifficultyLevel(bool show)
     {
-        difficultyText.gameObject.SetActive(condition);
+        if (!show)
+        {
+            difficultyText.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            easyToggle.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            mediumToggle.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+            hardToggle.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+        }
+        else
+        {
+            difficultyText.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            easyToggle.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            mediumToggle.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            hardToggle.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        }
+        /*difficultyText.gameObject.SetActive(condition);
         easyToggle.gameObject.SetActive(condition);
         mediumToggle.gameObject.SetActive(condition);
-        hardToggle.gameObject.SetActive(condition);
+        hardToggle.gameObject.SetActive(condition);*/
     }
 }

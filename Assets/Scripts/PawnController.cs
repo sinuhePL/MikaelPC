@@ -22,7 +22,7 @@ public class PawnController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (!IsPointerOverGameObject() && ((BattleManager.turnOwnerId == 1 && GameManagerController.isPlayer1Human || BattleManager.turnOwnerId == 2 && GameManagerController.isPlayer2Human) || BattleManager.gameMode == "deploy"))
+        if (!IsPointerOverGameObject() && ((BattleManager.Instance.turnOwnerId == 1 && GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && GameManagerController.Instance.isPlayer2Human) || BattleManager.Instance.gameMode == "deploy"))
         {
             EventManager.RaiseEventOnUnitClicked(_unitId);
         }
@@ -58,7 +58,7 @@ public class PawnController : MonoBehaviour
     public void EnableOutline()
     {
         transform.DOPunchScale(new Vector3(1.5f, 1.5f, 1.5f), 0.5f, 10, 1);
-        if(GameManagerController.viewType == "isometric") GetComponent<Renderer>().materials[0].SetFloat("_OutlineWidth", 0.001f);
+        if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) GetComponent<Renderer>().materials[0].SetFloat("_OutlineWidth", 0.001f);
         else GetComponent<Renderer>().materials[0].SetFloat("_OutlineWidth", 0.001f);
     }
 

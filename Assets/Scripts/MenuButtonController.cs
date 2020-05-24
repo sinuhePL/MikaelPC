@@ -8,9 +8,9 @@ public class MenuButtonController : MonoBehaviour
 {
     public void ButtonPressed()
     {
-        if (!BattleManager.isInputBlocked)
+        if (!BattleManager.Instance.isInputBlocked)
         {
-            BattleManager.isInputBlocked = true;
+            BattleManager.Instance.isInputBlocked = true;
             transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
         }
     }

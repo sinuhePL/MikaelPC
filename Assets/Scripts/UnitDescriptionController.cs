@@ -73,7 +73,7 @@ public class UnitDescriptionController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit = null;
-        if (!BattleManager.isInputBlocked && BattleManager.gameMode != "deploy")
+        if (!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
             if (unitId == lastUnitClicked) ShowHide(false);
             else

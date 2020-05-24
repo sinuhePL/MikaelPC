@@ -51,7 +51,7 @@ public class PanZoom : MonoBehaviour
 
     private void ZoomOut(StateChange r)
     {
-        if (GameManagerController.viewType == "isometric") StartCoroutine(ZoomAtDice(0.5f, 4.0f, 0.0f));
+        if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) StartCoroutine(ZoomAtDice(0.5f, 4.0f, 0.0f));
         else
         {
             myCamera.transform.DOMove(prevCamPosition, 0.5f).SetEase(Ease.OutQuint);
@@ -66,7 +66,7 @@ public class PanZoom : MonoBehaviour
 
     private void TurnEnd()
     {
-        if(GameManagerController.isPlayer1Human && GameManagerController.isPlayer2Human) ChangeViewAngle("button");
+        if(GameManagerController.Instance.isPlayer1Human && GameManagerController.Instance.isPlayer2Human) ChangeViewAngle("button");
     }
 
     private void OnEnable()
@@ -83,6 +83,18 @@ public class PanZoom : MonoBehaviour
         myCamera = Camera.main;
         lookDirection = 1;
         stopRotate = false;
+        if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric)
+        {
+            myCamera.orthographic = true;
+            myCamera.transform.localRotation = Quaternion.Euler(new Vector3(30.0f, 45.0f, 0.0f));
+            myCamera.transform.position = new Vector3(8.0f, 12.0f, -25.0f);
+        }
+        else if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective)
+        {
+            myCamera.orthographic = false;
+            myCamera.transform.localRotation = Quaternion.Euler(new Vector3(45.0f, 30.0f, 0.0f));
+            myCamera.transform.position = new Vector3(8.0f, 6.0f, -25.0f);
+        }
     }
 
     private void OnDestroy()
@@ -101,12 +113,12 @@ public class PanZoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!BattleManager.isInputBlocked)
+        if (!BattleManager.Instance.isInputBlocked)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if(GameManagerController.viewType == "isometric") touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
-                else if (GameManagerController.viewType == "perspective") touchStart = GetCursorWorldPosition();
+                if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
+                else if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective) touchStart = GetCursorWorldPosition();
             }
             if (Input.touchCount == 2)
             {
@@ -121,25 +133,25 @@ public class PanZoom : MonoBehaviour
 
                 float difference = currentMagnitude - prevMagnitude;
 
-                if (GameManagerController.viewType == "isometric") zoom(difference * 0.01f);
-                else if (GameManagerController.viewType == "perspective") zoomPerspective(difference * 0.1f);
+                if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) zoom(difference * 0.01f);
+                else if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective) zoomPerspective(difference * 0.1f);
             }
             else if (Input.GetMouseButton(0))
             {
                 Vector3 direction, tempPosition;
-                if (GameManagerController.viewType == "isometric") direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
-                else if (GameManagerController.viewType == "perspective") direction = touchStart - GetCursorWorldPosition();
+                if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
+                else if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective) direction = touchStart - GetCursorWorldPosition();
                 else direction = new Vector3(0.0f, 0.0f, 0.0f);
                 Vector3 previousCamPosition = myCamera.transform.position;
                 // limits camera movement
-                if (GameManagerController.viewType == "perspective")
+                if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective)
                 {
                     direction = new Vector3(direction.x, 0.0f, direction.z + direction.y);
                     tempPosition = myCamera.transform.position + direction * 0.1f;
                     if (tempPosition.x > 4.0f 
                         && tempPosition.z < -8.0f 
-                        && tempPosition.x < BattleManager.boardFieldWitdth * BattleManager.boardWidth + 8.0f 
-                        && tempPosition.z > -1.0f * BattleManager.boardFieldHeight * BattleManager.boardHeight - 8.0f)
+                        && tempPosition.x < BattleManager.Instance.boardFieldWitdth * BattleManager.Instance.boardWidth + 8.0f 
+                        && tempPosition.z > -1.0f * BattleManager.Instance.boardFieldHeight * BattleManager.Instance.boardHeight - 8.0f)
                     {
                         myCamera.transform.position += direction * 0.1f;
                     }
@@ -154,15 +166,15 @@ public class PanZoom : MonoBehaviour
                       if (!Physics.Raycast(lbRay) || !Physics.Raycast(ltRay) || !Physics.Raycast(rbRay) || !Physics.Raycast(rtRay))*/
                     if (lookDirection == 1 && (myCamera.transform.position.x < -2.0f
                         || myCamera.transform.position.z > -16.0f
-                        || myCamera.transform.position.x > BattleManager.boardFieldWitdth * BattleManager.boardWidth - 4.0f
-                        || myCamera.transform.position.z < -1.0f * BattleManager.boardFieldHeight * BattleManager.boardHeight - 18.0f))
+                        || myCamera.transform.position.x > BattleManager.Instance.boardFieldWitdth * BattleManager.Instance.boardWidth - 4.0f
+                        || myCamera.transform.position.z < -1.0f * BattleManager.Instance.boardFieldHeight * BattleManager.Instance.boardHeight - 18.0f))
                     {
                         myCamera.transform.position = previousCamPosition;
                     }
                     else if (lookDirection == 2 && (myCamera.transform.position.x < 22.0f
                         || myCamera.transform.position.z > -22.0f
-                        || myCamera.transform.position.x > BattleManager.boardFieldWitdth * BattleManager.boardWidth + 16.0f
-                        || myCamera.transform.position.z < -1.0f * BattleManager.boardFieldHeight * BattleManager.boardHeight - 20.0f))
+                        || myCamera.transform.position.x > BattleManager.Instance.boardFieldWitdth * BattleManager.Instance.boardWidth + 16.0f
+                        || myCamera.transform.position.z < -1.0f * BattleManager.Instance.boardFieldHeight * BattleManager.Instance.boardHeight - 20.0f))
                     {
                         myCamera.transform.position = previousCamPosition;
                     }
@@ -171,8 +183,8 @@ public class PanZoom : MonoBehaviour
             float mouseScrollWheel = Input.GetAxis("Mouse ScrollWheel");
             if (mouseScrollWheel != 0)
             {
-                if (GameManagerController.viewType == "isometric") zoom(mouseScrollWheel);
-                else if (GameManagerController.viewType == "perspective") zoomPerspective(mouseScrollWheel * 80.0f);
+                if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) zoom(mouseScrollWheel);
+                else if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective) zoomPerspective(mouseScrollWheel * 80.0f);
             }
         }
     }
@@ -219,7 +231,7 @@ public class PanZoom : MonoBehaviour
         RaycastHit groundHit;
         Vector3 dif, newpos, campos;
         Sequence cameraSequence = DOTween.Sequence();
-        if (GameManagerController.viewType == "isometric")
+        if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric)
         {
             StartCoroutine(ZoomAtDice(0.5f, 3.0f, delay));
             groundMask = LayerMask.GetMask("Ground");
@@ -289,7 +301,7 @@ public class PanZoom : MonoBehaviour
         if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
         {
             //obraca kamerę wokół punktu na który patrzy, kierunekj zalezy od kierunku aktualnego
-            if (BattleManager.turnOwnerId == 1)
+            if (BattleManager.Instance.turnOwnerId == 1)
             {
                 if(lookDirection == 1)
                 {

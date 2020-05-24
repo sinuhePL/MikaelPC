@@ -6,11 +6,11 @@ public class MusicButtonController : MenuElementController
 {
     protected override void onElementEnabled()
     {
-        GameManagerController.isMusicEnabled = true;
+        GameManagerController.Instance.isMusicEnabled = true;
     }
 
     protected override void onElementDisabled()
     {
-        GameManagerController.isMusicEnabled = false;
+        GameManagerController.Instance.isMusicEnabled = false;
     }
 }

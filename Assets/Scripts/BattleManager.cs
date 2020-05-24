@@ -32,16 +32,15 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private GameObject imperialCavaleryPrefab;
 
 
-    public static int boardWidth = 6;
-    public static int boardHeight = 5;
-    public static float boardFieldWitdth = 4.0f;
-    public static float boardFieldHeight = 4.0f;
-    public static int maxSquads = 12;
-    public static int turnOwnerId = 1;
-    public static bool hasTurnOwnerAttacked = false;
-    public static float minimaxLimit = 20.0f;
-    public static bool isInputBlocked = false;
-    public static string gameMode = "deploy";
+    public int boardWidth = 6;
+    public int boardHeight = 5;
+    public float boardFieldWitdth = 4.0f;
+    public float boardFieldHeight = 4.0f;
+    public int maxSquads = 12;
+    public int turnOwnerId = 1;
+    public bool hasTurnOwnerAttacked = false;
+    public bool isInputBlocked = false;
+    public string gameMode = "deploy";
 
     public const string Army1Color = "#4158f3";
     public const string Army2Color = "#ecc333";
@@ -145,7 +144,7 @@ public class BattleManager : MonoBehaviour {
     {
         GameObject tempObj;
 
-        BattleManager.turnOwnerId = armyId;
+        BattleManager.Instance.turnOwnerId = armyId;
         if (armyId == 1)
         {
             tempObj = Instantiate(gendarmesPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
@@ -177,7 +176,7 @@ public class BattleManager : MonoBehaviour {
         }
         else if(armyId == 3)
         {
-            BattleManager.turnOwnerId = 1;
+            BattleManager.Instance.turnOwnerId = 1;
             InitiateBoard();
         }
     }
@@ -221,14 +220,14 @@ public class BattleManager : MonoBehaviour {
                 if (leftAttackTile <= 5) leftAttackTile = 0;
                 centralAttackTile = uc.UnitTileId - 2;
                 rightAttackTile = uc.UnitTileId + 3;
-                if (rightAttackTile > BattleManager.boardHeight * BattleManager.boardWidth - BattleManager.boardHeight) rightAttackTile = 0;
+                if (rightAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTile = 0;
             }
             else
             {
                 leftAttackTile = uc.UnitTileId + 7;
                 centralAttackTile = uc.UnitTileId + 2;
                 rightAttackTile = uc.UnitTileId - 3;
-                if (leftAttackTile > BattleManager.boardHeight * BattleManager.boardWidth - BattleManager.boardHeight) leftAttackTile = 0;
+                if (leftAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTile = 0;
                 if (rightAttackTile <= 5) rightAttackTile = 0;
             }
             // sets arrow position depending on direction of attack (left, central right)
@@ -309,14 +308,14 @@ public class BattleManager : MonoBehaviour {
                 if (leftAttackTile <= 5) leftAttackTile = 0;
                 centralAttackTile = uc.UnitTileId - 2;
                 rightAttackTile = uc.UnitTileId + 3;
-                if (rightAttackTile > BattleManager.boardHeight * BattleManager.boardWidth - BattleManager.boardHeight) rightAttackTile = 0;
+                if (rightAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTile = 0;
             }
             else
             {
                 leftAttackTile = uc.UnitTileId + 7;
                 centralAttackTile = uc.UnitTileId + 2;
                 rightAttackTile = uc.UnitTileId - 3;
-                if (leftAttackTile > BattleManager.boardHeight * BattleManager.boardWidth - BattleManager.boardHeight) leftAttackTile = 0;
+                if (leftAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTile = 0;
                 if (rightAttackTile <= 5) rightAttackTile = 0;
             }
             //looks for units ids which sits on tiles pointed at attack arrows
@@ -361,7 +360,7 @@ public class BattleManager : MonoBehaviour {
                 ac.AddActivatingAttack(i);
             }
         }
-        BattleManager.gameMode = "fight";
+        BattleManager.Instance.gameMode = "fight";
         EventManager.RaiseEventGameStart();
     }
 
@@ -543,7 +542,7 @@ public class BattleManager : MonoBehaviour {
     private void TurnStart()
     {
         hasTurnOwnerAttacked = false;
-        if (turnOwnerId == 1 && !GameManagerController.isPlayer1Human || turnOwnerId == 2 && !GameManagerController.isPlayer2Human)
+        if (turnOwnerId == 1 && !GameManagerController.Instance.isPlayer1Human || turnOwnerId == 2 && !GameManagerController.Instance.isPlayer2Human)
         {
             ComputeBestAttack();
         }
@@ -614,9 +613,24 @@ public class BattleManager : MonoBehaviour {
     {
         List<int> avialableAttacks = new List<int>();
         int bestAttack = 0;
-        float score, maxScore;
+        float score, maxScore, minimaxLimit;
 
         maxScore = -1000.0f;
+        switch(GameManagerController.Instance.difficultyLevel)
+        {
+            case GameManagerController.diffLevelEnum.easy:
+                minimaxLimit = 10.0f;
+                break;
+            case GameManagerController.diffLevelEnum.medium:
+                minimaxLimit = 20.0f;
+                break;
+            case GameManagerController.diffLevelEnum.hard:
+                minimaxLimit = 30.0f;
+                break;
+            default:
+                minimaxLimit = 20.0f;
+                break;
+        }
         avialableAttacks = myBoardState.GetPossibleAttacks(turnOwnerId);
         if (avialableAttacks.Count > 0)
         {

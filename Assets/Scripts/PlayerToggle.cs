@@ -18,28 +18,52 @@ public class PlayerToggle : MonoBehaviour
         myNewGameController = NewGamePanel.GetComponent<NewGameController>();
     }
 
+    private void Start()
+    {
+        if (enumType == playerToggleEnum.franceHuman)
+        {
+            if (GameManagerController.Instance.isPlayer1Human) myToggle.isOn = true;
+            else myToggle.isOn = false;
+        }
+        else if (enumType == playerToggleEnum.franceAi)
+        {
+            if (GameManagerController.Instance.isPlayer1Human) myToggle.isOn = false;
+            else myToggle.isOn = true;
+        }
+        else if (enumType == playerToggleEnum.hreHuman)
+        {
+            if (GameManagerController.Instance.isPlayer2Human) myToggle.isOn = true;
+            else myToggle.isOn = false;
+        }
+        else if (enumType == playerToggleEnum.hreAi)
+        {
+            if (GameManagerController.Instance.isPlayer2Human) myToggle.isOn = false;
+            else myToggle.isOn = true;
+        }
+    }
+
     public void ToggleClicked()
     {
         if (myToggle != null && myToggle.isOn)
         {
             if (enumType == playerToggleEnum.franceHuman)
             {
-                GameManagerController.isPlayer1Human = true;
-                if (GameManagerController.isPlayer2Human) myNewGameController.DisplayDifficultyLevel(false);
+                GameManagerController.Instance.isPlayer1Human = true;
+                if (GameManagerController.Instance.isPlayer2Human) myNewGameController.DisplayDifficultyLevel(false);
             }
             else if (enumType == playerToggleEnum.franceAi)
             {
-                GameManagerController.isPlayer1Human = false;
+                GameManagerController.Instance.isPlayer1Human = false;
                 myNewGameController.DisplayDifficultyLevel(true);
             }
             else if (enumType == playerToggleEnum.hreHuman)
             {
-                GameManagerController.isPlayer2Human = true;
-                if (GameManagerController.isPlayer1Human) myNewGameController.DisplayDifficultyLevel(false);
+                GameManagerController.Instance.isPlayer2Human = true;
+                if (GameManagerController.Instance.isPlayer1Human) myNewGameController.DisplayDifficultyLevel(false);
             }
             else if (enumType == playerToggleEnum.hreAi)
             {
-                GameManagerController.isPlayer2Human = false;
+                GameManagerController.Instance.isPlayer2Human = false;
                 myNewGameController.DisplayDifficultyLevel(true);
             }
         }

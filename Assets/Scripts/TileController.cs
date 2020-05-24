@@ -101,14 +101,14 @@ public class TileController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if(BattleManager.gameMode == "deploy")
+        if(BattleManager.Instance.gameMode == "deploy")
         {
-            if(!IsPointerOverGameObject() && myDeployedUnitId == 0 && BattleManager.turnOwnerId == possibleArmyDeployment)
+            if(!IsPointerOverGameObject() && myDeployedUnitId == 0 && BattleManager.Instance.turnOwnerId == possibleArmyDeployment)
             {
                 EventManager.RaiseEventOnUnitDeployed(lastClickedUnit, tileId);
             }
         }
-        else if (!IsPointerOverGameObject() && !BattleManager.isInputBlocked)
+        else if (!IsPointerOverGameObject() && !BattleManager.Instance.isInputBlocked)
         {
             EventManager.RaiseEventOnTileClicked(tileId);
         }
@@ -233,9 +233,9 @@ public class TileController : MonoBehaviour
         {
             topParticleSystem.Play();
             bottomParticleSystem.Play();
-            if(BattleManager.boardHeight + 2 == tileId && aId == 2 || BattleManager.boardHeight + 4 == tileId && aId == 1) leftParticleSystem.Play();
-            if ((BattleManager.boardHeight * BattleManager.boardWidth) - BattleManager.boardHeight - 1 == tileId && aId == 1 ||
-            (BattleManager.boardHeight * BattleManager.boardWidth) - BattleManager.boardHeight - 3 == tileId && aId == 2)
+            if(BattleManager.Instance.boardHeight + 2 == tileId && aId == 2 || BattleManager.Instance.boardHeight + 4 == tileId && aId == 1) leftParticleSystem.Play();
+            if ((BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth) - BattleManager.Instance.boardHeight - 1 == tileId && aId == 1 ||
+            (BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth) - BattleManager.Instance.boardHeight - 3 == tileId && aId == 2)
             {
                 rightParticleSystem.Play();
             }

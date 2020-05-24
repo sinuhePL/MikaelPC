@@ -12,7 +12,7 @@ public class SMController : MonoBehaviour
     private void UnitClicked(int unitId)
     {
         Unit tempUnit = null;
-        if (unitId > 0 && BattleManager.gameMode != "deploy")
+        if (unitId > 0 && BattleManager.Instance.gameMode != "deploy")
         {
             tempUnit = BattleManager.Instance.GetUnit(unitId);
             if (tempUnit == null) return;

@@ -57,9 +57,9 @@ public class LookArrowController : MonoBehaviour
     // zmienia kąt patrzenia kamery obracajac ją wokół punktu na który aktualnie patrzy kamera
     public void ChangeViewAngle()
     {
-        if (isActive && !BattleManager.isInputBlocked)
+        if (isActive && !BattleManager.Instance.isInputBlocked)
         {
-            if (GameManagerController.viewType == "isometric")
+            if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric)
             {
                 myCamera.GetComponent<PanZoom>().ChangeViewAngle("arrow");
                 otherButton.GetComponent<LookArrowController>().isActive = true;
@@ -70,18 +70,18 @@ public class LookArrowController : MonoBehaviour
 
     public void ArrowReleased()
     {
-        if (GameManagerController.viewType == "perspective")
+        if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective)
         {
             myCamera.GetComponent<PanZoom>().StopRotate();
-            BattleManager.isInputBlocked = false;
+            BattleManager.Instance.isInputBlocked = false;
         }
     }
 
     public void ArrowPressed()
     {
-        if(GameManagerController.viewType == "perspective")
+        if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective)
         {
-            BattleManager.isInputBlocked = true;
+            BattleManager.Instance.isInputBlocked = true;
             if (directionType == directionEnum.right) myCamera.GetComponent<PanZoom>().ArrowPressed("right");
             if (directionType == directionEnum.left) myCamera.GetComponent<PanZoom>().ArrowPressed("left");
         }

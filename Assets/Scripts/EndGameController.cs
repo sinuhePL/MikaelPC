@@ -35,7 +35,7 @@ public class EndGameController : MonoBehaviour
     {
         if (winnerId != 0)
         {
-            BattleManager.isInputBlocked = true;
+            BattleManager.Instance.isInputBlocked = true;
             if (winnerId == 1)
             {
                 winnerText.text = "Kingdom of France";

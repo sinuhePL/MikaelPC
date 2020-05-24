@@ -28,7 +28,7 @@ public class SoundManagerController : MonoBehaviour
 
     public void PlayThrowSound(int a)
     {
-        if(GameManagerController.isSoundEnabled) myAudioSource.PlayOneShot(throwDiceSound, GameManagerController.soundLevel);
+        if(GameManagerController.Instance.isSoundEnabled) myAudioSource.PlayOneShot(throwDiceSound, GameManagerController.Instance.soundLevel);
     }
 
     // Start is called before the first frame update
@@ -44,6 +44,6 @@ public class SoundManagerController : MonoBehaviour
     }
     public void PlayStartTurn()
     {
-        if (GameManagerController.isSoundEnabled) myAudioSource.PlayOneShot(turnStartSound, GameManagerController.soundLevel-0.4f);
+        if (GameManagerController.Instance.isSoundEnabled) myAudioSource.PlayOneShot(turnStartSound, GameManagerController.Instance.soundLevel-0.4f);
     }
 }
