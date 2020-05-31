@@ -72,7 +72,7 @@ public class TurnStarterController : MonoBehaviour
 
     private void StartDeployment(int aId)
     {
-        if (aId < 3) TurnEnd();
+        if (aId == 1 && GameManagerController.Instance.isPlayer1Human || aId == 2 && GameManagerController.Instance.isPlayer2Human) TurnEnd();
     }
 
     private void TurnEnd()

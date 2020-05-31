@@ -140,6 +140,29 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
+    private void DeployEasy(int armyId)
+    {
+        List<int> possibleTiles = new List<int>();
+        foreach (GameObject t in tiles)
+        {
+            TileController tc;
+            tc = t.GetComponent<TileController>();
+            if (tc.DeploymentPossible(armyId)) possibleTiles.Add(tc.tileId); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
+        }
+        foreach (GameObject g in units)
+        {
+            UnitController uc;
+            int tempId = Random.Range(0, possibleTiles.Count);
+            uc = g.GetComponent<UnitController>();
+            if (uc.ArmyId == armyId)
+            {
+                EventManager.RaiseEventOnUnitDeployed(uc.UnitId, possibleTiles[tempId]);
+                possibleTiles.RemoveAt(tempId);
+            }
+        }
+        EventManager.RaiseEventOnDeploymentStart(armyId+1);
+    }
+
     private void DeployArmy(int armyId)
     {
         GameObject tempObj;
@@ -161,6 +184,10 @@ public class BattleManager : MonoBehaviour {
             tempObj.GetComponent<UnitController>().InitializeUnit(3, 1, 7, 8, 9, 1, 2);
             tempObj.GetComponent<UnitController>().HideAll();
             units.Add(tempObj);
+            if (!GameManagerController.Instance.isPlayer1Human) // places units on board
+            {
+                if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy) DeployEasy(armyId);
+            }
         }
         else if(armyId == 2)
         {
@@ -173,6 +200,10 @@ public class BattleManager : MonoBehaviour {
             tempObj.GetComponent<UnitController>().InitializeUnit(5, 2, 13, 14, 15, 1, 1);
             tempObj.GetComponent<UnitController>().HideAll();
             units.Add(tempObj);
+            if(!GameManagerController.Instance.isPlayer2Human)
+            {
+                if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy) DeployEasy(armyId);
+            }
         }
         else if(armyId == 3)
         {

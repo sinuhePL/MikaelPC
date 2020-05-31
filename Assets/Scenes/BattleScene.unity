@@ -3928,6 +3928,8 @@ MonoBehaviour:
     type: 3}
   unitImage: {fileID: 1454520709}
   unitCaption: {fileID: 748443955}
+  unitDescription: {fileID: 1498853700}
+  unitRules: {fileID: 1791833133}
 --- !u!1 &936634473
 GameObject:
   m_ObjectHideFlags: 0
@@ -6394,8 +6396,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -19.2, y: -114}
-  m_SizeDelta: {x: 198.4, y: 33.7}
+  m_AnchoredPosition: {x: -20, y: -195.7}
+  m_SizeDelta: {x: 196.9, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1383449525
 MonoBehaviour:
@@ -6419,7 +6421,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 25
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -7208,8 +7210,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6.7, y: 42.38}
-  m_SizeDelta: {x: 381, y: 277.76}
+  m_AnchoredPosition: {x: -3.275, y: 6.4}
+  m_SizeDelta: {x: 387.85, y: 361}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1498853700
 MonoBehaviour:
@@ -7233,10 +7235,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 14
+    m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -8614,8 +8616,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6.7, y: -267}
-  m_SizeDelta: {x: 381, y: 276}
+  m_AnchoredPosition: {x: -3.275, y: -311.13}
+  m_SizeDelta: {x: 387.85, y: 187.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1791833133
 MonoBehaviour:
@@ -8639,10 +8641,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 14
+    m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0

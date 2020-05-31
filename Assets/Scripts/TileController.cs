@@ -318,4 +318,10 @@ public class TileController : MonoBehaviour
         }
         return 0;
     }
+
+    public bool DeploymentPossible(int aId)
+    {
+        if (aId == possibleArmyDeployment) return true;
+        else return false;
+    }
 }

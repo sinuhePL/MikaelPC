@@ -287,7 +287,7 @@ public class UnitController : MonoBehaviour
 
     protected void StartDeployment(int aId)
     {
-        if (aId < 3) HideAll();
+        if (aId < 3 && GameManagerController.Instance.isPlayer2Human) HideAll();
         else
         {
             ShowAll();

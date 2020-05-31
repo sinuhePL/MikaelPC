@@ -8,6 +8,7 @@ public class GameManagerController : MonoBehaviour
 {
     public enum viewTypeEnum {perspective, isometric };
     public enum diffLevelEnum {easy, medium, hard};
+    public enum terrainTypeEnum {historical, random};
     private static GameManagerController _instance;
     public bool isSoundEnabled = true;
     public bool isMusicEnabled = true;
@@ -19,6 +20,7 @@ public class GameManagerController : MonoBehaviour
     public bool isPlayer2Human = true;
     public viewTypeEnum viewType = viewTypeEnum.perspective;
     public diffLevelEnum difficultyLevel = diffLevelEnum.medium;
+    public terrainTypeEnum terrainType = terrainTypeEnum.random;
 
     private void Awake()
     {
