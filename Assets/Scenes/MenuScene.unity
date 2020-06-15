@@ -1814,7 +1814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.175, y: -368427.94}
+  m_AnchoredPosition: {x: -7.175, y: -370169.16}
   m_SizeDelta: {x: 577.65, y: 515.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529051034
@@ -9121,7 +9121,7 @@ MonoBehaviour:
   isPlayer1Human: 1
   isPlayer2Human: 1
   viewType: 1
-  difficultyLevel: 0
+  difficultyLevel: 1
   terrainType: 1
 --- !u!4 &2098576142
 Transform:

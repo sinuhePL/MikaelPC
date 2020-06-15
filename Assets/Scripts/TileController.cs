@@ -324,4 +324,44 @@ public class TileController : MonoBehaviour
         if (aId == possibleArmyDeployment) return true;
         else return false;
     }
+
+    public int GetUnitValue(string uType)
+    {
+        if(tileType == "hill")
+        {
+            if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 10;
+            else return 20;
+        }
+        if(tileType == "forest")
+        {
+            if (uType == "Arquebusiers") return 10;
+            if (uType == "Suisse" || uType == "Landsknechte" || uType == "Artillery") return 40;
+        }
+        if(tileType == "town")
+        {
+            if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") return 30;
+        }
+        return 50;
+    }
+
+    public int GetOpposingUnitValue(string uType)
+    {
+        if (tileType == "hill")
+        {
+            if (uType == "Artillery") return 80;
+            if (uType == "Landsknechte" || uType == "Suisse") return 30;
+            else return 50;
+        }
+        if (tileType == "forest")
+        {
+            if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 40;
+            else return 10;
+        }
+        if (tileType == "town")
+        {
+            if (uType == "Artillery" || uType == "Arquebusiers") return 20;
+            else return 0;
+        }
+        return 0;
+    }
 }
