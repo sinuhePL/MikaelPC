@@ -184,6 +184,10 @@ MonoBehaviour:
   landsknechte: {fileID: 21300000, guid: d6f2e6c252a619a45a33d4cbee4dd851, type: 3}
   suisse: {fileID: 21300000, guid: 5225677092180df46a4faa0002ae382c, type: 3}
   manatarms: {fileID: 21300000, guid: ae54720645bed9445acb34c1e2c04a20, type: 3}
+  arquebusiers: {fileID: 21300000, guid: 5f3e5afe36083174f94981af0a0c52f7, type: 3}
+  artillery: {fileID: 21300000, guid: 0ee745740d4b50f4eab54c15af31efd4, type: 3}
+  stradioti: {fileID: 21300000, guid: ba9041f8503803749a0452cc42b6c4fd, type: 3}
+  coustilliers: {fileID: 21300000, guid: 1a31fd38f4b6c7049baede933f0d184c, type: 3}
 --- !u!1 &8855599499367559341
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +427,10 @@ MonoBehaviour:
   heavyCavalery: {fileID: 21300000, guid: ccfbe5702069f7e48ae722919f27c635, type: 3}
   landsknechte: {fileID: 21300000, guid: 741877e5292771a4f9f2d13c74face11, type: 3}
   suisse: {fileID: 21300000, guid: 19d2b40de98fca34da73f7022bd93b99, type: 3}
+  arquebusiers: {fileID: 21300000, guid: 86ea0c0dea9c33c42b8f460a2733fcda, type: 3}
+  artillery: {fileID: 21300000, guid: a9538e18dd0a08c48a6481caf3a06bef, type: 3}
+  stradioti: {fileID: 21300000, guid: b892a34cf0a4cd64c9960f4831c17ffc, type: 3}
+  coustilliers: {fileID: 21300000, guid: cb33f45595f6a4642904ce0d5d020ca8, type: 3}
 --- !u!1 &8855599499672395945
 GameObject:
   m_ObjectHideFlags: 0

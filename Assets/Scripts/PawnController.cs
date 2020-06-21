@@ -58,8 +58,8 @@ public class PawnController : MonoBehaviour
     public void EnableOutline()
     {
         transform.DOPunchScale(new Vector3(1.5f, 1.5f, 1.5f), 0.5f, 10, 1);
-        if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) GetComponent<Renderer>().materials[0].SetFloat("_OutlineWidth", 0.001f);
-        else GetComponent<Renderer>().materials[0].SetFloat("_OutlineWidth", 0.001f);
+        if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) GetComponent<Renderer>().materials[0].SetFloat("_OutlineWidth", 0.002f);
+        else GetComponent<Renderer>().materials[0].SetFloat("_OutlineWidth", 0.002f);
     }
 
     // called whenever user clicks on another unit

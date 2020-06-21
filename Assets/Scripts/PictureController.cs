@@ -8,6 +8,10 @@ public class PictureController : MonoBehaviour
     [SerializeField] private Sprite heavyCavalery;
     [SerializeField] private Sprite landsknechte;
     [SerializeField] private Sprite suisse;
+    [SerializeField] private Sprite arquebusiers;
+    [SerializeField] private Sprite artillery;
+    [SerializeField] private Sprite stradioti;
+    [SerializeField] private Sprite coustilliers;
     private Image myImage;
 
     private void UnitClicked(int unitId)
@@ -30,6 +34,18 @@ public class PictureController : MonoBehaviour
                 case "Imperial Cavalery":
                     myImage.sprite = heavyCavalery;
                     break;
+                case "Arquebusiers":
+                    myImage.sprite = arquebusiers;
+                    break;
+                case "Artillery":
+                    myImage.sprite = artillery;
+                    break;
+                case "Stradioti":
+                    myImage.sprite = stradioti;
+                    break;
+                case "Coustilliers":
+                    myImage.sprite = coustilliers;
+                    break;
             }
         }
     }
@@ -49,6 +65,18 @@ public class PictureController : MonoBehaviour
                 break;
             case "Imperial Cavalery":
                 myImage.sprite = heavyCavalery;
+                break;
+            case "Arquebusiers":
+                myImage.sprite = arquebusiers;
+                break;
+            case "Artillery":
+                myImage.sprite = artillery;
+                break;
+            case "Stradioti":
+                myImage.sprite = stradioti;
+                break;
+            case "Coustilliers":
+                myImage.sprite = coustilliers;
                 break;
         }
     }

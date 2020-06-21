@@ -680,7 +680,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.99998, y: -201}
+  m_AnchoredPosition: {x: -149.30003, y: -114}
   m_SizeDelta: {x: 226.6, y: 96.242}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &104793602
@@ -1105,7 +1105,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.425, y: 191}
+  m_AnchoredPosition: {x: -151.72505, y: 278}
   m_SizeDelta: {x: 386.05, y: 71.057}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &222873373
@@ -1576,7 +1576,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.425, y: -125}
+  m_AnchoredPosition: {x: -151.72505, y: -38}
   m_SizeDelta: {x: 386.05, y: 71.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &241968716
@@ -1729,7 +1729,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: 111}
+  m_AnchoredPosition: {x: -149.30005, y: 198}
   m_SizeDelta: {x: 226.6, y: 96.101}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &294341945
@@ -2241,7 +2241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7, y: 234}
+  m_AnchoredPosition: {x: -155.30005, y: 321}
   m_SizeDelta: {x: 545, y: 27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &395172873
@@ -2371,6 +2371,10 @@ MonoBehaviour:
   heavyCavalery: {fileID: 21300000, guid: ccfbe5702069f7e48ae722919f27c635, type: 3}
   landsknechte: {fileID: 21300000, guid: 741877e5292771a4f9f2d13c74face11, type: 3}
   suisse: {fileID: 21300000, guid: 19d2b40de98fca34da73f7022bd93b99, type: 3}
+  arquebusiers: {fileID: 21300000, guid: 86ea0c0dea9c33c42b8f460a2733fcda, type: 3}
+  artillery: {fileID: 21300000, guid: a9538e18dd0a08c48a6481caf3a06bef, type: 3}
+  stradioti: {fileID: 21300000, guid: b892a34cf0a4cd64c9960f4831c17ffc, type: 3}
+  coustilliers: {fileID: 21300000, guid: cb33f45595f6a4642904ce0d5d020ca8, type: 3}
 --- !u!1 &492145174
 GameObject:
   m_ObjectHideFlags: 0
@@ -2669,7 +2673,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.4248657, y: -270}
+  m_AnchoredPosition: {x: -151.72491, y: -183}
   m_SizeDelta: {x: 386.05, y: 50.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &661475645
@@ -3391,7 +3395,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &739196337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3915,16 +3919,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f866b5a63887e4f448f0b92011c64c89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  suisseSprite: {fileID: 21300000, guid: f71ba1b6f669e8248a98c91a957edb41, type: 3}
-  gendarmesSprite: {fileID: 21300000, guid: 81e80fbfd614b5446989ebf9da37bd7e, type: 3}
-  landsknechtsSprite: {fileID: 21300000, guid: d8828f5e9073c7d4ebdb06b1b995c139, type: 3}
-  imperialCavalerySprite: {fileID: 21300000, guid: 81e80fbfd614b5446989ebf9da37bd7e,
+  suisseSprite: {fileID: 21300000, guid: 7e1ce071ab453cd4da448cd494ee8a8d, type: 3}
+  gendarmesSprite: {fileID: 21300000, guid: 1a6d0aad0ea9b1f419bc8f016c8ae4fc, type: 3}
+  landsknechtsSprite: {fileID: 21300000, guid: 66c0f5671718b35468213480b8079652, type: 3}
+  imperialCavalerySprite: {fileID: 21300000, guid: 1a6d0aad0ea9b1f419bc8f016c8ae4fc,
     type: 3}
+  arquebusiersSprite: {fileID: 21300000, guid: b900bd8139c9d1f4db265278a414107f, type: 3}
+  artillerySprite: {fileID: 21300000, guid: b61a183111c422648b6de4176e2e2485, type: 3}
+  stradiotiSprite: {fileID: 21300000, guid: 285e1c21ca65e4441ac7e8cdf5442656, type: 3}
+  coustilliersSprite: {fileID: 21300000, guid: 0b80ad5319f36c24d9bb310c3735b083, type: 3}
   suisseCaption: {fileID: 21300000, guid: 5225677092180df46a4faa0002ae382c, type: 3}
   gendarmesCaption: {fileID: 21300000, guid: 655838c1d1336f047bf005d01c674845, type: 3}
   landsknechtsCaption: {fileID: 21300000, guid: d6f2e6c252a619a45a33d4cbee4dd851,
     type: 3}
   imperialCavaleryCaption: {fileID: 21300000, guid: ae54720645bed9445acb34c1e2c04a20,
+    type: 3}
+  arquebusiersCaption: {fileID: 21300000, guid: 5f3e5afe36083174f94981af0a0c52f7,
+    type: 3}
+  artilleryCaption: {fileID: 21300000, guid: 0ee745740d4b50f4eab54c15af31efd4, type: 3}
+  stradiotiCaption: {fileID: 21300000, guid: ba9041f8503803749a0452cc42b6c4fd, type: 3}
+  coustilliersCaption: {fileID: 21300000, guid: 1a31fd38f4b6c7049baede933f0d184c,
     type: 3}
   unitImage: {fileID: 1454520709}
   unitCaption: {fileID: 748443955}
@@ -4043,7 +4057,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -14.25, y: -30}
+  m_AnchoredPosition: {x: -162.55005, y: 57}
   m_SizeDelta: {x: 407.7, y: 99.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &939081795
@@ -4236,8 +4250,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 32, y: 633}
-  m_SizeDelta: {x: 727, y: 857}
+  m_AnchoredPosition: {x: 137, y: 462}
+  m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1000219709
 MonoBehaviour:
@@ -4379,6 +4393,10 @@ MonoBehaviour:
   landsknechte: {fileID: 21300000, guid: d6f2e6c252a619a45a33d4cbee4dd851, type: 3}
   suisse: {fileID: 21300000, guid: 5225677092180df46a4faa0002ae382c, type: 3}
   manatarms: {fileID: 21300000, guid: ae54720645bed9445acb34c1e2c04a20, type: 3}
+  arquebusiers: {fileID: 21300000, guid: 5f3e5afe36083174f94981af0a0c52f7, type: 3}
+  artillery: {fileID: 21300000, guid: 0ee745740d4b50f4eab54c15af31efd4, type: 3}
+  stradioti: {fileID: 21300000, guid: ba9041f8503803749a0452cc42b6c4fd, type: 3}
+  coustilliers: {fileID: 21300000, guid: 1a31fd38f4b6c7049baede933f0d184c, type: 3}
 --- !u!1 &1014987539
 GameObject:
   m_ObjectHideFlags: 0
@@ -5185,13 +5203,25 @@ MonoBehaviour:
     type: 3}
   gendarmesPrefab: {fileID: 319731512460961604, guid: a9ac4cb676925c84e92d8a39556a27c1,
     type: 3}
-  imperialLandsknechtePrefab: {fileID: 2983453476021083486, guid: 4d2b07b0ead4214419fc3232be009c6e,
-    type: 3}
   frenchLandsknechtePrefab: {fileID: 5368677229684786163, guid: 1aaf94209ca341548a2532a656380854,
+    type: 3}
+  frenchArquebusiersPrefab: {fileID: 2260705500205277993, guid: 9fa3f1e357ad6c24b8a1d387f31ebbeb,
+    type: 3}
+  frenchArtilleryPrefab: {fileID: 2136599262806164053, guid: 859987962f95246419566624d7ea0aca,
+    type: 3}
+  frenchCoustilliersPrefab: {fileID: 401198247618233655, guid: 7db47b1d0232e53469e2c89f40aa4563,
     type: 3}
   suissePrefab: {fileID: 2013210542190506625, guid: 07f97e67a251dfc4eb131db44d4c1207,
     type: 3}
+  imperialLandsknechtePrefab: {fileID: 2983453476021083486, guid: 4d2b07b0ead4214419fc3232be009c6e,
+    type: 3}
   imperialCavaleryPrefab: {fileID: 1393855818835718730, guid: 07b980fb536eed9449e87fb6e53b723e,
+    type: 3}
+  imperialArquebusiersPrefab: {fileID: 6167746437382340248, guid: fe636339d365b944b8d459e9e1a40e03,
+    type: 3}
+  imperialArtilleryPrefab: {fileID: 4069746179408082596, guid: b9af8c391bf0dd94684f166b5fe7f399,
+    type: 3}
+  imperialStradiotiPrefab: {fileID: 2052191729043289583, guid: 66d517412e9e0214b9ed1d3348a1fa17,
     type: 3}
   boardWidth: 6
   boardHeight: 5
@@ -6922,7 +6952,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.4243, y: -87}
+  m_AnchoredPosition: {x: -151.72435, y: 0}
   m_SizeDelta: {x: 551.5, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1432839661
@@ -6996,8 +7026,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -8.85, y: 329.31}
-  m_SizeDelta: {x: 399, y: 204}
+  m_AnchoredPosition: {x: 48.1, y: 306}
+  m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1454520709
 MonoBehaviour:
@@ -7019,7 +7049,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 81e80fbfd614b5446989ebf9da37bd7e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b900bd8139c9d1f4db265278a414107f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8844,7 +8874,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -8.7, y: 277}
+  m_AnchoredPosition: {x: -157, y: 364}
   m_SizeDelta: {x: 418.8, y: 85.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1861475234
@@ -9527,7 +9557,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1993111600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9866,7 +9896,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.425, y: 42}
+  m_AnchoredPosition: {x: -151.72505, y: 129}
   m_SizeDelta: {x: 386.05, y: 50.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2039633076
@@ -10156,72 +10186,3 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1001 &8090255294560918724
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 8084906619034228286, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_Name
-      value: StradiotiSquadYellow
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 11.039
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -12.066
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8084906619034228287, guid: 1d7cfa279b6be734f8649185ef523cd4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1d7cfa279b6be734f8649185ef523cd4, type: 3}

@@ -10,24 +10,34 @@ public class CounterAttack : Attack
         switch (aType)
         {
             case "Gendarmes":
-                attackDiceNumber = 4;
+                attackDiceNumber = 2;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 5;
                 break;
             case "Landsknechte":
-                attackDiceNumber = 3;
+                attackDiceNumber = 2;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 10;
                 break;
             case "Suisse":
-                attackDiceNumber = 3;
+                attackDiceNumber = 2;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 10;
                 break;
             case "Imperial Cavalery":
-                attackDiceNumber = 4;
+                attackDiceNumber = 2;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 8;
+                break;
+            case "Arquebusiers":
+                attackDiceNumber = 2;
+                defenceDiceNumber = 0;
+                specialOutcomeType = 7;
+                break;
+            case "Artillery":
+                attackDiceNumber = 3;
+                defenceDiceNumber = 0;
+                specialOutcomeType = 6;
                 break;
         }
     }

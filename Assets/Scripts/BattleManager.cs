@@ -40,10 +40,16 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private Transform marginAround;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GameObject gendarmesPrefab;
-    [SerializeField] private GameObject imperialLandsknechtePrefab;
     [SerializeField] private GameObject frenchLandsknechtePrefab;
+    [SerializeField] private GameObject frenchArquebusiersPrefab;
+    [SerializeField] private GameObject frenchArtilleryPrefab;
+    [SerializeField] private GameObject frenchCoustilliersPrefab;
     [SerializeField] private GameObject suissePrefab;
+    [SerializeField] private GameObject imperialLandsknechtePrefab;
     [SerializeField] private GameObject imperialCavaleryPrefab;
+    [SerializeField] private GameObject imperialArquebusiersPrefab;
+    [SerializeField] private GameObject imperialArtilleryPrefab;
+    [SerializeField] private GameObject imperialStradiotiPrefab;
 
 
     public int boardWidth = 6;
@@ -294,6 +300,21 @@ public class BattleManager : MonoBehaviour {
             tempObj.GetComponent<UnitController>().InitializeUnit(3, 1, 7, 8, 9, 1, 2);
             tempObj.GetComponent<UnitController>().HideAll();
             units.Add(tempObj);
+
+            tempObj = Instantiate(frenchArquebusiersPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(7, 1, 19, 20, 21, 1, 3);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
+
+            tempObj = Instantiate(frenchArtilleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(9, 1, 25, 26, 27, 1, 4);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
+
+            tempObj = Instantiate(frenchCoustilliersPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(11, 1, 31, 32, 33, 1, 5);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
             if (!GameManagerController.Instance.isPlayer1Human) // places units on board
             {
                 if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy) DeployEasy(armyId);
@@ -312,7 +333,22 @@ public class BattleManager : MonoBehaviour {
             tempObj.GetComponent<UnitController>().InitializeUnit(5, 2, 13, 14, 15, 1, 1);
             tempObj.GetComponent<UnitController>().HideAll();
             units.Add(tempObj);
-            if(!GameManagerController.Instance.isPlayer2Human)
+
+            tempObj = Instantiate(imperialArquebusiersPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(6, 2, 16, 17, 18, 1, 2);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
+
+            tempObj = Instantiate(imperialArtilleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(8, 2, 22, 23, 24, 1, 3);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
+
+            tempObj = Instantiate(imperialStradiotiPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj.GetComponent<UnitController>().InitializeUnit(10, 2, 28, 29, 30, 1, 4);
+            tempObj.GetComponent<UnitController>().HideAll();
+            units.Add(tempObj);
+            if (!GameManagerController.Instance.isPlayer2Human)
             {
                 if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy) DeployEasy(armyId);
                 else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.medium) DeployMedium(armyId);

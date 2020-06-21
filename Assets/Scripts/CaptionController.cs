@@ -9,6 +9,10 @@ public class CaptionController : MonoBehaviour
     [SerializeField] private Sprite landsknechte;
     [SerializeField] private Sprite suisse;
     [SerializeField] private Sprite manatarms;
+    [SerializeField] private Sprite arquebusiers;
+    [SerializeField] private Sprite artillery;
+    [SerializeField] private Sprite stradioti;
+    [SerializeField] private Sprite coustilliers;
     private Image myImage;
     // Start is called before the first frame update
 
@@ -31,6 +35,18 @@ public class CaptionController : MonoBehaviour
                     break;
                 case "Imperial Cavalery":
                     myImage.sprite = manatarms;
+                    break;
+                case "Arquebusiers":
+                    myImage.sprite = arquebusiers;
+                    break;
+                case "Artillery":
+                    myImage.sprite = artillery;
+                    break;
+                case "Stradioti":
+                    myImage.sprite = stradioti;
+                    break;
+                case "Coustilliers":
+                    myImage.sprite = coustilliers;
                     break;
             }
         }
@@ -61,6 +77,18 @@ public class CaptionController : MonoBehaviour
                 break;
             case "Imperial Cavalery":
                 myImage.sprite = manatarms;
+                break;
+            case "Arquebusiers":
+                myImage.sprite = arquebusiers;
+                break;
+            case "Artillery":
+                myImage.sprite = artillery;
+                break;
+            case "Stradioti":
+                myImage.sprite = stradioti;
+                break;
+            case "Coustilliers":
+                myImage.sprite = coustilliers;
                 break;
         }
     }

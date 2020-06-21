@@ -10,10 +10,18 @@ public class UnitDescriptionController : MonoBehaviour
     [SerializeField] private Sprite gendarmesSprite;
     [SerializeField] private Sprite landsknechtsSprite;
     [SerializeField] private Sprite imperialCavalerySprite;
+    [SerializeField] private Sprite arquebusiersSprite;
+    [SerializeField] private Sprite artillerySprite;
+    [SerializeField] private Sprite stradiotiSprite;
+    [SerializeField] private Sprite coustilliersSprite;
     [SerializeField] private Sprite suisseCaption;
     [SerializeField] private Sprite gendarmesCaption;
     [SerializeField] private Sprite landsknechtsCaption;
     [SerializeField] private Sprite imperialCavaleryCaption;
+    [SerializeField] private Sprite arquebusiersCaption;
+    [SerializeField] private Sprite artilleryCaption;
+    [SerializeField] private Sprite stradiotiCaption;
+    [SerializeField] private Sprite coustilliersCaption;
     [SerializeField] private Image unitImage;
     [SerializeField] private Image unitCaption;
     [SerializeField] private Text unitDescription;
@@ -66,7 +74,27 @@ public class UnitDescriptionController : MonoBehaviour
             case "Imperial Cavalery":
                 unitImage.sprite = imperialCavalerySprite;
                 unitCaption.sprite = imperialCavaleryCaption;
-                unitDescription.text = "   Imperial cavalry consisted of heavy cavalryman of noble birth from Spain, Germany, Low Countries and Burgundy. They were armed with lances, fought on horseback and were intended to deliver a battlefield charge. Spanish cavalryman were usually lighter armored (often without barding) and with lighter lances. Spanish cavalryman also deployed in line while their German counterparts preferred a deeper, wedge-edged formation.";
+                unitDescription.text = "    Imperial cavalry consisted of heavy cavalryman of noble birth from Spain, Germany, Low Countries and Burgundy. They were armed with lances, fought on horseback and were intended to deliver a battlefield charge. Spanish cavalryman were usually lighter armored (often without barding) and with lighter lances. Spanish cavalryman also deployed in line while their German counterparts preferred a deeper, wedge-edged formation.";
+                break;
+            case "Arquebusiers":
+                unitImage.sprite = arquebusiersSprite;
+                unitCaption.sprite = arquebusiersCaption;
+                unitDescription.text = "    Arquebusiers were foot soldiers armed with arquebus. Arquebus was a form of long gun that appeared in Europe and the Ottoman Empire during the 15th century. The addition of a shoulder stock, priming pan, and matchlock mechanism in the late 15th century turned the arquebus into a handheld firearm and also the first firearm equipped with a trigger. Arquebuses replaced crossbows as easier to handle and more deadly. ";
+                break;
+            case "Artillery":
+                unitImage.sprite = artillerySprite;
+                unitCaption.sprite = artilleryCaption;
+                unitDescription.text = "    Cannons appeared in Europe in 14th century, by the 16th century they were made in a great variety of lengths and bore diameters but field Artillery was still young invention during battle of Pavia. Used for the first time by Charles VIII of France in 1494 during his italian campaign. Cannons where placed on wooden carts pulled by horses and oxes. While very slow and with low fire rate field artillery proved useful on battlefields during Italian Wars (1494 - 1529). ";
+                break;
+            case "Stradioti":
+                unitImage.sprite = stradiotiSprite;
+                unitCaption.sprite = stradiotiCaption;
+                unitDescription.text = "    The stradioti or stratioti were mercenary units from the Balkans recruited mainly by states of southern and central Europe. The stradioti were pioneers of light cavalry tactics during renaissance era. They employed hit-and-run tactics, ambushes, feigned retreats and other complex maneuvers. In some ways, these tactics echoed those of the Ottoman sipahis and akinci. They had some notable successes also against French heavy cavalry during the Italian Wars";
+                break;
+            case "Coustilliers":
+                unitImage.sprite = coustilliersSprite;
+                unitCaption.sprite = coustilliersCaption;
+                unitDescription.text = "    The coustillier (also coutillier, coutilier) was a title of a low-ranking professional soldier in Medieval French armies. Since mid 15th century coustelliers were a lightly armoured horseman.  A French coutilier of 1446 was equipped with a helmet, leg armour, a haubergeon, jack or brigandine, a dagger, sword and either a demilance or a voulge. Although unable to stand up against heavy cavalry in battle, these soldiers made excellent skirmishers, raiders and scouts.";
                 break;
         }
     }
