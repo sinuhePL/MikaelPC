@@ -9,14 +9,17 @@ public class UnitController : MonoBehaviour
 {
     protected bool isInitialized = false;
     protected bool isOutlined;
-    protected bool isDisabled = false;
-    protected bool _isPlaced = false;
+    protected bool isDisabled;
+    protected bool _isPlaced;
+    protected bool _isBlocked;
+    protected bool isMoved;
     protected int _strength;
     protected string _unitType;
     protected int _morale;
     protected int _armyId;
     protected int _unitId;
     protected int _unitTileId;
+    protected int blockingUnitId;
     protected TextMeshPro _unitCaption;
     protected GameObject[] _squads;
     protected GameObject forwardArrow;
@@ -152,7 +155,7 @@ public class UnitController : MonoBehaviour
         if (mode == "routtest") return;
         myUnit = BattleManager.Instance.GetUnit(UnitId);
         anyTileClicked(0);
-        if (!myUnit.IsAvialable && !isDisabled)    // check if unit killed
+        if (!myUnit.IsAlive && !isDisabled)    // check if unit killed
         {
             isDisabled = true;
             EventManager.RaiseEventOnUnitDestroyed(UnitId);
@@ -168,6 +171,24 @@ public class UnitController : MonoBehaviour
         {
             flag.GetComponent<FlagController>().ChangeBannerHeight(initialMorale, myUnit.morale);
             _morale = myUnit.morale;
+        }
+        //check if unit moved to front line
+        if(myUnit.UnitMoved() && !isMoved)
+        {
+            isMoved = true;
+            SetArrowsBlockValue(false);
+            if (_armyId == 1)
+            {
+                transform.DOMoveZ(transform.position.z + BattleManager.Instance.boardFieldHeight, 1.0f).SetEase(Ease.InQuad);
+                //transform.position += new Vector3(0.0f, 0.0f, BattleManager.Instance.boardFieldHeight);
+                _unitTileId += -1;
+            }
+            if(_armyId == 2)
+            {
+                transform.DOMoveZ(transform.position.z - BattleManager.Instance.boardFieldHeight, 1.0f).SetEase(Ease.InQuad);
+                //transform.position += new Vector3(0.0f, 0.0f, -BattleManager.Instance.boardFieldHeight);
+                _unitTileId += 1;
+            }
         }
         //check if unit attacks are still active
         tempAttack = myUnit.GetAttack(forwardArrow.GetComponent<ArrowController>().AttackId);
@@ -201,19 +222,48 @@ public class UnitController : MonoBehaviour
 
     protected void ChangePosition(int tileId)
     {
-        float xpos = (tileId / BattleManager.Instance.boardHeight + 2) * BattleManager.Instance.boardFieldWitdth - BattleManager.Instance.boardFieldWitdth * 0.25f;
-        float zpos = (tileId % BattleManager.Instance.boardHeight) * -1.0f * BattleManager.Instance.boardFieldHeight - BattleManager.Instance.boardFieldHeight;
+        float xpos = (tileId - 1) / BattleManager.Instance.boardHeight + 1;
+        xpos = 4.0f + xpos * BattleManager.Instance.boardFieldWitdth - BattleManager.Instance.boardFieldWitdth * 0.25f;
+        float zpos = (tileId-1) % BattleManager.Instance.boardHeight;
+        zpos = -8.0f - zpos * BattleManager.Instance.boardFieldHeight; 
         transform.position = new Vector3(xpos, 0.05f, zpos);
         _unitTileId = tileId;
     }
 
     protected void PlaceOnTile(int uId, int tId)
     {
-        if(uId == _unitId)
+        if (uId == _unitId && !_isBlocked)
         {
             ShowAll();
             ChangePosition(tId);
             _isPlaced = true;
+        }
+        else
+        {
+            if (_armyId == 1)
+            {
+                if (tId - 1 == _unitTileId)
+                {
+                    _isBlocked = true;
+                    blockingUnitId = uId;
+                }
+                else
+                {
+                    if (blockingUnitId == uId) _isBlocked = false;
+                }
+            }
+            if(_armyId == 2)
+            {
+                if (tId + 1 == _unitTileId)
+                {
+                    _isBlocked = true;
+                    blockingUnitId = uId;
+                }
+                else
+                {
+                    if (blockingUnitId == uId) _isBlocked = false;
+                }
+            }
         }
     }
 
@@ -293,7 +343,7 @@ public class UnitController : MonoBehaviour
             ShowAll();
             if (!isPlaced)
             {
-                BattleManager.Instance.RemoveUnit(gameObject);
+                BattleManager.Instance.RemoveUnitController(gameObject);
                 Destroy(gameObject);
             }
         }
@@ -319,6 +369,12 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    public bool isBlocked
+    {
+        get { return _isBlocked; }
+        set { _isBlocked = value; }
+    }
+
     public virtual void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId, int deployPosition)   //   armyId == 1 then blue else red
     {
         Color myColor;
@@ -332,12 +388,17 @@ public class UnitController : MonoBehaviour
             }
             isInitialized = true;
             isOutlined = false;
+            isDisabled = false;
+            _isBlocked = false;
+            _isPlaced = false;
             _unitId = unitId;
             _strength = initialStrength;
             _morale = initialMorale;
             _armyId = armyId;
             _squads = new GameObject[initialStrength];
             _unitCaption = GetComponentInChildren<TextMeshPro>();
+            blockingUnitId = 0;
+            isMoved = false;
 
             // set position based on id tile which it sits on
             ChangePosition(tileId);
@@ -474,5 +535,22 @@ public class UnitController : MonoBehaviour
                 return leftArrowEmpty.GetComponent<ArrowController>();
         }
         return null;
+    }
+
+    public void SetArrowsBlockValue(bool value)
+    {
+        ArrowController ac;
+        ac = forwardArrow.GetComponent<ArrowController>();
+        ac.isArrowBlocked = value;
+        ac = forwardArrowEmpty.GetComponent<ArrowController>();
+        ac.isArrowBlocked = value;
+        ac = leftArrow.GetComponent<ArrowController>();
+        ac.isArrowBlocked = value;
+        ac = leftArrowEmpty.GetComponent<ArrowController>();
+        ac.isArrowBlocked = value;
+        ac = rightArrow.GetComponent<ArrowController>();
+        ac.isArrowBlocked = value;
+        ac = rightArrowEmpty.GetComponent<ArrowController>();
+        ac.isArrowBlocked = value;
     }
 }

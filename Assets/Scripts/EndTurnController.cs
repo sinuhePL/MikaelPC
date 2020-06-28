@@ -82,8 +82,6 @@ public class EndTurnController : MonoBehaviour
                 isClicked = true;
                 leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
                 rightArrow.GetComponent<LookArrowController>().ChangeActivityState();
-                if (BattleManager.Instance.turnOwnerId == 1) BattleManager.Instance.turnOwnerId = 2;
-                else BattleManager.Instance.turnOwnerId = 1;
                 EventManager.RaiseEventOnTurnEnd();
                 return;
             }

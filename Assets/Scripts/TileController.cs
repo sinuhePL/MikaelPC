@@ -35,6 +35,8 @@ public class TileController : MonoBehaviour
     private int myDeployedUnitId;
     private int possibleArmyDeployment;
     private string tileType;
+    private bool initiallyDeploymentNotPossible;
+    private int forwardUnitId;
     // Start is called before the first frame update
 
     public void InitializeTile(int ti, int kfid, string tType, int pArmDpl)
@@ -50,6 +52,9 @@ public class TileController : MonoBehaviour
         myDeployedUnitId = 0;
         lastClickedUnit = 0;
         possibleArmyDeployment = pArmDpl;
+        if(pArmDpl == 0) initiallyDeploymentNotPossible = true;
+        else initiallyDeploymentNotPossible = false;
+        forwardUnitId = 0;
         tileType = tType;
         tileInfluenceDescription.gameObject.SetActive(false);
         if(possibleArmyDeployment > 0)
@@ -103,7 +108,7 @@ public class TileController : MonoBehaviour
     {
         if(BattleManager.Instance.gameMode == "deploy")
         {
-            if(!IsPointerOverGameObject() && myDeployedUnitId == 0 && BattleManager.Instance.turnOwnerId == possibleArmyDeployment)
+            if(!IsPointerOverGameObject() && myDeployedUnitId == 0 && BattleManager.Instance.turnOwnerId == possibleArmyDeployment && lastClickedUnit != forwardUnitId && !BattleManager.Instance.isUnitControllerBlocked(lastClickedUnit))
             {
                 EventManager.RaiseEventOnUnitDeployed(lastClickedUnit, tileId);
             }
@@ -126,7 +131,7 @@ public class TileController : MonoBehaviour
     private void SetLastClickedUnit(int a, int p, int uId, string uType)
     {
         lastClickedUnit = uId;
-        if(a == possibleArmyDeployment && myDeployedUnitId == 0)
+        if(a == possibleArmyDeployment && myDeployedUnitId == 0 && !initiallyDeploymentNotPossible)
         {
             tileInfluenceDescription.gameObject.SetActive(true);
             tileInfluenceDescription.text = "";
@@ -150,16 +155,138 @@ public class TileController : MonoBehaviour
 
     private void anyUnitDeployed(int uId, int tId)
     {
-        if (uId == myDeployedUnitId && tId != tileId)
+        TileController tc;
+
+        if (uId == myDeployedUnitId && tId != tileId)   // if unit moved to another tile
         {
             myDeployedUnitId = 0;
-            tileInfluenceDescription.gameObject.SetActive(true);
+            if (!initiallyDeploymentNotPossible)
+            {
+                tileInfluenceDescription.gameObject.SetActive(true);
+                if(BattleManager.Instance.turnOwnerId == 2) topParticleSystem.Play();
+                if(BattleManager.Instance.turnOwnerId == 1) bottomParticleSystem.Play();
+            }
         }
-        if (myDeployedUnitId == 0 && tId == tileId)
+        else if (myDeployedUnitId == 0 && tId == tileId)    // if unit placed on this tile
         {
             myDeployedUnitId = uId;
             tileInfluenceDescription.gameObject.SetActive(false);
-        }       
+            if (BattleManager.Instance.turnOwnerId == 1 && (tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2)
+            {
+                bottomParticleSystem.Stop();
+                bottomParticleSystem.Clear();
+            }
+            if (BattleManager.Instance.turnOwnerId == 2 && (tileId - 1) % BattleManager.Instance.boardHeight == 1)
+            {
+                topParticleSystem.Stop();
+                topParticleSystem.Clear();
+            }
+        }
+        if(possibleArmyDeployment == 0) // checks if deployed unit was deployed on tile in front of this tile
+        {
+            if (BattleManager.Instance.turnOwnerId == 1 && tileId == tId + 1 && (tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1)
+            {
+                bottomParticleSystem.Play();
+                tc = BattleManager.Instance.GetTile(tileId - BattleManager.Instance.boardHeight);   // looks for left neighbour
+                if (!tc.DeploymentPossible(1) || tc.GetForwardUnitId() == uId) leftParticleSystem.Play();
+                else tc.DisableHighlight("right");
+                tc = BattleManager.Instance.GetTile(tileId + BattleManager.Instance.boardHeight);   // looks for right neighbour
+                if (!tc.DeploymentPossible(1) || tc.GetForwardUnitId() == uId) rightParticleSystem.Play();
+                else tc.DisableHighlight("left");
+                possibleArmyDeployment = 1;
+                forwardUnitId = uId;
+            }
+            if (BattleManager.Instance.turnOwnerId == 2 && tileId == tId - 1 && (tileId - 1) % BattleManager.Instance.boardHeight == 0)
+            {
+                topParticleSystem.startColor = Color.yellow;
+                topParticleSystem.Play();
+                tc = BattleManager.Instance.GetTile(tileId - BattleManager.Instance.boardHeight);
+                if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)  // looks for left neighbour
+                {
+                    leftParticleSystem.startColor = Color.yellow;
+                    leftParticleSystem.Play();
+                }
+                else tc.DisableHighlight("right");
+                tc = BattleManager.Instance.GetTile(tileId + BattleManager.Instance.boardHeight);   // looks for right neighbour
+                if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)
+                {
+                    rightParticleSystem.startColor = Color.yellow;
+                    rightParticleSystem.Play();
+                }
+                else tc.DisableHighlight("left");
+                possibleArmyDeployment = 2;
+                forwardUnitId = uId;
+            }
+        }
+        else if(possibleArmyDeployment != 0 && initiallyDeploymentNotPossible)  // if tile has unit on tile in front of it
+        {
+            if (forwardUnitId == uId)   // if moved unit in front of tile
+            {
+                leftParticleSystem.Stop();
+                leftParticleSystem.Clear();
+                rightParticleSystem.Stop();
+                rightParticleSystem.Clear();
+                if (BattleManager.Instance.turnOwnerId == 1)
+                {
+                    bottomParticleSystem.Stop();
+                    bottomParticleSystem.Clear();
+                    possibleArmyDeployment = 0;
+                    forwardUnitId = 0;
+                }
+                if (BattleManager.Instance.turnOwnerId == 2)
+                {
+                    topParticleSystem.Stop();
+                    topParticleSystem.Clear();
+                    possibleArmyDeployment = 0;
+                    forwardUnitId = 0;
+                }
+            }
+            else
+            {
+                if (BattleManager.Instance.turnOwnerId == 1 && (tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1)
+                {
+                    tc = BattleManager.Instance.GetTile(tileId - BattleManager.Instance.boardHeight);   // looks for left neighbour
+                    if (!tc.DeploymentPossible(1) || tc.GetForwardUnitId() == uId) leftParticleSystem.Play();
+                    tc = BattleManager.Instance.GetTile(tileId + BattleManager.Instance.boardHeight);   // looks for right neighbour
+                    if (!tc.DeploymentPossible(1) || tc.GetForwardUnitId() == uId) rightParticleSystem.Play();
+                    if(tId == tileId - 1 - BattleManager.Instance.boardHeight)
+                    {
+                        leftParticleSystem.Stop();
+                        leftParticleSystem.Clear();
+                    }
+                    if(tId == tileId - 1 + BattleManager.Instance.boardHeight)
+                    {
+                        rightParticleSystem.Stop();
+                        rightParticleSystem.Clear();
+                    }
+                }
+                if (BattleManager.Instance.turnOwnerId == 2 && (tileId - 1) % BattleManager.Instance.boardHeight == 0)
+                {
+                    tc = BattleManager.Instance.GetTile(tileId - BattleManager.Instance.boardHeight);
+                    if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)  // looks for left neighbour
+                    {
+                        leftParticleSystem.startColor = Color.yellow;
+                        leftParticleSystem.Play();
+                    }
+                    tc = BattleManager.Instance.GetTile(tileId + BattleManager.Instance.boardHeight);   // looks for right neighbour
+                    if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)
+                    {
+                        rightParticleSystem.startColor = Color.yellow;
+                        rightParticleSystem.Play();
+                    }
+                    if (tId == tileId + 1 - BattleManager.Instance.boardHeight)
+                    {
+                        leftParticleSystem.Stop();
+                        leftParticleSystem.Clear();
+                    }
+                    if (tId == tileId + 1 + BattleManager.Instance.boardHeight)
+                    {
+                        rightParticleSystem.Stop();
+                        rightParticleSystem.Clear();
+                    }
+                }
+            }
+        }
     }
 
     private void ChangeFieldOwner(StateChange sc)
@@ -363,5 +490,24 @@ public class TileController : MonoBehaviour
             else return 0;
         }
         return 0;
+    }
+
+    public void DisableHighlight(string side)
+    {
+        if(side == "right")
+        {
+            rightParticleSystem.Stop();
+            rightParticleSystem.Clear();
+        }
+        if(side == "left")
+        {
+            leftParticleSystem.Stop();
+            leftParticleSystem.Clear();
+        }
+    }
+
+    public int GetForwardUnitId()
+    {
+        return forwardUnitId;
     }
 }

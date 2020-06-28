@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 public class ArrowController : MonoBehaviour
 {
     public int _attackId;
-    private bool _isArrowActive;
+    private bool _isArrowActive;    // active arrow is displayed when owning unit is clicked
+    private bool _isBlocked;         // arrow is blocked when unit is placed in support line
     private MeshRenderer myRenderer;
     private List<int> activatingAttacks;
     private string arrowType;
@@ -41,19 +42,22 @@ public class ArrowController : MonoBehaviour
 
     private void CheckAndShowArrow(int aId, bool isCounterAttack)   // shows empty arrow when it represents counterattack
     {
-        if (arrowType == "empty" && activatingAttacks.Contains(aId))
+        if (!_isBlocked)
         {
-            gameObject.SetActive(true);
-            myRenderer.enabled = true;
-            isShownAsCounterAttack = true;
-        }
-        else if(arrowType == "solid" && aId != AttackId)
-        {
-            myRenderer.enabled = false;
-        }
-        else if(arrowType == "empty" && !isArrowActive)
-        {
-            myRenderer.enabled = false;
+            if (arrowType == "empty" && activatingAttacks.Contains(aId))
+            {
+                gameObject.SetActive(true);
+                myRenderer.enabled = true;
+                isShownAsCounterAttack = true;
+            }
+            else if (arrowType == "solid" && aId != AttackId)
+            {
+                myRenderer.enabled = false;
+            }
+            else if (arrowType == "empty" && !isArrowActive)
+            {
+                myRenderer.enabled = false;
+            }
         }
     }
 
@@ -89,6 +93,7 @@ public class ArrowController : MonoBehaviour
         Color myColor;
 
         arrowType = type;
+        _isBlocked = false;
         if (direction == "right")
         {
             if (type == "solid") myRenderer.material.mainTexture = arrowRightTexture;
@@ -135,14 +140,14 @@ public class ArrowController : MonoBehaviour
 
     public bool isArrowActive
     {
-        get
-        {
-            return _isArrowActive;
-        }
-        set
-        {
-            _isArrowActive = value;
-        }
+        get { return _isArrowActive; }
+        set { _isArrowActive = value; }
+    }
+
+    public bool isArrowBlocked
+    {
+        get { return _isBlocked; }
+        set { _isBlocked = value; }
     }
 
     public void ShowArrow()

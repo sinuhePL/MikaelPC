@@ -538,8 +538,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.5, y: 30}
-  m_SizeDelta: {x: -1255, y: -140}
+  m_AnchoredPosition: {x: 221, y: -34}
+  m_SizeDelta: {x: -896, y: -56}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &90034232
 MonoBehaviour:
@@ -945,7 +945,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -10, y: 275}
+  m_AnchoredPosition: {x: -225, y: 333}
   m_SizeDelta: {x: 130.1, y: 113.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &182796142
@@ -1655,8 +1655,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.5, y: -7}
-  m_SizeDelta: {x: 300, y: 230}
+  m_AnchoredPosition: {x: -118, y: 56}
+  m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &263505454
 MonoBehaviour:
@@ -3395,7 +3395,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &739196337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3534,7 +3534,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7, y: 147}
+  m_AnchoredPosition: {x: -222, y: 214}
   m_SizeDelta: {x: 446.3, y: 141.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &785581629
@@ -5537,7 +5537,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9, y: -225}
+  m_AnchoredPosition: {x: -206, y: -134.7}
   m_SizeDelta: {x: 446.3, y: 141.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1236314751
@@ -6039,8 +6039,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7, y: -142}
-  m_SizeDelta: {x: 150, y: 150}
+  m_AnchoredPosition: {x: -167.6, y: -121}
+  m_SizeDelta: {x: 256, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1333994028
 MonoBehaviour:
@@ -6664,8 +6664,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7, y: -316}
-  m_SizeDelta: {x: 412, y: 155}
+  m_AnchoredPosition: {x: -186.4, y: -238.3}
+  m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1417589445
 MonoBehaviour:
@@ -9557,7 +9557,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &1993111600
 MonoBehaviour:
   m_ObjectHideFlags: 0

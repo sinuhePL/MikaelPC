@@ -25,10 +25,10 @@ public class TurnStarterController : MonoBehaviour
     private void OnEnable()
     {
         EventManager.onTurnEnd += TurnEnd;
-        EventManager.onGameStart += TurnEnd;
+        EventManager.onGameStart += ResetCounter;
         EventManager.onGameOver += GameEnded;
         EventManager.onDeploymentStart += StartDeployment;
-        turnCounter = 0;
+        turnCounter = 1;
         turnCounterText = GetComponentInChildren<Text>();
         helmetImage = transform.Find("helmet").GetComponent<Image>();
         shieldImage = transform.Find("shield").GetComponent<Image>();
@@ -42,7 +42,7 @@ public class TurnStarterController : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.onTurnEnd -= TurnEnd;
-        EventManager.onGameStart -= TurnEnd;
+        EventManager.onGameStart -= ResetCounter;
         EventManager.onGameOver -= GameEnded;
         EventManager.onDeploymentStart -= StartDeployment;
     }
@@ -75,16 +75,27 @@ public class TurnStarterController : MonoBehaviour
         if (aId == 1 && GameManagerController.Instance.isPlayer1Human || aId == 2 && GameManagerController.Instance.isPlayer2Human) TurnEnd();
     }
 
+    private void ResetCounter()
+    {
+        turnCounter = 0;
+        TurnEnd();
+    }
+
     private void TurnEnd()
     {
         turnCounterText.gameObject.SetActive(true);
         if (!isGameEnded)
         {
-            ChangeImages(BattleManager.Instance.turnOwnerId);
             if (BattleManager.Instance.gameMode != "deploy")
             {
-                if (BattleManager.Instance.turnOwnerId == 1) turnCounter++;
+                if (BattleManager.Instance.turnOwnerId == 1) ChangeImages(2);
+                else ChangeImages(1);
+                if (BattleManager.Instance.turnOwnerId == 2) turnCounter++;
                 turnCounterText.text = turnCounter.ToString();
+            }
+            else
+            {
+                ChangeImages(BattleManager.Instance.turnOwnerId);
             }
             Sequence turnStarterControllerSequence = DOTween.Sequence();
             turnStarterControllerSequence.Insert(0.3f, helmetImage.transform.DOLocalMoveY(174.0f, 0.2f));

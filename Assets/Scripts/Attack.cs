@@ -14,7 +14,7 @@ public abstract class Attack
     protected List<int> activatesAttacks;
     protected List<int> deactivatesAttacks;
     protected int keyFieldId;
-    protected Vector3 arrowPosition;    // współrzędne pozycji strzałki przedstawiającej ten atak
+    protected Vector3 arrowPosition;    // coordinates of arrow representing this attack
     protected string attackName;
     protected int attackDiceNumber;
     protected int defenceDiceNumber;
@@ -28,7 +28,7 @@ public abstract class Attack
         set { isKeyFieldTaken = value; }
     }
 
-    protected Attack(Attack pattern, Unit o) // konstruktor kopiujący
+    protected Attack(Attack pattern, Unit o) // copying constructor
     {
         attackId = pattern.attackId;
         isActiveState = pattern.isActiveState;
@@ -75,7 +75,7 @@ public abstract class Attack
         return isAttackForward;
     }
 
-    public Attack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, bool f) // konstruktor
+    public Attack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, bool f) // constructor
     {
         attackId = aId;
         isActiveState = state;
@@ -105,7 +105,7 @@ public abstract class Attack
 
     public void Activate()
     {
-        Assert.IsFalse(isActiveState);
+        //Assert.IsFalse(isActiveState);
         isActiveState = true;
     }
 

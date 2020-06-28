@@ -12,9 +12,12 @@ public class Unit
     private int initialMorale;
     private int _morale;
     private int testModifier;
-    private bool isAvialable;
+    private bool isAlive;
+    private bool movedToFrontLine;
+    private List<Attack> additionalAttacks;
     private List<Attack> unitAttacks;
     private Army owner;
+    private int _supportLineUnitId;
 
     private Attack FindAttack(int aId)
     {
@@ -39,10 +42,16 @@ public class Unit
         set { _morale = value; }
     }
 
-    public bool IsAvialable
+    public bool IsAlive
     {
-        get => isAvialable;
-        set => isAvialable = value;
+        get => isAlive;
+        set => isAlive = value;
+    }
+
+    public int supportLineUnitId
+    {
+        get => _supportLineUnitId;
+        set => _supportLineUnitId = value;
     }
 
     public string GetUnitType()
@@ -50,7 +59,7 @@ public class Unit
         return unitType;
     }
 
-    public Unit(Unit pattern, Army a)   // konstruktor kopiujący
+    public Unit(Unit pattern, Army a)   // copying constructor
     {
         unitId = pattern.unitId;
         unitType = pattern.unitType;
@@ -59,12 +68,18 @@ public class Unit
         initialMorale = pattern.initialMorale;
         morale = pattern.morale;
         testModifier = pattern.testModifier;
-        isAvialable = pattern.isAvialable;
+        isAlive = pattern.isAlive;
         owner = a;
+        supportLineUnitId = pattern.supportLineUnitId;
+        movedToFrontLine = pattern.movedToFrontLine;
         unitAttacks = new List<Attack>();
         foreach(Attack at in pattern.unitAttacks)
         {
             unitAttacks.Add(at.GetCopy(this));
+        }
+        foreach (Attack at in pattern.additionalAttacks)
+        {
+            additionalAttacks.Add(at.GetCopy(this));
         }
     }
 
@@ -77,9 +92,12 @@ public class Unit
         initialMorale = iMorale;
         morale = iMorale;
         testModifier = 0;           // na razie nie wiem czego będzie dotyczył
-        isAvialable = true;
+        isAlive = true;
         unitAttacks = new List<Attack>();
+        additionalAttacks = new List<Attack>();
         owner = a;
+        supportLineUnitId = 0;
+        movedToFrontLine = false;
     }
 
     /*public StateChange MakeAttack(int aId) // wykonuje atak wskazany przez id ataku przekazane do metody
@@ -92,34 +110,47 @@ public class Unit
         else return tempCS;
     }*/
 
-    public void ChangeStrength(int sc)  //zmienia siłę jednostki o wskazaną wartość
+    public int ChangeStrength(int sc)  //zmienia siłę jednostki o wskazaną wartość i zwraca identyfikator jednostki wsparcia który ją zastępuje gdy została zabita
     {
         strength += sc;
         if (strength <= 0)
         {
-            isAvialable = false;
+            isAlive = false;
             owner.ChangeMorale(-morale);
             morale = 0;
             foreach(Attack a in unitAttacks)
             {
                 if(a.IsActive()) a.Deactivate();
             }
+            return _supportLineUnitId;
+        }
+        return 0;
+    }
+
+    public void MoveToFrontLine()
+    {
+        movedToFrontLine = true;
+        foreach (Attack a in unitAttacks)
+        {
+            if (a.IsAttackForward()) a.Activate();
         }
     }
 
-    public void ChangeMorale(int mc)    //zmienia morale jednostki o wskazaną wartość
+    public int ChangeMorale(int mc)    //zmienia morale jednostki o wskazaną wartość i zwraca identyfikator jednostki wsparcia który ją zastępuje gdy została zabita
     {
         morale += mc;
         owner.ChangeMorale(mc);
         if (morale <= 0)
         {
-            isAvialable = false;
+            isAlive = false;
             strength = 0;
             foreach (Attack a in unitAttacks)
             {
                 if(a.IsActive()) a.Deactivate();
             }
+            return _supportLineUnitId;
         }
+        return 0;
     }
 
     public List<StateChange> GetAttackOutcomes()    // zwraca wszystkie rezultaty wszystkich aktywnych ataków jednostki.
@@ -152,6 +183,11 @@ public class Unit
     public void AddAttack(Attack newAttack)  // dodaje nowy atak
     {
         unitAttacks.Add(newAttack);
+    }
+
+    public void AddAdditionalAttack(Attack newAttack)  // dodaje nowy atak
+    {
+        additionalAttacks.Add(newAttack);
     }
 
     public int GetArmyMorale()
@@ -223,14 +259,14 @@ public class Unit
         return resultList;
     }
 
-    public bool CheckIfForwardAttackOn(int unitId)
+    /*public bool CheckIfForwardAttackOn(int unitId)
     {
         foreach(Attack a in unitAttacks)
         {
-            if (a.IsAttackForward() && a.GetTargetId() == unitId) return true;
+            if (a.IsAttackForward() && a.GetTargetId() == unitId && a.IsActive()) return true;
         }
         return false;
-    }
+    }*/
 
     public void ActivateNotForwardAttacks()
     {
@@ -270,5 +306,36 @@ public class Unit
         {
             if (a.GetName() != "Charge!") a.Deactivate();
         }
+    }
+
+    public bool UnitMoved()
+    {
+        return movedToFrontLine;
+    }
+
+    public void PromoteAttackOnUnit(int uId)
+    {
+        Attack tempAttack;
+        tempAttack = null;
+        foreach (Attack a in additionalAttacks)
+        {
+            if (a.GetTargetId() == uId) tempAttack = a;
+        }
+        if (tempAttack != null)
+        {
+            unitAttacks.Add(tempAttack);
+            additionalAttacks.Remove(tempAttack);
+        }
+    }
+
+    public void DeleteAttackOnUnit(int uId)
+    {
+        Attack tempAttack;
+        tempAttack = null;
+        foreach (Attack a in unitAttacks)
+        {
+            if (a.GetTargetId() == uId) tempAttack = a;
+        }
+        if(tempAttack != null) unitAttacks.Remove(tempAttack);
     }
 }
