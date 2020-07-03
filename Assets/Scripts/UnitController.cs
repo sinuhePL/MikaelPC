@@ -39,7 +39,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] protected GameObject deployUnitPrefab;
 
     // called when arrow is clicked
-    protected void anyAttackClicked(int idAttack, bool isCounterAttack)
+    protected virtual void anyAttackClicked(int idAttack, bool isCounterAttack)
     {
         forwardArrow.GetComponent<ArrowController>().ShowArrow(idAttack, isCounterAttack);
         leftArrow.GetComponent<ArrowController>().ShowArrow(idAttack, isCounterAttack);
@@ -47,7 +47,7 @@ public class UnitController : MonoBehaviour
     }
 
     // deselects unit after any tile is clicked
-    protected void anyTileClicked(int idTile)
+    protected virtual void anyTileClicked(int idTile)
     {
         if (isOutlined)
         {
@@ -71,7 +71,7 @@ public class UnitController : MonoBehaviour
         rightArrowEmpty.SetActive(false);
     }
 
-    protected void myUnitClicked(int idUnit)
+    protected virtual void myUnitClicked(int idUnit)
     {
         if(!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
@@ -147,7 +147,7 @@ public class UnitController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    protected void UpdateMe(string mode)
+    protected virtual void UpdateMe(string mode)
     {
         Unit myUnit;
         Attack tempAttack;
@@ -180,17 +180,16 @@ public class UnitController : MonoBehaviour
             if (_armyId == 1)
             {
                 transform.DOMoveZ(transform.position.z + BattleManager.Instance.boardFieldHeight, 1.0f).SetEase(Ease.InQuad);
-                //transform.position += new Vector3(0.0f, 0.0f, BattleManager.Instance.boardFieldHeight);
                 _unitTileId += -1;
             }
             if(_armyId == 2)
             {
                 transform.DOMoveZ(transform.position.z - BattleManager.Instance.boardFieldHeight, 1.0f).SetEase(Ease.InQuad);
-                //transform.position += new Vector3(0.0f, 0.0f, -BattleManager.Instance.boardFieldHeight);
                 _unitTileId += 1;
             }
         }
         //check if unit attacks are still active
+        tempAttack = null;
         tempAttack = myUnit.GetAttack(forwardArrow.GetComponent<ArrowController>().AttackId);
         if (tempAttack != null && !tempAttack.IsActive())
         {
@@ -267,7 +266,12 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    protected void OnEnable()
+    protected void UpdateOnStart()
+    {
+        if(_isPlaced) UpdateMe("GameStart");
+    }
+
+    protected virtual void OnEnable()
     {
         EventManager.onAttackClicked += anyAttackClicked;
         EventManager.onUnitClicked += myUnitClicked;
@@ -275,9 +279,10 @@ public class UnitController : MonoBehaviour
         EventManager.onResultMenuClosed += UpdateMe;
         EventManager.onUnitDeployed += PlaceOnTile;
         EventManager.onDeploymentStart += StartDeployment;
+        EventManager.onGameStart += UpdateOnStart;
     }
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
     {
         EventManager.onAttackClicked -= anyAttackClicked;
         EventManager.onUnitClicked -= myUnitClicked;
@@ -285,6 +290,7 @@ public class UnitController : MonoBehaviour
         EventManager.onResultMenuClosed -= UpdateMe;
         EventManager.onUnitDeployed -= PlaceOnTile;
         EventManager.onDeploymentStart -= StartDeployment;
+        EventManager.onGameStart -= UpdateOnStart;
     }
 
     public int UnitId
@@ -375,7 +381,7 @@ public class UnitController : MonoBehaviour
         set { _isBlocked = value; }
     }
 
-    public virtual void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId, int deployPosition)   //   armyId == 1 then blue else red
+    public virtual void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)   //   armyId == 1 then blue else red
     {
         Color myColor;
 
@@ -391,7 +397,7 @@ public class UnitController : MonoBehaviour
             isDisabled = false;
             _isBlocked = false;
             _isPlaced = false;
-            _unitId = unitId;
+            _unitId = unitId*10;
             _strength = initialStrength;
             _morale = initialMorale;
             _armyId = armyId;
@@ -405,22 +411,22 @@ public class UnitController : MonoBehaviour
 
             if (_armyId == 1)
             {
-                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
+                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.14f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 forwardArrow.GetComponent<ArrowController>().InitializeArrow("forward", "blue", "solid");
                 forwardArrow.transform.SetParent(transform);
-                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
+                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.14f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
                 forwardArrowEmpty.GetComponent<ArrowController>().InitializeArrow("forward", "blue", "empty");
                 forwardArrowEmpty.transform.SetParent(transform);
-                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
+                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.0f, -0.002f, 4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 10.0f));
                 leftArrow.GetComponent<ArrowController>().InitializeArrow("left", "blue", "solid");
                 leftArrow.transform.SetParent(transform);
-                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.02f, 4.0f), arrowPrefab.transform.rotation);
+                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.0f, -0.002f, 4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 10.0f));
                 leftArrowEmpty.GetComponent<ArrowController>().InitializeArrow("left", "blue", "empty");
                 leftArrowEmpty.transform.SetParent(transform);
-                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
+                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, -0.002f, 4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, -10.0f));
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "blue", "solid");
                 rightArrow.transform.SetParent(transform);
-                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
+                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, -0.002f, 4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, -10.0f));
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "blue", "empty");
                 rightArrowEmpty.transform.SetParent(transform);
                 ColorUtility.TryParseHtmlString(BattleManager.Army1Color, out myColor);
@@ -431,22 +437,22 @@ public class UnitController : MonoBehaviour
             }
             else
             {
-                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(0.89f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 forwardArrow.GetComponent<ArrowController>().InitializeArrow("forward", "yellow", "solid");
                 forwardArrow.transform.SetParent(transform);
-                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(1.0f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                forwardArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(0.89f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
                 forwardArrowEmpty.GetComponent<ArrowController>().InitializeArrow("forward", "yellow", "empty");
                 forwardArrowEmpty.transform.SetParent(transform);
-                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                leftArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, -0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 190.0f));
                 leftArrow.GetComponent<ArrowController>().InitializeArrow("left", "yellow", "solid");
                 leftArrow.transform.SetParent(transform);
-                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                leftArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, -0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 190.0f));
                 leftArrowEmpty.GetComponent<ArrowController>().InitializeArrow("left", "yellow", "empty");
                 leftArrowEmpty.transform.SetParent(transform);
-                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                rightArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, -0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 170.0f));
                 rightArrow.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "solid");
                 rightArrow.transform.SetParent(transform);
-                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
+                rightArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -4.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 170.0f));
                 rightArrowEmpty.GetComponent<ArrowController>().InitializeArrow("right", "yellow", "empty");
                 rightArrowEmpty.transform.SetParent(transform);
                 ColorUtility.TryParseHtmlString(BattleManager.Army2Color, out myColor);
@@ -454,12 +460,12 @@ public class UnitController : MonoBehaviour
                 flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, 0.35f), flagPrefab.transform.rotation * Quaternion.Euler(0.0f, 180.0f, 0.0f));
                 flag.transform.SetParent(transform);
             }
-            forwardArrow.GetComponent<ArrowController>().AttackId = forwardAttackId;
-            forwardArrowEmpty.GetComponent<ArrowController>().AttackId = forwardAttackId;
-            leftArrow.GetComponent<ArrowController>().AttackId = leftAttackId;
-            leftArrowEmpty.GetComponent<ArrowController>().AttackId = leftAttackId;
-            rightArrow.GetComponent<ArrowController>().AttackId = rightAttackId;
-            rightArrowEmpty.GetComponent<ArrowController>().AttackId = rightAttackId;
+            forwardArrow.GetComponent<ArrowController>().AttackId = _unitId + 1;
+            forwardArrowEmpty.GetComponent<ArrowController>().AttackId = _unitId + 1;
+            leftArrow.GetComponent<ArrowController>().AttackId = _unitId + 2;
+            leftArrowEmpty.GetComponent<ArrowController>().AttackId = _unitId + 2;
+            rightArrow.GetComponent<ArrowController>().AttackId = _unitId + 3;
+            rightArrowEmpty.GetComponent<ArrowController>().AttackId = _unitId + 3;
             forwardArrow.SetActive(false);
             forwardArrowEmpty.SetActive(false);
             leftArrow.SetActive(false);
@@ -471,7 +477,7 @@ public class UnitController : MonoBehaviour
     }
 
 
-    public void ActivateAttack(int attackId)
+    public virtual void ActivateAttack(int attackId)
     {
         if (forwardArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
         {
@@ -490,7 +496,7 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    public void DeactivateAttack(int attackId)
+    public virtual void DeactivateAttack(int attackId)
     {
         if (forwardArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
         {
@@ -509,7 +515,7 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    public int GetAttackId(string direction)    
+    public virtual int GetAttackId(string direction)    
     {
         switch(direction)
         {
@@ -523,7 +529,7 @@ public class UnitController : MonoBehaviour
         return -1;
     }
 
-    public ArrowController GetArrowController(string direction)
+    public virtual ArrowController GetArrowController(string direction)
     {
         switch (direction)
         {

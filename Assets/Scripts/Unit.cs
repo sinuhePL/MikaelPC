@@ -132,7 +132,8 @@ public class Unit
         movedToFrontLine = true;
         foreach (Attack a in unitAttacks)
         {
-            if (a.IsAttackForward()) a.Activate();
+            if (a.GetName() == "Charge!") a.Activate();
+            if (a.GetName() == "Skirmish") a.Deactivate();
         }
     }
 
@@ -249,6 +250,14 @@ public class Unit
         }
     }
 
+    public void ActivateAttackOnUnit(int uId)
+    {
+        foreach (Attack a in unitAttacks)
+        {
+            if (a.GetTargetId() == uId && !a.IsActive()) a.Activate();
+        }
+    }
+
     public List<int> GetActiveAttacksIds()
     {
         List<int> resultList = new List<int>();
@@ -268,11 +277,11 @@ public class Unit
         return false;
     }*/
 
-    public void ActivateNotForwardAttacks()
+    public void ActivateNotForwardAttacks() // called when opposing unit destroyed/fled
     {
         foreach (Attack a in unitAttacks)
         {
-            if (!a.IsAttackForward())
+            if (a.GetName() != "Charge!")
             {
                 a.Activate();
                 a.ChangeAttack(1);
@@ -323,6 +332,7 @@ public class Unit
         }
         if (tempAttack != null)
         {
+            tempAttack.Activate();
             unitAttacks.Add(tempAttack);
             additionalAttacks.Remove(tempAttack);
         }
@@ -331,11 +341,15 @@ public class Unit
     public void DeleteAttackOnUnit(int uId)
     {
         Attack tempAttack;
-        tempAttack = null;
-        foreach (Attack a in unitAttacks)
+        do
         {
-            if (a.GetTargetId() == uId) tempAttack = a;
+            tempAttack = null;
+            foreach (Attack a in unitAttacks)
+            {
+                if (a.GetTargetId() == uId) tempAttack = a;
+            }
+            if (tempAttack != null) unitAttacks.Remove(tempAttack);
         }
-        if(tempAttack != null) unitAttacks.Remove(tempAttack);
+        while (tempAttack != null);
     }
 }

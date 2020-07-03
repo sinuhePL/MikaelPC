@@ -140,20 +140,22 @@ public class BoardState
         Unit u, u2;
         KeyField kf;
         Attack a;
-        int army1ActiveCount, army2ActiveCount, oldKeyFieldOwner = 0, changeResult = 0, tempUnitId;
+        int army1ActiveCount, army2ActiveCount, oldKeyFieldOwner = 0, unitToMove = 0, tempUnitId;
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId);
-        changeResult = u.ChangeStrength(change.attackerStrengthChange);
+        unitToMove = u.ChangeStrength(change.attackerStrengthChange);
         if (!u.IsAlive)
         {
             DeactivateAttacksOnUnit(u.GetUnitId());
-            if (changeResult != 0)
+            if (unitToMove != 0)
             {
-                u2 = GetUnit(changeResult);
+                u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                 u2.MoveToFrontLine();
+                //u2.DeactivateAttackOnUnit(change.defenderId);
+                //u2.ActivateAttackOnUnit(change.defenderId);
                 tempUnitId = u2.GetUnitId();
                 PromoteAttacksOnUnit(tempUnitId);
-                u2 = GetUnit(change.defenderId);
+                u2 = GetUnit(change.defenderId);    // unit that is opposite of killed unit
                 DeleteAttacksOnUnit(u.GetUnitId());
             }
             else
@@ -164,14 +166,16 @@ public class BoardState
         }
         else
         {
-            changeResult = u.ChangeMorale(change.attackerMoraleChanged);
+            unitToMove = u.ChangeMorale(change.attackerMoraleChanged);
             if (!u.IsAlive)
             {
                 DeactivateAttacksOnUnit(u.GetUnitId());
-                if (changeResult != 0)
+                if (unitToMove != 0)
                 {
-                    u2 = GetUnit(changeResult);
+                    u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
+                    //u2.DeactivateAttackOnUnit(change.defenderId);
+                    //u2.ActivateAttackOnUnit(change.defenderId);
                     tempUnitId = u2.GetUnitId();
                     PromoteAttacksOnUnit(tempUnitId);
                     u2 = GetUnit(change.defenderId);
@@ -196,14 +200,16 @@ public class BoardState
         }
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
-        changeResult = u.ChangeStrength(change.defenderStrengthChange);
+        unitToMove = u.ChangeStrength(change.defenderStrengthChange);
         if (!u.IsAlive)
         {
             DeactivateAttacksOnUnit(u.GetUnitId());
-            if (changeResult != 0)
+            if (unitToMove != 0)
             {
-                u2 = GetUnit(changeResult);
+                u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                 u2.MoveToFrontLine();
+                //u2.DeactivateAttackOnUnit(change.attackerId);
+                //u2.ActivateAttackOnUnit(change.attackerId);
                 tempUnitId = u2.GetUnitId();
                 PromoteAttacksOnUnit(tempUnitId);
                 u2 = GetUnit(change.attackerId);
@@ -217,14 +223,16 @@ public class BoardState
         }
         else
         {
-            changeResult = u.ChangeMorale(change.defenderMoraleChanged);
+            unitToMove = u.ChangeMorale(change.defenderMoraleChanged);
             if (!u.IsAlive)
             {
                 DeactivateAttacksOnUnit(u.GetUnitId());
-                if (changeResult != 0)
+                if (unitToMove != 0)
                 {
-                    u2 = GetUnit(changeResult);
+                    u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
+                    //u2.DeactivateAttackOnUnit(change.attackerId);
+                    //u2.ActivateAttackOnUnit(change.attackerId);
                     tempUnitId = u2.GetUnitId();
                     PromoteAttacksOnUnit(tempUnitId);
                     u2 = GetUnit(change.attackerId);

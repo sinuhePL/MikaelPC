@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 3757254920715771087}
   - component: {fileID: 3757254920715771086}
   - component: {fileID: 3757254920715771081}
-  - component: {fileID: 3757254920715771080}
   - component: {fileID: 5216330788313360248}
+  - component: {fileID: 1537079686507884685}
   m_Layer: 9
-  m_Name: arrow
+  m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3757254920715771083}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 11.871, y: 0.01, z: -16.413}
-  m_LocalScale: {x: 1, y: 7.1679997, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 6.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -79,7 +79,32 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &3757254920715771080
+--- !u!114 &5216330788313360248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3757254920715771083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5717c1c707be04088e78b7fdc0039d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackId: 0
+  arrowRightTexture: {fileID: 2800000, guid: 2a0ea1d408b5f96489a94cdb5ba0bf47, type: 3}
+  arrowForwardTexture: {fileID: 2800000, guid: 50680881600095045a160b9f9abc5584, type: 3}
+  arrowLeftTexture: {fileID: 2800000, guid: 2c1cb9fdaf49df94aaa1bd3e7f63fddf, type: 3}
+  arrowRightEmptyTexture: {fileID: 2800000, guid: 303fbacfdab51b747a009d9971b495d2,
+    type: 3}
+  arrowForwardEmptyTexture: {fileID: 2800000, guid: f0b35c369609bc942af8c3c6fb4cf8b6,
+    type: 3}
+  arrowLeftEmptyTexture: {fileID: 2800000, guid: 42fa362fb8a0ec241975526c1d6b2aed,
+    type: 3}
+  arrowFarTexture: {fileID: 2800000, guid: eebc6180dc4efb34c836c1090fc28173, type: 3}
+  arrowFarEmptyTexture: {fileID: 2800000, guid: e9176167aaa11104faa09243c6a9f1da,
+    type: 3}
+--- !u!64 &1537079686507884685
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,24 +118,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &5216330788313360248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3757254920715771083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac5717c1c707be04088e78b7fdc0039d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arrowRightTexture: {fileID: 2800000, guid: 2a0ea1d408b5f96489a94cdb5ba0bf47, type: 3}
-  arrowForwardTexture: {fileID: 2800000, guid: 50680881600095045a160b9f9abc5584, type: 3}
-  arrowLeftTexture: {fileID: 2800000, guid: 2c1cb9fdaf49df94aaa1bd3e7f63fddf, type: 3}
-  arrowRightEmptyTexture: {fileID: 2800000, guid: 303fbacfdab51b747a009d9971b495d2,
-    type: 3}
-  arrowForwardEmptyTexture: {fileID: 2800000, guid: f0b35c369609bc942af8c3c6fb4cf8b6,
-    type: 3}
-  arrowLeftEmptyTexture: {fileID: 2800000, guid: 42fa362fb8a0ec241975526c1d6b2aed,
-    type: 3}

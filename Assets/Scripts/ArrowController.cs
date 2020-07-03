@@ -21,6 +21,8 @@ public class ArrowController : MonoBehaviour
     [SerializeField] private Texture arrowRightEmptyTexture;
     [SerializeField] private Texture arrowForwardEmptyTexture;
     [SerializeField] private Texture arrowLeftEmptyTexture;
+    [SerializeField] private Texture arrowFarTexture;
+    [SerializeField] private Texture arrowFarEmptyTexture;
 
     private void OnMouseDown()
     {
@@ -49,14 +51,17 @@ public class ArrowController : MonoBehaviour
                 gameObject.SetActive(true);
                 myRenderer.enabled = true;
                 isShownAsCounterAttack = true;
+                transform.position = new Vector3(transform.position.x, 0.002f, transform.position.z);
             }
             else if (arrowType == "solid" && aId != AttackId)
             {
                 myRenderer.enabled = false;
+                transform.position = new Vector3(transform.position.x, -0.002f, transform.position.z);
             }
             else if (arrowType == "empty" && !isArrowActive)
             {
                 myRenderer.enabled = false;
+                transform.position = new Vector3(transform.position.x, -0.002f, transform.position.z);
             }
         }
     }
@@ -109,6 +114,11 @@ public class ArrowController : MonoBehaviour
             if (type == "solid") myRenderer.material.mainTexture = arrowLeftTexture;
             else if (type == "empty") myRenderer.material.mainTexture = arrowLeftEmptyTexture;
         }
+        else if (direction == "far")
+        {
+            if (type == "solid") myRenderer.material.mainTexture = arrowFarTexture;
+            else if (type == "empty") myRenderer.material.mainTexture = arrowFarEmptyTexture;
+        }
         myRenderer.material.EnableKeyword("_EmisColor");
         if (color == "red")
         {
@@ -152,13 +162,18 @@ public class ArrowController : MonoBehaviour
 
     public void ShowArrow()
     {
-        if(isArrowActive) myRenderer.enabled = true;
+        if (isArrowActive)
+        {
+            myRenderer.enabled = true;
+            transform.position = new Vector3(transform.position.x, 0.002f, transform.position.z);
+        }
     }
 
     public void HideArrow()
     {
         myRenderer.enabled = false;
         isShownAsCounterAttack = false;
+        transform.position = new Vector3(transform.position.x, -0.002f, transform.position.z);
     }
 
     public void ShowArrow(int aId, bool isCounterAttack)
@@ -167,9 +182,14 @@ public class ArrowController : MonoBehaviour
         {
             myRenderer.enabled = true;
             gameObject.SetActive(true);
+            transform.position = new Vector3(transform.position.x, 0.002f, transform.position.z);
             return;
         }
-        if (isArrowActive && AttackId == aId) myRenderer.enabled = true;
+        if (isArrowActive && AttackId == aId)
+        {
+            myRenderer.enabled = true;
+            transform.position = new Vector3(transform.position.x, 0.002f, transform.position.z);
+        }
     }
 
     public void HideArrow(int aId)
@@ -177,6 +197,7 @@ public class ArrowController : MonoBehaviour
         if (isArrowActive && AttackId == aId)
         {
             myRenderer.enabled = false;
+            transform.position = new Vector3(transform.position.x, -0.002f, transform.position.z);
         }
     }
 

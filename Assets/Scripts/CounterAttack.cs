@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CounterAttack : Attack
 {
-    public CounterAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, string aType, string dType, bool f) : base(aId, state, army, o, keyField, isKFTaken, tId, p, f)
+    public CounterAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, string aType, string dType) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
     {
         attackName = "CounterAttack";
         switch (aType)
@@ -42,7 +42,7 @@ public class CounterAttack : Attack
         }
     }
 
-    public CounterAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, int aNum, int dNum, bool f) : base(aId, state, army, o, keyField, isKFTaken, tId, p, f)
+    public CounterAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, int aNum, int dNum) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
     {
         attackName = "CounterAttack";
         attackDiceNumber = aNum;
@@ -232,8 +232,8 @@ public class CounterAttack : Attack
 
     public override Attack GetCopy(Unit o)
     {
-        ChargeAttack nca;
-        nca = new ChargeAttack(attackId, isActiveState, armyId, o, keyFieldId, isKeyFieldTaken, targetId, arrowPosition, attackDiceNumber, defenceDiceNumber, isAttackForward);
+        CounterAttack nca;
+        nca = new CounterAttack(attackId, isActiveState, armyId, o, keyFieldId, isKeyFieldTaken, targetId, arrowPosition, attackDiceNumber, defenceDiceNumber);
         foreach (int i in activatesAttacks)
         {
             nca.AddActivatedAttackId(i);

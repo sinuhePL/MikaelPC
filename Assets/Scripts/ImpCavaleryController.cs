@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class ImpCavaleryController : UnitController
 {
-    public override void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId, int deployPosition)
+    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)
     {
         Vector3 tempPos;
 
-        base.InitializeUnit(unitId, armyId, forwardAttackId, leftAttackId, rightAttackId, tileId, deployPosition);
+        base.InitializeUnit(unitId, armyId, tileId, deployPosition);
         _unitType = "Imperial Cavalery";
         _unitCaption.text = "de Lannoy";
         if (_armyId == 1)
         {
-            _unitCaption.transform.position = transform.position + new Vector3(0.8f, 0.0f, -1.2f);
+            _unitCaption.transform.position = transform.position + new Vector3(0.8f, 0.0f, -1.5f);
         }
         else
         {
-            _unitCaption.transform.position = transform.position + new Vector3(0.8f, 0.0f, 1.2f);
+            _unitCaption.transform.position = transform.position + new Vector3(0.8f, 0.0f, 1.5f);
             _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }
         // inicjalizacja squadów

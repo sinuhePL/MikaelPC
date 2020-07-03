@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class SwissController : UnitController
 {
-    public override void InitializeUnit(int unitId, int armyId, int forwardAttackId, int leftAttackId, int rightAttackId, int tileId, int deployPosition)
+    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)
     {
         Vector3 tempPos;
 
-        base.InitializeUnit(unitId, armyId, forwardAttackId, leftAttackId, rightAttackId, tileId, deployPosition);
+        base.InitializeUnit(unitId, armyId, tileId, deployPosition);
         _unitType = "Suisse";
         _unitCaption.text = "de La Marck";
         if (_armyId == 1)

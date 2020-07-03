@@ -9,9 +9,11 @@ public class EndTurnController : MonoBehaviour
     private bool isClicked;
     private int mode; // 1 - end turn, 2 - attack, 3 - close attack result
     private Text myText;
-    private int lastClickedAttack;
+    private bool isShifted;
+    private Vector3 startingPosition;
+    private int lastClickedUnit;
 
-    public int LastClickedAttack { get => lastClickedAttack; set => lastClickedAttack = value; }
+    public int LastClickedAttack { get; set; }
 
     [SerializeField] private GameObject leftArrow;
     [SerializeField] private GameObject rightArrow;
@@ -33,7 +35,7 @@ public class EndTurnController : MonoBehaviour
         EventManager.onAttackClicked += AttackClicked;
         EventManager.onDiceResult += DiceThrown;
         EventManager.onTileClicked += Reset;
-        EventManager.onUnitClicked += Reset;
+        EventManager.onUnitClicked += UnitClicked;
         EventManager.onRouteTestOver += RouteTestEnded;
         EventManager.onGameStart += GameStart;
     }
@@ -44,6 +46,9 @@ public class EndTurnController : MonoBehaviour
         myText = GetComponentInChildren<Text>();
         mode = 1;
         LastClickedAttack = 0;
+        startingPosition = transform.position;
+        isShifted = false;
+        lastClickedUnit = 0;
     }
 
     private void OnDestroy()
@@ -51,7 +56,7 @@ public class EndTurnController : MonoBehaviour
         EventManager.onAttackClicked -= AttackClicked;
         EventManager.onDiceResult -= DiceThrown;
         EventManager.onTileClicked -= Reset;
-        EventManager.onUnitClicked -= Reset;
+        EventManager.onUnitClicked -= UnitClicked;
         EventManager.onRouteTestOver -= RouteTestEnded;
         EventManager.onGameStart -= GameStart;
     }
@@ -103,10 +108,16 @@ public class EndTurnController : MonoBehaviour
         }
     }
 
-    private void GameStart()
+    private void ChangeToMode2()
     {
         myText.text = "End Turn";
         mode = 2;
+    }
+
+    private void GameStart()
+    {
+        ChangeToMode2();
+        if (!isShifted) ShiftMe();
     }
 
     private void RouteTestEnded(string resultDescription, int result, int morale)
@@ -143,7 +154,8 @@ public class EndTurnController : MonoBehaviour
             {
                 myText.text = "Attack";
                 mode = 3;
-                lastClickedAttack = attackId;
+                LastClickedAttack = attackId;
+                if (!isShifted) ShiftMe();
             }
             else
             {
@@ -164,11 +176,36 @@ public class EndTurnController : MonoBehaviour
         mode = 4;
     }
 
+    private void UnitClicked(int uId)
+    {
+        if (uId == lastClickedUnit && !isShifted) ShiftMe();
+        else lastClickedUnit = uId;
+        if (mode == 3)
+        {
+            ChangeToMode2();
+        }
+    }
+
     public void Reset(int i)
     {
         if (mode == 3)
         {
-            GameStart();
+            ChangeToMode2();
+        }
+        if(!isShifted) ShiftMe();
+    }
+
+    public void ShiftMe()
+    {
+        if (!isShifted)
+        {
+            transform.DOMoveX(startingPosition.x - 430.0f, 0.3f).SetEase(Ease.InOutQuint);
+            isShifted = true;
+        }
+        else
+        {
+            transform.DOMoveX(startingPosition.x, 0.3f).SetEase(Ease.InOutQuint);
+            isShifted = false;
         }
     }
 }
