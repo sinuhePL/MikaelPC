@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class ArtilleryController : UnitController
 {
-    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)
+    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition, string commander)
     {
         Vector3 tempPos;
 
-        base.InitializeUnit(unitId, armyId, tileId, deployPosition);
+        base.InitializeUnit(unitId, armyId, tileId, deployPosition, commander);
         _unitType = "Artillery";
+        _unitCaption.text = _unitCommander;
         if (_armyId == 1)
         {
-            _unitCaption.text = "de Genouillac";
             _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, -1.5f);
         }
         else
         {
-            _unitCaption.text = "";
             _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 2.0f);
             _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }

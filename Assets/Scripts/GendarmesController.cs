@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class GendarmesController : UnitController
 {
-    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)
+    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition, string commander)
     {
         Vector3 tempPos;
 
-        base.InitializeUnit(unitId, armyId, tileId, deployPosition);
+        base.InitializeUnit(unitId, armyId, tileId, deployPosition, commander);
         _unitType = "Gendarmes";
-        _unitCaption.text = "Francis I";
+        _unitCaption.text = _unitCommander;
         if(_armyId == 1)
         {
             _unitCaption.transform.position = transform.position + new Vector3(1.2f, 0.0f, -1.3f);

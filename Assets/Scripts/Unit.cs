@@ -7,6 +7,7 @@ public class Unit
 {
     private int unitId;
     private string unitType;
+    private string unitCommander;
     private int initialStrength;
     private int _strength;
     private int initialMorale;
@@ -63,6 +64,7 @@ public class Unit
     {
         unitId = pattern.unitId;
         unitType = pattern.unitType;
+        unitCommander = pattern.unitCommander;
         initialStrength = pattern.initialStrength;
         strength = pattern.strength;
         initialMorale = pattern.initialMorale;
@@ -83,7 +85,7 @@ public class Unit
         }
     }
 
-    public Unit(int uId, string uType, int iStrength, int iMorale, Army a)  // konstruktor
+    public Unit(int uId, string uType, int iStrength, int iMorale, Army a, string commander)  // konstruktor
     {
         unitId = uId;
         unitType = uType;
@@ -98,6 +100,7 @@ public class Unit
         owner = a;
         supportLineUnitId = 0;
         movedToFrontLine = false;
+        unitCommander = commander;
     }
 
     /*public StateChange MakeAttack(int aId) // wykonuje atak wskazany przez id ataku przekazane do metody
@@ -220,6 +223,11 @@ public class Unit
     public int GetUnitId()
     {
         return unitId;
+    }
+
+    public string GetCommander()
+    {
+        return unitCommander;
     }
 
     /*public void SetAttacksTargets(List<Unit> _unitList) // ustawia referencję celów ataków na odpowiednie jednostki bazując na id celu ataku

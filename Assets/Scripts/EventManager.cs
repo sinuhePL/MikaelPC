@@ -8,7 +8,7 @@ public class EventManager : MonoBehaviour
     public delegate void Action<A>(A arg1);
     public delegate void Action<A, B>(A arg1, B arg2);
     public delegate void Action<A, B, C>(A arg1, B arg2, C arg3);
-    public delegate void Action<A, B, C, D>(A arg1, B arg2, C arg3, D arg4);
+    public delegate void Action<A, B, C, D, E>(A arg1, B arg2, C arg3, D arg4, E arg5);
 
     /* Example use:
     public static event Action newEvent;
@@ -101,10 +101,10 @@ public class EventManager : MonoBehaviour
         if (onRouteTestOver != null) onRouteTestOver(description, result, morale);
     }
 
-    public static event Action<int, int, int, string> onUIDeployPressed;
-    public static void RaiseEventOnUIDeployPressed(int armyId, int position, int uId, string uType)
+    public static event Action<int, int, int, string, string> onUIDeployPressed;
+    public static void RaiseEventOnUIDeployPressed(int armyId, int position, int uId, string uType, string commander)
     {
-        if (onUIDeployPressed != null) onUIDeployPressed(armyId, position, uId, uType);
+        if (onUIDeployPressed != null) onUIDeployPressed(armyId, position, uId, uType, commander);
     }
 
     public static event Action<int, int> onUnitDeployed;

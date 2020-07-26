@@ -7,15 +7,15 @@ public class StradiotiController : UnitController
     protected GameObject farArrow;
     protected GameObject farArrowEmpty;
 
-    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)
+    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition, string commander)
     {
         Vector3 tempPos;
 
-        base.InitializeUnit(unitId, armyId, tileId, deployPosition);
+        base.InitializeUnit(unitId, armyId, tileId, deployPosition, commander);
+        _unitCaption.text = _unitCommander;
         if (_armyId == 1)
         {
             _unitType = "Coustilliers";
-            _unitCaption.text = "Tiercelin";
             _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, -1.5f);
             farArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 6.0f), arrowPrefab.transform.rotation);
             farArrow.GetComponent<ArrowController>().InitializeArrow("far", "blue", "solid");
@@ -29,7 +29,6 @@ public class StradiotiController : UnitController
         else
         {
             _unitType = "Stradioti";
-            _unitCaption.text = "";
             _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 2.0f);
             _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
             farArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -6.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
@@ -160,7 +159,7 @@ public class StradiotiController : UnitController
         myUnit = BattleManager.Instance.GetUnit(UnitId);
         tempAttack = null;
         tempAttack = myUnit.GetAttack(farArrow.GetComponent<ArrowController>().AttackId);
-        if (tempAttack == null || !tempAttack.IsActive())
+        if (tempAttack != null && !tempAttack.IsActive())
         {
             DeactivateAttack(tempAttack.GetId());
         }

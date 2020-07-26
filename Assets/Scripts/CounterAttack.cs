@@ -30,7 +30,7 @@ public class CounterAttack : Attack
                 specialOutcomeType = 8;
                 break;
             case "Arquebusiers":
-                attackDiceNumber = 2;
+                attackDiceNumber = 4;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 7;
                 break;

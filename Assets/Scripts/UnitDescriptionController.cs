@@ -25,6 +25,7 @@ public class UnitDescriptionController : MonoBehaviour
     [SerializeField] private Image unitImage;
     [SerializeField] private Image unitCaption;
     [SerializeField] private Text unitDescription;
+    [SerializeField] private Text unitCommander;
     [SerializeField] private Text unitRules;
     private Vector3 startingPosition;
     private bool isShifted;
@@ -52,7 +53,7 @@ public class UnitDescriptionController : MonoBehaviour
         ShowHide(false);
     }
 
-    private void ChangeDescription(string uType)
+    private void ChangeDescription(string uType, string commander)
     {
         switch (uType)
         {
@@ -97,11 +98,47 @@ public class UnitDescriptionController : MonoBehaviour
                 unitDescription.text = "    The coustillier (also coutillier, coutilier) was a title of a low-ranking professional soldier in Medieval French armies. Since mid 15th century coustelliers were a lightly armoured horseman.  A French coutilier of 1446 was equipped with a helmet, leg armour, a haubergeon, jack or brigandine, a dagger, sword and either a demilance or a voulge. Although unable to stand up against heavy cavalry in battle, these soldiers made excellent skirmishers, raiders and scouts.";
                 break;
         }
+        switch(commander)
+        {
+            case "Francis I":
+                unitCommander.text = "    Francis I -  King of France from 1515 until his death in 1547. He succeeded his first cousin once removed and father-in-law Louis XII, who died without a son. Captured during battle of Pavia by imperial troops.";
+                break;
+            case "de Lorraine":
+                unitCommander.text = "    Francois de Lorraine (1506 - 1525) was the Lord of Lambesc. He commanded the Black Band of renegade Landsknechts at the Battle of Pavia, and in the combat that ensued between his unit and Imperial Landsknechts, Lorraine was killed.";
+                break;
+            case "de La Marck":
+                unitCommander.text = "    Robert III de La Marck (1491 – 1537), Seigneur of Fleuranges, Marshal of France and historian. Taken prisoner during battle of Pavia with Francis I";
+                break;
+            case "de la Pole":
+                unitCommander.text = "    Richard de la Pole (1480 – 24 February 1525) duke of Suffolk was a pretender to the English crown - he was the last Yorkist claimant to actively seek the crown of England. Commanded french infrantry during battle of Pavia where he was killed.";
+                break;
+            case "de Genouillac":
+                unitCommander.text = "    Jacques Ricard de Genouillac, called Galiot de Genouillac , (1465 - 1546) was a French diplomat and warlord from the Ricard de Genouillac family. He was involved in the Battle of Pavia as Grand Master of Artillery of France .";
+                break;
+            case "Tiercelin":
+                unitCommander.text = "    Charles Tiercelin - french nobleman, commander of light cavalery unit during battle of Pavia.";
+                break;
+            case "von Frundsberg":
+                unitCommander.text = "    Georg von Frundsberg (1473 – 1528) was a German military and Landsknecht leader in the service of the Holy Roman Empire and Imperial House of Habsburg.";
+                break;
+            case "de Lannoy":
+                unitCommander.text = "    Charles de Lannoy (1487 – 1527) was a soldier and statesman from the Low Countries in service of the Habsburg Emperors Maximilian I and Charles V.";
+                break;
+            case "de Vasto":
+                unitCommander.text = "    Alfonso d'Avalos d'Aquino, VI marquis of Pescara and II of Vasto (1502 – 1546), was an Italian condottiero of Spanish origins, renowned for his service in favor of Charles V, Holy Roman Emperor and King of Spain. ";
+                break;
+            case "Pescara":
+                unitCommander.text = "    Fernando Francesco d'Ávalos, 5th marquis of Pescara (1489 – 1525), was an Italian condottiero of Aragonese extraction. He was the chief commander of the Habsburg armies of Charles V in Italy during italian wars. ";
+                break;
+            case "":
+                unitCommander.text = "    Unknown";
+                break;
+        }
     }
 
-    private void UIDeployClicked(int armyId, int position, int uId, string uType)
+    private void UIDeployClicked(int armyId, int position, int uId, string uType, string commander)
     {
-        ChangeDescription(uType);
+        ChangeDescription(uType, commander);
     }
 
     private void UnitClicked(int unitId)
@@ -113,7 +150,7 @@ public class UnitDescriptionController : MonoBehaviour
             else
             {
                 tempUnit = BattleManager.Instance.GetUnit(unitId);
-                ChangeDescription(tempUnit.GetUnitType());
+                ChangeDescription(tempUnit.GetUnitType(), tempUnit.GetCommander());
                 lastUnitClicked = unitId;
             }
         }

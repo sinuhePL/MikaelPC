@@ -15,6 +15,7 @@ public class UnitController : MonoBehaviour
     protected bool isMoved;
     protected int _strength;
     protected string _unitType;
+    protected string _unitCommander;
     protected int _morale;
     protected int _armyId;
     protected int _unitId;
@@ -266,6 +267,32 @@ public class UnitController : MonoBehaviour
         }
     }
 
+    protected void UnitDeployUIClicked(int aId, int p, int uId, string uType, string commander)
+    {
+        if (isPlaced)
+        {
+            if (uId == UnitId && !isOutlined)
+            {
+                for (int i = 0; i < _strength; i++)
+                {
+                    _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+                }
+                isOutlined = true;
+            }
+            else
+            {
+                if (isOutlined)
+                {
+                    for (int i = 0; i < _strength; i++)
+                    {
+                        _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+                    }
+                    isOutlined = false;
+                }
+            }
+        }
+    }
+
     protected void UpdateOnStart()
     {
         if(_isPlaced) UpdateMe("GameStart");
@@ -280,6 +307,7 @@ public class UnitController : MonoBehaviour
         EventManager.onUnitDeployed += PlaceOnTile;
         EventManager.onDeploymentStart += StartDeployment;
         EventManager.onGameStart += UpdateOnStart;
+        EventManager.onUIDeployPressed += UnitDeployUIClicked;
     }
 
     protected virtual void OnDestroy()
@@ -291,6 +319,7 @@ public class UnitController : MonoBehaviour
         EventManager.onUnitDeployed -= PlaceOnTile;
         EventManager.onDeploymentStart -= StartDeployment;
         EventManager.onGameStart -= UpdateOnStart;
+        EventManager.onUIDeployPressed -= UnitDeployUIClicked;
     }
 
     public int UnitId
@@ -306,6 +335,11 @@ public class UnitController : MonoBehaviour
     public string UnitType
     {
         get {return _unitType; }
+    }
+
+    public string UnitCommander
+    {
+        get { return _unitCommander; }
     }
 
     public int InitialStrength
@@ -338,7 +372,7 @@ public class UnitController : MonoBehaviour
         deployWidget = Instantiate(deployUnitPrefab, deployUnitPrefab.transform.position, deployUnitPrefab.transform.rotation);
         deployWidget.transform.SetParent(uiCanvas.transform);
         deployWidget.GetComponent<RectTransform>().anchoredPosition = new Vector3(485.0f, -65.0f - position * 115.0f, 0.0f);
-        deployWidget.GetComponent<DeployUIController>().InitializeDeploy(_unitType, _strength, _morale, position, _armyId, _unitId);
+        deployWidget.GetComponent<DeployUIController>().InitializeDeploy(_unitType, _strength, _morale, position, _armyId, _unitId, _unitCommander);
     }
 
     protected void StartDeployment(int aId)
@@ -381,7 +415,7 @@ public class UnitController : MonoBehaviour
         set { _isBlocked = value; }
     }
 
-    public virtual void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)   //   armyId == 1 then blue else red
+    public virtual void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition, string commander)   //   armyId == 1 then blue else red
     {
         Color myColor;
 
@@ -403,6 +437,7 @@ public class UnitController : MonoBehaviour
             _armyId = armyId;
             _squads = new GameObject[initialStrength];
             _unitCaption = GetComponentInChildren<TextMeshPro>();
+            _unitCommander = commander;
             blockingUnitId = 0;
             isMoved = false;
 

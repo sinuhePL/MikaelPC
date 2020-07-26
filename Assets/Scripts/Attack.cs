@@ -92,7 +92,7 @@ public abstract class Attack
 
     public void ChangeDefence(int amount)
     {
-        defenceDiceNumber += amount;
+        if(defenceDiceNumber + amount >= 2) defenceDiceNumber += amount;
     }
 
     public void Activate()

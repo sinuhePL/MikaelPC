@@ -45,6 +45,7 @@ public class PanZoom : MonoBehaviour
             }
             myCamera.transform.RotateAround(rotatePoint, new Vector3(0.0f, 1.0f, 0.0f), Mathf.Lerp(0.0f, angle, ((float)t )/ duration) - lastAngle);
             lastAngle = Mathf.Lerp(0.0f, angle, ((float)t) / duration);
+            if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) myCamera.transform.position = new Vector3(myCamera.transform.position.x, 12.0f, myCamera.transform.position.z);
             yield return 0;
         }
     }
@@ -113,11 +114,26 @@ public class PanZoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float directionMagnitude;
+        Vector3 mousePos;
+        Ray camRay;
+        RaycastHit groundHit;
+        int groundMask;
+
         if (!BattleManager.Instance.isInputBlocked)
         {
+            groundMask = LayerMask.GetMask("Ground");
             if (Input.GetMouseButtonDown(0))
             {
-                if(GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) touchStart = myCamera.ScreenToWorldPoint(Input.mousePosition);
+                if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric)
+                {
+                    camRay =  myCamera.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
+                    {
+                        touchStart = groundHit.point;
+                    }
+
+                }
                 else if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective) touchStart = GetCursorWorldPosition();
             }
             if (Input.touchCount == 2)
@@ -138,8 +154,17 @@ public class PanZoom : MonoBehaviour
             }
             else if (Input.GetMouseButton(0))
             {
-                Vector3 direction, tempPosition;
-                if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) direction = touchStart - myCamera.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 direction, tempPosition, touchEnd;
+                if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric)
+                {
+                    camRay = myCamera.ScreenPointToRay(Input.mousePosition);
+                    if (Physics.Raycast(camRay, out groundHit, 100.0f, groundMask))
+                    {
+                        touchEnd = groundHit.point;
+                    }
+                    else touchEnd = new Vector3(0.0f, 0.0f, 0.0f);
+                    direction = touchStart - touchEnd;
+                }
                 else if (GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.perspective) direction = touchStart - GetCursorWorldPosition();
                 else direction = new Vector3(0.0f, 0.0f, 0.0f);
                 Vector3 previousCamPosition = myCamera.transform.position;
@@ -158,12 +183,8 @@ public class PanZoom : MonoBehaviour
                 }
                 else
                 {
+                    //direction.y = 0.0f;
                     myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + direction, smoothing * Time.deltaTime);
-                    /*  Ray lbRay = myCamera.ScreenPointToRay(new Vector2(0.0f, 0.0f));
-                      Ray ltRay = myCamera.ScreenPointToRay(new Vector2(0.0f, Screen.height));
-                      Ray rbRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, 0.0f));
-                      Ray rtRay = myCamera.ScreenPointToRay(new Vector2(Screen.width, Screen.height));
-                      if (!Physics.Raycast(lbRay) || !Physics.Raycast(ltRay) || !Physics.Raycast(rbRay) || !Physics.Raycast(rtRay))*/
                     if (lookDirection == 1 && (myCamera.transform.position.x < -2.0f
                         || myCamera.transform.position.z > -16.0f
                         || myCamera.transform.position.x > BattleManager.Instance.boardFieldWitdth * BattleManager.Instance.boardWidth - 4.0f
@@ -222,6 +243,7 @@ public class PanZoom : MonoBehaviour
         if (!Physics.Raycast(ltRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
         if (!Physics.Raycast(rbRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, 0.2f), 6 * smoothing * Time.deltaTime);
         if (!Physics.Raycast(rtRay)) myCamera.transform.position = Vector3.Lerp(myCamera.transform.position, myCamera.transform.position + new Vector3(-0.2f, 0.0f, -0.2f), 6 * smoothing * Time.deltaTime);
+        myCamera.transform.position = new Vector3(myCamera.transform.position.x, 12.0f, myCamera.transform.position.z);
     }
 
     private void ReallyLookAtDice(Vector3 target, float delay)

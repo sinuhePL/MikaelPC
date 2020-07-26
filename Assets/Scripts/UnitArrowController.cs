@@ -8,7 +8,7 @@ public class UnitArrowController : MonoBehaviour
 {
     private Vector3 startingPosition;
 
-    private void MoveArrow(int aId, int p, int uId, string uType)
+    private void MoveArrow(int aId, int p, int uId, string uType, string commander)
     {
         transform.DOMoveY(startingPosition.y - p * 116.0f, 0.25f).SetEase(Ease.InOutQuint);
     }

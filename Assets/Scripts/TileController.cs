@@ -128,19 +128,29 @@ public class TileController : MonoBehaviour
         return results.Count > 0;
     }
 
-    private void SetLastClickedUnit(int a, int p, int uId, string uType)
+    private void SetLastClickedUnit(int a, int p, int uId, string uType, string commander)
     {
+        TileController tc;
+
         lastClickedUnit = uId;
         if(a == possibleArmyDeployment && myDeployedUnitId == 0 && !initiallyDeploymentNotPossible)
         {
             tileInfluenceDescription.gameObject.SetActive(true);
             tileInfluenceDescription.text = "";
+            if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+            {
+                tc = null;
+                if (a == 1) tc = BattleManager.Instance.GetTile(tileId - 2);
+                else tc = BattleManager.Instance.GetTile(tileId + 2);
+                if(tc.tileType == "hill") tileInfluenceDescription.text = "-1 Attack Die";
+                else tileInfluenceDescription.text = "";
+            }
             if (tileType == "hill")
             {
-                if (uType == "Imperial Cavalery" || uType == "Gendarmes") tileInfluenceDescription.text = "+1 Attack Die";
-                tileInfluenceDescription.text += "\n\n+1 Defence Die";
+                if(a == 1) tileInfluenceDescription.text += "\n\n-1 Attack Die for opposing  Imperial Cavalry";
+                if (a == 2) tileInfluenceDescription.text += "\n\n-1 Attack Die for opposing Gendarmes";
             }
-            if(tileType == "forest")
+            /*if(tileType == "forest")
             {
                 if(uType == "Arquebusiers") tileInfluenceDescription.text = "+1 Attack Die";
                 if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers" || uType == "Artillery") tileInfluenceDescription.text += "\n\n+1 Defence Die against Cavalery";
@@ -148,7 +158,7 @@ public class TileController : MonoBehaviour
             if(tileType == "town")
             {
                 if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") tileInfluenceDescription.text += "\n\n+1 Defence Die against Arquebusiers and Artillery";
-            }
+            }*/
         }
         else tileInfluenceDescription.gameObject.SetActive(false);
     }
@@ -418,20 +428,22 @@ public class TileController : MonoBehaviour
 
     public int ChangeAttackStrength(string uType)
     {
-        if (tileType == "hill")
+        TileController tc;
+
+        if (uType == "Imperial Cavalery" || uType == "Gendarmes")
         {
-            if (uType == "Imperial Cavalery" || uType == "Gendarmes") return 1;
-        }
-        if (tileType == "forest")
-        {
-            if (uType == "Arquebusiers") return 1;
+            tc = null;
+            if (uType == "Gendarmes") tc = BattleManager.Instance.GetTile(tileId - 2);
+            else tc = BattleManager.Instance.GetTile(tileId + 2);
+            if (tc.tileType == "hill") return -1;
+            else return 0;
         }
         return 0;
     }
 
     public int ChangeDefenceStrength(string defenderType, string attackerType)
     {
-        if (tileType == "hill")
+        /*if (tileType == "hill")
         {
             return 1;
         }
@@ -442,7 +454,7 @@ public class TileController : MonoBehaviour
         if (tileType == "town")
         {
             if ((defenderType == "Suisse" || defenderType == "Landsknechte" || defenderType == "Arquebusiers") && (attackerType == "Arquebusiers" || attackerType == "Artillery")) return 1;
-        }
+        }*/
         return 0;
     }
 
@@ -454,12 +466,32 @@ public class TileController : MonoBehaviour
 
     public int GetUnitValue(string uType)
     {
-        if(tileType == "hill")
+        TileController tc;
+
+        if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (tileId - 1) % BattleManager.Instance.boardHeight == 0) // if tile in second line
         {
-            if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 10;
-            else return 20;
+            if (uType == "Coustilliers" || uType == "Stradioti") return 40;
+            else return 60;
         }
-        if(tileType == "forest")
+        if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+        {
+            tc = null;
+            if (uType == "Gendarmes") tc = BattleManager.Instance.GetTile(tileId - 2);
+            else tc = BattleManager.Instance.GetTile(tileId + 2);
+            if (tileType == "hill")
+            {
+                if (tc.tileType == "hill") return 60;
+                else return 40;
+            }
+            else
+            {
+                if (tc.tileType == "hill") return 70;
+                else return 50;
+            }
+        }
+        if (tileType == "hill") return 40;
+
+        /*if(tileType == "forest")
         {
             if (uType == "Arquebusiers") return 10;
             if (uType == "Suisse" || uType == "Landsknechte" || uType == "Artillery") return 40;
@@ -467,7 +499,7 @@ public class TileController : MonoBehaviour
         if(tileType == "town")
         {
             if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") return 30;
-        }
+        }*/
         return 50;
     }
 
@@ -475,11 +507,12 @@ public class TileController : MonoBehaviour
     {
         if (tileType == "hill")
         {
-            if (uType == "Artillery") return 80;
+            if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 20;
+            /*if (uType == "Artillery") return 80;
             if (uType == "Landsknechte" || uType == "Suisse") return 30;
-            else return 50;
+            else return 50;*/
         }
-        if (tileType == "forest")
+        /*if (tileType == "forest")
         {
             if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 40;
             else return 10;
@@ -488,7 +521,7 @@ public class TileController : MonoBehaviour
         {
             if (uType == "Artillery" || uType == "Arquebusiers") return 20;
             else return 0;
-        }
+        }*/
         return 0;
     }
 

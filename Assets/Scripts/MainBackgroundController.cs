@@ -9,6 +9,6 @@ public class MainBackgroundController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.DOScale(0.305f, 120.0f);   
+        transform.DOScale(Screen.width/6100.0f, 120.0f);   
     }
 }

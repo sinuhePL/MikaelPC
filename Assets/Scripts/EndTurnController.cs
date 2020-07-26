@@ -171,7 +171,14 @@ public class EndTurnController : MonoBehaviour
 
     public void DiceThrown(StateChange st)
     {
-        if (st.attackerStrengthChange != 0 || st.defenderStrengthChange != 0) myText.text = "Rout Test";
+        int attackerArmyId, defenderArmyId;
+        attackerArmyId = BattleManager.Instance.turnOwnerId;
+        if (BattleManager.Instance.turnOwnerId == 1)
+        {
+            defenderArmyId = 2;
+        }
+        else defenderArmyId = 1;
+        if (st.attackerStrengthChange != 0 && BattleManager.Instance.GetArmyMorale(attackerArmyId) <= 30 || st.defenderStrengthChange != 0 && BattleManager.Instance.GetArmyMorale(defenderArmyId) <= 30) myText.text = "Rout Test";
         else myText.text = "Close Result";
         mode = 4;
     }
@@ -197,7 +204,7 @@ public class EndTurnController : MonoBehaviour
 
     public void ShiftMe()
     {
-        if (!isShifted)
+        if (!isShifted && BattleManager.Instance.gameMode != "deploy")
         {
             transform.DOMoveX(startingPosition.x - 430.0f, 0.3f).SetEase(Ease.InOutQuint);
             isShifted = true;

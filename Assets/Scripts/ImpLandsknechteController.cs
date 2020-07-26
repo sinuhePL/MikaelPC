@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class ImpLandsknechteController : UnitController
 {
-    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition)
+    public override void InitializeUnit(int unitId, int armyId, int tileId, int deployPosition, string commander)
     {
         Vector3 tempPos;
 
-        base.InitializeUnit(unitId, armyId, tileId, deployPosition);
+        base.InitializeUnit(unitId, armyId, tileId, deployPosition, commander);
         _unitType = "Landsknechte";
-        _unitCaption.text = "von Frundsberg";
+        _unitCaption.text = _unitCommander;
         if (_armyId == 1)
         {
             _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, -1.5f);

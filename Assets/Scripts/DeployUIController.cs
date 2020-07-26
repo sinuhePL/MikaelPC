@@ -15,6 +15,7 @@ public class DeployUIController : MonoBehaviour
     private int unitId;
     private int armyId;
     private string unitType;
+    private string unitCommander;
     private Vector3 startingPosition;
     // Start is called before the first frame update
     void Awake()
@@ -40,7 +41,7 @@ public class DeployUIController : MonoBehaviour
         EventManager.onDeploymentStart -= DeploymentStart;
     }
 
-    private void MoveDown(int aId, int p, int uId, string uType)
+    private void MoveDown(int aId, int p, int uId, string uType, string commander)
     {
         if (aId == armyId && p == myPosition) return;
         if (isEnlarged)
@@ -66,7 +67,7 @@ public class DeployUIController : MonoBehaviour
         if (aId > armyId) Destroy(gameObject);
     }
 
-    public void InitializeDeploy(string uType, int strength, int morale, int position, int aId, int myId)
+    public void InitializeDeploy(string uType, int strength, int morale, int position, int aId, int myId, string commander)
     {
         myPictureController.InitialPicture(uType);
         myWidgetController.InitalColor(aId);
@@ -74,6 +75,7 @@ public class DeployUIController : MonoBehaviour
         mySMControllers[0].InitialSM(strength, morale);
         mySMControllers[1].InitialSM(strength, morale);
         myPosition = position;
+        unitCommander = commander;
         startingPosition = transform.position;
         armyId = aId;
         unitId = myId;
@@ -93,7 +95,7 @@ public class DeployUIController : MonoBehaviour
             transform.DOMoveX(540.0f, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveY(startingPosition.y - 25.0f, 0.25f).SetEase(Ease.OutBack);
             isEnlarged = true;
-            EventManager.RaiseEventOnUIDeployPressed(armyId, myPosition, unitId, unitType);
+            EventManager.RaiseEventOnUIDeployPressed(armyId, myPosition, unitId, unitType, unitCommander);
         }
     }
 }
