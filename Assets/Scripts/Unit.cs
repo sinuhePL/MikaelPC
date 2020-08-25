@@ -321,7 +321,7 @@ public class Unit
     {
         foreach(Attack a in unitAttacks)
         {
-            if (a.GetName() != "Charge!") a.Deactivate();
+            if (a.GetName() == "Counter Attack") a.Deactivate();
         }
     }
 
@@ -359,5 +359,13 @@ public class Unit
             if (tempAttack != null) unitAttacks.Remove(tempAttack);
         }
         while (tempAttack != null);
+    }
+
+    public void OtherAttacksSpecialAction(int myAttackId)
+    {
+        foreach (Attack a in unitAttacks)
+        {
+            if (a.GetId() != myAttackId) a.SpecialAction();
+        }
     }
 }

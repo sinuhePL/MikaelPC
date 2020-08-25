@@ -61,6 +61,7 @@ public class UnitDescriptionController : MonoBehaviour
                 unitImage.sprite = gendarmesSprite;
                 unitCaption.sprite = gendarmesCaption;
                 unitDescription.text = "    A gendarme was a heavy cavalryman of noble birth, primarily serving in the French army from the Late Medieval to the Early Modern periods of European history. They provided the Kings of France with a potent regular force of heavily-armoured lance-armed cavalry which, when properly employed in combination with pikemen and artillery, could dominate the battlefield. They fought exclusively on horseback, generally in a very thin line (en haye), usually two or even just one rank deep";
+                unitRules.text = "- Weak attack against targets on hills.\n- Weak against Landsknechts and Suisse.";
                 break;
             case "Landsknechte":
                 unitImage.sprite = landsknechtsSprite;
@@ -81,21 +82,25 @@ public class UnitDescriptionController : MonoBehaviour
                 unitImage.sprite = arquebusiersSprite;
                 unitCaption.sprite = arquebusiersCaption;
                 unitDescription.text = "    Arquebusiers were foot soldiers armed with arquebus. Arquebus was a form of long gun that appeared in Europe and the Ottoman Empire during the 15th century. The addition of a shoulder stock, priming pan, and matchlock mechanism in the late 15th century turned the arquebus into a handheld firearm and also the first firearm equipped with a trigger. Arquebuses replaced crossbows as easier to handle and more deadly. ";
+                unitRules.text = "- Good defence in woods\n- Powerful counterattack.\n- Weak attack and defence";
                 break;
             case "Artillery":
                 unitImage.sprite = artillerySprite;
                 unitCaption.sprite = artilleryCaption;
                 unitDescription.text = "    Cannons appeared in Europe in 14th century, by the 16th century they were made in a great variety of lengths and bore diameters but field Artillery was still young invention during battle of Pavia. Used for the first time by Charles VIII of France in 1494 during his italian campaign. Cannons where placed on wooden carts pulled by horses and oxes. While very slow and with low fire rate field artillery proved useful on battlefields during Italian Wars (1494 - 1529). ";
+                unitRules.text = "- Effective against Landsknechts and Suisse.\n- Good attack against targets in buildings.\n- Weak defence against cavalery.\n- Can change attack target.";
                 break;
             case "Stradioti":
                 unitImage.sprite = stradiotiSprite;
                 unitCaption.sprite = stradiotiCaption;
                 unitDescription.text = "    The stradioti or stratioti were mercenary units from the Balkans recruited mainly by states of southern and central Europe. The stradioti were pioneers of light cavalry tactics during renaissance era. They employed hit-and-run tactics, ambushes, feigned retreats and other complex maneuvers. In some ways, these tactics echoed those of the Ottoman sipahis and akinci. They had some notable successes also against French heavy cavalry during the Italian Wars";
+                unitRules.text = "- Can attack from second line.\n- Good attack against arquebusiers and artillery units.\n- Counterattack captures key points.\n- Weak defence against Imperial Gendarmes";
                 break;
             case "Coustilliers":
                 unitImage.sprite = coustilliersSprite;
                 unitCaption.sprite = coustilliersCaption;
                 unitDescription.text = "    The coustillier (also coutillier, coutilier) was a title of a low-ranking professional soldier in Medieval French armies. Since mid 15th century coustelliers were a lightly armoured horseman.  A French coutilier of 1446 was equipped with a helmet, leg armour, a haubergeon, jack or brigandine, a dagger, sword and either a demilance or a voulge. Although unable to stand up against heavy cavalry in battle, these soldiers made excellent skirmishers, raiders and scouts.";
+                unitRules.text = "- Can attack from second line.\n- Good attack against arquebusiers and artillery units.\n- Counterattack captures key points.\n- Weak defence against Imperial Cavalery";
                 break;
         }
         switch(commander)

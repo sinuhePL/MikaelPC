@@ -7,6 +7,12 @@ using DG.Tweening;
 public class AttackMenuController : MonoBehaviour
 {
     private bool isVisible;
+    public Text attackerText;
+    public Image die1Image;
+    public Image starImage;
+    public Text colonText;
+    public Text defenderText;
+    public Image die2Image;
     private Text attackNameText;
     private Text attackDiceNumberText;
     private Text starText;
@@ -17,6 +23,7 @@ public class AttackMenuController : MonoBehaviour
     {
         Sequence mySequence = DOTween.Sequence();
         Attack tempAttack;
+        string an;
 
         if (BattleManager.Instance.turnOwnerId == 1 && !GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && !GameManagerController.Instance.isPlayer2Human) return;
         if (isVisible)  // hide previous attack
@@ -28,10 +35,50 @@ public class AttackMenuController : MonoBehaviour
         mySequence.Join(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
         isVisible = true;
         tempAttack = BattleManager.Instance.GetAttack(idAttack);
-        attackNameText.text = tempAttack.GetName();
-        attackDiceNumberText.text = tempAttack.GetAttackDiceNumber().ToString();
-        starText.text = tempAttack.GetSpecialOutcomeDescription();
-        defenceDiceNumberText.text = tempAttack.GetDefenceDiceNumber().ToString();
+        an = tempAttack.GetName();
+        attackNameText.text = an;
+        if (an == "Aim")
+        {
+            attackerText.text = "Enables attack in next turn";
+            attackerText.alignment = TextAnchor.UpperCenter;
+            attackerText.fontSize = 40;
+            colonText.text = "";
+            defenderText.text = "";
+            die1Image.enabled = false;
+            die2Image.enabled = false;
+            starImage.enabled = false;
+            attackDiceNumberText.text = "";
+            starText.text = "";
+            defenceDiceNumberText.text = "";
+        }
+        else if (an == "Capture")
+        {
+            attackerText.text = tempAttack.GetSpecialOutcomeDescription();
+            attackerText.alignment = TextAnchor.UpperCenter;
+            attackerText.fontSize = 25;
+            colonText.text = "";
+            defenderText.text = "";
+            die1Image.enabled = false;
+            die2Image.enabled = false;
+            starImage.enabled = false;
+            attackDiceNumberText.text = "";
+            starText.text = "";
+            defenceDiceNumberText.text = "";
+        }
+        else
+        {
+            attackerText.text = "Attacker:";
+            attackerText.alignment = TextAnchor.UpperLeft;
+            attackerText.fontSize = 40;
+            colonText.text = ":";
+            defenderText.text = "Defender:";
+            die1Image.enabled = true;
+            die2Image.enabled = true;
+            starImage.enabled = true;
+            attackDiceNumberText.text = tempAttack.GetAttackDiceNumber().ToString();
+            starText.text = tempAttack.GetSpecialOutcomeDescription();
+            defenceDiceNumberText.text = tempAttack.GetDefenceDiceNumber().ToString();
+        }
     }
 
     private void UnitClicked(int idUnit)

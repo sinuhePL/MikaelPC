@@ -35,6 +35,7 @@ public class ResultMenuController : MonoBehaviour
         Vector3 endPosition;
         Sequence mySequence = DOTween.Sequence();
         int attackerArmyId, defenderArmyId;
+        Attack ta;
 
         header.text = "Attack Result";
         Line2.gameObject.SetActive(true);
@@ -57,7 +58,7 @@ public class ResultMenuController : MonoBehaviour
         }
         else attackerRoutText.text = "";
         if (result.attackerMoraleChanged != 0) attackResultText.text += " Morale: " + result.attackerMoraleChanged.ToString();
-        defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":"; 
+        defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":";
         defenceResultText.text = "";
         if (result.defenderStrengthChange != 0 && BattleManager.Instance.GetArmyMorale(defenderArmyId) <= 30)
         {

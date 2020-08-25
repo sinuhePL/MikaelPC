@@ -93,17 +93,20 @@ public class EndTurnController : MonoBehaviour
             if (mode == 3) // if displays Attack
             {
                 EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
-                myText.text = "";
+                myText.text = "Close Result";
+                return;
             }
             if (mode == 4) // if displays Close Result (attack result)
             {
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("attack");
+                return;
             }
             if(mode == 5) // if displays Close Result (rout test result)
             {
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("routtest");
+                return;
             }
         }
     }

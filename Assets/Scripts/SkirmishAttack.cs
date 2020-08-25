@@ -109,7 +109,7 @@ public class SkirmishAttack : Attack
         defenceDiceNumber = dNum;
     }
 
-    public override StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner)
+    /*public override StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner)
     {
 
         StateChange st = new StateChange();
@@ -122,7 +122,7 @@ public class SkirmishAttack : Attack
         st.changeProbability = probability;
         return st;
 
-    }
+    }*/
 
     public override void SpecialOutcome(ref StateChange sc)
     {

@@ -25,6 +25,7 @@ public class TileController : MonoBehaviour
     [SerializeField] private Texture field1Texture;
     [SerializeField] private Texture field2Texture;
     [SerializeField] private TextMeshPro tileInfluenceDescription;
+    [SerializeField] private TextMeshPro tileTypeText;
 
 
     private TextMeshPro fieldCaption;
@@ -56,6 +57,8 @@ public class TileController : MonoBehaviour
         else initiallyDeploymentNotPossible = false;
         forwardUnitId = 0;
         tileType = tType;
+        tileTypeText.text = tType;
+        tileTypeText.gameObject.SetActive(false);
         tileInfluenceDescription.gameObject.SetActive(false);
         if(possibleArmyDeployment > 0)
         {
@@ -83,20 +86,20 @@ public class TileController : MonoBehaviour
         randomInt = Random.Range(1, 3);
         switch (tileType)
         {
-            case "town":
+            case "Town":
                 myRenderer.material.mainTexture = town1Texture;
                 if(keyFieldId != 0) fieldCaption.text = "Mirabello Castle";
                 break;
-            case "forest":
+            case "Forest":
                 myRenderer.material.mainTexture = forest1Texture;
                 if (keyFieldId != 0) fieldCaption.text = "Deep Forest";
                 break;
-            case "field":
+            case "Field":
                 if (randomInt == 1) myRenderer.material.mainTexture = field1Texture;
                 if (randomInt == 2) myRenderer.material.mainTexture = field2Texture;
                 if (keyFieldId != 0) fieldCaption.text = "Ogden's Field";
                 break;
-            case "hill":
+            case "Hill":
                 if (randomInt == 1) myRenderer.material.mainTexture = hill1Texture;
                 if (randomInt == 2) myRenderer.material.mainTexture = hill2Texture;
                 if (keyFieldId != 0) fieldCaption.text = "Windy Peak";
@@ -133,23 +136,38 @@ public class TileController : MonoBehaviour
         TileController tc;
 
         lastClickedUnit = uId;
-        if(a == possibleArmyDeployment && myDeployedUnitId == 0 && !initiallyDeploymentNotPossible)
+        if (a == possibleArmyDeployment && myDeployedUnitId == 0 && !initiallyDeploymentNotPossible)
         {
+            tc = null;
+            if (a == 1) tc = BattleManager.Instance.GetTile(tileId - 2);
+            else tc = BattleManager.Instance.GetTile(tileId + 2);
             tileInfluenceDescription.gameObject.SetActive(true);
+            tileTypeText.gameObject.SetActive(true);
             tileInfluenceDescription.text = "";
             if (uType == "Imperial Cavalery" || uType == "Gendarmes")
             {
-                tc = null;
-                if (a == 1) tc = BattleManager.Instance.GetTile(tileId - 2);
-                else tc = BattleManager.Instance.GetTile(tileId + 2);
-                if(tc.tileType == "hill") tileInfluenceDescription.text = "-1 Attack Die";
+                if (tc.tileType == "Hill") tileInfluenceDescription.text = "-1 Attack Die";
                 else tileInfluenceDescription.text = "";
             }
-            if (tileType == "hill")
+            if (uType == "Artillery")
             {
-                if(a == 1) tileInfluenceDescription.text += "\n\n-1 Attack Die for opposing  Imperial Cavalry";
-                if (a == 2) tileInfluenceDescription.text += "\n\n-1 Attack Die for opposing Gendarmes";
+                if (tc.tileType == "Town") tileInfluenceDescription.text = "+1 Attack Die";
+                else tileInfluenceDescription.text = "";
             }
+            if (uType == "Arquebusiers")
+            {
+                if (tileType == "Forest") tileInfluenceDescription.text = "+1 Defence Die";
+            }
+            if (tileType == "Hill")
+            {
+                if (a == 1) tileInfluenceDescription.text += "-1 Attack Die for opposing Imperial Cavalry\n\n";
+                if (a == 2) tileInfluenceDescription.text += "-1 Attack Die for opposing Gendarmes\n\n";
+            }
+            if (tileType == "Town")
+            {
+                tileInfluenceDescription.text += "+1 Attack Die for opposing Artillery\n\n";
+            }
+            if (tc.tileType == "Forest") tileInfluenceDescription.text += "+1 Defence Die for opposing Arquebusiers\n\n";
             /*if(tileType == "forest")
             {
                 if(uType == "Arquebusiers") tileInfluenceDescription.text = "+1 Attack Die";
@@ -160,7 +178,11 @@ public class TileController : MonoBehaviour
                 if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") tileInfluenceDescription.text += "\n\n+1 Defence Die against Arquebusiers and Artillery";
             }*/
         }
-        else tileInfluenceDescription.gameObject.SetActive(false);
+        else
+        {
+            tileInfluenceDescription.gameObject.SetActive(false);
+            tileTypeText.gameObject.SetActive(false);
+        }
     }
 
     private void anyUnitDeployed(int uId, int tId)
@@ -430,12 +452,23 @@ public class TileController : MonoBehaviour
     {
         TileController tc;
 
+        tc = null;
+        if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2)    // if tile in first line of army 1
+        {
+            tc = BattleManager.Instance.GetTile(tileId - 2);
+        }
+        else if ((tileId - 1) % BattleManager.Instance.boardHeight == 1)    // if tile in first line of army 2
+        {
+            tc = BattleManager.Instance.GetTile(tileId + 2);
+        }
         if (uType == "Imperial Cavalery" || uType == "Gendarmes")
         {
-            tc = null;
-            if (uType == "Gendarmes") tc = BattleManager.Instance.GetTile(tileId - 2);
-            else tc = BattleManager.Instance.GetTile(tileId + 2);
-            if (tc.tileType == "hill") return -1;
+            if (tc.tileType == "Hill") return -1;
+            else return 0;
+        }
+        if(uType == "Artillery")
+        {
+            if (tc.tileType == "Town") return 1;
             else return 0;
         }
         return 0;
@@ -443,6 +476,10 @@ public class TileController : MonoBehaviour
 
     public int ChangeDefenceStrength(string defenderType, string attackerType)
     {
+        if (tileType == "Forest")
+        {
+            if (defenderType == "Arquebusiers") return 1;
+        }
         /*if (tileType == "hill")
         {
             return 1;
@@ -467,29 +504,34 @@ public class TileController : MonoBehaviour
     public int GetUnitValue(string uType)
     {
         TileController tc;
+        int score;
 
+        score = 50;
+        tc = null;
+        if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2)    // if tile in first line of army 1
+        {
+            tc = BattleManager.Instance.GetTile(tileId - 2);
+        }
+        else if ((tileId - 1) % BattleManager.Instance.boardHeight == 1)    // if tile in first line of army 2
+        {
+            tc = BattleManager.Instance.GetTile(tileId + 2);
+        }
         if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (tileId - 1) % BattleManager.Instance.boardHeight == 0) // if tile in second line
         {
-            if (uType == "Coustilliers" || uType == "Stradioti") return 40;
-            else return 60;
+            if (uType == "Coustilliers" || uType == "Stradioti") return score - 10;
+            else return score + 10;
         }
-        if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+        if (tileType == "Hill") score -= 10;
+        if (tileType == "Town") score += 10;
+        /*if (uType == "Imperial Cavalery" || uType == "Gendarmes")
         {
-            tc = null;
-            if (uType == "Gendarmes") tc = BattleManager.Instance.GetTile(tileId - 2);
-            else tc = BattleManager.Instance.GetTile(tileId + 2);
-            if (tileType == "hill")
-            {
-                if (tc.tileType == "hill") return 60;
-                else return 40;
-            }
-            else
-            {
-                if (tc.tileType == "hill") return 70;
-                else return 50;
-            }
+            if (tc.tileType == "hill") score += 20;
         }
-        if (tileType == "hill") return 40;
+        else if(uType == "Artillery")
+        {
+            if (tc.tileType == "town") score -= 30;
+        }*/
+        return score;
 
         /*if(tileType == "forest")
         {
@@ -500,18 +542,25 @@ public class TileController : MonoBehaviour
         {
             if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") return 30;
         }*/
-        return 50;
     }
 
     public int GetOpposingUnitValue(string uType)
     {
-        if (tileType == "hill")
+        if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+        {
+            if (tileType == "Hill") return 20;
+        }
+        else if (uType == "Artillery")
+        {
+            if (tileType == "Town") return -30;
+        }
+        return 0;
+        /*if (tileType == "hill")
         {
             if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 20;
-            /*if (uType == "Artillery") return 80;
+            if (uType == "Artillery") return 80;
             if (uType == "Landsknechte" || uType == "Suisse") return 30;
             else return 50;*/
-        }
         /*if (tileType == "forest")
         {
             if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 40;
@@ -522,7 +571,6 @@ public class TileController : MonoBehaviour
             if (uType == "Artillery" || uType == "Arquebusiers") return 20;
             else return 0;
         }*/
-        return 0;
     }
 
     public void DisableHighlight(string side)

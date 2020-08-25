@@ -151,8 +151,6 @@ public class BoardState
             {
                 u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                 u2.MoveToFrontLine();
-                //u2.DeactivateAttackOnUnit(change.defenderId);
-                //u2.ActivateAttackOnUnit(change.defenderId);
                 tempUnitId = u2.GetUnitId();
                 PromoteAttacksOnUnit(tempUnitId);
                 u2 = GetUnit(change.defenderId);    // unit that is opposite of killed unit
@@ -174,8 +172,6 @@ public class BoardState
                 {
                     u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
-                    //u2.DeactivateAttackOnUnit(change.defenderId);
-                    //u2.ActivateAttackOnUnit(change.defenderId);
                     tempUnitId = u2.GetUnitId();
                     PromoteAttacksOnUnit(tempUnitId);
                     u2 = GetUnit(change.defenderId);
@@ -194,9 +190,19 @@ public class BoardState
             kf = GetKeyField(change.keyFieldChangeId);
             oldKeyFieldOwner = kf.GetOccupant();
             kf.SetOccupant(u.GetArmyId());
-            a = u.GetAttackOnKeyField(change.keyFieldChangeId);
-            a.keyFieldTaken = true;
-            a.ChangeAttack(1);
+            foreach(Unit loopUnit in units)
+            {
+                if(loopUnit.GetArmyId() == u.GetArmyId())
+                {
+                    a = null;
+                    a = loopUnit.GetAttackOnKeyField(change.keyFieldChangeId);
+                    if(a != null && a.GetName() != "Capture" && a.GetName() != "Aim")
+                    {
+                        a.keyFieldTaken = true;
+                        a.ChangeAttack(1);
+                    }
+                }
+            }
         }
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
@@ -208,8 +214,6 @@ public class BoardState
             {
                 u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                 u2.MoveToFrontLine();
-                //u2.DeactivateAttackOnUnit(change.attackerId);
-                //u2.ActivateAttackOnUnit(change.attackerId);
                 tempUnitId = u2.GetUnitId();
                 PromoteAttacksOnUnit(tempUnitId);
                 u2 = GetUnit(change.attackerId);
@@ -231,8 +235,6 @@ public class BoardState
                 {
                     u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
-                    //u2.DeactivateAttackOnUnit(change.attackerId);
-                    //u2.ActivateAttackOnUnit(change.attackerId);
                     tempUnitId = u2.GetUnitId();
                     PromoteAttacksOnUnit(tempUnitId);
                     u2 = GetUnit(change.attackerId);
@@ -248,9 +250,22 @@ public class BoardState
         }
         if (change.keyFieldChangeId != 0)
         {
-            a = u.GetAttackOnKeyField(change.keyFieldChangeId);
-            a.keyFieldTaken = false;
-            if(oldKeyFieldOwner != 0) a.ChangeAttack(-1);
+            if(oldKeyFieldOwner != 0)
+            {
+                foreach (Unit loopUnit in units)
+                {
+                    if (loopUnit.GetArmyId() == oldKeyFieldOwner)
+                    {
+                        a = null;
+                        a = loopUnit.GetAttackOnKeyField(change.keyFieldChangeId);
+                        if (a != null && a.GetName() != "Capture" && a.GetName() != "Aim")
+                        {
+                            a.keyFieldTaken = false;
+                            a.ChangeAttack(-1);
+                        }
+                    }
+                }
+            }
         }
         // wprowadza rezultat dotyczący aktywowanych i dezaktywowanych ataków
         if (change.activatedAttacks != null)

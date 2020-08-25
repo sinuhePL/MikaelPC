@@ -3566,7 +3566,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &739196337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5580,7 +5580,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 45
+    m_FontSize: 39
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -5590,7 +5590,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1.2
+    m_LineSpacing: 1
   m_Text: End Deployment
 --- !u!222 &1234986903
 CanvasRenderer:
@@ -7815,7 +7815,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 220, y: -203}
+  m_AnchoredPosition: {x: 215.2, y: -203}
   m_SizeDelta: {x: 315, y: 412}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1571266021
@@ -7867,6 +7867,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3425135a1fab3974bbd65d796bbbd158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackerText: {fileID: 1736332960}
+  die1Image: {fileID: 1941530689}
+  starImage: {fileID: 1043399944}
+  colonText: {fileID: 1390342029}
+  defenderText: {fileID: 1345166185}
+  die2Image: {fileID: 129864423}
 --- !u!1 &1615608434
 GameObject:
   m_ObjectHideFlags: 0
@@ -8390,8 +8396,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -41, y: 69}
-  m_SizeDelta: {x: 148.8, y: 52.3}
+  m_AnchoredPosition: {x: -1.1, y: 19}
+  m_SizeDelta: {x: 211.4, y: 151}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1736332960
 MonoBehaviour:
@@ -8420,7 +8426,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 45
-    m_Alignment: 4
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -9733,7 +9739,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1993111600
 MonoBehaviour:
   m_ObjectHideFlags: 0

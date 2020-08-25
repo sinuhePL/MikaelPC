@@ -1260,7 +1260,90 @@ public abstract class Attack
         return stc;
     }
 
-    public abstract StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner);
+    public virtual void MakeAttack()
+    {
+        int throw1 = 0, throw2 = 0;
+        Dice.Clear();
+        if (armyId == 1)
+        {
+            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackblue", arrowPosition + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+            if (defenceDiceNumber > 0) throw2 = Dice.Roll(defenceDiceNumber.ToString() + "d6", "d6-defenceyellow", arrowPosition + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+        }
+        else
+        {
+            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackyellow", arrowPosition + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+            if (defenceDiceNumber > 0) throw2 = Dice.Roll(defenceDiceNumber.ToString() + "d6", "d6-defenceblue", arrowPosition + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+        }
+        BattleManager.Instance.StartCoroutine(WaitForDice(throw1, throw2, attackId));
+    }
+
+    // Waits for dice to stop rolling
+    protected IEnumerator WaitForDice(int throw1Id, int throw2Id, int attackId)
+    {
+        string result1 = "", result2 = "";
+        bool isSpecialOutcome;
+
+        while (Dice.rolling)
+        {
+            yield return null;
+        }
+        if (throw1Id > 0) result1 = Dice.AsString("d6", throw1Id);
+        if (throw2Id > 0) result2 = Dice.AsString("d6", throw2Id);
+        Debug.Log(result1);
+        Debug.Log(result2);
+        StateChange result = new StateChange();
+        string[] throw1Hits, throw2Hits;
+        int attackStrengthHit = 0, attackMoraleHit = 0, defenceStrengthHit = 0, defenceMoraleHit = 0;
+        if (!(result1.Contains("?") || result2.Contains("?") || result1.Length < 13 && result1.Length > 0 || result2.Length < 12 && result2.Length > 0))    // sprawdzenie czy rzut był udany/bezbłędny
+        {
+            if (throw1Id > 0) throw1Hits = Dice.ResultForThrow("d6", throw1Id);
+            else throw1Hits = new string[0];
+            if (throw2Id > 0) throw2Hits = Dice.ResultForThrow("d6", throw2Id);
+            else throw2Hits = new string[0];
+            if (throw1Hits != null && throw2Hits != null)
+            {
+                isSpecialOutcome = false;
+                for (int i = 0; i < throw1Hits.Length; i++)
+                {
+                    if (throw1Hits[i] == "S") attackStrengthHit++;
+                    if (throw1Hits[i] == "M") attackMoraleHit++;
+                    if (throw1Hits[i] == "*") isSpecialOutcome = true;
+                }
+                for (int i = 0; i < throw2Hits.Length; i++)
+                {
+                    if (throw2Hits[i] == "S") defenceStrengthHit++;
+                    if (throw2Hits[i] == "M") defenceMoraleHit++;
+                }
+                result.attackerId = owner.GetUnitId();
+                result.defenderId = targetId;
+                result.attackerMoraleChanged = -defenceMoraleHit;
+                result.attackerStrengthChange = -defenceStrengthHit;
+                result.defenderMoraleChanged = -attackMoraleHit;
+                result.defenderStrengthChange = -attackStrengthHit;
+                if (isSpecialOutcome) SpecialOutcome(ref result);
+                result.activatedAttacks = new List<int>(GetActivatedAttacks().ToArray());
+                result.deactivatedAttacks = new List<int>(GetDeactivatedAttacks().ToArray());
+                Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
+                Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
+                BattleManager.Instance.hasTurnOwnerAttacked = true;
+                yield return new WaitForSeconds(1.5f);
+                EventManager.RaiseEventOnDiceResult(result);
+                Dice.Clear();
+            }
+        }
+        else
+        {
+            Debug.Log("Błąd przy rzucie");
+            MakeAttack();
+        }
+    }
+
+    public virtual void SpecialAction()
+    {
+
+    }
+
+    //public abstract StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner);
     public abstract Attack GetCopy(Unit o);
     public abstract void SpecialOutcome(ref StateChange sc);
     public abstract string GetSpecialOutcomeDescription();

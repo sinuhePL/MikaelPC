@@ -379,21 +379,6 @@ public class ChargeAttack : Attack
         defenceDiceNumber = dNum;
     }
 
-    public override StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner)
-    {
-
-        StateChange st = new StateChange();
-        st.attackerId = owner.GetUnitId();
-        st.attackerMoraleChanged = defenderMoraleHits * -1;
-        st.attackerStrengthChange = defenderStrengthHits * -1;
-        st.defenderId = targetId;
-        st.defenderMoraleChanged = attackerMoraleHits * -1;
-        st.defenderStrengthChange = attackerStrengthHits * -1;
-        st.changeProbability = probability;
-        return st;
-
-    }
-
     public override void SpecialOutcome(ref StateChange sc)
     {
         if(keyFieldId != 0 && !isKeyFieldTaken)

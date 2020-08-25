@@ -6,7 +6,7 @@ public class CounterAttack : Attack
 {
     public CounterAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, string aType, string dType) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
     {
-        attackName = "CounterAttack";
+        attackName = "Counter Attack";
         switch (aType)
         {
             case "Gendarmes":
@@ -44,12 +44,12 @@ public class CounterAttack : Attack
 
     public CounterAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, int aNum, int dNum) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
     {
-        attackName = "CounterAttack";
+        attackName = "Counter Attack";
         attackDiceNumber = aNum;
         defenceDiceNumber = dNum;
     }
 
-    public override StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner)
+    /*public override StateChange ApplyAttack(int attackerStrengthHits, int attackerMoraleHits, int defenderStrengthHits, int defenderMoraleHits, float probability, int winner)
     {
 
         StateChange st = new StateChange();
@@ -62,7 +62,7 @@ public class CounterAttack : Attack
         st.changeProbability = probability;
         return st;
 
-    }
+    }*/
 
     public override void SpecialOutcome(ref StateChange sc)
     {
