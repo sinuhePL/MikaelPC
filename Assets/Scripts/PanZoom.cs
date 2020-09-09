@@ -282,7 +282,7 @@ public class PanZoom : MonoBehaviour
     {
         Vector3 target;
 
-        target = BattleManager.Instance.GetAttack(attackId).GetPosition();
+        target = BattleManager.Instance.GetAttackById(attackId).GetPosition();
         ReallyLookAtDice(target + new Vector3(2.0f, 0.0f, -1.0f), 0.0f);
     }
 

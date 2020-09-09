@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class ArrowController : MonoBehaviour
 {
-    public int _attackId;
+    private int _arrowId;
     private bool _isArrowActive;    // active arrow is displayed when owning unit is clicked
     private bool _isBlocked;         // arrow is blocked when unit is placed in support line
     private MeshRenderer myRenderer;
@@ -28,7 +28,7 @@ public class ArrowController : MonoBehaviour
     {
         if ((_isArrowActive || isShownAsCounterAttack) && !IsPointerOverGameObject())
         {
-            EventManager.RaiseEventOnAttackClicked(_attackId, !_isArrowActive);
+            EventManager.RaiseEventOnAttackClicked(_arrowId, !_isArrowActive);
         }
     }
     // dodać obsługę zdarzenia kliknięcia na strzałkę ataku, dodać dodanych ataku współrzędne każdego ataku. usunąć poprzednie rozwiązanie
@@ -42,18 +42,27 @@ public class ArrowController : MonoBehaviour
         return results.Count > 0;
     }
 
-    private void CheckAndShowArrow(int aId, bool isCounterAttack)   // shows empty arrow when it represents counterattack
+    private void CheckAndShowArrow(int arrId, bool isCounterAttack)   // shows empty arrow when it represents counterattack
     {
+        List<Attack> tempAttacks;
+        Attack tempAttack;
+        
         if (!_isBlocked)
         {
-            if (arrowType == "empty" && activatingAttacks.Contains(aId))
+            tempAttacks = BattleManager.Instance.GetAttacksByArrowId(arrId);
+            tempAttack = null;
+            foreach (Attack a in tempAttacks)
+            {
+                if (a.IsActive() && a.GetName() == "Charge!") tempAttack = a;
+            }
+            if (tempAttack != null && arrowType == "empty" && activatingAttacks.Contains(tempAttack.GetId()))
             {
                 gameObject.SetActive(true);
                 myRenderer.enabled = true;
                 isShownAsCounterAttack = true;
                 transform.position = new Vector3(transform.position.x, 0.002f, transform.position.z);
             }
-            else if (arrowType == "solid" && aId != AttackId)
+            else if (arrowType == "solid" && arrId != ArrowId)
             {
                 myRenderer.enabled = false;
                 transform.position = new Vector3(transform.position.x, -0.002f, transform.position.z);
@@ -68,7 +77,7 @@ public class ArrowController : MonoBehaviour
 
     private void AnyAttackOrdered(int aId)
     {
-        if (aId != _attackId) myRenderer.enabled = false;
+        if (aId != _arrowId) myRenderer.enabled = false;
     }
 
     private void Awake()
@@ -136,15 +145,15 @@ public class ArrowController : MonoBehaviour
         }
     }
 
-    public int AttackId
+    public int ArrowId
     {
         get
         {
-            return _attackId;
+            return _arrowId;
         }
         set
         {
-            _attackId = value;
+            _arrowId = value;
         }
     }
 
@@ -178,14 +187,14 @@ public class ArrowController : MonoBehaviour
 
     public void ShowArrow(int aId, bool isCounterAttack)
     {
-        if (isCounterAttack && arrowType == "solid" && AttackId == aId)
+        if (isCounterAttack && arrowType == "solid" && ArrowId == aId)
         {
             myRenderer.enabled = true;
             gameObject.SetActive(true);
             transform.position = new Vector3(transform.position.x, 0.002f, transform.position.z);
             return;
         }
-        if (isArrowActive && AttackId == aId)
+        if (isArrowActive && ArrowId == aId)
         {
             myRenderer.enabled = true;
             transform.position = new Vector3(transform.position.x, 0.002f, transform.position.z);
@@ -194,7 +203,7 @@ public class ArrowController : MonoBehaviour
 
     public void HideArrow(int aId)
     {
-        if (isArrowActive && AttackId == aId)
+        if (isArrowActive && ArrowId == aId)
         {
             myRenderer.enabled = false;
             transform.position = new Vector3(transform.position.x, -0.002f, transform.position.z);

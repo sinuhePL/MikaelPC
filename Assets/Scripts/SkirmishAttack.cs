@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkirmishAttack : Attack
 {
-    public SkirmishAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, string aType, string dType) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
+    public SkirmishAttack(int aId, int arrId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, string aType, string dType) : base(aId, arrId, state, army, o, keyField, isKFTaken, tId, p)
     {
         attackName = "Skirmish";
         switch (aType)
@@ -102,7 +102,7 @@ public class SkirmishAttack : Attack
         }
     }
 
-    public SkirmishAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, int aNum, int dNum) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
+    public SkirmishAttack(int aId, int arrId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, int aNum, int dNum) : base(aId, arrId, state, army, o, keyField, isKFTaken, tId, p)
     {
         attackName = "Skirmish";
         attackDiceNumber = aNum;
@@ -212,7 +212,7 @@ public class SkirmishAttack : Attack
     public override Attack GetCopy(Unit o)
     {
         SkirmishAttack nca;
-        nca = new SkirmishAttack(attackId, isActiveState, armyId, o, keyFieldId, isKeyFieldTaken, targetId, arrowPosition, attackDiceNumber, defenceDiceNumber);
+        nca = new SkirmishAttack(attackId, arrowId, isActiveState, armyId, o, keyFieldId, isKeyFieldTaken, targetId, arrowPosition, attackDiceNumber, defenceDiceNumber);
         foreach (int i in activatesAttacks)
         {
             nca.AddActivatedAttackId(i);

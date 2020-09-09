@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CaptureAttack : Attack
 {
-    public CaptureAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, string aType, string dType) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
+    public CaptureAttack(int aId, int arrId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, string aType, string dType) : base(aId, arrId, state, army, o, keyField, isKFTaken, tId, p)
     {
         attackName = "Capture";
         attackDiceNumber = 0;
         defenceDiceNumber = 0;
     }
 
-    public CaptureAttack(int aId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, int aNum, int dNum) : base(aId, state, army, o, keyField, isKFTaken, tId, p)
+    public CaptureAttack(int aId, int arrId, bool state, int army, Unit o, int keyField, bool isKFTaken, int tId, Vector3 p, int aNum, int dNum) : base(aId, arrId, state, army, o, keyField, isKFTaken, tId, p)
     {
         attackName = "Capture";
         attackDiceNumber = aNum;
@@ -64,7 +64,7 @@ public class CaptureAttack : Attack
     public override Attack GetCopy(Unit o)
     {
         CaptureAttack nca;
-        nca = new CaptureAttack(attackId, isActiveState, armyId, o, keyFieldId, isKeyFieldTaken, targetId, arrowPosition, attackDiceNumber, defenceDiceNumber);
+        nca = new CaptureAttack(attackId, arrowId, isActiveState, armyId, o, keyFieldId, isKeyFieldTaken, targetId, arrowPosition, attackDiceNumber, defenceDiceNumber);
         foreach (int i in activatesAttacks)
         {
             nca.AddActivatedAttackId(i);

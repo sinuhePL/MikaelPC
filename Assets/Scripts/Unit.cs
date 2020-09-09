@@ -176,6 +176,14 @@ public class Unit
         if(tempAttack != null && !tempAttack.IsActive()) tempAttack.Activate();
     }
 
+    public void BlockAttack(int a)
+    {
+        Attack tempAttack;
+
+        tempAttack = FindAttack(a);
+        if (tempAttack != null) tempAttack.Block();
+    }
+
     public void DeactivateAttack(int a)     // deaktywuje atak o podanym Id
     {
         Attack tempAttack;
@@ -241,13 +249,25 @@ public class Unit
         }
     }*/
 
-    public Attack GetAttack(int idAttack)
+    public Attack GetAttackById(int idA)
     {
         foreach (Attack a in unitAttacks)
         {
-            if (a.GetId() == idAttack) return a;
+            if (a.GetId() == idA) return a;
         }
         return null;
+    }
+
+    public List<Attack> GetAttacksByArrowId(int idArrow)
+    {
+        List<Attack> result;
+
+        result = new List<Attack>();
+        foreach (Attack a in unitAttacks)
+        {
+            if (a.GetArrowId() == idArrow) result.Add(a);
+        }
+        return result;
     }
 
     public void DeactivateAttackOnUnit(int uId)
@@ -285,11 +305,11 @@ public class Unit
         return false;
     }*/
 
-    public void ActivateNotForwardAttacks() // called when opposing unit destroyed/fled
+    public void ActivateOtherAttacks(int uId) // called when opposing unit destroyed/fled
     {
         foreach (Attack a in unitAttacks)
         {
-            if (a.GetName() != "Charge!")
+            if (a.GetName() == "Charge!" && a.GetTargetId() != uId)
             {
                 a.Activate();
                 a.ChangeAttack(1);
@@ -306,22 +326,22 @@ public class Unit
         return null;
     }
 
-    public List<int> GetAttacksActivating(int myAttackId)
+    public List<int> GetAttacksActivating(int attackId)
     {
         List<int> result = new List<int>();
         
         foreach(Attack a in unitAttacks)
         {
-            if (a.CheckIfActivates(myAttackId)) result.Add(a.GetId());
+            if (a.CheckIfActivatesAttack(attackId)) result.Add(a.GetId());
         }
         return result;
     }
 
-    public void DeactivateCounterAttacks()
+    public void DeactivateSideAttacks()
     {
         foreach(Attack a in unitAttacks)
         {
-            if (a.GetName() == "Counter Attack") a.Deactivate();
+            if (a.GetName() == "Counter Attack" || a.GetName() == "Capture" || a.GetName() == "Charge!") a.DeactivateAsSideAttack();
         }
     }
 
@@ -366,6 +386,77 @@ public class Unit
         foreach (Attack a in unitAttacks)
         {
             if (a.GetId() != myAttackId) a.SpecialAction();
+        }
+    }
+
+    public void SetOwnAttacksDeactivation()
+    {
+        foreach (Attack a in unitAttacks)
+        {
+            if(a.GetName() == "Charge!")
+            {
+                foreach(Attack a2 in unitAttacks)
+                {
+                    if (a != a2)
+                    {
+                        a.AddDeactivatedAttackId(a2.GetId());
+                        a.AddBlockedAttackId(a2.GetId());
+                    }
+                }
+                foreach (Attack a2 in additionalAttacks)
+                {
+                    if (a != a2)
+                    {
+                        a.AddDeactivatedAttackId(a2.GetId());
+                        a.AddBlockedAttackId(a2.GetId());
+                    }
+                }
+            }
+        }
+        foreach (Attack a in additionalAttacks)
+        {
+            if (a.GetName() == "Charge!")
+            {
+                foreach (Attack a2 in unitAttacks)
+                {
+                    if (a != a2) a.AddDeactivatedAttackId(a2.GetId());
+                }
+                foreach (Attack a2 in additionalAttacks)
+                {
+                    if (a != a2) a.AddDeactivatedAttackId(a2.GetId());
+                }
+            }
+        }
+    }
+
+    public int GetNotBlockedTarget()
+    {
+        int unblockedAttackNumber;
+        Attack tempAttack;
+
+        tempAttack = null;
+        unblockedAttackNumber = 0;
+        foreach(Attack a in unitAttacks)
+        {
+            if (!a.IsBlocked())
+            {
+                unblockedAttackNumber++;
+                tempAttack = a;
+            }
+        }
+        if (unblockedAttackNumber == 1 && tempAttack != null) return tempAttack.GetTargetId();
+        else return 0;
+    }
+
+    public void UnblockAttacks()
+    {
+        foreach(Attack a in unitAttacks)
+        {
+            if (a.IsBlocked())
+            {
+                a.UnBlock();
+                a.ActivateNotForcedAttack();
+            }
         }
     }
 }

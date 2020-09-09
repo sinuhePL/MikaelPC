@@ -40,8 +40,8 @@ public class StradiotiController : UnitController
             farArrowEmpty.transform.localScale = new Vector3(farArrow.transform.localScale.x, 10.5f, farArrow.transform.localScale.z);
             farArrowEmpty.transform.SetParent(transform);
         }
-        farArrow.GetComponent<ArrowController>().AttackId = _unitId + 4;
-        farArrowEmpty.GetComponent<ArrowController>().AttackId = _unitId + 4;
+        farArrow.GetComponent<ArrowController>().ArrowId = _unitId + 4;
+        farArrowEmpty.GetComponent<ArrowController>().ArrowId = _unitId + 4;
         farArrow.SetActive(false);
         farArrowEmpty.SetActive(false);
         // inicjalizacja squadów
@@ -64,18 +64,18 @@ public class StradiotiController : UnitController
         PlaceWidget(deployPosition);
     }
 
-    public override int GetAttackId(string direction)
+    public override int GetArrowId(string direction)
     {
         switch (direction)
         {
             case "right":
-                return rightArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return rightArrowEmpty.GetComponent<ArrowController>().ArrowId;
             case "central":
-                return forwardArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return forwardArrowEmpty.GetComponent<ArrowController>().ArrowId;
             case "left":
-                return leftArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return leftArrowEmpty.GetComponent<ArrowController>().ArrowId;
             case "far":
-                return farArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return farArrowEmpty.GetComponent<ArrowController>().ArrowId;
         }
         return -1;
     }
@@ -153,36 +153,40 @@ public class StradiotiController : UnitController
     protected override void UpdateMe(string mode)
     {
         Unit myUnit;
-        Attack tempAttack;
+        List<Attack> tempAttacks;
+        bool isActive;
+
         if (mode == "routtest") return;
         base.UpdateMe(mode);
         myUnit = BattleManager.Instance.GetUnit(UnitId);
-        tempAttack = null;
-        tempAttack = myUnit.GetAttack(farArrow.GetComponent<ArrowController>().AttackId);
-        if (tempAttack != null && !tempAttack.IsActive())
+        tempAttacks = null;
+        tempAttacks = myUnit.GetAttacksByArrowId(farArrow.GetComponent<ArrowController>().ArrowId);
+        if (tempAttacks != null)
         {
-            DeactivateAttack(tempAttack.GetId());
-        }
-        else if (tempAttack != null && tempAttack.IsActive())
-        {
-            ActivateAttack(tempAttack.GetId());
+            isActive = false;
+            foreach (Attack a in tempAttacks)
+            {
+                if (a.IsActive()) isActive = true;
+            }
+            if (isActive) ActivateAttack(farArrow.GetComponent<ArrowController>().ArrowId);
+            else DeactivateAttack(farArrow.GetComponent<ArrowController>().ArrowId);
         }
     }
 
-    public override void ActivateAttack(int attackId)
+    public override void ActivateAttack(int arrowId)
     {
-        base.ActivateAttack(attackId);
-        if (farArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        base.ActivateAttack(arrowId);
+        if (farArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             farArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
             farArrow.GetComponent<ArrowController>().isArrowActive = true;
         }
     }
 
-    public override void DeactivateAttack(int attackId)
+    public override void DeactivateAttack(int arrowId)
     {
-        base.DeactivateAttack(attackId);
-        if (farArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        base.DeactivateAttack(arrowId);
+        if (farArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             farArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
             farArrow.GetComponent<ArrowController>().isArrowActive = false;

@@ -151,7 +151,8 @@ public class UnitController : MonoBehaviour
     protected virtual void UpdateMe(string mode)
     {
         Unit myUnit;
-        Attack tempAttack;
+        List<Attack> tempAttacks;
+        bool isActive;
 
         if (mode == "routtest") return;
         myUnit = BattleManager.Instance.GetUnit(UnitId);
@@ -190,33 +191,41 @@ public class UnitController : MonoBehaviour
             }
         }
         //check if unit attacks are still active
-        tempAttack = null;
-        tempAttack = myUnit.GetAttack(forwardArrow.GetComponent<ArrowController>().AttackId);
-        if (tempAttack != null && !tempAttack.IsActive())
+        tempAttacks = null;
+        tempAttacks = myUnit.GetAttacksByArrowId(forwardArrow.GetComponent<ArrowController>().ArrowId);
+        if(tempAttacks != null)
         {
-            DeactivateAttack(tempAttack.GetId());
+            isActive = false;
+            foreach(Attack a in tempAttacks)
+            {
+                if (a.IsActive()) isActive = true;
+            }
+            if(isActive) ActivateAttack(forwardArrow.GetComponent<ArrowController>().ArrowId);
+            else DeactivateAttack(forwardArrow.GetComponent<ArrowController>().ArrowId);
         }
-        else if(tempAttack != null && tempAttack.IsActive())
+        tempAttacks = null;
+        tempAttacks = myUnit.GetAttacksByArrowId(rightArrow.GetComponent<ArrowController>().ArrowId);
+        if (tempAttacks != null)
         {
-            ActivateAttack(tempAttack.GetId());
+            isActive = false;
+            foreach (Attack a in tempAttacks)
+            {
+                if (a.IsActive()) isActive = true;
+            }
+            if (isActive) ActivateAttack(rightArrow.GetComponent<ArrowController>().ArrowId);
+            else DeactivateAttack(rightArrow.GetComponent<ArrowController>().ArrowId);
         }
-        tempAttack = myUnit.GetAttack(rightArrow.GetComponent<ArrowController>().AttackId);
-        if (tempAttack != null && !tempAttack.IsActive())
+        tempAttacks = null;
+        tempAttacks = myUnit.GetAttacksByArrowId(leftArrow.GetComponent<ArrowController>().ArrowId);
+        if (tempAttacks != null)
         {
-            DeactivateAttack(tempAttack.GetId());
-        }
-        else if (tempAttack != null && tempAttack.IsActive())
-        {
-            ActivateAttack(tempAttack.GetId());
-        }
-        tempAttack = myUnit.GetAttack(leftArrow.GetComponent<ArrowController>().AttackId);
-        if (tempAttack != null && !tempAttack.IsActive())
-        {
-            DeactivateAttack(tempAttack.GetId());
-        }
-        else if (tempAttack != null && tempAttack.IsActive())
-        {
-            ActivateAttack(tempAttack.GetId());
+            isActive = false;
+            foreach (Attack a in tempAttacks)
+            {
+                if (a.IsActive()) isActive = true;
+            }
+            if (isActive) ActivateAttack(leftArrow.GetComponent<ArrowController>().ArrowId);
+            else DeactivateAttack(leftArrow.GetComponent<ArrowController>().ArrowId);
         }
     }
 
@@ -495,12 +504,12 @@ public class UnitController : MonoBehaviour
                 flag = Instantiate(flagPrefab, transform.position + new Vector3(1.0f, 0.2f, 0.35f), flagPrefab.transform.rotation * Quaternion.Euler(0.0f, 180.0f, 0.0f));
                 flag.transform.SetParent(transform);
             }
-            forwardArrow.GetComponent<ArrowController>().AttackId = _unitId + 1;
-            forwardArrowEmpty.GetComponent<ArrowController>().AttackId = _unitId + 1;
-            leftArrow.GetComponent<ArrowController>().AttackId = _unitId + 2;
-            leftArrowEmpty.GetComponent<ArrowController>().AttackId = _unitId + 2;
-            rightArrow.GetComponent<ArrowController>().AttackId = _unitId + 3;
-            rightArrowEmpty.GetComponent<ArrowController>().AttackId = _unitId + 3;
+            forwardArrow.GetComponent<ArrowController>().ArrowId = _unitId + 1;
+            forwardArrowEmpty.GetComponent<ArrowController>().ArrowId = _unitId + 1;
+            leftArrow.GetComponent<ArrowController>().ArrowId = _unitId + 2;
+            leftArrowEmpty.GetComponent<ArrowController>().ArrowId = _unitId + 2;
+            rightArrow.GetComponent<ArrowController>().ArrowId = _unitId + 3;
+            rightArrowEmpty.GetComponent<ArrowController>().ArrowId = _unitId + 3;
             forwardArrow.SetActive(false);
             forwardArrowEmpty.SetActive(false);
             leftArrow.SetActive(false);
@@ -512,54 +521,54 @@ public class UnitController : MonoBehaviour
     }
 
 
-    public virtual void ActivateAttack(int attackId)
+    public virtual void ActivateAttack(int arrowId)
     {
-        if (forwardArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        if (forwardArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
             forwardArrow.GetComponent<ArrowController>().isArrowActive = true;
         }
-        if (leftArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        if (leftArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
             leftArrow.GetComponent<ArrowController>().isArrowActive = true;
         }
-        if (rightArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        if (rightArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = true;
             rightArrow.GetComponent<ArrowController>().isArrowActive = true;
         }
     }
 
-    public virtual void DeactivateAttack(int attackId)
+    public virtual void DeactivateAttack(int arrowId)
     {
-        if (forwardArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        if (forwardArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             forwardArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
             forwardArrow.GetComponent<ArrowController>().isArrowActive = false;
         }
-        if (leftArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        if (leftArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             leftArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
             leftArrow.GetComponent<ArrowController>().isArrowActive = false;
         }
-        if (rightArrowEmpty.GetComponent<ArrowController>().AttackId == attackId)
+        if (rightArrowEmpty.GetComponent<ArrowController>().ArrowId == arrowId)
         {
             rightArrowEmpty.GetComponent<ArrowController>().isArrowActive = false;
             rightArrow.GetComponent<ArrowController>().isArrowActive = false;
         }
     }
 
-    public virtual int GetAttackId(string direction)    
+    public virtual int GetArrowId(string direction)    
     {
         switch(direction)
         {
             case "right":
-                return rightArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return rightArrowEmpty.GetComponent<ArrowController>().ArrowId;
             case "central":
-                return forwardArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return forwardArrowEmpty.GetComponent<ArrowController>().ArrowId;
             case "left":
-                return leftArrowEmpty.GetComponent<ArrowController>().AttackId;
+                return leftArrowEmpty.GetComponent<ArrowController>().ArrowId;
         }
         return -1;
     }

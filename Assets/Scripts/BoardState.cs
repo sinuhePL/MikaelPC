@@ -34,6 +34,18 @@ public class BoardState
         }
     }
 
+    public List<Attack> GetAttacksByArrowId(int arrowId)
+    {
+        List<Attack> result;
+
+        result = new List<Attack>();
+        foreach (Unit u in units)
+        {
+            result.AddRange(u.GetAttacksByArrowId(arrowId)); 
+        }
+        return result;
+    }
+
     /*public Unit GetForwardAttacker(int unitId)
     {
         foreach (Unit u in units)
@@ -124,12 +136,12 @@ public class BoardState
         return null;
     }
 
-    public Attack GetAttack(int idAttack)
+    public Attack GetAttackById(int idAttack)
     {
         Attack tempAttack = null;
         foreach(Unit u in units)
         {
-            tempAttack = u.GetAttack(idAttack);
+            tempAttack = u.GetAttackById(idAttack);
             if (tempAttack != null) return tempAttack;
         }
         return null;
@@ -137,15 +149,22 @@ public class BoardState
 
     public int ChangeState(StateChange change)  // zmienia stan planszy zgodnie z definicją zmiany
     {
-        Unit u, u2;
+        Unit u, u2, u3;
         KeyField kf;
         Attack a;
-        int army1ActiveCount, army2ActiveCount, oldKeyFieldOwner = 0, unitToMove = 0, tempUnitId;
+        int army1ActiveCount, army2ActiveCount, oldKeyFieldOwner = 0, unitToMove = 0, tempUnitId, opposingUnitId;
+    
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId);
         unitToMove = u.ChangeStrength(change.attackerStrengthChange);
         if (!u.IsAlive)
         {
+            tempUnitId = u.GetNotBlockedTarget();
+            if(tempUnitId != 0)
+            {
+                u2 = GetUnit(tempUnitId);
+                u2.UnblockAttacks();
+            }
             DeactivateAttacksOnUnit(u.GetUnitId());
             if (unitToMove != 0)
             {
@@ -158,8 +177,9 @@ public class BoardState
             }
             else
             {
-                u2 = GetUnit(change.defenderId);
-                u2.ActivateNotForwardAttacks();
+                opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.attackerId);
+                u2 = GetUnit(opposingUnitId);
+                u2.ActivateOtherAttacks(change.attackerId);
             }
         }
         else
@@ -167,6 +187,12 @@ public class BoardState
             unitToMove = u.ChangeMorale(change.attackerMoraleChanged);
             if (!u.IsAlive)
             {
+                tempUnitId = u.GetNotBlockedTarget();
+                if (tempUnitId != 0)
+                {
+                    u2 = GetUnit(tempUnitId);
+                    u2.UnblockAttacks();
+                }
                 DeactivateAttacksOnUnit(u.GetUnitId());
                 if (unitToMove != 0)
                 {
@@ -179,11 +205,11 @@ public class BoardState
                 }
                 else
                 {
-                    u2 = GetUnit(change.defenderId);
-                    u2.ActivateNotForwardAttacks();
+                    opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.attackerId);
+                    u2 = GetUnit(opposingUnitId);
+                    u2.ActivateOtherAttacks(change.attackerId);
                 }
             }
-            u.DeactivateCounterAttacks();
         }
         if(change.keyFieldChangeId !=0)
         {
@@ -209,6 +235,12 @@ public class BoardState
         unitToMove = u.ChangeStrength(change.defenderStrengthChange);
         if (!u.IsAlive)
         {
+            tempUnitId = u.GetNotBlockedTarget();
+            if (tempUnitId != 0)
+            {
+                u2 = GetUnit(tempUnitId);
+                u2.UnblockAttacks();
+            }
             DeactivateAttacksOnUnit(u.GetUnitId());
             if (unitToMove != 0)
             {
@@ -221,8 +253,9 @@ public class BoardState
             }
             else
             {
-                u2 = GetUnit(change.attackerId);
-                u2.ActivateNotForwardAttacks();
+                opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.defenderId);
+                u2 = GetUnit(opposingUnitId);
+                u2.ActivateOtherAttacks(change.defenderId);
             }
         }
         else
@@ -230,6 +263,12 @@ public class BoardState
             unitToMove = u.ChangeMorale(change.defenderMoraleChanged);
             if (!u.IsAlive)
             {
+                tempUnitId = u.GetNotBlockedTarget();
+                if (tempUnitId != 0)
+                {
+                    u2 = GetUnit(tempUnitId);
+                    u2.UnblockAttacks();
+                }
                 DeactivateAttacksOnUnit(u.GetUnitId());
                 if (unitToMove != 0)
                 {
@@ -242,11 +281,11 @@ public class BoardState
                 }
                 else
                 {
-                    u2 = GetUnit(change.attackerId);
-                    u2.ActivateNotForwardAttacks();
+                    opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.defenderId);
+                    u2 = GetUnit(opposingUnitId);
+                    u2.ActivateOtherAttacks(change.defenderId);
                 }
             }
-            u.DeactivateCounterAttacks();
         }
         if (change.keyFieldChangeId != 0)
         {
@@ -267,8 +306,13 @@ public class BoardState
                 }
             }
         }
-        // wprowadza rezultat dotyczący aktywowanych i dezaktywowanych ataków
-        if (change.activatedAttacks != null)
+        // deactivated side attacks not used this turn
+        foreach(Unit un in units)
+        {
+            un.DeactivateSideAttacks();
+        }
+        // activates and deactivates attacks
+        if (change.activatedAttacks.Count > 0)
         {
             foreach (Unit un in units)
             {
@@ -278,13 +322,24 @@ public class BoardState
                 }
             }
         }
-        if (change.deactivatedAttacks != null)
+        if (change.deactivatedAttacks.Count > 0)
         {
             foreach (Unit un in units)
             {
                 foreach (int i in change.deactivatedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
                 {
                     un.DeactivateAttack(i);
+                }
+            }
+        }
+        //blocks attacks
+        if (change.blockedAttacks.Count > 0)
+        {
+            foreach (Unit un in units)
+            {
+                foreach (int i in change.blockedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+                {
+                    un.BlockAttack(i);
                 }
             }
         }
@@ -367,12 +422,12 @@ public class BoardState
         return null;
     }
 
-    public List<int> GetAttacksActivating(int myAttackId)
+    public List<int> GetAttacksActivating(int attackId)
     {
         List<int> result = new List<int>();
         foreach(Unit u in units)
         {
-            result.AddRange(u.GetAttacksActivating(myAttackId));
+            result.AddRange(u.GetAttacksActivating(attackId));
         }
         return result;
     }

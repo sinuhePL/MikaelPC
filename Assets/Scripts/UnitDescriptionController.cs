@@ -67,6 +67,7 @@ public class UnitDescriptionController : MonoBehaviour
                 unitImage.sprite = landsknechtsSprite;
                 unitCaption.sprite = landsknechtsCaption;
                 unitDescription.text = "    The Landsknechte were German-speaking mercenaries, consisting predominantly of pikemen and supporting foot soldiers, who became an important military force in early modern Europe. Their front line was formed by doppelsöldner, renowned for their use of arquebus and zweihänder in the early modern period. They formed the bulk of the Imperial Army (Holy Roman Empire) from the late 1400s to the early 1600s.";
+                unitRules.text = "- Good defence againt cavalry.\n- Blocks enemy attacks targeting other units.";
                 break;
             case "Suisse":
                 unitImage.sprite = suisseSprite;

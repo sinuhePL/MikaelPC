@@ -143,21 +143,31 @@ public class EndTurnController : MonoBehaviour
         else StartCoroutine(WaitForClick());
     }
 
-    public void AttackClicked(int attackId, bool isCounterAttack)
+    public void AttackClicked(int arrowId, bool isCounterAttack)
     {
+        List<Attack> tempAttacks;
+        Attack tempAttack;
+
         if (isCounterAttack)
         {
             myText.text = "";
             mode = 0;
             return;
         }
-        if (BattleManager.Instance.turnOwnerId == BattleManager.Instance.GetAttack(attackId).GetOwner().GetArmyId() && !BattleManager.Instance.hasTurnOwnerAttacked)
+        tempAttacks = BattleManager.Instance.GetAttacksByArrowId(arrowId);
+        tempAttack = null;
+        foreach (Attack a in tempAttacks)
+        {
+            if (a.IsActive()) tempAttack = a;
+        }
+        if (tempAttack == null) return;
+        if (BattleManager.Instance.turnOwnerId == tempAttack.GetOwner().GetArmyId() && !BattleManager.Instance.hasTurnOwnerAttacked)
         {
             if (BattleManager.Instance.turnOwnerId == 1 && GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && GameManagerController.Instance.isPlayer2Human)
             {
                 myText.text = "Attack";
                 mode = 3;
-                LastClickedAttack = attackId;
+                LastClickedAttack = tempAttack.GetId();
                 if (!isShifted) ShiftMe();
             }
             else

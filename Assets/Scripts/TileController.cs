@@ -354,10 +354,18 @@ public class TileController : MonoBehaviour
         }
     }
 
-    private void BlinkKeyField(int idAttack, bool isCounterAttack)
+    private void BlinkKeyField(int idArrow, bool isCounterAttack)
     {
         Attack tempAttack;
-        tempAttack = BattleManager.Instance.GetAttack(idAttack);
+        List<Attack> tempAttacks;
+
+        tempAttacks = BattleManager.Instance.GetAttacksByArrowId(idArrow);
+        tempAttack = null;
+        foreach (Attack a in tempAttacks)
+        {
+            if (a.IsActive()) tempAttack = a;
+        }
+        if (tempAttack == null) return;
         if(tempAttack.GetKeyFieldId() == keyFieldId && keyFieldId != 0 && ownerId != tempAttack.GetArmyId())
         {
             isBlinking = true;

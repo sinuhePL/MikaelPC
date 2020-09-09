@@ -14,6 +14,7 @@ public class StateChange
     public int keyFieldNewOccupantId;
     public List<int> activatedAttacks;
     public List<int> deactivatedAttacks;
+    public List<int> blockedAttacks;
     public float changeProbability;
     public string specialOutcomeDescription;
 
@@ -29,11 +30,12 @@ public class StateChange
         keyFieldNewOccupantId = 0;
         activatedAttacks = new List<int>();
         deactivatedAttacks = new List<int>();
+        blockedAttacks = new List<int>();
         changeProbability = 0.0f;
         specialOutcomeDescription = "";
     }
 
-    public StateChange(int ai, int di, int amc, int dmc, int asc, int dsc, int kfci, int kfnoi, List<int> aa, List<int> da, float cp)
+    public StateChange(int ai, int di, int amc, int dmc, int asc, int dsc, int kfci, int kfnoi, List<int> aa, List<int> da, List<int> ba, float cp)
     {
         attackerId = ai;
         defenderId = di;
@@ -45,6 +47,7 @@ public class StateChange
         keyFieldNewOccupantId = kfnoi;
         activatedAttacks = aa;
         deactivatedAttacks = da;
+        blockedAttacks = ba;
         changeProbability = cp;
         specialOutcomeDescription = "";
     }

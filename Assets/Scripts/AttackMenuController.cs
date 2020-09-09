@@ -19,10 +19,11 @@ public class AttackMenuController : MonoBehaviour
     private Text defenceDiceNumberText;
     private int lastClickedUnitId;
 
-    private void AttackClicked(int idAttack, bool isCounterAttack)
+    private void AttackClicked(int idArrow, bool isCounterAttack)
     {
         Sequence mySequence = DOTween.Sequence();
         Attack tempAttack;
+        List<Attack> tempAttacks;
         string an;
 
         if (BattleManager.Instance.turnOwnerId == 1 && !GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && !GameManagerController.Instance.isPlayer2Human) return;
@@ -34,7 +35,13 @@ public class AttackMenuController : MonoBehaviour
         mySequence.Append(transform.DOMoveX(510.0f, 0.3f).SetEase(Ease.OutBack));
         mySequence.Join(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
         isVisible = true;
-        tempAttack = BattleManager.Instance.GetAttack(idAttack);
+        tempAttacks = BattleManager.Instance.GetAttacksByArrowId(idArrow);
+        tempAttack = null;
+        foreach(Attack a in tempAttacks)
+        {
+            if (a.IsActive()) tempAttack = a;
+        }
+        if (tempAttack == null) return;
         an = tempAttack.GetName();
         attackNameText.text = an;
         if (an == "Aim")
