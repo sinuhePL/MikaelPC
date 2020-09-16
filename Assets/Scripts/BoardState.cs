@@ -34,6 +34,15 @@ public class BoardState
         }
     }
 
+    private Unit GetUnitByTileId(int tId)
+    {
+        foreach(Unit u in units)
+        {
+            if (u.GetTileId() == tId) return u;
+        }
+        return null;
+    }
+
     public List<Attack> GetAttacksByArrowId(int arrowId)
     {
         List<Attack> result;
@@ -156,6 +165,13 @@ public class BoardState
     
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId);
+        if((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && change.defenderStrengthChange < 0)
+        {
+            u2 = GetUnitByTileId(u.GetTileId() + BattleManager.Instance.boardHeight);
+            if (u2 != null) u2.ChangeMorale(1);
+            u2 = GetUnitByTileId(u.GetTileId() - BattleManager.Instance.boardHeight);
+            if (u2 != null) u2.ChangeMorale(1);
+        }
         unitToMove = u.ChangeStrength(change.attackerStrengthChange);
         if (!u.IsAlive)
         {
@@ -232,6 +248,13 @@ public class BoardState
         }
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
+        if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && change.attackerStrengthChange < 0)
+        {
+            u2 = GetUnitByTileId(u.GetTileId() + BattleManager.Instance.boardHeight);
+            if (u2 != null) u2.ChangeMorale(1);
+            u2 = GetUnitByTileId(u.GetTileId() - BattleManager.Instance.boardHeight);
+            if (u2 != null) u2.ChangeMorale(1);
+        }
         unitToMove = u.ChangeStrength(change.defenderStrengthChange);
         if (!u.IsAlive)
         {

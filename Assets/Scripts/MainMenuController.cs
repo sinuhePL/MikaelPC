@@ -29,7 +29,7 @@ public class MainMenuController : MonoBehaviour
         if (clickedButton == "newgame") mmSequence1.Append(newGamePanel.transform.DOScale(1.0f, 0.0f));
         if (clickedButton == "tutorial") mmSequence1.Append(tutorialPanel.transform.DOScale(1.0f, 0.0f));
         if (clickedButton == "settings") mmSequence1.Append(settingsPanel.transform.DOScale(1.0f, 0.0f));
-        if (clickedButton == "credits") mmSequence1.Append(creditsPanel.transform.DOScale(1.0f, 0.0f));
+        if (clickedButton == "credits") mmSequence1.Append(creditsPanel.transform.DOScale(1.1f, 0.0f));
         if (clickedButton == "quit") mmSequence1.Append(quitPanel.transform.DOScale(0.7f, 0.0f));
     }
 }

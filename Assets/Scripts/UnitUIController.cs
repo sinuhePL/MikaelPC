@@ -12,7 +12,8 @@ public class UnitUIController : MonoBehaviour
 
     private void TileClicked(int idTile)
     {
-        transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InOutQuint);
+        //transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InOutQuint);
+        transform.DOMoveX(startingPosition.x, 0.3f).SetEase(Ease.InOutQuint);
         isHidden = true;
         isShifted = false;
     }

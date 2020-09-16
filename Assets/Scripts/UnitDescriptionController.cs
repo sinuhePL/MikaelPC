@@ -61,23 +61,25 @@ public class UnitDescriptionController : MonoBehaviour
                 unitImage.sprite = gendarmesSprite;
                 unitCaption.sprite = gendarmesCaption;
                 unitDescription.text = "    A gendarme was a heavy cavalryman of noble birth, primarily serving in the French army from the Late Medieval to the Early Modern periods of European history. They provided the Kings of France with a potent regular force of heavily-armoured lance-armed cavalry which, when properly employed in combination with pikemen and artillery, could dominate the battlefield. They fought exclusively on horseback, generally in a very thin line (en haye), usually two or even just one rank deep";
-                unitRules.text = "- Weak attack against targets on hills.\n- Weak against Landsknechts and Suisse.";
+                unitRules.text = "- Weak attack against targets on hills.\n- Weak against Landsknechts and Suisse.\n- Every kill adds 1 point of morale to neighbours.";
                 break;
             case "Landsknechte":
                 unitImage.sprite = landsknechtsSprite;
                 unitCaption.sprite = landsknechtsCaption;
                 unitDescription.text = "    The Landsknechte were German-speaking mercenaries, consisting predominantly of pikemen and supporting foot soldiers, who became an important military force in early modern Europe. Their front line was formed by doppelsöldner, renowned for their use of arquebus and zweihänder in the early modern period. They formed the bulk of the Imperial Army (Holy Roman Empire) from the late 1400s to the early 1600s.";
-                unitRules.text = "- Good defence againt cavalry.\n- Blocks enemy attacks targeting other units.";
+                unitRules.text = "- Good defence againt cavalry.\n- Disables enemy attacks targeting other units.";
                 break;
             case "Suisse":
                 unitImage.sprite = suisseSprite;
                 unitCaption.sprite = suisseCaption;
                 unitDescription.text = "    The Suisse were considered the best mercenery infrantry during late Medieval Age. They formed up into three dense columns, up to eight thousand men strong, for an attack. Each column was composed of pikemen, carrying their pikes at shoulder height as they advanced, with halberdiers and double-handed swordsmen in the center. The key to victory, the Swiss believed, was to advance, regardless of cost, regardless of obstacles.";
+                unitRules.text = "- Good defence againt cavalry.\n- Disables enemy attacks targeting other units.";
                 break;
             case "Imperial Cavalery":
                 unitImage.sprite = imperialCavalerySprite;
                 unitCaption.sprite = imperialCavaleryCaption;
                 unitDescription.text = "    Imperial cavalry consisted of heavy cavalryman of noble birth from Spain, Germany, Low Countries and Burgundy. They were armed with lances, fought on horseback and were intended to deliver a battlefield charge. Spanish cavalryman were usually lighter armored (often without barding) and with lighter lances. Spanish cavalryman also deployed in line while their German counterparts preferred a deeper, wedge-edged formation.";
+                unitRules.text = "- Weak attack against targets on hills.\n- Weak against Landsknechts and Suisse.\n- Every kill adds 1 point of morale to neighbours."; 
                 break;
             case "Arquebusiers":
                 unitImage.sprite = arquebusiersSprite;

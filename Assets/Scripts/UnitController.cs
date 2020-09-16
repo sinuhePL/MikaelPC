@@ -169,7 +169,7 @@ public class UnitController : MonoBehaviour
             KillSquads(_strength - myUnit.strength);
             _strength = myUnit.strength;
         }
-        if (_morale > myUnit.morale)    // check if unit lost morale
+        if (_morale != myUnit.morale)    // check if unit lost morale
         {
             flag.GetComponent<FlagController>().ChangeBannerHeight(initialMorale, myUnit.morale);
             _morale = myUnit.morale;

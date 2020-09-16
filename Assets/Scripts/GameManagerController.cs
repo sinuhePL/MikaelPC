@@ -40,6 +40,8 @@ public class GameManagerController : MonoBehaviour
 
     public void LoadLevel(string level)
     {
+        /*if (level == "BattleScene") Screen.orientation = ScreenOrientation.LandscapeRight;
+        else Screen.orientation = ScreenOrientation.Portrait;*/
         SceneManager.LoadScene(level);
     }
 

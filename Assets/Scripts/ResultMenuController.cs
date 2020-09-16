@@ -35,7 +35,7 @@ public class ResultMenuController : MonoBehaviour
         Vector3 endPosition;
         Sequence mySequence = DOTween.Sequence();
         int attackerArmyId, defenderArmyId;
-        Attack ta;
+        Unit u;
 
         header.text = "Attack Result";
         Line2.gameObject.SetActive(true);
@@ -51,25 +51,35 @@ public class ResultMenuController : MonoBehaviour
             defenderArmyId = 2;
         }
         else defenderArmyId = 1;
-        if (result.attackerStrengthChange != 0 && BattleManager.Instance.GetArmyMorale(attackerArmyId) <= 30)
+        if (result.attackerStrengthChange != 0)
         {
             attackResultText.text = "Strength: " + result.attackerStrengthChange.ToString();
-            attackerRoutText.text = "Rout test imminent!";
+            if(BattleManager.Instance.GetArmyMorale(attackerArmyId) <= 30) attackerRoutText.text = "Rout test imminent!";
         }
         else attackerRoutText.text = "";
-        if (result.attackerMoraleChanged != 0) attackResultText.text += " Morale: " + result.attackerMoraleChanged.ToString();
+        if (result.attackerMoraleChanged != 0) attackResultText.text += "\nMorale: " + result.attackerMoraleChanged.ToString();
+        u = BattleManager.Instance.GetUnit(result.attackerId);
+        if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && result.defenderStrengthChange < 0)
+        {
+            attackResultText.text += "\n+1 morale for neighbours";
+        }
         defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":";
         defenceResultText.text = "";
-        if (result.defenderStrengthChange != 0 && BattleManager.Instance.GetArmyMorale(defenderArmyId) <= 30)
+        if (result.defenderStrengthChange != 0)
         {
             defenceResultText.text = "Strength: " + result.defenderStrengthChange.ToString();
-            defenderRoutText.text = "Rout test imminent!";
+            if(BattleManager.Instance.GetArmyMorale(defenderArmyId) <= 30) defenderRoutText.text = "Rout test imminent!";
         }
         else defenderRoutText.text = "";
-        if (result.defenderMoraleChanged != 0) defenceResultText.text += " Morale: " + result.defenderMoraleChanged.ToString();
+        if (result.defenderMoraleChanged != 0) defenceResultText.text += "\nMorale: " + result.defenderMoraleChanged.ToString();
+        u = BattleManager.Instance.GetUnit(result.defenderId);
+        if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && result.attackerStrengthChange < 0)
+        {
+            defenceResultText.text += "\n+1 morale for neighbours";
+        }
         endPosition = new Vector3(Screen.width/2, Screen.height/2);
         mySequence.Append(transform.DOMove(endPosition, 0.01f));
-        mySequence.Append(transform.DOScale(0.7f, 0.3f).SetEase(Ease.OutBack));
+        mySequence.Append(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
         attackerStarText.text = result.specialOutcomeDescription;
     }
 

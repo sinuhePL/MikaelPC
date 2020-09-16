@@ -19,6 +19,7 @@ public class Unit
     private List<Attack> unitAttacks;
     private Army owner;
     private int _supportLineUnitId;
+    private int tileId;
 
     private Attack FindAttack(int aId)
     {
@@ -74,6 +75,7 @@ public class Unit
         owner = a;
         supportLineUnitId = pattern.supportLineUnitId;
         movedToFrontLine = pattern.movedToFrontLine;
+        tileId = pattern.tileId;
         unitAttacks = new List<Attack>();
         foreach(Attack at in pattern.unitAttacks)
         {
@@ -85,7 +87,7 @@ public class Unit
         }
     }
 
-    public Unit(int uId, string uType, int iStrength, int iMorale, Army a, string commander)  // konstruktor
+    public Unit(int uId, string uType, int iStrength, int iMorale, Army a, string commander, int tId)  // konstruktor
     {
         unitId = uId;
         unitType = uType;
@@ -101,6 +103,7 @@ public class Unit
         supportLineUnitId = 0;
         movedToFrontLine = false;
         unitCommander = commander;
+        tileId = tId;
     }
 
     /*public StateChange MakeAttack(int aId) // wykonuje atak wskazany przez id ataku przekazane do metody
@@ -143,7 +146,8 @@ public class Unit
     public int ChangeMorale(int mc)    //zmienia morale jednostki o wskazaną wartość i zwraca identyfikator jednostki wsparcia który ją zastępuje gdy została zabita
     {
         morale += mc;
-        owner.ChangeMorale(mc);
+        if (morale > initialMorale) morale = initialMorale;
+        else owner.ChangeMorale(mc);
         if (morale <= 0)
         {
             isAlive = false;
@@ -221,6 +225,11 @@ public class Unit
     {
         if (id == unitId) return true;
         else return false;
+    }
+
+    public int GetTileId()
+    {
+        return tileId;
     }
 
     public int GetArmyId()

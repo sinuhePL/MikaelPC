@@ -19913,7 +19913,7 @@ GameObject:
   - component: {fileID: 8262453227370926125}
   m_Layer: 8
   m_Name: map_tile
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

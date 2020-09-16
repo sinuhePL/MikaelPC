@@ -13,6 +13,8 @@ public class AttackMenuController : MonoBehaviour
     public Text colonText;
     public Text defenderText;
     public Image die2Image;
+    public GameObject dummy;
+    public GameObject dummy2;
     private Text attackNameText;
     private Text attackDiceNumberText;
     private Text starText;
@@ -29,7 +31,8 @@ public class AttackMenuController : MonoBehaviour
         if (BattleManager.Instance.turnOwnerId == 1 && !GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && !GameManagerController.Instance.isPlayer2Human) return;
         if (isVisible)  // hide previous attack
         {
-            mySequence.Append(transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack));
+            //mySequence.Append(transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack));
+            mySequence.Append(transform.DOMoveX(dummy.transform.position.x, 0.3f).SetEase(Ease.InBack));
             mySequence.Join(transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack));
         }
         mySequence.Append(transform.DOMoveX(510.0f, 0.3f).SetEase(Ease.OutBack));
@@ -92,13 +95,15 @@ public class AttackMenuController : MonoBehaviour
     {
         if (isVisible && lastClickedUnitId != idUnit)
         {
-            transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack);
+            //transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack);
+            transform.DOMoveX(dummy.transform.position.x, 0.3f).SetEase(Ease.InBack);
             transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }
         else if(isVisible && lastClickedUnitId == idUnit)
         {
-            transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
+            //transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
+            transform.DOMoveX(dummy2.transform.position.x, 0.3f).SetEase(Ease.InBack);
             transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }
@@ -109,7 +114,8 @@ public class AttackMenuController : MonoBehaviour
     {
         if (isVisible)
         {
-            transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
+            //transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
+            transform.DOMoveX(dummy2.transform.position.x, 0.3f).SetEase(Ease.InBack);
             transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }
@@ -119,7 +125,8 @@ public class AttackMenuController : MonoBehaviour
     {
         if (isVisible)
         {
-            transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack);
+            //transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack);
+            transform.DOMoveX(dummy.transform.position.x, 0.3f).SetEase(Ease.InBack);
             transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }

@@ -23,13 +23,13 @@ public class SwissController : UnitController
         // inicjalizacja squadów
         tempPos = transform.position;
         tempPos.x = tempPos.x - 0.7f;
-        if (_armyId == 1) tempPos.z = tempPos.z + 0.5f;
-        else tempPos.z = tempPos.z - 0.5f;
+        if (_armyId == 1) tempPos.z = tempPos.z + 1.25f;
+        else tempPos.z = tempPos.z - 1.25f;
         for (int i = 0; i < initialStrength; i++)
         {
             tempPos.x = tempPos.x + 0.8f;
-            if (_armyId == 1) tempPos.z = tempPos.z - 0.5f;
-            else tempPos.z = tempPos.z + 0.5f;
+            if (_armyId == 1) tempPos.z = tempPos.z - 0.75f;
+            else tempPos.z = tempPos.z + 0.75f;
 
 
             _squads[i] = Instantiate(unitSquadPrefab, tempPos, transform.rotation);

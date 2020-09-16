@@ -1398,7 +1398,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: -170}
+  m_AnchoredPosition: {x: 1, y: -182}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &272132427
@@ -1814,8 +1814,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -7.175, y: -48449.246}
-  m_SizeDelta: {x: 577.65, y: 515.3}
+  m_AnchoredPosition: {x: 2.65, y: -20102.418}
+  m_SizeDelta: {x: 597.2, y: 538.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529051034
 MonoBehaviour:
@@ -1850,7 +1850,12 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Author: Karol \u0141awicki\nlawicki.karol@gmail.com\n\ntest\ntest\ntest\ntest\ntst\nsdfsda\nsad\nsadsda\ndadsd\nasdsa\ndsad\nasd\nsad\nsad\nada\ndas"
+  m_Text: "Design & Programming: Karol \u0141awicki\nlawicki.karol@gmail.com\n\nGraphics:\nsword.png
+    - Icon made by Freepik from www.flaticon.com\npointed star.png - Icon made by
+    Freepik from www.flaticon.com\nmap-flag.png - Icon made by Freepik from www.flaticon.com\n88600.jpg
+    - Designed by rawpixel.com / Freepik\n\nSource of Public Domain Graphics:\n- Wikimedia
+    Commons\n- British Library\n- New York Public Libary Collections\n\nSounds: \n-
+    freesound.org\n- soundbible.com\n"
 --- !u!222 &529051035
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1960,7 +1965,7 @@ RectTransform:
   m_GameObject: {fileID: 560410768}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children: []
   m_Father: {fileID: 1717234710}
   m_RootOrder: 2
@@ -2459,8 +2464,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.4, y: -38.5}
-  m_SizeDelta: {x: 563.3, y: 282.2}
+  m_AnchoredPosition: {x: 2.1, y: -71.2}
+  m_SizeDelta: {x: 602.5, y: 347.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &603285485
 MonoBehaviour:
@@ -2528,7 +2533,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -14.3, y: 76.7}
+  m_AnchoredPosition: {x: -14.3, y: 54}
   m_SizeDelta: {x: -3.5, y: -149.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &629210817
@@ -2680,7 +2685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21, y: -169}
+  m_AnchoredPosition: {x: 18, y: -104}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &729631512
@@ -2815,7 +2820,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 629210816}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.55563426
+  m_Size: 0.5451668
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3558,7 +3563,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &908182125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4253,7 +4258,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &993990587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4606,7 +4611,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 188, y: -272}
+  m_AnchoredPosition: {x: 157, y: -272}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1070583831
@@ -4876,6 +4881,7 @@ GameObject:
   - component: {fileID: 1135495702}
   - component: {fileID: 1135495701}
   - component: {fileID: 1135495700}
+  - component: {fileID: 1135495703}
   m_Layer: 5
   m_Name: yesButton
   m_TagString: Untagged
@@ -4944,18 +4950,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1135495701}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2098576141}
-        m_MethodName: QuitGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1135495701
@@ -4995,6 +4990,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1135495698}
   m_CullTransparentMesh: 0
+--- !u!114 &1135495703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135495698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a017bbca78fdb3b4c8cc009f86ff02e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1143697050
 GameObject:
   m_ObjectHideFlags: 0
@@ -5775,7 +5782,7 @@ RectTransform:
   m_GameObject: {fileID: 1311815548}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
   - {fileID: 929394579}
   - {fileID: 579319388}
@@ -6223,7 +6230,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &1456060808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6807,7 +6814,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1555520314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6887,7 +6894,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21, y: -169}
+  m_AnchoredPosition: {x: 4, y: -169}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1566699715
@@ -7554,6 +7561,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   throwDiceSound: {fileID: 8300000, guid: ab4c64cb29d6f4c47889ba5e8ab21cb2, type: 3}
   turnStartSound: {fileID: 8300000, guid: bc9d9775c9ed68140b3df9d3f8fff0bb, type: 3}
+  arquebusiersAttackSound: {fileID: 8300000, guid: 5ba7e8b2a0bda7044af684706c591fba,
+    type: 3}
+  pikemanAttackSound: {fileID: 8300000, guid: 89a691ea25e3c164aba05c3c54d411a5, type: 3}
+  artilleryAttackSound: {fileID: 8300000, guid: ce1bf8ab9067db14b9f484023c094618,
+    type: 3}
+  cavalryAttackSound: {fileID: 8300000, guid: ae11127864c448840b2d8f056b7153f1, type: 3}
+  lightCavalryAttackSound: {fileID: 8300000, guid: f511268fe22ebc14db7fa6af2f540abc,
+    type: 3}
 --- !u!82 &1771573867
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7697,8 +7712,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.95, y: 17.2}
-  m_SizeDelta: {x: -9.9, y: -54.5}
+  m_AnchoredPosition: {x: 4.95, y: 35.2}
+  m_SizeDelta: {x: -9.9, y: -90.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1790564916
 GameObject:
@@ -8758,8 +8773,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.2999878, y: -86.900024}
-  m_SizeDelta: {x: -408.1, y: -785.9}
+  m_AnchoredPosition: {x: 2.100006, y: -86.900024}
+  m_SizeDelta: {x: -403.3, y: -785.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2023265837
 MonoBehaviour:

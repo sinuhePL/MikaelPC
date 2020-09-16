@@ -404,7 +404,7 @@ public class BattleManager : MonoBehaviour {
         {
             uc = g.GetComponent<UnitController>();
             if (!uc.isPlaced) continue;
-            myUnit = new Unit(uc.UnitId, uc.UnitType, uc.InitialStrength, uc.InitialMorale, uc.ArmyId == 1 ? army1 : army2, uc.UnitCommander);
+            myUnit = new Unit(uc.UnitId, uc.UnitType, uc.InitialStrength, uc.InitialMorale, uc.ArmyId == 1 ? army1 : army2, uc.UnitCommander, uc.UnitTileId);
             supportTile = 0;
             centralKeyFieldId = 0;
             leftKeyFieldId = 0;
