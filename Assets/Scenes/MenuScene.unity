@@ -603,7 +603,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &130088617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1814,7 +1814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.65, y: -20102.418}
+  m_AnchoredPosition: {x: 2.65, y: -136362.45}
   m_SizeDelta: {x: 597.2, y: 538.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529051034
@@ -1854,8 +1854,10 @@ MonoBehaviour:
     - Icon made by Freepik from www.flaticon.com\npointed star.png - Icon made by
     Freepik from www.flaticon.com\nmap-flag.png - Icon made by Freepik from www.flaticon.com\n88600.jpg
     - Designed by rawpixel.com / Freepik\n\nSource of Public Domain Graphics:\n- Wikimedia
-    Commons\n- British Library\n- New York Public Libary Collections\n\nSounds: \n-
-    freesound.org\n- soundbible.com\n"
+    Commons\n- British Library\n- New York Public Libary Collections\n\nSounds:\n194982__soundmary__wild-horses-running.mp3
+    - https://freesound.org/people/soundmary/\n218522__yap-audio-production__medievalcombatloop.mp3
+    - Creators of 'A Scottish Podcast' - ScottishPodcast.com\n\nOther sounds:\n- freesound.org\n-
+    soundbible.com\n- "
 --- !u!222 &529051035
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2952,7 +2954,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &746689849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3151,7 +3153,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &791654621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3563,7 +3565,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &908182125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6036,7 +6038,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1410315286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6230,7 +6232,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1456060808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7538,7 +7540,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1771573868}
-  - component: {fileID: 1771573867}
   - component: {fileID: 1771573866}
   m_Layer: 0
   m_Name: SoundManager
@@ -7569,102 +7570,30 @@ MonoBehaviour:
   cavalryAttackSound: {fileID: 8300000, guid: ae11127864c448840b2d8f056b7153f1, type: 3}
   lightCavalryAttackSound: {fileID: 8300000, guid: f511268fe22ebc14db7fa6af2f540abc,
     type: 3}
---- !u!82 &1771573867
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1771573865}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  clickSound: {fileID: 8300000, guid: 6b6c777671a1add4da09b6e6d4774073, type: 3}
+  lostSound: {fileID: 8300000, guid: 2aa5137972be64d49a4e751459dd06d1, type: 3}
+  stalemateSound: {fileID: 8300000, guid: b5c1a830246f8984084c8ea86a128467, type: 3}
+  wonSound: {fileID: 8300000, guid: 648dec663a418ef48933ed3d3b5285c1, type: 3}
+  unitReportSound:
+  - {fileID: 8300000, guid: f4b3fe3c6ccc67942826ad7670abf1a4, type: 3}
+  - {fileID: 8300000, guid: b12fc4f78fc3e5c48ad9e3aa1aadf418, type: 3}
+  - {fileID: 8300000, guid: 44a18f66ef3605e438675dc859d1db4b, type: 3}
+  unitPlaceSound:
+  - {fileID: 8300000, guid: e0738915c5a3912448f3dbb52b22dc68, type: 3}
+  - {fileID: 8300000, guid: 617327dbb5ea3bf4a826d814743c30cd, type: 3}
+  - {fileID: 8300000, guid: a0e9d0e60c550cf4cba1242ea044d9f3, type: 3}
+  gameMusic:
+  - {fileID: 8300000, guid: 32ca90b8aad25dd498abef0e1fce30f7, type: 3}
+  - {fileID: 8300000, guid: 7c3a68c900c1c164ea21da46896ed4cb, type: 3}
+  - {fileID: 8300000, guid: a1d8a5f318a34f04ab3bdd559c8f7a2c, type: 3}
+  - {fileID: 8300000, guid: 586f129d1bf1e714985876824850767e, type: 3}
+  - {fileID: 8300000, guid: 1814f28ec1a3fd943b3280736f2bb5b9, type: 3}
+  - {fileID: 8300000, guid: a65ce2c23fbeba34298f78a51fc00558, type: 3}
+  - {fileID: 8300000, guid: a16df444c31bafc4181910085a60679d, type: 3}
+  - {fileID: 8300000, guid: 7af3402938acf2e4f80f473d2bed4925, type: 3}
+  - {fileID: 8300000, guid: 4fc94bea626aeba41bc8a31f5200579e, type: 3}
+  - {fileID: 8300000, guid: 49cfd9d0ed7a4b64c9399ae8d0191275, type: 3}
+  - {fileID: 8300000, guid: e88fc41ae9c9193498d6e12fcc298467, type: 3}
 --- !u!4 &1771573868
 Transform:
   m_ObjectHideFlags: 0
@@ -8013,7 +7942,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1850935525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9253,7 +9182,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &2099336984
 MonoBehaviour:
   m_ObjectHideFlags: 0

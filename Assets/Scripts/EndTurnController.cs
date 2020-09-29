@@ -70,7 +70,8 @@ public class EndTurnController : MonoBehaviour
             if (mode == 0) return;
             if (mode == 1) // if displays End Deployment
             {
-                if(BattleManager.Instance.turnOwnerId == 1)
+                SoundManagerController.Instance.PlayClick();
+                if (BattleManager.Instance.turnOwnerId == 1)
                 {
                     EventManager.RaiseEventOnDeploymentStart(2);
                 }
@@ -84,6 +85,7 @@ public class EndTurnController : MonoBehaviour
             }
             if (mode == 2)  // if displays End Turn
             {
+                SoundManagerController.Instance.PlayClick();
                 isClicked = true;
                 leftArrow.GetComponent<LookArrowController>().ChangeActivityState();
                 rightArrow.GetComponent<LookArrowController>().ChangeActivityState();
@@ -98,12 +100,14 @@ public class EndTurnController : MonoBehaviour
             }
             if (mode == 4) // if displays Close Result (attack result)
             {
+                SoundManagerController.Instance.PlayClick();
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("attack");
                 return;
             }
             if(mode == 5) // if displays Close Result (rout test result)
             {
+                SoundManagerController.Instance.PlayClick();
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("routtest");
                 return;

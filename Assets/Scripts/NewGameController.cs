@@ -30,6 +30,7 @@ public class NewGameController : MonoBehaviour
 
     public void BackClicked()
     {
+        SoundManagerController.Instance.PlayClick();
         Sequence mmSequence2 = DOTween.Sequence();
         mmSequence2.Append(backButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mmSequence2.Append(transform.DOScale(0.0f, 0.0f));

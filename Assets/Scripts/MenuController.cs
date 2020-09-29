@@ -25,6 +25,7 @@ public class MenuController : MonoBehaviour
 
     public void ResumeClicked()
     {
+        SoundManagerController.Instance.PlayClick();
         Sequence mySequence = DOTween.Sequence();
         mySequence.Append(resumeButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mySequence.Append(transform.DOScale(0.0f, 0.25f).SetEase(Ease.InBack));
@@ -38,6 +39,7 @@ public class MenuController : MonoBehaviour
 
     public void SettingsClicked()
     {
+        SoundManagerController.Instance.PlayClick();
         Sequence mySequence2 = DOTween.Sequence();
         mySequence2.Append(settingsButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mySequence2.Append(transform.DOScale(0.0f, 0.0f));
@@ -46,6 +48,7 @@ public class MenuController : MonoBehaviour
 
     public void QuitClicked()
     {
+        SoundManagerController.Instance.PlayClick();
         quitButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
         GameManagerController.Instance.LoadLevel("MenuScene");
     }

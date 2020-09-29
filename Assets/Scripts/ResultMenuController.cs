@@ -37,6 +37,9 @@ public class ResultMenuController : MonoBehaviour
         int attackerArmyId, defenderArmyId;
         Unit u;
 
+        if (result.defenderMoraleChanged + result.defenderStrengthChange < result.attackerStrengthChange + result.attackerMoraleChanged || result.keyFieldChangeId != 0) SoundManagerController.Instance.PlayResult("won");
+        if (result.defenderMoraleChanged + result.defenderStrengthChange == result.attackerStrengthChange + result.attackerMoraleChanged) SoundManagerController.Instance.PlayResult("stalemate");
+        if (result.defenderMoraleChanged + result.defenderStrengthChange > result.attackerStrengthChange + result.attackerMoraleChanged) SoundManagerController.Instance.PlayResult("lost");
         header.text = "Attack Result";
         Line2.gameObject.SetActive(true);
         defenceText.rectTransform.sizeDelta = new Vector2(386.0f, 71.0f);

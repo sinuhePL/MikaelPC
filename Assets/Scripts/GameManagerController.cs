@@ -42,6 +42,8 @@ public class GameManagerController : MonoBehaviour
     {
         /*if (level == "BattleScene") Screen.orientation = ScreenOrientation.LandscapeRight;
         else Screen.orientation = ScreenOrientation.Portrait;*/
+        if (level == "BattleScene") SoundManagerController.Instance.PlayMusicWithCrossFade(1);
+        else SoundManagerController.Instance.PlayMusicWithCrossFade(0);
         SceneManager.LoadScene(level);
     }
 

@@ -22,6 +22,7 @@ public class SettingsController : MonoBehaviour
 
     public void BackClicked()
     {
+        SoundManagerController.Instance.PlayClick();
         Sequence mySequence3 = DOTween.Sequence();
         mySequence3.Append(backButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mySequence3.Append(transform.DOScale(0.0f, 0.0f));

@@ -49,7 +49,8 @@ public class ToggleController : MonoBehaviour
 
     public void ToggleChanged()
     {
-        if(myToggle != null && myToggle.isOn)
+        SoundManagerController.Instance.PlayClick();
+        if (myToggle != null && myToggle.isOn)
         {
             if (enumType == toggleEnum.easy) GameManagerController.Instance.difficultyLevel = GameManagerController.diffLevelEnum.easy;
             else if (enumType == toggleEnum.medium) GameManagerController.Instance.difficultyLevel = GameManagerController.diffLevelEnum.medium;

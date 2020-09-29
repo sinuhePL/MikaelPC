@@ -19,6 +19,7 @@ public class MainMenuController : MonoBehaviour
 
     public void ButtonClicked(string clickedButton)
     {
+        SoundManagerController.Instance.PlayClick();
         Sequence mmSequence1 = DOTween.Sequence();
         if (clickedButton == "newgame") mmSequence1.Append(newGameButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         if (clickedButton == "tutorial") mmSequence1.Append(tutorialButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));

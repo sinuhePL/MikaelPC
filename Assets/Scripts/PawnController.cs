@@ -25,6 +25,7 @@ public class PawnController : MonoBehaviour
         if (!IsPointerOverGameObject() && ((BattleManager.Instance.turnOwnerId == 1 && GameManagerController.Instance.isPlayer1Human || BattleManager.Instance.turnOwnerId == 2 && GameManagerController.Instance.isPlayer2Human) || BattleManager.Instance.gameMode == "deploy"))
         {
             EventManager.RaiseEventOnUnitClicked(_unitId);
+            SoundManagerController.Instance.PlayUnitReport();
         }
     }
 

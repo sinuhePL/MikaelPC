@@ -114,6 +114,7 @@ public class TileController : MonoBehaviour
             if(!IsPointerOverGameObject() && myDeployedUnitId == 0 && BattleManager.Instance.turnOwnerId == possibleArmyDeployment && lastClickedUnit != forwardUnitId && !BattleManager.Instance.isUnitControllerBlocked(lastClickedUnit))
             {
                 EventManager.RaiseEventOnUnitDeployed(lastClickedUnit, tileId);
+                SoundManagerController.Instance.PlayUnitPlaced();
             }
         }
         else if (!IsPointerOverGameObject() && !BattleManager.Instance.isInputBlocked)

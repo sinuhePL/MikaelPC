@@ -59,7 +59,7 @@ public class DeployUIController : MonoBehaviour
 
     private void UnitClicked(int uId)
     {
-        if (uId == unitId) WidgetPressed();
+        if (uId == unitId) WidgetPressed(false);
     }
 
     private void DeploymentStart(int aId)
@@ -82,15 +82,16 @@ public class DeployUIController : MonoBehaviour
         unitType = uType;
         if (position == 0)
         {
-            WidgetPressed();
+            WidgetPressed(false);
         }
         else transform.position = new Vector3(transform.position.x, transform.position.y - 42.0f, transform.position.z);
     }
 
-    public void WidgetPressed()
+    public void WidgetPressed(bool playSound)
     {
         if (!isEnlarged)
         {
+            if(playSound) SoundManagerController.Instance.PlayUnitReport();
             transform.DOScale(0.4f, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveX(540.0f, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveY(startingPosition.y - 25.0f, 0.25f).SetEase(Ease.OutBack);

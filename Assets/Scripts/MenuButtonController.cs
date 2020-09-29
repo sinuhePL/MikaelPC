@@ -10,6 +10,7 @@ public class MenuButtonController : MonoBehaviour
     {
         if (!BattleManager.Instance.isInputBlocked)
         {
+            SoundManagerController.Instance.PlayClick();
             BattleManager.Instance.isInputBlocked = true;
             transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
         }

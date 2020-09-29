@@ -42,6 +42,16 @@ public class BombardAttack : Attack
                 defenceDiceNumber = 0;
                 specialOutcomeType = 6;
                 break;
+            case "Stradioti":
+                attackDiceNumber = 2;
+                defenceDiceNumber = 0;
+                specialOutcomeType = 6;
+                break;
+            case "Coustilliers":
+                attackDiceNumber = 2;
+                defenceDiceNumber = 0;
+                specialOutcomeType = 6;
+                break;
         }
     }
 
