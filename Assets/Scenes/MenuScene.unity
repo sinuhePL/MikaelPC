@@ -1814,7 +1814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.65, y: -136362.45}
+  m_AnchoredPosition: {x: 2.65, y: -314618.4}
   m_SizeDelta: {x: 597.2, y: 538.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529051034
@@ -1850,14 +1850,17 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Design & Programming: Karol \u0141awicki\nlawicki.karol@gmail.com\n\nGraphics:\nsword.png
-    - Icon made by Freepik from www.flaticon.com\npointed star.png - Icon made by
-    Freepik from www.flaticon.com\nmap-flag.png - Icon made by Freepik from www.flaticon.com\n88600.jpg
-    - Designed by rawpixel.com / Freepik\n\nSource of Public Domain Graphics:\n- Wikimedia
-    Commons\n- British Library\n- New York Public Libary Collections\n\nSounds:\n194982__soundmary__wild-horses-running.mp3
-    - https://freesound.org/people/soundmary/\n218522__yap-audio-production__medievalcombatloop.mp3
-    - Creators of 'A Scottish Podcast' - ScottishPodcast.com\n\nOther sounds:\n- freesound.org\n-
-    soundbible.com\n- "
+  m_Text: "Design & Programming: Karol \u0141awicki\nlawicki.karol@gmail.com\n\nGraphics
+    licensed under the Attribution License:\nsword.png - Icon made by Freepik from
+    www.flaticon.com\npointed star.png - Icon made by Freepik from www.flaticon.com\nmap-flag.png
+    - Icon made by Freepik from www.flaticon.com\n88600.jpg - Designed by rawpixel.com
+    / Freepik\n\nSource of Public Domain Graphics:\n- Wikimedia Commons\n- British
+    Library\n- New York Public Libary Collections\n\nSounds licensed under the Attribution
+    License:\n194982__soundmary__wild-horses-running.mp3 - https://freesound.org/people/soundmary/\n218522__yap-audio-production__medievalcombatloop.mp3
+    - Creators of 'A Scottish Podcast' - ScottishPodcast.com\n466133__humanoide9000__victory-fanfare.wav
+    - https://www.youtube.com/c/LuisHumanoide\n\nOther sounds:\n- freesound.org\n-
+    soundbible.com\n\nMusic:\nLord of the Land by Kevin MacLeod\r\nLink: https://incompetech.filmmusic.io/song/4002-lord-of-the-land\r\nLicense:
+    http://creativecommons.org/licenses/by/4.0/\nJon Sayles - http://www.jsayles.com/familypages/earlymusic.htm"
 --- !u!222 &529051035
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7594,6 +7597,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4fc94bea626aeba41bc8a31f5200579e, type: 3}
   - {fileID: 8300000, guid: 49cfd9d0ed7a4b64c9399ae8d0191275, type: 3}
   - {fileID: 8300000, guid: e88fc41ae9c9193498d6e12fcc298467, type: 3}
+  winGameSound: {fileID: 8300000, guid: 803c46c2827f9084dbdc0f8de61b8cf8, type: 3}
+  looseGameSound: {fileID: 8300000, guid: 544c32225adffa64ab3798c77163a2ee, type: 3}
 --- !u!4 &1771573868
 Transform:
   m_ObjectHideFlags: 0
@@ -9060,9 +9065,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSoundEnabled: 1
   isMusicEnabled: 1
-  soundLevel: 0.9
-  musicLevel: 0.7
-  isPlayer1Human: 1
+  soundLevel: 1
+  musicLevel: 0.5
+  isPlayer1Human: 0
   isPlayer2Human: 1
   viewType: 1
   difficultyLevel: 1

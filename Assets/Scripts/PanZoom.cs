@@ -76,6 +76,24 @@ public class PanZoom : MonoBehaviour
         EventManager.onTurnEnd += TurnEnd;
         EventManager.onAttackOrdered += LookAtDice;
         EventManager.onRouteTestOver += ZoomOutAfterRoutTest;
+        EventManager.onGameStart += SetupCamera;
+        EventManager.onDeploymentStart += SetupCamera2;
+    }
+
+    private void SetupCamera()
+    {
+        if(lookDirection != 1)
+        {
+            ChangeViewAngle("button");
+        }
+    }
+
+    private void SetupCamera2(int i)
+    {
+        if (lookDirection != 1 && i == 1)
+        {
+            ChangeViewAngle("button");
+        }
     }
 
     // Start is called before the first frame update
@@ -104,6 +122,8 @@ public class PanZoom : MonoBehaviour
         EventManager.onTurnEnd -= TurnEnd;
         EventManager.onAttackOrdered -= LookAtDice;
         EventManager.onRouteTestOver -= ZoomOutAfterRoutTest;
+        EventManager.onGameStart -= SetupCamera;
+        EventManager.onDeploymentStart -= SetupCamera2;
     }
 
     public void RoutTest(Vector3 testSpot)
@@ -325,7 +345,7 @@ public class PanZoom : MonoBehaviour
             //obraca kamerę wokół punktu na który patrzy, kierunekj zalezy od kierunku aktualnego
             if (BattleManager.Instance.turnOwnerId == 1)
             {
-                if(lookDirection == 1)
+                if(lookDirection == 1 || lookDirection == 3)
                 {
                     if(caller == "arrow")
                     {
@@ -338,7 +358,7 @@ public class PanZoom : MonoBehaviour
                         lookDirection = 4;
                     }
                 }
-                else if(lookDirection == 2)
+                else if(lookDirection == 2 || lookDirection == 4)
                 {
                     if (caller == "arrow")
                     {

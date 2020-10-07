@@ -169,15 +169,6 @@ public class TileController : MonoBehaviour
                 tileInfluenceDescription.text += "+1 Attack Die for opposing Artillery\n\n";
             }
             if (tc.tileType == "Forest") tileInfluenceDescription.text += "+1 Defence Die for opposing Arquebusiers\n\n";
-            /*if(tileType == "forest")
-            {
-                if(uType == "Arquebusiers") tileInfluenceDescription.text = "+1 Attack Die";
-                if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers" || uType == "Artillery") tileInfluenceDescription.text += "\n\n+1 Defence Die against Cavalery";
-            }
-            if(tileType == "town")
-            {
-                if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") tileInfluenceDescription.text += "\n\n+1 Defence Die against Arquebusiers and Artillery";
-            }*/
         }
         else
         {
@@ -204,6 +195,7 @@ public class TileController : MonoBehaviour
         {
             myDeployedUnitId = uId;
             tileInfluenceDescription.gameObject.SetActive(false);
+            tileTypeText.gameObject.SetActive(false);
             if (BattleManager.Instance.turnOwnerId == 1 && (tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2)
             {
                 bottomParticleSystem.Stop();
@@ -419,6 +411,7 @@ public class TileController : MonoBehaviour
             rightParticleSystem.Clear();
             leftParticleSystem.Clear();
             tileInfluenceDescription.gameObject.SetActive(false);
+            tileTypeText.gameObject.SetActive(false);
         }
     }
 
@@ -489,18 +482,6 @@ public class TileController : MonoBehaviour
         {
             if (defenderType == "Arquebusiers") return 1;
         }
-        /*if (tileType == "hill")
-        {
-            return 1;
-        }
-        if (tileType == "forest")
-        {
-            if ((defenderType == "Suisse" || defenderType == "Landsknechte" || defenderType == "Arquebusiers" || defenderType == "Artillery") && (attackerType == "Gendarmes" || attackerType == "Imperial Cavalery")) return 1;
-        }
-        if (tileType == "town")
-        {
-            if ((defenderType == "Suisse" || defenderType == "Landsknechte" || defenderType == "Arquebusiers") && (attackerType == "Arquebusiers" || attackerType == "Artillery")) return 1;
-        }*/
         return 0;
     }
 
@@ -512,74 +493,128 @@ public class TileController : MonoBehaviour
 
     public int GetUnitValue(string uType)
     {
-        TileController tc;
         int score;
+        TileController tc;
 
         score = 50;
-        tc = null;
-        if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2)    // if tile in first line of army 1
+        if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2 || (tileId - 1) % BattleManager.Instance.boardHeight == 1)    // if tile in first line 
         {
-            tc = BattleManager.Instance.GetTile(tileId - 2);
+            if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy)
+            {
+                if (uType == "Coustilliers" || uType == "Stradioti") score += 10;
+                if (tileType == "Hill") score += 10;    // better because protected from Heavy cavalry
+                if (tileType == "Town") score -= 10;    // worse because easy target for artillery
+                if (tileType == "Forest" && uType == "Arquebusiers") score -= 10;
+            }
+            else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.medium || GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard)
+            {
+                if (uType == "Coustilliers" || uType == "Stradioti") score += 10;
+                if (tileType == "Hill") score -= 10;    // better because protected from Heavy cavalry
+                if (tileType == "Town") score += 10;    // worse because easy target for artillery
+                if (tileType == "Forest" && uType == "Arquebusiers") score -= 30;
+                if (tileType == "Town" && (uType == "Coustilliers" || uType == "Stradioti" || uType == "Imperial Cavalery" || uType == "Gendarmes")) score -= 20;
+                if (tileType == "Hill" && (uType == "Landsknechte" || uType == "Suisse")) score += 10;
+                if (uType == "Coustilliers" || uType == "Stradioti")
+                {
+                    if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2)    // check if tile in front and next to it is key field
+                    {
+                        tc = BattleManager.Instance.GetTile(tileId - 1 + BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                        tc = BattleManager.Instance.GetTile(tileId - 1 - BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                    }
+                    if ((tileId - 1) % BattleManager.Instance.boardHeight == 1)
+                    {
+                        tc = BattleManager.Instance.GetTile(tileId + 1 + BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                        tc = BattleManager.Instance.GetTile(tileId + 1 - BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                    }
+                }
+                if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard) // Heavy cavalry shoudn't be placed on both end of deployment zone
+                {
+                    if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+                    {
+                        if (tileId < 2 * BattleManager.Instance.boardHeight || tileId > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - 2 * BattleManager.Instance.boardHeight) score += 10;
+                    }
+                }
+            }
         }
-        else if ((tileId - 1) % BattleManager.Instance.boardHeight == 1)    // if tile in first line of army 2
+        else if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (tileId - 1) % BattleManager.Instance.boardHeight == 0) // if tile in second line 
         {
-            tc = BattleManager.Instance.GetTile(tileId + 2);
+            if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1) tc = BattleManager.Instance.GetTile(tileId - 1);
+            else tc = BattleManager.Instance.GetTile(tileId + 1);
+            if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy)
+            {
+                if (uType == "Coustilliers" || uType == "Stradioti") score -= 10;
+                if (tc.tileType == "Hill") score += 10;    // better because protected from Heavy cavalry
+                if (tc.tileType == "Town") score -= 10;    // worse because easy target for artillery
+                if (tc.tileType == "Forest" && uType == "Arquebusiers") score -= 10;    // better because arquebusiers has bonus to defense in woods
+            }
+            else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.medium || GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard)
+            {
+                if (uType == "Coustilliers" || uType == "Stradioti") score -= 10;
+                if (tc.tileType == "Hill") score -= 10;    // better because protected from Heavy cavalry
+                if (tc.tileType == "Town") score += 10;    // worse because easy target for artillery
+                if (tc.tileType == "Forest" && uType == "Arquebusiers") score -= 30;    // better because arquebusiers has bonus to defense in woods
+                if (tc.tileType == "Town" && (uType == "Coustilliers" || uType == "Stradioti" || uType == "Imperial Cavalery" || uType == "Gendarmes")) score -= 20;
+                if (tc.tileType == "Hill" && (uType == "Landsknechte" || uType == "Suisse")) score += 10;
+                if (uType == "Coustilliers" || uType == "Stradioti")
+                {
+                    if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 2)     // check if tile in front and next to it is key field
+                    {
+                        tc = BattleManager.Instance.GetTile(tileId - 2 + BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                        tc = BattleManager.Instance.GetTile(tileId - 2 - BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                    }
+                    if ((tileId - 1) % BattleManager.Instance.boardHeight == 1)
+                    {
+                        tc = BattleManager.Instance.GetTile(tileId + 2 + BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                        tc = BattleManager.Instance.GetTile(tileId + 2 - BattleManager.Instance.boardHeight);
+                        if (tc.keyFieldId != 0) score -= 10;
+                    }
+                }
+                if(GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard)  // Heavy cavalry shoudn't be placed on both end of deployment zone
+                {
+                    if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+                    {
+                        if (tileId < 2 * BattleManager.Instance.boardHeight || tileId > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - 2 * BattleManager.Instance.boardHeight) score += 10;
+                    }
+                }
+            }
         }
-        if ((tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (tileId - 1) % BattleManager.Instance.boardHeight == 0) // if tile in second line
-        {
-            if (uType == "Coustilliers" || uType == "Stradioti") return score - 10;
-            else return score + 10;
-        }
-        if (tileType == "Hill") score -= 10;
-        if (tileType == "Town") score += 10;
-        /*if (uType == "Imperial Cavalery" || uType == "Gendarmes")
-        {
-            if (tc.tileType == "hill") score += 20;
-        }
-        else if(uType == "Artillery")
-        {
-            if (tc.tileType == "town") score -= 30;
-        }*/
         return score;
-
-        /*if(tileType == "forest")
-        {
-            if (uType == "Arquebusiers") return 10;
-            if (uType == "Suisse" || uType == "Landsknechte" || uType == "Artillery") return 40;
-        }
-        if(tileType == "town")
-        {
-            if (uType == "Suisse" || uType == "Landsknechte" || uType == "Arquebusiers") return 30;
-        }*/
     }
 
     public int GetOpposingUnitValue(string uType)
     {
-        if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+        int score = 0;
+        if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.medium || GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard)
         {
-            if (tileType == "Hill") return 20;
+            if (uType == "Imperial Cavalery" || uType == "Gendarmes")
+            {
+                if (tileType == "Hill") score += 20;
+            }
+            else if (uType == "Artillery")
+            {
+                if (tileType == "Town") score -=30;
+            }
+            if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard)
+            {
+                if (tileType == "Town")
+                {
+                    if (uType == "Artillery") score += 20;
+                    if (uType == "Landsknechte" || uType == "Suisse") score -= 10;
+                }
+                if (uType == "Landsknechte" || uType == "Suisse")
+                {
+                    if (tileId < 2 * BattleManager.Instance.boardHeight || tileId > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - 2 * BattleManager.Instance.boardHeight) score += 10;
+                }
+            }
         }
-        else if (uType == "Artillery")
-        {
-            if (tileType == "Town") return -30;
-        }
-        return 0;
-        /*if (tileType == "hill")
-        {
-            if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 20;
-            if (uType == "Artillery") return 80;
-            if (uType == "Landsknechte" || uType == "Suisse") return 30;
-            else return 50;*/
-        /*if (tileType == "forest")
-        {
-            if (uType == "Gendarmes" || uType == "Imperial Cavalery") return 40;
-            else return 10;
-        }
-        if (tileType == "town")
-        {
-            if (uType == "Artillery" || uType == "Arquebusiers") return 20;
-            else return 0;
-        }*/
+        return score;
     }
 
     public void DisableHighlight(string side)
@@ -599,5 +634,25 @@ public class TileController : MonoBehaviour
     public int GetForwardUnitId()
     {
         return forwardUnitId;
+    }
+
+    public void ResetTile()
+    {
+        pawn.SetActive(false);
+        isBlinking = false;
+        ownerId = 0;
+        lastClickedUnit = 0;
+        forwardUnitId = 0;
+    }
+
+    public void ResetDeployedUnit()
+    {
+        myDeployedUnitId = 0;
+    }
+
+    public bool IsTileOccupied()
+    {
+        if (myDeployedUnitId == 0) return false;
+        else return true;
     }
 }

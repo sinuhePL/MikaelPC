@@ -13,6 +13,8 @@ public class SliderController : MonoBehaviour
     private void Start()
     {
         mySlider = GetComponent<Slider>();
+        if (controlObject == controlType.sound) mySlider.value = GameManagerController.Instance.soundLevel;
+        else if (controlObject == controlType.music) mySlider.value = GameManagerController.Instance.musicLevel;
     }
 
     public void ValueChanged()

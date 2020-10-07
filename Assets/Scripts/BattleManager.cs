@@ -22,6 +22,7 @@ public class BattleManager : MonoBehaviour {
 
     private static BattleManager _instance;
     private BoardState myBoardState;
+    private BoardState afterDeploymentBoardState;
     private List<GameObject> units;
     private List<GameObject> tiles;
     private Camera myCamera;
@@ -158,93 +159,75 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
-    private void DeployEasy(int armyId)
+    /*private void DeployEasy(int armyId)
     {
-        List<int> possibleTiles = new List<int>();
-        foreach (GameObject t in tiles)
+        List<TileController> possibleTiles = new List<TileController>();
+        List<UnitController> possibleUnits = new List<UnitController>();
+        TileController tc;
+        UnitController uc;
+        int tempUnitIndex, tempTileIndex;
+
+        foreach (GameObject t in tiles) // creates a list of possible deployment tiles 
         {
-            TileController tc;
             tc = t.GetComponent<TileController>();
-            if (tc.DeploymentPossible(armyId)) possibleTiles.Add(tc.tileId); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
+            if (tc.DeploymentPossible(armyId)) possibleTiles.Add(tc); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
         }
-        foreach (GameObject g in units)
+        foreach (GameObject g in units) // creates a list of units possible to deploy
         {
-            UnitController uc;
-            int tempId = Random.Range(0, possibleTiles.Count);
             uc = g.GetComponent<UnitController>();
-            if (uc.ArmyId == armyId)
+            if (uc.ArmyId == armyId) possibleUnits.Add(uc);
+        }
+        while (possibleTiles.Count > 0 && possibleUnits.Count > 0)
+        {
+            tempUnitIndex = Random.Range(0, possibleUnits.Count);
+            tempTileIndex = Random.Range(0, possibleTiles.Count);
+            EventManager.RaiseEventOnUnitDeployed(possibleUnits[tempUnitIndex].UnitId, possibleTiles[tempTileIndex].tileId);
+            possibleUnits.RemoveAt(tempUnitIndex);
+            possibleTiles.RemoveAt(tempTileIndex);
+        }
+        if (possibleUnits.Count > 0)
+        {
+            possibleTiles.Clear();
+            foreach (GameObject t in tiles)
             {
-                EventManager.RaiseEventOnUnitDeployed(uc.UnitId, possibleTiles[tempId]);
-                possibleTiles.RemoveAt(tempId);
+                tc = t.GetComponent<TileController>();
+                if (tc.DeploymentPossible(armyId) && !tc.IsTileOccupied()) possibleTiles.Add(tc); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
+            }
+            while (possibleTiles.Count > 0 && possibleUnits.Count > 0)
+            {
+                tempUnitIndex = Random.Range(0, possibleUnits.Count);
+                tempTileIndex = Random.Range(0, possibleTiles.Count);
+                EventManager.RaiseEventOnUnitDeployed(possibleUnits[tempUnitIndex].UnitId, possibleTiles[tempTileIndex].tileId);
+                possibleUnits.RemoveAt(tempUnitIndex);
+                possibleTiles.RemoveAt(tempTileIndex);
             }
         }
         EventManager.RaiseEventOnDeploymentStart(armyId+1);
-    }
+    }*/
 
-    private void DeployMedium(int armyId)
+    private void ComputeDeployment(int armyId)
     {
-        int tileUnitResult, tempTile, tempUnit;
-        List<TileController> possibleTiles = new List<TileController>();
-        List<UnitPlacementHelp> placementList = new List<UnitPlacementHelp>();  // list of possible pairs unit - tile
+        int tileUnitValue, tempTileId, tempUnitId;
+        List<TileController> possibleTiles;
+        List<UnitController> possibleUnits;
+        List<UnitPlacementHelp> placementList;  // list of possible pairs unit - tile
         List<UnitPlacementHelp> placementToRemove;
+        TileController tc, oppositeTile;
+        UnitController uc;
         UnitPlacementHelp tempPlacementHelp;
+
+        possibleTiles = new List<TileController>();
+        possibleUnits = new List<UnitController>();
+        placementList = new List<UnitPlacementHelp>();
         foreach (GameObject t in tiles) // looks for tiles with possible placement
         {
-            TileController tc;
             tc = t.GetComponent<TileController>();
             if (tc.DeploymentPossible(armyId)) possibleTiles.Add(tc); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
         }
         foreach (GameObject g in units) // creates list of every possible pair tile - unit
         {
-            UnitController uc;
             uc = g.GetComponent<UnitController>();
-            if (uc.ArmyId == armyId)
-            {
-                foreach (TileController tc2 in possibleTiles)
-                {
-                    tileUnitResult = tc2.GetUnitValue(uc.UnitType);    // gets value of pair tile - unit
-                    tempPlacementHelp = new UnitPlacementHelp(uc.UnitId, tc2.tileId, tileUnitResult);
-                    placementList.Add(tempPlacementHelp);
-                }
-            }
-        }
-        placementList.Sort((p1,p2)=>p1.points.CompareTo(p2.points));    // sorts list of possible pairs unit - tile by value
-        while (placementList.Count > 0) // do until all units are placed
-        {
-            EventManager.RaiseEventOnUnitDeployed(placementList[0].unitId, placementList[0].tileId); // place an unit
-            tempTile = placementList[0].tileId;
-            tempUnit = placementList[0].unitId;
-            placementToRemove = new List<UnitPlacementHelp>();
-            foreach (UnitPlacementHelp uph in placementList)    // looks for elements to remove and stores them in separate list
-            {
-                if (uph.tileId == tempTile || uph.unitId == tempUnit) placementToRemove.Add(uph);
-            }
-            foreach(UnitPlacementHelp uph2 in placementToRemove)    // removes from list of possible pair tile - unit
-            {
-                placementList.Remove(uph2);
-            }
-        }
-        EventManager.RaiseEventOnDeploymentStart(armyId + 1);
-    }
-
-    private void DeployHard(int armyId)
-    {
-        int tileUnitValue, tempTile, tempUnit;
-        TileController oppositeTile;
-        List<TileController> possibleTiles = new List<TileController>();
-        List<UnitPlacementHelp> placementList = new List<UnitPlacementHelp>();  // list of possible pairs unit - tile
-        List<UnitPlacementHelp> placementToRemove;
-        UnitPlacementHelp tempPlacementHelp;
-        foreach (GameObject t in tiles) // looks for tiles with possible placement
-        {
-            TileController tc;
-            tc = t.GetComponent<TileController>();
-            if (tc.DeploymentPossible(armyId)) possibleTiles.Add(tc); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
-        }
-        foreach (GameObject g in units) // creates list of every possible pair tile - unit
-        {
-            UnitController uc;
-            uc = g.GetComponent<UnitController>();
+            possibleUnits.Add(uc);
             if (uc.ArmyId == armyId)
             {
                 foreach (TileController tc2 in possibleTiles)
@@ -257,7 +240,7 @@ public class BattleManager : MonoBehaviour {
                     }
                     else
                     {
-                        if((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) oppositeTile = GetTile(tc2.tileId + 3);
+                        if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) oppositeTile = GetTile(tc2.tileId + 3);
                         else oppositeTile = GetTile(tc2.tileId + 2);
                     }
                     tileUnitValue += oppositeTile.GetOpposingUnitValue(uc.UnitType);
@@ -266,20 +249,73 @@ public class BattleManager : MonoBehaviour {
                 }
             }
         }
-        placementList.Sort((p1, p2) => p1.points.CompareTo(p2.points));    // sorts list of possible pairs unit - tile by value
-        while (placementList.Count > 0) // do until all units are placed
+        placementList.Sort((p1,p2)=>p1.points.CompareTo(p2.points));    // sorts list of possible pairs unit - tile by value
+        while (possibleUnits.Count > 0 && possibleTiles.Count > 0) // do until all units are placed
         {
             EventManager.RaiseEventOnUnitDeployed(placementList[0].unitId, placementList[0].tileId); // place an unit
-            tempTile = placementList[0].tileId;
-            tempUnit = placementList[0].unitId;
+            possibleTiles.Remove(GetTile(placementList[0].tileId));
+            possibleUnits.Remove(GetUnitController(placementList[0].unitId));
+            tempTileId = placementList[0].tileId;
+            tempUnitId = placementList[0].unitId;
             placementToRemove = new List<UnitPlacementHelp>();
             foreach (UnitPlacementHelp uph in placementList)    // looks for elements to remove and stores them in separate list
             {
-                if (uph.tileId == tempTile || uph.unitId == tempUnit) placementToRemove.Add(uph);
+                if (uph.tileId == tempTileId || uph.unitId == tempUnitId) placementToRemove.Add(uph);
             }
-            foreach (UnitPlacementHelp uph2 in placementToRemove)    // removes from list of possible pair tile - unit
+            foreach(UnitPlacementHelp uph2 in placementToRemove)    // removes from list of possible pair tile - unit
             {
                 placementList.Remove(uph2);
+            }
+        }
+        if(possibleUnits.Count > 0)
+        {
+            possibleTiles.Clear();
+            placementList.Clear();
+            foreach (GameObject t in tiles)
+            {
+                tc = t.GetComponent<TileController>();
+                if (tc.DeploymentPossible(armyId) && !tc.IsTileOccupied()) possibleTiles.Add(tc); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
+            }
+            foreach (GameObject g in units) // creates list of every possible pair tile - unit
+            {
+                uc = g.GetComponent<UnitController>();
+                if (uc.ArmyId == armyId && !uc.isPlaced)
+                {
+                    foreach (TileController tc2 in possibleTiles)
+                    {
+                        tileUnitValue = tc2.GetUnitValue(uc.UnitType);    // gets value of pair tile - unit
+                        if (uc.ArmyId == 1)
+                        {
+                            if ((tc2.tileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1) oppositeTile = GetTile(tc2.tileId - 3);
+                            else oppositeTile = GetTile(tc2.tileId - 2);
+                        }
+                        else
+                        {
+                            if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) oppositeTile = GetTile(tc2.tileId + 3);
+                            else oppositeTile = GetTile(tc2.tileId + 2);
+                        }
+                        tileUnitValue += oppositeTile.GetOpposingUnitValue(uc.UnitType);
+                        tempPlacementHelp = new UnitPlacementHelp(uc.UnitId, tc2.tileId, tileUnitValue);
+                        placementList.Add(tempPlacementHelp);
+                    }
+                }
+            }
+            placementList.Sort((p1, p2) => p1.points.CompareTo(p2.points));    // sorts list of possible pairs unit - tile by value
+            while (placementList.Count > 0 && possibleTiles.Count > 0) // do until all units are placed
+            {
+                EventManager.RaiseEventOnUnitDeployed(placementList[0].unitId, placementList[0].tileId); // place an unit
+                possibleTiles.Remove(GetTile(placementList[0].tileId));
+                tempTileId = placementList[0].tileId;
+                tempUnitId = placementList[0].unitId;
+                placementToRemove = new List<UnitPlacementHelp>();
+                foreach (UnitPlacementHelp uph in placementList)    // looks for elements to remove and stores them in separate list
+                {
+                    if (uph.tileId == tempTileId || uph.unitId == tempUnitId) placementToRemove.Add(uph);
+                }
+                foreach (UnitPlacementHelp uph2 in placementToRemove)    // removes from list of possible pair tile - unit
+                {
+                    placementList.Remove(uph2);
+                }
             }
         }
         EventManager.RaiseEventOnDeploymentStart(armyId + 1);
@@ -323,9 +359,7 @@ public class BattleManager : MonoBehaviour {
             units.Add(tempObj);
             if (!GameManagerController.Instance.isPlayer1Human) // places units on board
             {
-                if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy) DeployEasy(armyId);
-                else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.medium) DeployMedium(armyId);
-                else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard) DeployHard(armyId);
+                ComputeDeployment(armyId);
             }
         }
         else if(armyId == 2)
@@ -361,9 +395,7 @@ public class BattleManager : MonoBehaviour {
             units.Add(tempObj);
             if (!GameManagerController.Instance.isPlayer2Human)
             {
-                if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy) DeployEasy(armyId);
-                else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.medium) DeployMedium(armyId);
-                else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard) DeployHard(armyId);
+                ComputeDeployment(armyId);
             }
         }
         else if(armyId == 3)
@@ -1028,6 +1060,7 @@ public class BattleManager : MonoBehaviour {
                 ac.AddActivatingAttack(i);
             }
         }
+        afterDeploymentBoardState = new BoardState(myBoardState);
         gameMode = "fight";
         EventManager.RaiseEventGameStart();
     }
@@ -1038,6 +1071,7 @@ public class BattleManager : MonoBehaviour {
         int winnerId;
         int attackerArmyId, defenderArmyId;
         // check if route test needed
+        isInputBlocked = false;
         armyRouteTest = 0;
         attackerArmyId = turnOwnerId;
         if (turnOwnerId == 1)
@@ -1066,7 +1100,8 @@ public class BattleManager : MonoBehaviour {
         }
         else
         {
-            if(armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 2 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 1 && closedMode == "routtest")
+            BattleManager.Instance.isInputBlocked = true;
+            if (armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 2 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 1 && closedMode == "routtest")
             {
                 SoundManagerController.Instance.PlayThrowSound(0);
                 myCamera.GetComponent<PanZoom>().RoutTest(testSpot + new Vector3(2.0f, 0.0f, 1.0f));
@@ -1095,6 +1130,7 @@ public class BattleManager : MonoBehaviour {
         {
             yield return null;
         }
+        isInputBlocked = false;
         stringResult = Dice.AsString("d10", throwId);
         armyMorale = myBoardState.GetArmyMorale(testingArmyId);
         if (!stringResult.Contains("?"))
@@ -1217,16 +1253,16 @@ public class BattleManager : MonoBehaviour {
         switch(GameManagerController.Instance.difficultyLevel)
         {
             case GameManagerController.diffLevelEnum.easy:
-                minimaxLimit = 10.0f;
+                minimaxLimit = 5.0f;
                 break;
             case GameManagerController.diffLevelEnum.medium:
-                minimaxLimit = 20.0f;
+                minimaxLimit = 10.0f;
                 break;
             case GameManagerController.diffLevelEnum.hard:
-                minimaxLimit = 30.0f;
+                minimaxLimit = 15.0f;
                 break;
             default:
-                minimaxLimit = 20.0f;
+                minimaxLimit = 10.0f;
                 break;
         }
         avialableAttacks = myBoardState.GetPossibleAttacks(turnOwnerId);
@@ -1234,7 +1270,7 @@ public class BattleManager : MonoBehaviour {
         {
             foreach (int i in avialableAttacks)
             {
-                score = -ExpectiMinMaxAttack(myBoardState, i, minimaxLimit, turnOwnerId);
+                score = -ExpectiMinMaxAttack(new BoardState(myBoardState), i, minimaxLimit, turnOwnerId);
                 if (score > maxScore)
                 {
                     maxScore = score;
@@ -1317,6 +1353,18 @@ public class BattleManager : MonoBehaviour {
         units.Remove(u);
     }
 
+    public UnitController GetUnitController(int uId)
+    {
+        UnitController uc;
+
+        foreach(GameObject g in units)
+        {
+            uc = g.GetComponent<UnitController>();
+            if (uc.UnitId == uId) return uc;
+        }
+        return null;
+    }
+
     public bool isUnitControllerBlocked(int uId)
     {
         UnitController uc;
@@ -1352,5 +1400,51 @@ public class BattleManager : MonoBehaviour {
             if (uc.UnitTileId == opposingTileId) result = uc.UnitId;
         }
         return result;
+    }
+
+    public void StartAgain()
+    {
+        UnitController uc;
+        TileController tc;
+
+        foreach (GameObject g in units)
+        {
+            uc = g.GetComponent<UnitController>();
+            uc.isPlaced = false;
+            uc.ResetUnit();
+        }
+        foreach(GameObject g in tiles)
+        {
+            tc = g.GetComponent<TileController>();
+            tc.ResetTile();
+            tc.ResetDeployedUnit();
+        }
+        gameMode = "deploy";
+        turnOwnerId = 1;
+        hasTurnOwnerAttacked = false;
+        isInputBlocked = false;
+        EventManager.RaiseEventOnDeploymentStart(1);
+    }
+
+    public void StartAfterDeployment()
+    {
+        UnitController uc;
+        TileController tc;
+
+        myBoardState = afterDeploymentBoardState;
+        turnOwnerId = 1;
+        hasTurnOwnerAttacked = false;
+        isInputBlocked = false;
+        foreach (GameObject g in units)
+        {
+            uc = g.GetComponent<UnitController>();
+            uc.ResetUnit();
+        }
+        foreach (GameObject g in tiles)
+        {
+            tc = g.GetComponent<TileController>();
+            tc.ResetTile();
+        }
+        EventManager.RaiseEventGameStart();
     }
 }

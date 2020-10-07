@@ -24,6 +24,8 @@ public class SoundManagerController : MonoBehaviour
     [SerializeField] private AudioClip[] unitReportSound;
     [SerializeField] private AudioClip[] unitPlaceSound;
     [SerializeField] private AudioClip[] gameMusic;
+    [SerializeField] private AudioClip winGameSound;
+    [SerializeField] private AudioClip looseGameSound;
 
     public static SoundManagerController Instance { get { return _instance; } }
 
@@ -41,9 +43,6 @@ public class SoundManagerController : MonoBehaviour
         musicAudioSource = gameObject.AddComponent<AudioSource>();
         musicAudioSource2 = gameObject.AddComponent<AudioSource>();
         sfxAudioSource = gameObject.AddComponent<AudioSource>();
-
-        musicAudioSource.loop = true;
-        musicAudioSource2.loop = true;
     }
 
     public void PlayThrowSound(int a)
@@ -70,8 +69,12 @@ public class SoundManagerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sfxAudioSource = GetComponent<AudioSource>();
         EventManager.onAttackOrdered += PlayAttackSound;
+        musicAudioSource.loop = true;
+        musicAudioSource2.loop = true;
+        musicAudioSource.volume = GameManagerController.Instance.musicLevel;
+        musicAudioSource2.volume = GameManagerController.Instance.musicLevel;
+        sfxAudioSource.volume = GameManagerController.Instance.soundLevel;
         firstMusicSourceIsPlaying = false;
         PlayMusic(0, true);
     }
@@ -171,7 +174,12 @@ public class SoundManagerController : MonoBehaviour
             AudioSource newSource = (firstMusicSourceIsPlaying) ? musicAudioSource2 : musicAudioSource;
             activeSource.loop = false;
             firstMusicSourceIsPlaying = !firstMusicSourceIsPlaying;
-            newSource.clip = gameMusic[newClip];
+            if(newClip == 0) newSource.clip = gameMusic[newClip];
+            else
+            {
+                int song = Random.Range(1, gameMusic.Length);
+                newSource.clip = gameMusic[song];
+            }
             newSource.Play();
             StartCoroutine(UpdateMusicWithCrossFade(activeSource, newSource, transitionTime));
             Invoke("PlayNextClip", newSource.clip.length);
@@ -217,5 +225,54 @@ public class SoundManagerController : MonoBehaviour
     {
         AudioSource activeSource = (firstMusicSourceIsPlaying) ? musicAudioSource : musicAudioSource2;
         activeSource.volume = GameManagerController.Instance.musicLevel;
+    }
+
+    public void PlayEndGame(bool isWinner)
+    {
+        if (GameManagerController.Instance.isSoundEnabled)
+        {
+            if(isWinner) sfxAudioSource.PlayOneShot(winGameSound, GameManagerController.Instance.soundLevel);
+            else sfxAudioSource.PlayOneShot(looseGameSound, GameManagerController.Instance.soundLevel);
+        }
+    }
+
+    public void SilenceMusic(float transitionTime = 0.25f)
+    {
+        if (GameManagerController.Instance.isMusicEnabled)
+        {
+            AudioSource activeSource = (firstMusicSourceIsPlaying) ? musicAudioSource : musicAudioSource2;
+            StartCoroutine(SilenceMusicWithFade(activeSource, transitionTime));
+        }
+    }
+
+    private IEnumerator SilenceMusicWithFade(AudioSource activeSource, float transitionTime)
+    {
+        if (!activeSource.isPlaying) activeSource.Play();
+        float t = 0.0f;
+        for (t = 0; t < transitionTime; t += Time.deltaTime)
+        {
+            activeSource.volume = GameManagerController.Instance.musicLevel * (1 - (t / transitionTime));
+            yield return null;
+        }
+    }
+
+    public void LouderMusic(float transitionTime = 0.25f)
+    {
+        if (GameManagerController.Instance.isMusicEnabled)
+        {
+            AudioSource activeSource = (firstMusicSourceIsPlaying) ? musicAudioSource : musicAudioSource2;
+            StartCoroutine(ResumeMusicWithFade(activeSource, transitionTime));
+        }
+    }
+
+    private IEnumerator ResumeMusicWithFade(AudioSource activeSource, float transitionTime)
+    {
+        if (!activeSource.isPlaying) activeSource.Play();
+        float t = 0.0f;
+        for (t = 0; t < transitionTime; t += Time.deltaTime)
+        {
+            activeSource.volume = GameManagerController.Instance.musicLevel * (t / transitionTime);
+            yield return null;
+        }
     }
 }

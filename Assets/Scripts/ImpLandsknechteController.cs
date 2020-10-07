@@ -24,13 +24,13 @@ public class ImpLandsknechteController : UnitController
         for (int i = 0; i < initialStrength; i++)
         {
             tempPos = transform.position;
-            tempPos.x = tempPos.x + (i % 3)*1.0f;
-            if (i > 2)
+            tempPos.x = tempPos.x + (i % 2) * 1.0f + 0.5f;
+            if (i > 1)
             {
                 if (_armyId == 1) tempPos.z = tempPos.z - 1.0f;
                 else tempPos.z = tempPos.z + 1.0f;
             }
-            if(i > 5)
+            if(i > 3)
             {
                 if (_armyId == 1) tempPos.z = tempPos.z - 1.0f;
                 else tempPos.z = tempPos.z + 1.0f;

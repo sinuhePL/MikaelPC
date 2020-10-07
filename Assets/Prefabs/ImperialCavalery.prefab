@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c88b2fcb6858034fbb7a304e0b9b606, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialStrength: 5
+  initialStrength: 3
   initialMorale: 6
   arrowPrefab: {fileID: 3757254920715771083, guid: 2e7b4573427006241833f1a7d2b892b2,
     type: 3}

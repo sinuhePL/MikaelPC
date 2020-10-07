@@ -53,6 +53,11 @@ public class UnitDescriptionController : MonoBehaviour
         ShowHide(false);
     }
 
+    private void ShowMe(int deploymentPhase)
+    {
+        if (deploymentPhase == 1) ShowHide(true);
+    }
+
     private void ChangeDescription(string uType, string commander)
     {
         switch (uType)
@@ -171,6 +176,7 @@ public class UnitDescriptionController : MonoBehaviour
         EventManager.onUIDeployPressed += UIDeployClicked;
         EventManager.onTileClicked += HideMe;
         EventManager.onAttackClicked += HideMe;
+        EventManager.onDeploymentStart += ShowMe;
     }
 
     private void Start()
@@ -187,6 +193,7 @@ public class UnitDescriptionController : MonoBehaviour
         EventManager.onUIDeployPressed -= UIDeployClicked;
         EventManager.onTileClicked -= HideMe;
         EventManager.onAttackClicked -= HideMe;
+        EventManager.onDeploymentStart -= ShowMe;
     }
 
     public void ShiftUnitDescription()

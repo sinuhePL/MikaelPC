@@ -38,6 +38,7 @@ public class EndTurnController : MonoBehaviour
         EventManager.onUnitClicked += UnitClicked;
         EventManager.onRouteTestOver += RouteTestEnded;
         EventManager.onGameStart += GameStart;
+        EventManager.onDeploymentStart += ChangeToMode1;
     }
 
     private void Start()
@@ -59,6 +60,7 @@ public class EndTurnController : MonoBehaviour
         EventManager.onUnitClicked -= UnitClicked;
         EventManager.onRouteTestOver -= RouteTestEnded;
         EventManager.onGameStart -= GameStart;
+        EventManager.onDeploymentStart -= ChangeToMode1;
     }
 
     public void ButtonPressed()
@@ -94,12 +96,14 @@ public class EndTurnController : MonoBehaviour
             }
             if (mode == 3) // if displays Attack
             {
+                BattleManager.Instance.isInputBlocked = true;
                 EventManager.RaiseEventOnAttackOrdered(LastClickedAttack);
                 myText.text = "Close Result";
                 return;
             }
             if (mode == 4) // if displays Close Result (attack result)
             {
+                //SoundManagerController.Instance.ResumeMusic();
                 SoundManagerController.Instance.PlayClick();
                 myText.text = "";
                 EventManager.RaiseEventResultMenuClosed("attack");
@@ -119,6 +123,16 @@ public class EndTurnController : MonoBehaviour
     {
         myText.text = "End Turn";
         mode = 2;
+    }
+
+    private void ChangeToMode1(int i)
+    {
+        if (i == 1)
+        {
+            mode = 1;
+            myText.text = "End Deployment";
+            if (isShifted) ShiftMe();
+        }
     }
 
     private void GameStart()

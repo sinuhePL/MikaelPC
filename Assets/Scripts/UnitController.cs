@@ -131,19 +131,19 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    protected IEnumerator DisableUnit()
+    protected IEnumerator DisableUnit() // called when unit is killed
     {
-        foreach (GameObject g in _squads)
+        for (int i = 0; i < _squads.Length; i++)
         {
-            g.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.75f).SetEase(Ease.InBack);
+            _squads[i].GetComponentInChildren<PawnController>().Disable();
         }
         _unitCaption.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.75f).SetEase(Ease.InBack);
         flag.transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 0.75f).SetEase(Ease.InBack);
         yield return new WaitForSeconds(0.75f);
         flag.SetActive(false);
-        foreach (GameObject g in _squads)
+        for (int i = 0; i < _squads.Length; i++)
         {
-            g.SetActive(false);
+            _squads[i].SetActive(false);
         }
         gameObject.SetActive(false);
     }
@@ -164,9 +164,9 @@ public class UnitController : MonoBehaviour
             StartCoroutine(DisableUnit());
             return;
         }
-        if (_strength > myUnit.strength)  // check if unit lost strength
+        if (_strength != myUnit.strength)  // check if unit lost strength
         {
-            KillSquads(_strength - myUnit.strength);
+            if(_strength > myUnit.strength) KillSquads(_strength - myUnit.strength);
             _strength = myUnit.strength;
         }
         if (_morale != myUnit.morale)    // check if unit lost morale
@@ -339,6 +339,7 @@ public class UnitController : MonoBehaviour
     public bool isPlaced
     {
         get { return _isPlaced; }
+        set { _isPlaced = value; }
     }
 
     public string UnitType
@@ -602,5 +603,22 @@ public class UnitController : MonoBehaviour
         ac.isArrowBlocked = value;
         ac = rightArrowEmpty.GetComponent<ArrowController>();
         ac.isArrowBlocked = value;
+    }
+
+    public void ResetUnit()
+    {
+        PawnController pc;
+
+        isDisabled = false;
+        for (int i = 0; i < _squads.Length; i++)
+        {
+            _squads[i].SetActive(true);
+            pc = _squads[i].GetComponentInChildren<PawnController>();
+            pc.Enable();
+        }
+        gameObject.SetActive(true);
+        _unitCaption.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        flag.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); 
+        flag.SetActive(true);
     }
 }

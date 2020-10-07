@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class PawnController : MonoBehaviour
 {
     private int _unitId;
+    private Vector3 initialScale;
 
     public int UnitId
     {
@@ -18,6 +19,11 @@ public class PawnController : MonoBehaviour
         {
             _unitId = value;
         }
+    }
+
+    private void Start()
+    {
+        initialScale = transform.localScale;
     }
 
     private void OnMouseDown()
@@ -38,21 +44,17 @@ public class PawnController : MonoBehaviour
         return results.Count > 0;
     }
 
-    /*private void OnMouseOver()
-    {
-        EventManager.RaiseEventOnUnitClicked(_unitId);
-    }
-
-    private void OnMouseExit()
-    {
-        EventManager.RaiseEventOnUnitClicked(-1);
-    }*/
-
     // called when unit receives casualty
     public void Disable()
     {
         transform.DOScale(0.0f, 0.75f).SetEase(Ease.InBack);
-        //this.GetComponent<Renderer>().enabled = false;
+    }
+
+    public void Enable()
+    {
+        transform.DOScaleX(initialScale.x, 0.75f).SetEase(Ease.OutBack);
+        transform.DOScaleY(initialScale.y, 0.75f).SetEase(Ease.OutBack);
+        transform.DOScaleZ(initialScale.z, 0.75f).SetEase(Ease.OutBack);
     }
 
     // called whenever user clicks on unit

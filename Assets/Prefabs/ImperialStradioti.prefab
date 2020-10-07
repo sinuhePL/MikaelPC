@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialStrength: 3
-  initialMorale: 4
+  initialMorale: 5
   arrowPrefab: {fileID: 3757254920715771083, guid: 2e7b4573427006241833f1a7d2b892b2,
     type: 3}
   flagPrefab: {fileID: 812276910430702034, guid: 939f89dc58680a645a5685b7c651a161,

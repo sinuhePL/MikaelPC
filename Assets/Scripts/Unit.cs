@@ -77,7 +77,8 @@ public class Unit
         movedToFrontLine = pattern.movedToFrontLine;
         tileId = pattern.tileId;
         unitAttacks = new List<Attack>();
-        foreach(Attack at in pattern.unitAttacks)
+        additionalAttacks = new List<Attack>();
+        foreach (Attack at in pattern.unitAttacks)
         {
             unitAttacks.Add(at.GetCopy(this));
         }

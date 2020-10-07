@@ -257,6 +257,7 @@ public class BombardAttack : Attack
             result.specialOutcomeDescription = "Target aimed";
             attackName = "Bombard";
             BattleManager.Instance.hasTurnOwnerAttacked = true;
+            BattleManager.Instance.isInputBlocked = false;
             EventManager.RaiseEventOnDiceResult(result);
         }
         else base.MakeAttack();
