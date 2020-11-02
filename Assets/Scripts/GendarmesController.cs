@@ -18,7 +18,7 @@ public class GendarmesController : UnitController
         else
         {
             _unitCaption.transform.position = transform.position + new Vector3(1.2f, 0.0f, 1.2f);
-            _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
+            //_unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }
         // inicjalizacja squadów
         for (int i = 0; i < initialStrength; i++)

@@ -13,32 +13,32 @@ public class BombardAttack : Attack
         switch (dType)
         {
             case "Gendarmes":
-                attackDiceNumber = 2;
+                attackDiceNumber = 3;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 5;
                 break;
             case "Landsknechte":
-                attackDiceNumber = 3;
+                attackDiceNumber = 4;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 10;
                 break;
             case "Suisse":
-                attackDiceNumber = 3;
+                attackDiceNumber = 4;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 10;
                 break;
             case "Imperial Cavalery":
-                attackDiceNumber = 2;
+                attackDiceNumber = 3;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 8;
                 break;
             case "Arquebusiers":
-                attackDiceNumber = 2;
+                attackDiceNumber = 3;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 7;
                 break;
             case "Artillery":
-                attackDiceNumber = 2;
+                attackDiceNumber = 3;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 6;
                 break;

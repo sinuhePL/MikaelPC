@@ -165,6 +165,7 @@ public class BoardState
     
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId);
+        // increase morale of heavy cavalry neighbours after killing enemy squad
         if((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && change.defenderStrengthChange < 0)
         {
             u2 = GetUnitByTileId(u.GetTileId() + BattleManager.Instance.boardHeight);
@@ -179,17 +180,16 @@ public class BoardState
             if(tempUnitId != 0)
             {
                 u2 = GetUnit(tempUnitId);
-                u2.UnblockAttacks();
+                u2.UnblockAttacks();    // applies to pikeman targets
             }
             DeactivateAttacksOnUnit(u.GetUnitId());
             if (unitToMove != 0)
             {
                 u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                 u2.MoveToFrontLine();
-                tempUnitId = u2.GetUnitId();
-                PromoteAttacksOnUnit(tempUnitId);
+                PromoteAttacksOnUnit(unitToMove);
                 u2 = GetUnit(change.defenderId);    // unit that is opposite of killed unit
-                DeleteAttacksOnUnit(u.GetUnitId());
+                //DeleteAttacksOnUnit(u.GetUnitId());
             }
             else
             {
@@ -207,17 +207,16 @@ public class BoardState
                 if (tempUnitId != 0)
                 {
                     u2 = GetUnit(tempUnitId);
-                    u2.UnblockAttacks();
+                    u2.UnblockAttacks();    // applies to pikeman targets
                 }
                 DeactivateAttacksOnUnit(u.GetUnitId());
                 if (unitToMove != 0)
                 {
                     u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
-                    tempUnitId = u2.GetUnitId();
-                    PromoteAttacksOnUnit(tempUnitId);
+                    PromoteAttacksOnUnit(unitToMove);
                     u2 = GetUnit(change.defenderId);
-                    DeleteAttacksOnUnit(u.GetUnitId());
+                    //DeleteAttacksOnUnit(u.GetUnitId());
                 }
                 else
                 {
@@ -248,6 +247,7 @@ public class BoardState
         }
         // wprowadza rezultat ataku do oddziału zaatakowanego
         u = GetUnit(change.defenderId);
+        // increase morale of heavy cavalry neighbours after killing enemy squad
         if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && change.attackerStrengthChange < 0)
         {
             u2 = GetUnitByTileId(u.GetTileId() + BattleManager.Instance.boardHeight);
@@ -262,17 +262,16 @@ public class BoardState
             if (tempUnitId != 0)
             {
                 u2 = GetUnit(tempUnitId);
-                u2.UnblockAttacks();
+                u2.UnblockAttacks();    // applies to pikeman targets
             }
             DeactivateAttacksOnUnit(u.GetUnitId());
             if (unitToMove != 0)
             {
                 u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                 u2.MoveToFrontLine();
-                tempUnitId = u2.GetUnitId();
-                PromoteAttacksOnUnit(tempUnitId);
+                PromoteAttacksOnUnit(unitToMove);
                 u2 = GetUnit(change.attackerId);
-                DeleteAttacksOnUnit(u.GetUnitId());
+                //DeleteAttacksOnUnit(u.GetUnitId());
             }
             else
             {
@@ -290,7 +289,7 @@ public class BoardState
                 if (tempUnitId != 0)
                 {
                     u2 = GetUnit(tempUnitId);
-                    u2.UnblockAttacks();
+                    u2.UnblockAttacks();    // applies to pikeman targets
                 }
                 DeactivateAttacksOnUnit(u.GetUnitId());
                 if (unitToMove != 0)
@@ -298,9 +297,9 @@ public class BoardState
                     u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
                     tempUnitId = u2.GetUnitId();
-                    PromoteAttacksOnUnit(tempUnitId);
+                    PromoteAttacksOnUnit(unitToMove);
                     u2 = GetUnit(change.attackerId);
-                    DeleteAttacksOnUnit(u.GetUnitId());
+                    //DeleteAttacksOnUnit(u.GetUnitId());
                 }
                 else
                 {
@@ -341,7 +340,11 @@ public class BoardState
             {
                 foreach (int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
                 {
-                    un.ActivateAttack(i);
+                    if (un.UnitMoved())
+                    {
+                        un.UnblockAttack(i);
+                        un.ActivateAttack(i);
+                    }
                 }
             }
         }
@@ -377,8 +380,8 @@ public class BoardState
             }
         }
         if (army1ActiveCount == 0 && army2ActiveCount == 0) winnerId = -1;
-        else if (army1ActiveCount == 0) winnerId = 2;
-        else if (army2ActiveCount == 0) winnerId = 1;
+        else if (army1ActiveCount == 0) winnerId = 1;
+        else if (army2ActiveCount == 0) winnerId = 2;
         return winnerId;
     }
 

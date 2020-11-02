@@ -13,7 +13,7 @@ public class ArrowController : MonoBehaviour
     private List<int> activatingAttacks;
     private string arrowType;
     private bool isShownAsCounterAttack;
-    public const string YellowColor = "#766800";
+    public const string YellowColor = "#FFE100";//"#766800";
     public const string RedColor = "#6A0006";
     [SerializeField] private Texture arrowRightTexture;
     [SerializeField] private Texture arrowForwardTexture;
@@ -75,9 +75,12 @@ public class ArrowController : MonoBehaviour
         }
     }
 
-    private void AnyAttackOrdered(int aId)
+    private void AnyAttackOrdered(int attackId)
     {
-        if (aId != _arrowId) myRenderer.enabled = false;
+        Attack at;
+
+        at = BattleManager.Instance.GetAttackById(attackId);
+        if (at.GetArrowId() != _arrowId) myRenderer.enabled = false;
     }
 
     private void Awake()

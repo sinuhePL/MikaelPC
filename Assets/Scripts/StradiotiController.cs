@@ -15,28 +15,28 @@ public class StradiotiController : UnitController
         _unitCaption.text = _unitCommander;
         if (_armyId == 1)
         {
-            _unitType = "Coustilliers";
+            _unitType = "Stradioti";
             _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, -1.5f);
             farArrow = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 6.0f), arrowPrefab.transform.rotation);
-            farArrow.GetComponent<ArrowController>().InitializeArrow("far", "blue", "solid");
+            farArrow.GetComponent<ArrowController>().InitializeArrow("far", "yellow", "solid");
             farArrow.transform.localScale = new Vector3(farArrow.transform.localScale.x, 10.5f, farArrow.transform.localScale.z);
             farArrow.transform.SetParent(transform);
             farArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(2.5f, 0.002f, 6.0f), arrowPrefab.transform.rotation);
-            farArrowEmpty.GetComponent<ArrowController>().InitializeArrow("far", "blue", "empty");
+            farArrowEmpty.GetComponent<ArrowController>().InitializeArrow("far", "yellow", "empty");
             farArrowEmpty.transform.localScale = new Vector3(farArrow.transform.localScale.x, 10.5f, farArrow.transform.localScale.z);
             farArrowEmpty.transform.SetParent(transform);
         }
         else
         {
-            _unitType = "Stradioti";
-            _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 2.0f);
-            _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
+            _unitType = "Coustilliers";
+            _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 1.5f);
+            //_unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
             farArrow = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -6.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
-            farArrow.GetComponent<ArrowController>().InitializeArrow("far", "yellow", "solid");
+            farArrow.GetComponent<ArrowController>().InitializeArrow("far", "blue", "solid");
             farArrow.transform.localScale = new Vector3(farArrow.transform.localScale.x, 10.5f, farArrow.transform.localScale.z);
             farArrow.transform.SetParent(transform);
             farArrowEmpty = Instantiate(arrowPrefab, transform.position + new Vector3(-0.5f, 0.002f, -6.0f), arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f));
-            farArrowEmpty.GetComponent<ArrowController>().InitializeArrow("far", "yellow", "empty");
+            farArrowEmpty.GetComponent<ArrowController>().InitializeArrow("far", "blue", "empty");
             farArrowEmpty.transform.localScale = new Vector3(farArrow.transform.localScale.x, 10.5f, farArrow.transform.localScale.z);
             farArrowEmpty.transform.SetParent(transform);
         }

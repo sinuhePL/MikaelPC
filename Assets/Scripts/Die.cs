@@ -106,6 +106,10 @@ public class Die : MonoBehaviour {
             {
                 myAudioSource.PlayOneShot(die2dieSound, GameManagerController.Instance.soundLevel - 0.2f);
             }
+            else if(collision.gameObject.tag == "SafetyNet")
+            {
+                collision.gameObject.GetComponent<Rigidbody>().MovePosition(new Vector3(collision.gameObject.transform.position.x, 1.0f, collision.gameObject.transform.position.z));
+            }
         }
     }
 

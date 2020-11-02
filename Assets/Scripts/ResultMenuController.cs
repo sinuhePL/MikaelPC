@@ -55,13 +55,17 @@ public class ResultMenuController : MonoBehaviour
             defenderArmyId = 2;
         }
         else defenderArmyId = 1;
+        attackerRoutText.text = "";
         if (result.attackerStrengthChange != 0)
         {
             attackResultText.text = "Strength: " + result.attackerStrengthChange.ToString();
-            if(BattleManager.Instance.GetArmyMorale(attackerArmyId) <= 30) attackerRoutText.text = "Rout test imminent!";
+            if (BattleManager.Instance.GetArmyMorale(attackerArmyId) <= 30) attackerRoutText.text = "Rout test imminent!";
         }
-        else attackerRoutText.text = "";
-        if (result.attackerMoraleChanged != 0) attackResultText.text += "\nMorale: " + result.attackerMoraleChanged.ToString();
+        if (result.attackerMoraleChanged != 0)
+        {
+            attackResultText.text += "\nMorale: " + result.attackerMoraleChanged.ToString();
+            if(BattleManager.Instance.GetUnit(result.attackerId).morale + result.attackerMoraleChanged <= 0) attackerRoutText.text = "Rout test imminent!";
+        }
         u = BattleManager.Instance.GetUnit(result.attackerId);
         if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && result.defenderStrengthChange < 0)
         {
@@ -69,13 +73,17 @@ public class ResultMenuController : MonoBehaviour
         }
         defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":";
         defenceResultText.text = "";
+        defenderRoutText.text = "";
         if (result.defenderStrengthChange != 0)
         {
             defenceResultText.text = "Strength: " + result.defenderStrengthChange.ToString();
-            if(BattleManager.Instance.GetArmyMorale(defenderArmyId) <= 30) defenderRoutText.text = "Rout test imminent!";
+            if (BattleManager.Instance.GetArmyMorale(defenderArmyId) <= 30) defenderRoutText.text = "Rout test imminent!";
         }
-        else defenderRoutText.text = "";
-        if (result.defenderMoraleChanged != 0) defenceResultText.text += "\nMorale: " + result.defenderMoraleChanged.ToString();
+        if (result.defenderMoraleChanged != 0)
+        {
+            defenceResultText.text += "\nMorale: " + result.defenderMoraleChanged.ToString();
+            if (BattleManager.Instance.GetUnit(result.defenderId).morale + result.defenderMoraleChanged <= 0) defenderRoutText.text = "Rout test imminent!";
+        }
         u = BattleManager.Instance.GetUnit(result.defenderId);
         if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && result.attackerStrengthChange < 0)
         {

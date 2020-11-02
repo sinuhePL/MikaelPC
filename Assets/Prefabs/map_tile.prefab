@@ -222,7 +222,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.112136945, g: 0.011213934, b: 0.7924528, a: 1}
+      maxColor: {r: 1, g: 0.99607843, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5271,7 +5271,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.112136945, g: 0.011213934, b: 0.7924528, a: 1}
+      maxColor: {r: 1, g: 0.99607843, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -10014,8 +10014,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278198343
-  m_fontColor: {r: 0.2784314, g: 0.1254902, b: 0, a: 1}
+    rgba: 4280427042
+  m_fontColor: {r: 0.13333334, g: 0.13333334, b: 0.13333334, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -10033,8 +10033,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -10319,7 +10319,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.112136945, g: 0.011213934, b: 0.7924528, a: 1}
+      maxColor: {r: 1, g: 0.9960785, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -15163,7 +15163,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.112136945, g: 0.011213934, b: 0.7924528, a: 1}
+      maxColor: {r: 1, g: 0.9952228, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -19815,8 +19815,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278198343
-  m_fontColor: {r: 0.2784314, g: 0.1254902, b: 0, a: 1}
+    rgba: 4280427042
+  m_fontColor: {r: 0.13333334, g: 0.13333334, b: 0.13333334, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -20029,5 +20029,28 @@ MonoBehaviour:
   town1Texture: {fileID: 2800000, guid: a5ab3d2f7c5ed364cbf8a321664e5ffb, type: 3}
   field1Texture: {fileID: 2800000, guid: 3aaead995c9b99049b207bcf9a96c3ef, type: 3}
   field2Texture: {fileID: 2800000, guid: 4aadf56c609a7ff48b6edc0a6ec3ff2d, type: 3}
+  riverTexture: {fileID: 2800000, guid: c9bd7c64683a9f340815d67cfe4f5112, type: 3}
+  pavia1Texture: {fileID: 2800000, guid: 31682810e4688a74285fdbda288714d8, type: 3}
+  pavia2Texture: {fileID: 2800000, guid: f5f006923cf677f45b5a4ecb2b247959, type: 3}
+  castleTexture: {fileID: 2800000, guid: cc35ad4ac589d794e904dca448b447df, type: 3}
+  wallBottomTexture:
+  - {fileID: 2800000, guid: fecd88b8a2596494bb15c53d94abd398, type: 3}
+  - {fileID: 2800000, guid: 96be8c7de6a292046bc13e83c62e169c, type: 3}
+  - {fileID: 2800000, guid: b605d8743cf8452489d9f2be3b8ee7f5, type: 3}
+  wallRightTexture:
+  - {fileID: 2800000, guid: 3089d732d1bac4342b32fe5c6ce600fc, type: 3}
+  - {fileID: 2800000, guid: c07cb22fda6b6b444bf07cfaa18e77ff, type: 3}
+  wallTopTexture:
+  - {fileID: 2800000, guid: 7f063332b1a342942b04ae82e19cb1ef, type: 3}
+  - {fileID: 2800000, guid: 42a81e0972e938044a46e09e33decb1c, type: 3}
+  - {fileID: 2800000, guid: 9b57557fa8788484cab8cabc829ab3b7, type: 3}
+  wallLeft1Texture: {fileID: 2800000, guid: 34d51044166accf42b5355e57350ad76, type: 3}
+  wallLeft2Texture: {fileID: 2800000, guid: 1bce56df8e6c8144eb098ffef97ea4ab, type: 3}
+  wallLeftBottomTexture: {fileID: 2800000, guid: de35c9d488a1184479004f9c15306926,
+    type: 3}
+  wallLeftTopTexture: {fileID: 2800000, guid: 65c5faf59b3297346a68ee1dacd54108, type: 3}
+  wallRightTopTexture: {fileID: 2800000, guid: 2187fc7505913f347a9405a4f6dd80f6, type: 3}
+  wallRightBottomTexture: {fileID: 2800000, guid: e488a6341a7a9f04db217df0a66b6a59,
+    type: 3}
   tileInfluenceDescription: {fileID: 5046885785707603186}
   tileTypeText: {fileID: 7369055417097177036}

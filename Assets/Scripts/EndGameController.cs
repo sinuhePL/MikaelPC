@@ -65,17 +65,17 @@ public class EndGameController : MonoBehaviour
         {
             SoundManagerController.Instance.StopMusic();
             BattleManager.Instance.isInputBlocked = true;
-            if (winnerId == 1)
+            if (winnerId == 2)
             {
-                if (GameManagerController.Instance.isPlayer1Human) SoundManagerController.Instance.PlayEndGame(true);
+                if (GameManagerController.Instance.isPlayer2Human) SoundManagerController.Instance.PlayEndGame(true);
                 else SoundManagerController.Instance.PlayEndGame(false);
                 winnerText.text = "Kingdom of France";
                 helmet.sprite = franceHelmet;
                 shield.sprite = franceShield;
             }
-            else if (winnerId == 2)
+            else if (winnerId == 1)
             {
-                if (GameManagerController.Instance.isPlayer2Human) SoundManagerController.Instance.PlayEndGame(true);
+                if (GameManagerController.Instance.isPlayer1Human) SoundManagerController.Instance.PlayEndGame(true);
                 else SoundManagerController.Instance.PlayEndGame(false);
                 winnerText.text = "Holy Roman Empire";
                 helmet.sprite = hreHelmet;

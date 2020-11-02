@@ -38,6 +38,11 @@ public class Unit
         set {_strength = value;}
     }
 
+    public void SetUnitInSupportLine()
+    {
+        movedToFrontLine = false;
+    }
+
     public int morale
     {
         get { return _morale; }
@@ -102,7 +107,7 @@ public class Unit
         additionalAttacks = new List<Attack>();
         owner = a;
         supportLineUnitId = 0;
-        movedToFrontLine = false;
+        movedToFrontLine = true;
         unitCommander = commander;
         tileId = tId;
     }
@@ -139,7 +144,7 @@ public class Unit
         movedToFrontLine = true;
         foreach (Attack a in unitAttacks)
         {
-            if (a.GetName() == "Charge!") a.Activate();
+            if (a.GetName() == "Charge!" && a.Forward || a.GetName() == "Bombard" || a.GetName() == "Aim") a.Activate();
             if (a.GetName() == "Skirmish") a.Deactivate();
         }
     }
@@ -187,6 +192,14 @@ public class Unit
 
         tempAttack = FindAttack(a);
         if (tempAttack != null) tempAttack.Block();
+    }
+
+    public void UnblockAttack(int a)
+    {
+        Attack tempAttack;
+
+        tempAttack = FindAttack(a);
+        if (tempAttack != null) tempAttack.UnBlock();
     }
 
     public void DeactivateAttack(int a)     // deaktywuje atak o podanym Id
@@ -370,7 +383,7 @@ public class Unit
         }
         if (tempAttack != null)
         {
-            tempAttack.Activate();
+            if(tempAttack.GetName() == "Charge!" && tempAttack.Forward || tempAttack.GetName() == "Bombard" || tempAttack.GetName() == "Aim") tempAttack.Activate();
             unitAttacks.Add(tempAttack);
             additionalAttacks.Remove(tempAttack);
         }
@@ -439,7 +452,7 @@ public class Unit
         }
     }
 
-    public int GetNotBlockedTarget()
+    public int GetNotBlockedTarget()    // zwraca id jednostki atakowanej przez niezablokowany atak jeżeli jest tylko jeden taki atak 
     {
         int unblockedAttackNumber;
         Attack tempAttack;

@@ -65,15 +65,15 @@ public class PanZoom : MonoBehaviour
         ZoomOut(new StateChange());
     }
 
-    private void TurnEnd()
+   /* private void TurnEnd()
     {
-        if(GameManagerController.Instance.isPlayer1Human && GameManagerController.Instance.isPlayer2Human) ChangeViewAngle("button");
-    }
+        if(GameManagerController.Instance.isPlayer1Human && GameManagerController.Instance.isPlayer2Human && GameManagerController.Instance.viewType == GameManagerController.viewTypeEnum.isometric) ChangeViewAngle("button");
+    }*/
 
     private void OnEnable()
     {
         EventManager.onDiceResult += ZoomOut;
-        EventManager.onTurnEnd += TurnEnd;
+        //EventManager.onTurnEnd += TurnEnd;
         EventManager.onAttackOrdered += LookAtDice;
         EventManager.onRouteTestOver += ZoomOutAfterRoutTest;
         EventManager.onGameStart += SetupCamera;
@@ -119,7 +119,7 @@ public class PanZoom : MonoBehaviour
     private void OnDestroy()
     {
         EventManager.onDiceResult -= ZoomOut;
-        EventManager.onTurnEnd -= TurnEnd;
+        //EventManager.onTurnEnd -= TurnEnd;
         EventManager.onAttackOrdered -= LookAtDice;
         EventManager.onRouteTestOver -= ZoomOutAfterRoutTest;
         EventManager.onGameStart -= SetupCamera;

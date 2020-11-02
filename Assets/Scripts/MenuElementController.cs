@@ -6,13 +6,13 @@ using DG.Tweening;
 
 public abstract class MenuElementController : MonoBehaviour
 {
-    private Image myImage;
-    private bool isEnabled;
-    [SerializeField] private Sprite enabledPicture;
-    [SerializeField] private Sprite disabledPicture;
+    protected Image myImage;
+    protected bool isEnabled;
+    [SerializeField] protected Sprite enabledPicture;
+    [SerializeField] protected Sprite disabledPicture;
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
         isEnabled = true;
         myImage = GetComponent<Image>();

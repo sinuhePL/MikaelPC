@@ -24,6 +24,19 @@ public class TileController : MonoBehaviour
     [SerializeField] private Texture town1Texture;
     [SerializeField] private Texture field1Texture;
     [SerializeField] private Texture field2Texture;
+    [SerializeField] private Texture riverTexture;
+    [SerializeField] private Texture pavia1Texture;
+    [SerializeField] private Texture pavia2Texture;
+    [SerializeField] private Texture castleTexture;
+    [SerializeField] private Texture[] wallBottomTexture;
+    [SerializeField] private Texture[] wallRightTexture;
+    [SerializeField] private Texture[] wallTopTexture;
+    [SerializeField] private Texture wallLeft1Texture;
+    [SerializeField] private Texture wallLeft2Texture;
+    [SerializeField] private Texture wallLeftBottomTexture;
+    [SerializeField] private Texture wallLeftTopTexture;
+    [SerializeField] private Texture wallRightTopTexture;
+    [SerializeField] private Texture wallRightBottomTexture;
     [SerializeField] private TextMeshPro tileInfluenceDescription;
     [SerializeField] private TextMeshPro tileTypeText;
 
@@ -45,7 +58,8 @@ public class TileController : MonoBehaviour
         int randomInt;
         myRenderer = GetComponent<MeshRenderer>();
         tileId = ti;
-        keyFieldId = kfid;
+        if (GameManagerController.Instance.terrainType == GameManagerController.terrainTypeEnum.random) keyFieldId = kfid;
+        else keyFieldId = 0;
         pawn.SetActive(false);
         fieldCaption = GetComponentInChildren<TextMeshPro>();
         isBlinking = false;
@@ -62,14 +76,14 @@ public class TileController : MonoBehaviour
         tileInfluenceDescription.gameObject.SetActive(false);
         if(possibleArmyDeployment > 0)
         {
-            if(possibleArmyDeployment == 1)
+            if(possibleArmyDeployment == 2)
             {
                 topParticleSystem.startColor = Color.blue;
                 bottomParticleSystem.startColor = Color.blue;
                 rightParticleSystem.startColor = Color.blue;
                 leftParticleSystem.startColor = Color.blue;
             }
-            else if (possibleArmyDeployment == 2)
+            else if (possibleArmyDeployment == 1)
             {
                 topParticleSystem.startColor = Color.yellow;
                 bottomParticleSystem.startColor = Color.yellow;
@@ -77,33 +91,145 @@ public class TileController : MonoBehaviour
                 leftParticleSystem.startColor = Color.yellow;
             }
         }
-        if (keyFieldId == 0)
+        if (keyFieldId == 0 && GameManagerController.Instance.terrainType == GameManagerController.terrainTypeEnum.random)
         {
             fieldCaption.text = "";
             border.SetActive(false);
             floor.SetActive(false);
         }
-        randomInt = Random.Range(1, 3);
-        switch (tileType)
+        if (ti < 6)
         {
-            case "Town":
-                myRenderer.material.mainTexture = town1Texture;
-                if(keyFieldId != 0) fieldCaption.text = "Mirabello Castle";
-                break;
-            case "Forest":
-                myRenderer.material.mainTexture = forest1Texture;
-                if (keyFieldId != 0) fieldCaption.text = "Deep Forest";
-                break;
-            case "Field":
-                if (randomInt == 1) myRenderer.material.mainTexture = field1Texture;
-                if (randomInt == 2) myRenderer.material.mainTexture = field2Texture;
-                if (keyFieldId != 0) fieldCaption.text = "Ogden's Field";
-                break;
-            case "Hill":
-                if (randomInt == 1) myRenderer.material.mainTexture = hill1Texture;
-                if (randomInt == 2) myRenderer.material.mainTexture = hill2Texture;
-                if (keyFieldId != 0) fieldCaption.text = "Windy Peak";
-                break;
+            if (ti == 3) myRenderer.material.mainTexture = pavia1Texture;
+            else myRenderer.material.mainTexture = riverTexture;
+        }
+        else if (ti < 11)
+        {
+            if (ti == 6) myRenderer.material.mainTexture = wallLeftTopTexture;
+            if (ti == 7) myRenderer.material.mainTexture = wallLeft1Texture;
+            if (ti == 8) myRenderer.material.mainTexture = pavia2Texture;
+            if (ti == 9) myRenderer.material.mainTexture = wallLeft2Texture;
+            if (ti == 10) myRenderer.material.mainTexture = wallLeftBottomTexture;
+        }
+        else if (ti == (BattleManager.Instance.boardHeight) * (BattleManager.Instance.boardWidth-1) + 1) myRenderer.material.mainTexture = wallRightTopTexture;
+        else if (ti == BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth) myRenderer.material.mainTexture = wallRightBottomTexture;
+        else if (ti > BattleManager.Instance.boardHeight * (BattleManager.Instance.boardWidth-1) + 1) myRenderer.material.mainTexture = wallRightTexture[Random.Range(0, wallRightTexture.Length)];
+        else if ((ti - 1) % BattleManager.Instance.boardHeight == 0) myRenderer.material.mainTexture = wallTopTexture[Random.Range(0, wallTopTexture.Length)];
+        else if ((ti - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1) myRenderer.material.mainTexture = wallBottomTexture[Random.Range(0, wallBottomTexture.Length)];
+        else
+        {
+            if (GameManagerController.Instance.terrainType == GameManagerController.terrainTypeEnum.random)
+            {
+                randomInt = Random.Range(1, 3);
+                switch (tileType)
+                {
+                    case "Town":
+                        myRenderer.material.mainTexture = town1Texture;
+                        if (keyFieldId != 0) fieldCaption.text = "Mirabello Castle";
+                        break;
+                    case "Forest":
+                        myRenderer.material.mainTexture = forest1Texture;
+                        if (keyFieldId != 0) fieldCaption.text = "Deep Forest";
+                        break;
+                    case "Field":
+                        if (randomInt == 1) myRenderer.material.mainTexture = field1Texture;
+                        if (randomInt == 2) myRenderer.material.mainTexture = field2Texture;
+                        if (keyFieldId != 0) fieldCaption.text = "Ogden's Field";
+                        break;
+                    case "Hill":
+                        if (randomInt == 1) myRenderer.material.mainTexture = hill1Texture;
+                        if (randomInt == 2) myRenderer.material.mainTexture = hill2Texture;
+                        if (keyFieldId != 0) fieldCaption.text = "Windy Peak";
+                        break;
+                }
+            }
+            else
+            {
+                fieldCaption.text = "";
+                border.SetActive(false);
+                floor.SetActive(false);
+                switch (ti)
+                {
+                    case 12:
+                        myRenderer.material.mainTexture = field1Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 13:
+                        myRenderer.material.mainTexture = field2Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 14:
+                        myRenderer.material.mainTexture = field1Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 17:
+                        myRenderer.material.mainTexture = forest1Texture;
+                        tileType = "Forest";
+                        tileTypeText.text = "Forest";
+                        break;
+                    case 18:
+                        myRenderer.material.mainTexture = field2Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 19:
+                        myRenderer.material.mainTexture = field1Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 22:
+                        myRenderer.material.mainTexture = field1Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 23:
+                        myRenderer.material.mainTexture = castleTexture;
+                        tileType = "Town";
+                        tileTypeText.text = "Town";
+                        fieldCaption.text = "Mirabello Castle";
+                        border.SetActive(true);
+                        floor.SetActive(true);
+                        keyFieldId = 1;
+                        break;
+                    case 24:
+                        myRenderer.material.mainTexture = forest1Texture;
+                        tileType = "Forest";
+                        tileTypeText.text = "Forest";
+                        break;
+                    case 27:
+                        myRenderer.material.mainTexture = forest1Texture;
+                        tileType = "Forest";
+                        tileTypeText.text = "Forest";
+                        break;
+                    case 28:
+                        myRenderer.material.mainTexture = field1Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 29:
+                        myRenderer.material.mainTexture = field1Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 32:
+                        myRenderer.material.mainTexture = field1Texture;
+                        tileType = "Field";
+                        tileTypeText.text = "Field";
+                        break;
+                    case 33:
+                        myRenderer.material.mainTexture = forest1Texture;
+                        tileType = "Forest";
+                        tileTypeText.text = "Forest";
+                        break;
+                    case 34:
+                        myRenderer.material.mainTexture = forest1Texture;
+                        tileType = "Forest";
+                        tileTypeText.text = "Forest";
+                        break;
+                }
+            }
         }
     }
 
@@ -137,13 +263,14 @@ public class TileController : MonoBehaviour
         TileController tc;
 
         lastClickedUnit = uId;
+        if(possibleArmyDeployment != 0) tileTypeText.gameObject.SetActive(true);
         if (a == possibleArmyDeployment && myDeployedUnitId == 0 && !initiallyDeploymentNotPossible)
         {
             tc = null;
             if (a == 1) tc = BattleManager.Instance.GetTile(tileId - 2);
             else tc = BattleManager.Instance.GetTile(tileId + 2);
             tileInfluenceDescription.gameObject.SetActive(true);
-            tileTypeText.gameObject.SetActive(true);
+            //tileTypeText.gameObject.SetActive(true);
             tileInfluenceDescription.text = "";
             if (uType == "Imperial Cavalery" || uType == "Gendarmes")
             {
@@ -173,7 +300,7 @@ public class TileController : MonoBehaviour
         else
         {
             tileInfluenceDescription.gameObject.SetActive(false);
-            tileTypeText.gameObject.SetActive(false);
+            //tileTypeText.gameObject.SetActive(false);
         }
     }
 
@@ -223,19 +350,19 @@ public class TileController : MonoBehaviour
             }
             if (BattleManager.Instance.turnOwnerId == 2 && tileId == tId - 1 && (tileId - 1) % BattleManager.Instance.boardHeight == 0)
             {
-                topParticleSystem.startColor = Color.yellow;
+                topParticleSystem.startColor = Color.blue;
                 topParticleSystem.Play();
                 tc = BattleManager.Instance.GetTile(tileId - BattleManager.Instance.boardHeight);
                 if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)  // looks for left neighbour
                 {
-                    leftParticleSystem.startColor = Color.yellow;
+                    leftParticleSystem.startColor = Color.blue;
                     leftParticleSystem.Play();
                 }
                 else tc.DisableHighlight("right");
                 tc = BattleManager.Instance.GetTile(tileId + BattleManager.Instance.boardHeight);   // looks for right neighbour
                 if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)
                 {
-                    rightParticleSystem.startColor = Color.yellow;
+                    rightParticleSystem.startColor = Color.blue;
                     rightParticleSystem.Play();
                 }
                 else tc.DisableHighlight("left");
@@ -290,13 +417,13 @@ public class TileController : MonoBehaviour
                     tc = BattleManager.Instance.GetTile(tileId - BattleManager.Instance.boardHeight);
                     if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)  // looks for left neighbour
                     {
-                        leftParticleSystem.startColor = Color.yellow;
+                        leftParticleSystem.startColor = Color.blue;
                         leftParticleSystem.Play();
                     }
                     tc = BattleManager.Instance.GetTile(tileId + BattleManager.Instance.boardHeight);   // looks for right neighbour
                     if (!tc.DeploymentPossible(2) || tc.GetForwardUnitId() == uId)
                     {
-                        rightParticleSystem.startColor = Color.yellow;
+                        rightParticleSystem.startColor = Color.blue;
                         rightParticleSystem.Play();
                     }
                     if (tId == tileId + 1 - BattleManager.Instance.boardHeight)
@@ -319,12 +446,12 @@ public class TileController : MonoBehaviour
         if(sc.keyFieldChangeId == keyFieldId)
         {
             ownerId = sc.keyFieldNewOccupantId;
-            if (ownerId == 1)
+            if (ownerId == 2)
             {
                 pawn.SetActive(true);
                 pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
             }
-            else if(ownerId == 2)
+            else if(ownerId == 1)
             {
                 pawn.SetActive(true);
                 pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
@@ -337,12 +464,12 @@ public class TileController : MonoBehaviour
         while(isBlinking)
         {
             if (ownerId == 0) pawn.SetActive(true);
-            else if (ownerId == 1) pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
-            else if (ownerId == 2) pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
-            yield return new WaitForSeconds(0.5f);
-            if(ownerId == 0) pawn.SetActive(false);
             else if (ownerId == 1) pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
             else if (ownerId == 2) pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            yield return new WaitForSeconds(0.5f);
+            if(ownerId == 0) pawn.SetActive(false);
+            else if (ownerId == 1) pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            else if (ownerId == 2) pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
             yield return new WaitForSeconds(0.5f);
         }
     }
@@ -362,8 +489,8 @@ public class TileController : MonoBehaviour
         if(tempAttack.GetKeyFieldId() == keyFieldId && keyFieldId != 0 && ownerId != tempAttack.GetArmyId())
         {
             isBlinking = true;
-            if (tempAttack.GetArmyId() == 1) pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
-            else pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            if (tempAttack.GetArmyId() == 1) pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            else pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
             StartCoroutine(Blink());
         }
         else
@@ -378,12 +505,12 @@ public class TileController : MonoBehaviour
         if (ownerId == 1)
         {
             pawn.SetActive(true);
-            pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
+            pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
         }
         else if (ownerId == 2)
         {
             pawn.SetActive(true);
-            pawn.GetComponent<MeshRenderer>().material = imperialMaterial;
+            pawn.GetComponent<MeshRenderer>().material = frenchMaterial;
         }
     }
 
@@ -393,7 +520,7 @@ public class TileController : MonoBehaviour
         {
             topParticleSystem.Play();
             bottomParticleSystem.Play();
-            if(BattleManager.Instance.boardHeight + 2 == tileId && aId == 2 || BattleManager.Instance.boardHeight + 4 == tileId && aId == 1) leftParticleSystem.Play();
+            if(BattleManager.Instance.boardHeight + 7 == tileId && aId == 2 || BattleManager.Instance.boardHeight + 9 == tileId && aId == 1) leftParticleSystem.Play();
             if ((BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth) - BattleManager.Instance.boardHeight - 1 == tileId && aId == 1 ||
             (BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth) - BattleManager.Instance.boardHeight - 3 == tileId && aId == 2)
             {
@@ -411,7 +538,7 @@ public class TileController : MonoBehaviour
             rightParticleSystem.Clear();
             leftParticleSystem.Clear();
             tileInfluenceDescription.gameObject.SetActive(false);
-            tileTypeText.gameObject.SetActive(false);
+            if(aId == 3) tileTypeText.gameObject.SetActive(false);
         }
     }
 

@@ -30,9 +30,9 @@ public class EventManager : MonoBehaviour
     }
 
     public static event Action<int, bool> onAttackClicked;
-    public static void RaiseEventOnAttackClicked(int idAttack, bool isCounterAttack)
+    public static void RaiseEventOnAttackClicked(int idArrow, bool isCounterAttack)
     {
-        if (onAttackClicked != null) onAttackClicked(idAttack, isCounterAttack);
+        if (onAttackClicked != null) onAttackClicked(idArrow, isCounterAttack);
     }
 
     public static event Action<int> onTileClicked;

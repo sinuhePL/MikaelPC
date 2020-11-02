@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Tile
   - Die
+  - SafetyNet
   layers:
   - Default
   - TransparentFX

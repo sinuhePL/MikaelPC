@@ -17,7 +17,7 @@ public class ImpLandsknechteController : UnitController
         }
         else
         {
-            _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 2.0f);
+            _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 1.5f);
             _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }
         // inicjalizacja squadów
@@ -25,6 +25,8 @@ public class ImpLandsknechteController : UnitController
         {
             tempPos = transform.position;
             tempPos.x = tempPos.x + (i % 2) * 1.0f + 0.5f;
+            if (_armyId == 1) tempPos.z = tempPos.z + 0.5f;
+            else tempPos.z = tempPos.z - 0.5f;
             if (i > 1)
             {
                 if (_armyId == 1) tempPos.z = tempPos.z - 1.0f;

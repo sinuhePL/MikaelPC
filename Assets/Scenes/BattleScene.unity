@@ -710,7 +710,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 40
+    m_FontSize: 35
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1388,8 +1388,8 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.2784314, g: 0.1254902, b: 0, a: 1}
+  m_Material: {fileID: 2100000, guid: 3d3f349ba01922542a4a4c0d49d523ed, type: 2}
+  m_Color: {r: 0.89692223, g: 1, b: 0.2688679, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1983,7 +1983,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 40
+    m_FontSize: 35
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -1994,7 +1994,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0.9
-  m_Text: "Morale\nStrength\n "
+  m_Text: 'Morale
+
+    Strength
+
+'
 --- !u!222 &294341946
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4133,7 +4137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7f274ec237acdd49b82cdf6d5e565d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myArmyId: 2
+  myArmyId: 1
 --- !u!1 &920065488
 GameObject:
   m_ObjectHideFlags: 0
@@ -4413,6 +4417,98 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 939081793}
   m_CullTransparentMesh: 0
+--- !u!1 &950482977
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 950482981}
+  - component: {fileID: 950482980}
+  - component: {fileID: 950482979}
+  - component: {fileID: 950482978}
+  m_Layer: 0
+  m_Name: safetyNet
+  m_TagString: SafetyNet
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!64 &950482978
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950482977}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &950482979
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950482977}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &950482980
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950482977}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &950482981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950482977}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 65.3, y: -2, z: -59.1}
+  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -5344,8 +5440,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b531294c1059c02408399e96729e260b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  widgetArmy1: {fileID: 21300000, guid: ef00f5dd045a76644bf56dd90db19574, type: 3}
-  widgetArmy2: {fileID: 21300000, guid: 0d570c2f20df33341b87e195aec2bff7, type: 3}
+  widgetArmy1: {fileID: 21300000, guid: 0d570c2f20df33341b87e195aec2bff7, type: 3}
+  widgetArmy2: {fileID: 21300000, guid: ef00f5dd045a76644bf56dd90db19574, type: 3}
 --- !u!1 &1184935444
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,6 +5614,8 @@ MonoBehaviour:
     type: 3}
   frenchArquebusiersPrefab: {fileID: 2260705500205277993, guid: 9fa3f1e357ad6c24b8a1d387f31ebbeb,
     type: 3}
+  frenchArquebusiersPrefab2: {fileID: 3327296402600867838, guid: 2fc7dcce19e8c4642936df7b40141d81,
+    type: 3}
   frenchArtilleryPrefab: {fileID: 2136599262806164053, guid: 859987962f95246419566624d7ea0aca,
     type: 3}
   frenchCoustilliersPrefab: {fileID: 401198247618233655, guid: 7db47b1d0232e53469e2c89f40aa4563,
@@ -5528,6 +5626,8 @@ MonoBehaviour:
     type: 3}
   imperialLandsknechtePrefab2: {fileID: 6657950607933084939, guid: eb69ea82df27f8b41838671e864805fd,
     type: 3}
+  imperialLandsknechtePrefab3: {fileID: 4147560290058988426, guid: 576dce287cf0f3c40aad8dc666e55ca9,
+    type: 3}
   imperialCavaleryPrefab: {fileID: 1393855818835718730, guid: 07b980fb536eed9449e87fb6e53b723e,
     type: 3}
   imperialArquebusiersPrefab: {fileID: 6167746437382340248, guid: fe636339d365b944b8d459e9e1a40e03,
@@ -5536,7 +5636,7 @@ MonoBehaviour:
     type: 3}
   imperialStradiotiPrefab: {fileID: 2052191729043289583, guid: 66d517412e9e0214b9ed1d3348a1fa17,
     type: 3}
-  boardWidth: 7
+  boardWidth: 8
   boardHeight: 5
   boardFieldWitdth: 4
   boardFieldHeight: 4
@@ -5707,8 +5807,8 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.2784314, g: 0.1254902, b: 0, a: 1}
+  m_Material: {fileID: 2100000, guid: 3d3f349ba01922542a4a4c0d49d523ed, type: 2}
+  m_Color: {r: 1, g: 0.07075471, b: 0.35203242, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5944,8 +6044,8 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.2784314, g: 0.1254902, b: 0, a: 1}
+  m_Material: {fileID: 2100000, guid: 3d3f349ba01922542a4a4c0d49d523ed, type: 2}
+  m_Color: {r: 1, g: 0.1273585, b: 0.6427668, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7603,8 +7703,8 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.2784314, g: 0.1254902, b: 0, a: 1}
+  m_Material: {fileID: 2100000, guid: 3d3f349ba01922542a4a4c0d49d523ed, type: 2}
+  m_Color: {r: 1, g: 0.46884134, b: 0.033018887, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7786,7 +7886,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7f274ec237acdd49b82cdf6d5e565d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myArmyId: 1
+  myArmyId: 2
 --- !u!1 &1544093713
 GameObject:
   m_ObjectHideFlags: 0
@@ -9148,8 +9248,8 @@ MonoBehaviour:
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.2784314, g: 0.1254902, b: 0, a: 1}
+  m_Material: {fileID: 2100000, guid: 3d3f349ba01922542a4a4c0d49d523ed, type: 2}
+  m_Color: {r: 0.9716981, g: 0.14208792, b: 0.8246751, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

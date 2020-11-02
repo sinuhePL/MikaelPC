@@ -49,14 +49,14 @@ public class TurnStarterController : MonoBehaviour
 
     void ChangeImages(int armyId)
     {
-        if (armyId == 1)
+        if (armyId == 2)
         {
             helmetImage.sprite = franceHelmet;
             shieldImage.sprite = franceShield;
             if (BattleManager.Instance.gameMode == "deploy") captionImage.sprite = franceDeployCaption;
             else captionImage.sprite = franceCaption;
         }
-        else if (armyId == 2)
+        else if (armyId == 1)
         {
             helmetImage.sprite = hreHelmet;
             shieldImage.sprite = hreShield;

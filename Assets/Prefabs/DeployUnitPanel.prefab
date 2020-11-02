@@ -611,5 +611,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b531294c1059c02408399e96729e260b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  widgetArmy1: {fileID: 21300000, guid: ef00f5dd045a76644bf56dd90db19574, type: 3}
-  widgetArmy2: {fileID: 21300000, guid: 0d570c2f20df33341b87e195aec2bff7, type: 3}
+  widgetArmy1: {fileID: 21300000, guid: 0d570c2f20df33341b87e195aec2bff7, type: 3}
+  widgetArmy2: {fileID: 21300000, guid: ef00f5dd045a76644bf56dd90db19574, type: 3}

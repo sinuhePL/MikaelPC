@@ -17,8 +17,8 @@ public class ArtilleryController : UnitController
         }
         else
         {
-            _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 2.0f);
-            _unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
+            _unitCaption.transform.position = transform.position + new Vector3(1.0f, 0.0f, 1.5f);
+            //_unitCaption.transform.rotation = _unitCaption.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 180.0f);
         }
         // inicjalizacja squadów
         for (int i = 0; i < initialStrength; i++)

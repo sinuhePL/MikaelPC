@@ -14,22 +14,22 @@ public class SkirmishAttack : Attack
                 {
                     case "Gendarmes":
                         attackDiceNumber = 2;
-                        defenceDiceNumber = 3;
+                        defenceDiceNumber = 4;
                         specialOutcomeType = 10;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 2;
-                        defenceDiceNumber = 3;
+                        defenceDiceNumber = 4;
                         specialOutcomeType = 6;
                         break;
                     case "Suisse":
                         attackDiceNumber = 2;
-                        defenceDiceNumber = 3;
+                        defenceDiceNumber = 4;
                         specialOutcomeType = 10;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 2;
-                        defenceDiceNumber = 3;
+                        defenceDiceNumber = 4;
                         specialOutcomeType = 5;
                         break;
                     case "Arquebusiers":
@@ -38,17 +38,17 @@ public class SkirmishAttack : Attack
                         specialOutcomeType = 8;
                         break;
                     case "Artillery":
-                        attackDiceNumber = 3;
+                        attackDiceNumber = 4;
                         defenceDiceNumber = 2;
                         specialOutcomeType = 7;
                         break;
                     case "Stradioti":
-                        attackDiceNumber = 2;
+                        attackDiceNumber = 3;
                         defenceDiceNumber = 2;
                         specialOutcomeType = 6;
                         break;
                     case "Coustilliers":
-                        attackDiceNumber = 2;
+                        attackDiceNumber = 3;
                         defenceDiceNumber = 2;
                         specialOutcomeType = 6;
                         break;
