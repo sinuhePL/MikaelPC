@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public class ResultMenuController : MonoBehaviour
@@ -99,7 +100,7 @@ public class ResultMenuController : MonoBehaviour
     {
         Vector3 endPosition;
         Sequence mySequence2 = DOTween.Sequence();
-        if (resultDesription != "noResult")
+        if (resultDesription != "noResult" && SceneManager.GetActiveScene().name != "Tutorial")
         {
             header.text = "Rout Test Result";
             Line2.gameObject.SetActive(false);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public class TurnStarterController : MonoBehaviour
@@ -98,16 +99,19 @@ public class TurnStarterController : MonoBehaviour
                 ChangeImages(BattleManager.Instance.turnOwnerId);
             }
             Sequence turnStarterControllerSequence = DOTween.Sequence();
-            turnStarterControllerSequence.Insert(0.3f, helmetImage.transform.DOLocalMoveY(174.0f, 0.2f));
-            turnStarterControllerSequence.Insert(0.3f, captionImage.transform.DOLocalMoveY(-116.0f, 0.2f));
-            if (BattleManager.Instance.gameMode != "deploy") turnStarterControllerSequence.Insert(0.3f, turnCounterText.transform.DOLocalMoveY(-96.0f, 0.2f));
-            turnStarterControllerSequence.Insert(0.3f, shieldImage.transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack));
-            turnStarterControllerSequence.InsertCallback(0.3f, () => { SoundManagerController.Instance.PlayStartTurn(); });
-            turnStarterControllerSequence.AppendInterval(2.0f);
-            turnStarterControllerSequence.Insert(2.5f, helmetImage.transform.DOLocalMoveY(689.0f, 0.2f));
-            turnStarterControllerSequence.Insert(2.5f, captionImage.transform.DOLocalMoveY(-640.0f, 0.2f));
-            if (BattleManager.Instance.gameMode != "deploy") turnStarterControllerSequence.Insert(2.5f, turnCounterText.transform.DOLocalMoveY(-620.0f, 0.2f));
-            turnStarterControllerSequence.Insert(2.5f, shieldImage.transform.DOScale(0.0f, 0.2f));
+            if (SceneManager.GetActiveScene().name != "Tutorial")
+            {
+                turnStarterControllerSequence.Insert(0.3f, helmetImage.transform.DOLocalMoveY(174.0f, 0.2f));
+                turnStarterControllerSequence.Insert(0.3f, captionImage.transform.DOLocalMoveY(-116.0f, 0.2f));
+                if (BattleManager.Instance.gameMode != "deploy") turnStarterControllerSequence.Insert(0.3f, turnCounterText.transform.DOLocalMoveY(-96.0f, 0.2f));
+                turnStarterControllerSequence.Insert(0.3f, shieldImage.transform.DOScale(1.5f, 0.2f).SetEase(Ease.OutBack));
+                turnStarterControllerSequence.InsertCallback(0.3f, () => { SoundManagerController.Instance.PlayStartTurn(); });
+                turnStarterControllerSequence.AppendInterval(2.0f);
+                turnStarterControllerSequence.Insert(2.5f, helmetImage.transform.DOLocalMoveY(689.0f, 0.2f));
+                turnStarterControllerSequence.Insert(2.5f, captionImage.transform.DOLocalMoveY(-640.0f, 0.2f));
+                if (BattleManager.Instance.gameMode != "deploy") turnStarterControllerSequence.Insert(2.5f, turnCounterText.transform.DOLocalMoveY(-620.0f, 0.2f));
+                turnStarterControllerSequence.Insert(2.5f, shieldImage.transform.DOScale(0.0f, 0.2f));
+            }
             if (BattleManager.Instance.gameMode != "deploy") turnStarterControllerSequence.AppendCallback(() => { EventManager.RaiseEventOnTurnStart(); });
         }
     }

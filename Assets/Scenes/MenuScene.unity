@@ -603,7 +603,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &130088617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1814,8 +1814,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.65, y: -326155.62}
-  m_SizeDelta: {x: 597.2, y: 538.4}
+  m_AnchoredPosition: {x: 2.65, y: -10325.3125}
+  m_SizeDelta: {x: 597.2, y: 869}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529051034
 MonoBehaviour:
@@ -1855,7 +1855,7 @@ MonoBehaviour:
     www.flaticon.com\npointed star.png - Icon made by Freepik from www.flaticon.com\nmap-flag.png
     - Icon made by Freepik from www.flaticon.com\n88600.jpg - Designed by rawpixel.com
     / Freepik\n\nSource of Public Domain Graphics:\n- Wikimedia Commons\n- British
-    Library\n- New York Public Libary Collections\n\nSounds licensed under the Attribution
+    Library\n- New York Public Library Collections\n\nSounds licensed under the Attribution
     License:\n194982__soundmary__wild-horses-running.mp3 - https://freesound.org/people/soundmary/\n218522__yap-audio-production__medievalcombatloop.mp3
     - Creators of 'A Scottish Podcast' - ScottishPodcast.com\n466133__humanoide9000__victory-fanfare.wav
     - https://www.youtube.com/c/LuisHumanoide\n\nOther sounds:\n- freesound.org\n-
@@ -2129,7 +2129,7 @@ RectTransform:
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children: []
   m_Father: {fileID: 1311815549}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2335,7 +2335,7 @@ RectTransform:
   m_LocalScale: {x: 0.59999996, y: 0.59999996, z: 1}
   m_Children: []
   m_Father: {fileID: 1311815549}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2538,8 +2538,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -14.3, y: 54}
-  m_SizeDelta: {x: -3.5, y: -149.2}
+  m_AnchoredPosition: {x: -14.299999, y: 1.699997}
+  m_SizeDelta: {x: -3.4, y: -44.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &629210817
 MonoBehaviour:
@@ -2957,7 +2957,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &746689849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3156,7 +3156,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &791654621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3306,7 +3306,7 @@ RectTransform:
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children: []
   m_Father: {fileID: 1311815549}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3568,7 +3568,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &908182125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3693,7 +3693,7 @@ RectTransform:
   m_LocalScale: {x: 0.59999996, y: 0.59999996, z: 1}
   m_Children: []
   m_Father: {fileID: 1311815549}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4263,7 +4263,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &993990587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4528,9 +4528,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2098576141}
-        m_MethodName: LoadLevel
-        m_Mode: 5
+      - m_Target: {fileID: 272132427}
+        m_MethodName: StartBattleClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5789,11 +5789,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_Children:
-  - {fileID: 929394579}
-  - {fileID: 579319388}
-  - {fileID: 1512532326}
-  - {fileID: 571882652}
   - {fileID: 847608655}
+  - {fileID: 929394579}
+  - {fileID: 1512532326}
+  - {fileID: 579319388}
+  - {fileID: 571882652}
   m_Father: {fileID: 1717234710}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6235,7 +6235,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &1456060808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6819,7 +6819,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1555520314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7646,8 +7646,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 4.95, y: 35.2}
-  m_SizeDelta: {x: -9.9, y: -90.5}
+  m_AnchoredPosition: {x: 4.95, y: 91.6}
+  m_SizeDelta: {x: -9.9, y: -203.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1790564916
 GameObject:
@@ -7947,7 +7947,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1850935525
 MonoBehaviour:
   m_ObjectHideFlags: 0

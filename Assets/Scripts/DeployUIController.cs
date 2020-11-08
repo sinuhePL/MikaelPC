@@ -89,7 +89,7 @@ public class DeployUIController : MonoBehaviour
 
     public void WidgetPressed(bool playSound)
     {
-        if (!isEnlarged)
+        if (!isEnlarged && !BattleManager.Instance.isInputBlocked)
         {
             if(playSound) SoundManagerController.Instance.PlayUnitReport();
             transform.DOScale(0.4f, 0.25f).SetEase(Ease.OutBack);

@@ -22,13 +22,20 @@ public class MainMenuController : MonoBehaviour
         SoundManagerController.Instance.PlayClick();
         Sequence mmSequence1 = DOTween.Sequence();
         if (clickedButton == "newgame") mmSequence1.Append(newGameButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
-        if (clickedButton == "tutorial") mmSequence1.Append(tutorialButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
+        if (clickedButton == "tutorial")
+        {
+            GameManagerController.Instance.isPlayer1Human = true;
+            GameManagerController.Instance.isPlayer2Human = false;
+            GameManagerController.Instance.difficultyLevel = GameManagerController.diffLevelEnum.easy;
+            GameManagerController.Instance.viewType = GameManagerController.viewTypeEnum.perspective;
+            GameManagerController.Instance.terrainType = GameManagerController.terrainTypeEnum.historical;
+            mmSequence1.Append(tutorialButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20)).OnComplete(() => GameManagerController.Instance.LoadLevel("Tutorial"));
+        }
         if (clickedButton == "settings") mmSequence1.Append(settingsButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         if (clickedButton == "credits") mmSequence1.Append(creditsButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         if (clickedButton == "quit") mmSequence1.Append(quitButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mmSequence1.Append(transform.DOScale(0.0f, 0.0f));
         if (clickedButton == "newgame") mmSequence1.Append(newGamePanel.transform.DOScale(1.0f, 0.0f));
-        if (clickedButton == "tutorial") mmSequence1.Append(tutorialPanel.transform.DOScale(1.0f, 0.0f));
         if (clickedButton == "settings") mmSequence1.Append(settingsPanel.transform.DOScale(1.0f, 0.0f));
         if (clickedButton == "credits") mmSequence1.Append(creditsPanel.transform.DOScale(1.1f, 0.0f));
         if (clickedButton == "quit") mmSequence1.Append(quitPanel.transform.DOScale(0.7f, 0.0f));

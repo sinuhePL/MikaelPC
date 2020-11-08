@@ -7,6 +7,7 @@ using DG.Tweening;
 public class NewGameController : MonoBehaviour
 {
     private Button backButton;
+    private Button startBattleButton;
     [SerializeField] private RectTransform menuPanel;
     [SerializeField] private RectTransform difficultyText;
     [SerializeField] private RectTransform easyToggle;
@@ -20,12 +21,9 @@ public class NewGameController : MonoBehaviour
         foreach (Button b in myButtons)
         {
             if (b.name == "backButton") backButton = b;
+            if (b.name == "startBattleButton") startBattleButton = b;
         }
         DisplayDifficultyLevel(false);
-        /*difficultyText.gameObject.SetActive(false);
-        easyToggle.gameObject.SetActive(false);
-        mediumToggle.gameObject.SetActive(false);
-        hardToggle.gameObject.SetActive(false);*/
     }
 
     public void BackClicked()
@@ -35,6 +33,12 @@ public class NewGameController : MonoBehaviour
         mmSequence2.Append(backButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
         mmSequence2.Append(transform.DOScale(0.0f, 0.0f));
         mmSequence2.Append(menuPanel.transform.DOScale(1.0f, 0.0f));
+    }
+
+    public void StartBattleClicked()
+    {
+        SoundManagerController.Instance.PlayClick();
+        startBattleButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20).OnComplete(() => GameManagerController.Instance.LoadLevel("BattleScene")); ;
     }
 
     public void DisplayDifficultyLevel(bool show)
@@ -53,9 +57,5 @@ public class NewGameController : MonoBehaviour
             mediumToggle.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             hardToggle.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         }
-        /*difficultyText.gameObject.SetActive(condition);
-        easyToggle.gameObject.SetActive(condition);
-        mediumToggle.gameObject.SetActive(condition);
-        hardToggle.gameObject.SetActive(condition);*/
     }
 }

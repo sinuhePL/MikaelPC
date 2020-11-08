@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public class BattleManager : MonoBehaviour {
@@ -65,6 +66,7 @@ public class BattleManager : MonoBehaviour {
     public bool hasTurnOwnerAttacked = false;
     public bool isInputBlocked = false;
     public string gameMode = "deploy";
+    public bool ignoreRoutTest;
     
     public const string Army1Color = "#ecc333";
     public const string Army2Color = "#4158f3";
@@ -116,6 +118,7 @@ public class BattleManager : MonoBehaviour {
         Random.InitState(System.Environment.TickCount);
         myCamera = Camera.main;
         armyRouteTest = 0;
+        ignoreRoutTest = false;
         //inicjalizacja elementów graficznych planszy
         for (int i=0; i< _boardWidth+4; i++)
         {
@@ -331,42 +334,44 @@ public class BattleManager : MonoBehaviour {
         if(armyId < 3) BattleManager.Instance.turnOwnerId = armyId;
         if (armyId == 1)
         {
-            tempObj = Instantiate(imperialLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(7, 1, 1, 0, "von Frundsberg");
-            uc.HideAll();
-            units.Add(tempObj);
-
             tempObj = Instantiate(imperialCavaleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
             uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(8, 1, 1, 1, "de Lannoy");
+            uc.InitializeUnit(8, 1, 1, 0, "de Lannoy");
             uc.HideAll();
             units.Add(tempObj);
 
             tempObj = Instantiate(imperialArquebusiersPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
             uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(9, 1, 1, 2, "de Vasto");
+            uc.InitializeUnit(9, 1, 1, 1, "de Vasto");
             uc.HideAll();
             units.Add(tempObj);
 
-            tempObj = Instantiate(imperialArtilleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+            tempObj = Instantiate(imperialLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
             uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(10, 1, 1, 3, "");
+            uc.InitializeUnit(7, 1, 1, 2, "von Frundsberg");
             uc.HideAll();
             units.Add(tempObj);
 
-            tempObj = Instantiate(imperialStradiotiPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(11, 1, 1, 4, "");
-            uc.HideAll();
-            units.Add(tempObj);
+            if (SceneManager.GetActiveScene().name != "Tutorial")
+            {
+                tempObj = Instantiate(imperialArtilleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(10, 1, 1, 4, "");
+                uc.HideAll();
+                units.Add(tempObj);
 
-            tempObj = Instantiate(imperialLandsknechtePrefab2, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(12, 1, 1, 5, "Pescara");
-            uc.HideAll();
-            units.Add(tempObj);
+                tempObj = Instantiate(imperialStradiotiPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(11, 1, 1, 5, "");
+                uc.HideAll();
+                units.Add(tempObj);
 
+                tempObj = Instantiate(imperialLandsknechtePrefab2, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(12, 1, 1, 3, "Pescara");
+                uc.HideAll();
+                units.Add(tempObj);
+            }
             if (!GameManagerController.Instance.isPlayer1Human) // places units on board
             {
                 ComputeDeployment(armyId);
@@ -380,35 +385,38 @@ public class BattleManager : MonoBehaviour {
             uc.HideAll();
             units.Add(tempObj);
 
-            tempObj = Instantiate(frenchLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(2, 2, 1, 1, "de Lorraine");
-            uc.HideAll();
-            units.Add(tempObj);
-
-            tempObj = Instantiate(suissePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(3, 2, 1, 2, "de La Marck");
-            uc.HideAll();
-            units.Add(tempObj);
-
             tempObj = Instantiate(frenchArquebusiersPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
             uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(4, 2, 1, 3, "de la Pole");
+            uc.InitializeUnit(4, 2, 1, 1, "de la Pole");
             uc.HideAll();
             units.Add(tempObj);
 
-            tempObj = Instantiate(frenchArtilleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(5, 2, 1, 4, "de Genouillac");
-            uc.HideAll();
-            units.Add(tempObj);
+            if (SceneManager.GetActiveScene().name != "Tutorial")
+            {
+                tempObj = Instantiate(frenchLandsknechtePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(2, 2, 1, 3, "de Lorraine");
+                uc.HideAll();
+                units.Add(tempObj);
 
-            tempObj = Instantiate(frenchCoustilliersPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(6, 2, 1, 5, "Tiercelin");
-            uc.HideAll();
-            units.Add(tempObj);
+                tempObj = Instantiate(suissePrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(3, 2, 1, 2, "de La Marck");
+                uc.HideAll();
+                units.Add(tempObj);
+
+                tempObj = Instantiate(frenchArtilleryPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(5, 2, 1, 4, "de Genouillac");
+                uc.HideAll();
+                units.Add(tempObj);
+
+                tempObj = Instantiate(frenchCoustilliersPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(6, 2, 1, 5, "Tiercelin");
+                uc.HideAll();
+                units.Add(tempObj);
+            }
 
             if (!GameManagerController.Instance.isPlayer2Human)
             {
@@ -1130,7 +1138,7 @@ public class BattleManager : MonoBehaviour {
     {
         Vector3 testSpot = new Vector3(20.0f, 2.0f, -16.0f);
 
-        if (armyRouteTest == 0 || armyRouteTest < 3 && closedMode == "routtest")
+        if (armyRouteTest == 0 || armyRouteTest < 3 && closedMode == "routtest" || ignoreRoutTest)
         {
             EventManager.RaiseEventRouteTestOver("noResult", 0, 0);
         }
@@ -1139,13 +1147,13 @@ public class BattleManager : MonoBehaviour {
             BattleManager.Instance.isInputBlocked = true;
             if (armyRouteTest == 1 || armyRouteTest == 3 && turnOwnerId == 2 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 1 && closedMode == "routtest")
             {
-                SoundManagerController.Instance.PlayThrowSound(0);
+                //SoundManagerController.Instance.PlayThrowSound(0);
                 myCamera.GetComponent<PanZoom>().RoutTest(testSpot + new Vector3(2.0f, 0.0f, 1.0f));
                 StartCoroutine(WaitForRouteTest(1, closedMode, "d10-yellow"));
             }
             else if(armyRouteTest == 2 || armyRouteTest == 3 && turnOwnerId == 1 && closedMode != "routtest" || armyRouteTest == 3 && turnOwnerId == 2 && closedMode == "routtest")
             {
-                SoundManagerController.Instance.PlayThrowSound(0);
+                //SoundManagerController.Instance.PlayThrowSound(0);
                 myCamera.GetComponent<PanZoom>().RoutTest(testSpot + new Vector3(2.0f, 0.0f, 1.0f));
                 StartCoroutine(WaitForRouteTest(2, closedMode, "d10-blue"));
             }

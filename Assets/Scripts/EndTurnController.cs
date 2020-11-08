@@ -76,6 +76,11 @@ public class EndTurnController : MonoBehaviour
                 if (BattleManager.Instance.turnOwnerId == 1)
                 {
                     EventManager.RaiseEventOnDeploymentStart(2);
+                    if(!GameManagerController.Instance.isPlayer2Human)
+                    {
+                        leftArrow.SetActive(true);
+                        rightArrow.SetActive(true);
+                    }
                 }
                 else if(BattleManager.Instance.turnOwnerId == 2)
                 {
@@ -148,8 +153,8 @@ public class EndTurnController : MonoBehaviour
         {
             myText.text = "Close Result";
             mode = 5;
-            if (resultDescription == "frenchFlee") EventManager.RaiseEventGameOver(2);
-            else if (resultDescription == "imperialFlee") EventManager.RaiseEventGameOver(1);
+            if (resultDescription == "frenchFlee") EventManager.RaiseEventGameOver(1);
+            else if (resultDescription == "imperialFlee") EventManager.RaiseEventGameOver(2);
         }
     }
 

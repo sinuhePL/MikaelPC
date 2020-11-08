@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class TileController : MonoBehaviour
 {
@@ -91,7 +92,7 @@ public class TileController : MonoBehaviour
                 leftParticleSystem.startColor = Color.yellow;
             }
         }
-        if (keyFieldId == 0 && GameManagerController.Instance.terrainType == GameManagerController.terrainTypeEnum.random)
+        if (keyFieldId == 0)
         {
             fieldCaption.text = "";
             border.SetActive(false);
@@ -147,87 +148,130 @@ public class TileController : MonoBehaviour
                 fieldCaption.text = "";
                 border.SetActive(false);
                 floor.SetActive(false);
-                switch (ti)
+                if (SceneManager.GetActiveScene().name == "Tutorial")
                 {
-                    case 12:
-                        myRenderer.material.mainTexture = field1Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 13:
-                        myRenderer.material.mainTexture = field2Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 14:
-                        myRenderer.material.mainTexture = field1Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 17:
-                        myRenderer.material.mainTexture = forest1Texture;
-                        tileType = "Forest";
-                        tileTypeText.text = "Forest";
-                        break;
-                    case 18:
-                        myRenderer.material.mainTexture = field2Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 19:
-                        myRenderer.material.mainTexture = field1Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 22:
-                        myRenderer.material.mainTexture = field1Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 23:
-                        myRenderer.material.mainTexture = castleTexture;
-                        tileType = "Town";
-                        tileTypeText.text = "Town";
-                        fieldCaption.text = "Mirabello Castle";
-                        border.SetActive(true);
-                        floor.SetActive(true);
-                        keyFieldId = 1;
-                        break;
-                    case 24:
-                        myRenderer.material.mainTexture = forest1Texture;
-                        tileType = "Forest";
-                        tileTypeText.text = "Forest";
-                        break;
-                    case 27:
-                        myRenderer.material.mainTexture = forest1Texture;
-                        tileType = "Forest";
-                        tileTypeText.text = "Forest";
-                        break;
-                    case 28:
-                        myRenderer.material.mainTexture = field1Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 29:
-                        myRenderer.material.mainTexture = field1Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 32:
-                        myRenderer.material.mainTexture = field1Texture;
-                        tileType = "Field";
-                        tileTypeText.text = "Field";
-                        break;
-                    case 33:
-                        myRenderer.material.mainTexture = forest1Texture;
-                        tileType = "Forest";
-                        tileTypeText.text = "Forest";
-                        break;
-                    case 34:
-                        myRenderer.material.mainTexture = forest1Texture;
-                        tileType = "Forest";
-                        tileTypeText.text = "Forest";
-                        break;
+                    switch (ti)
+                    {
+                        case 12:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 13:
+                            myRenderer.material.mainTexture = field2Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 14:
+                            myRenderer.material.mainTexture = forest1Texture;
+                            tileType = "Forest";
+                            tileTypeText.text = "Forest";
+                            break;
+                        case 17:
+                            myRenderer.material.mainTexture = hill1Texture;
+                            tileType = "Hill";
+                            tileTypeText.text = "Hill";
+                            break;
+                        case 18:
+                            myRenderer.material.mainTexture = castleTexture;
+                            tileType = "Town";
+                            tileTypeText.text = "Town";
+                            fieldCaption.text = "Mirabello Castle";
+                            border.SetActive(true);
+                            floor.SetActive(true);
+                            keyFieldId = 1;
+                            break;
+                        case 19:
+                            myRenderer.material.mainTexture = field2Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (ti)
+                    {
+                        case 12:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 13:
+                            myRenderer.material.mainTexture = field2Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 14:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 17:
+                            myRenderer.material.mainTexture = forest1Texture;
+                            tileType = "Forest";
+                            tileTypeText.text = "Forest";
+                            break;
+                        case 18:
+                            myRenderer.material.mainTexture = field2Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 19:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 22:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 23:
+                            myRenderer.material.mainTexture = castleTexture;
+                            tileType = "Town";
+                            tileTypeText.text = "Town";
+                            fieldCaption.text = "Mirabello Castle";
+                            border.SetActive(true);
+                            floor.SetActive(true);
+                            keyFieldId = 1;
+                            break;
+                        case 24:
+                            myRenderer.material.mainTexture = forest1Texture;
+                            tileType = "Forest";
+                            tileTypeText.text = "Forest";
+                            break;
+                        case 27:
+                            myRenderer.material.mainTexture = forest1Texture;
+                            tileType = "Forest";
+                            tileTypeText.text = "Forest";
+                            break;
+                        case 28:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 29:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 32:
+                            myRenderer.material.mainTexture = field1Texture;
+                            tileType = "Field";
+                            tileTypeText.text = "Field";
+                            break;
+                        case 33:
+                            myRenderer.material.mainTexture = forest1Texture;
+                            tileType = "Forest";
+                            tileTypeText.text = "Forest";
+                            break;
+                        case 34:
+                            myRenderer.material.mainTexture = forest1Texture;
+                            tileType = "Forest";
+                            tileTypeText.text = "Forest";
+                            break;
+                    }
                 }
             }
         }

@@ -42,8 +42,15 @@ public class GameManagerController : MonoBehaviour
     {
         /*if (level == "BattleScene") Screen.orientation = ScreenOrientation.LandscapeRight;
         else Screen.orientation = ScreenOrientation.Portrait;*/
-        if (level == "BattleScene") SoundManagerController.Instance.PlayMusicWithCrossFade(1);
-        else SoundManagerController.Instance.PlayMusicWithCrossFade(0);
+        if (level == "BattleScene" || level == "Tutorial") SoundManagerController.Instance.PlayMusicWithCrossFade(1);
+        else
+        {
+            SoundManagerController.Instance.PlayMusicWithCrossFade(0);
+            isPlayer1Human = true;
+            isPlayer2Human = true;
+            difficultyLevel = diffLevelEnum.medium;
+            terrainType = terrainTypeEnum.random;
+        }
         SceneManager.LoadScene(level);
     }
 
