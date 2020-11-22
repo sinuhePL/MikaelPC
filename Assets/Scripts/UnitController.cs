@@ -11,7 +11,7 @@ public class UnitController : MonoBehaviour
     protected bool isOutlined;
     protected bool isDisabled;
     protected bool _isPlaced;
-    protected bool _isBlocked;
+    protected bool _isBlocked;  // blocked during deployment
     protected bool isMoved;
     protected int _strength;
     protected string _unitType;
@@ -400,6 +400,16 @@ public class UnitController : MonoBehaviour
         if (aId < 3 && GameManagerController.Instance.isPlayer2Human) HideAll();
         else
         {
+            if (_unitTileId == 12 || _unitTileId == 11)
+            {
+
+                rightArrow.transform.rotation = arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 135.0f);
+                rightArrow.transform.position += new Vector3(-0.4f, 0.0f, 1.8f);
+                rightArrow.transform.localScale = new Vector3(1.6f, 4.5f, 1.0f);
+                rightArrowEmpty.transform.rotation = arrowPrefab.transform.rotation * Quaternion.Euler(0.0f, 0.0f, 135.0f);
+                rightArrowEmpty.transform.position += new Vector3(-0.4f, 0.0f, 1.8f);
+                rightArrowEmpty.transform.localScale = new Vector3(1.6f, 4.5f, 1.0f);
+            }
             ShowAll();
             if (!isPlaced)
             {
@@ -461,9 +471,6 @@ public class UnitController : MonoBehaviour
             blockingUnitId = 0;
             isMoved = true;
 
-            // set position based on id tile which it sits on
-            ChangePosition(tileId);
-            //if (unitId == 13) transform.position = transform.position + new Vector3(-1.0f, 0.0f, -0.5f);
             if (_armyId == 1)
             {
                 forwardArrow = Instantiate(arrowPrefab, transform.position + new Vector3(1.14f, 0.002f, 4.0f), arrowPrefab.transform.rotation);
@@ -527,6 +534,8 @@ public class UnitController : MonoBehaviour
             leftArrowEmpty.SetActive(false);
             rightArrow.SetActive(false);
             rightArrowEmpty.SetActive(false);
+            // set position based on id tile which it sits on
+            ChangePosition(tileId);
         }
         else Debug.Log("Tried to initialized UnitController again! Id: " + _unitId);
     }
@@ -615,7 +624,7 @@ public class UnitController : MonoBehaviour
         ac.isArrowBlocked = value;
     }
 
-    public void ResetUnit()
+    public virtual void ResetUnit()
     {
         PawnController pc;
 

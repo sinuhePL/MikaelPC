@@ -50,7 +50,7 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private GameObject suissePrefab;
     [SerializeField] private GameObject imperialLandsknechtePrefab;
     [SerializeField] private GameObject imperialLandsknechtePrefab2;
-    [SerializeField] private GameObject imperialLandsknechtePrefab3;
+    [SerializeField] private GameObject garrisonPrefab;
     [SerializeField] private GameObject imperialCavaleryPrefab;
     [SerializeField] private GameObject imperialArquebusiersPrefab;
     [SerializeField] private GameObject imperialArtilleryPrefab;
@@ -163,52 +163,6 @@ public class BattleManager : MonoBehaviour {
             }
         }
     }
-
-    /*private void DeployEasy(int armyId)
-    {
-        List<TileController> possibleTiles = new List<TileController>();
-        List<UnitController> possibleUnits = new List<UnitController>();
-        TileController tc;
-        UnitController uc;
-        int tempUnitIndex, tempTileIndex;
-
-        foreach (GameObject t in tiles) // creates a list of possible deployment tiles 
-        {
-            tc = t.GetComponent<TileController>();
-            if (tc.DeploymentPossible(armyId)) possibleTiles.Add(tc); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
-        }
-        foreach (GameObject g in units) // creates a list of units possible to deploy
-        {
-            uc = g.GetComponent<UnitController>();
-            if (uc.ArmyId == armyId) possibleUnits.Add(uc);
-        }
-        while (possibleTiles.Count > 0 && possibleUnits.Count > 0)
-        {
-            tempUnitIndex = Random.Range(0, possibleUnits.Count);
-            tempTileIndex = Random.Range(0, possibleTiles.Count);
-            EventManager.RaiseEventOnUnitDeployed(possibleUnits[tempUnitIndex].UnitId, possibleTiles[tempTileIndex].tileId);
-            possibleUnits.RemoveAt(tempUnitIndex);
-            possibleTiles.RemoveAt(tempTileIndex);
-        }
-        if (possibleUnits.Count > 0)
-        {
-            possibleTiles.Clear();
-            foreach (GameObject t in tiles)
-            {
-                tc = t.GetComponent<TileController>();
-                if (tc.DeploymentPossible(armyId) && !tc.IsTileOccupied()) possibleTiles.Add(tc); //checks if deployment possible for army aId on this tile and adds it to list of possible tiles
-            }
-            while (possibleTiles.Count > 0 && possibleUnits.Count > 0)
-            {
-                tempUnitIndex = Random.Range(0, possibleUnits.Count);
-                tempTileIndex = Random.Range(0, possibleTiles.Count);
-                EventManager.RaiseEventOnUnitDeployed(possibleUnits[tempUnitIndex].UnitId, possibleTiles[tempTileIndex].tileId);
-                possibleUnits.RemoveAt(tempUnitIndex);
-                possibleTiles.RemoveAt(tempTileIndex);
-            }
-        }
-        EventManager.RaiseEventOnDeploymentStart(armyId+1);
-    }*/
 
     private void ComputeDeployment(int armyId)
     {
@@ -425,16 +379,19 @@ public class BattleManager : MonoBehaviour {
         }
         else if(armyId == 3)
         {
-            /*tempObj = Instantiate(imperialLandsknechtePrefab3, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(13, 1, 8, -1, "de Leyva");
-            uc.isPlaced = true;
-            units.Add(tempObj);
-            tempObj = Instantiate(frenchArquebusiersPrefab2, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
-            uc = tempObj.GetComponent<UnitController>();
-            uc.InitializeUnit(14, 2, 6, -1, "d'Alencon");
-            uc.isPlaced = true;
-            units.Add(tempObj);*/
+            if (SceneManager.GetActiveScene().name != "Tutorial")
+            {
+                tempObj = Instantiate(garrisonPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(13, 1, 8, -1, "de Leyva");
+                uc.isPlaced = true;
+                units.Add(tempObj);
+                tempObj = Instantiate(frenchArquebusiersPrefab2, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+                uc = tempObj.GetComponent<UnitController>();
+                uc.InitializeUnit(14, 2, 6, -1, "d'Alencon");
+                uc.isPlaced = true;
+                units.Add(tempObj);
+            }
             InitiateBoard();
         }
     }
@@ -447,11 +404,12 @@ public class BattleManager : MonoBehaviour {
         KeyField myKeyField;
         ArrowController ac;
         Army army1, army2;
-        Attack tempAttack;
+        Attack tempAttack, tempAdditionalAttack;
         List<Attack> resultAttacks;
         Vector3 arrowRightPositionShift, arrowCentralPositionShift, arrowLeftPositionShift;
-        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile, centralKeyFieldTile, leftKeyFieldTile, rightKeyFieldTile, centralKeyFieldId, leftKeyFieldId, rightKeyFieldId, tempAttackId, leftAttackTileSupport, centralAttackTileSupport, rightAttackTileSupport, supportTile, attackIdTemp; ;
+        int army1morale = 0, army2morale = 0, leftAttackTile, centralAttackTile, rightAttackTile, centralKeyFieldTile, leftKeyFieldTile, rightKeyFieldTile, centralKeyFieldId, leftKeyFieldId, rightKeyFieldId, tempAttackId, leftAttackTileSupport, centralAttackTileSupport, rightAttackTileSupport, supportTile, attackIdCounter, tempTileId;
         List<int> attackList;
+        bool isTileOccupied;
 
         // counts morale of army
         foreach (GameObject g in units)
@@ -466,7 +424,8 @@ public class BattleManager : MonoBehaviour {
         myBoardState = new BoardState(army1, army2);
 
         // creates in memory representation of each unit on screen
-        attackIdTemp = 1;
+        attackIdCounter = 1;
+        isTileOccupied = false;
         foreach (GameObject g in units)
         {
             uc = g.GetComponent<UnitController>();
@@ -503,8 +462,8 @@ public class BattleManager : MonoBehaviour {
                     leftAttackTileSupport = uc.UnitTileId - 9;
                     centralAttackTileSupport = uc.UnitTileId - 4;
                     rightAttackTileSupport = uc.UnitTileId + 1;
-                    if (leftAttackTile <= 5) leftAttackTile = 0;
-                    if (leftAttackTileSupport <= 5) leftAttackTileSupport = 0;
+                    if (leftAttackTile <= 6) leftAttackTile = 0;
+                    if (leftAttackTileSupport <= 6) leftAttackTileSupport = 0;
                     if (rightAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTile = 0;
                     if (rightAttackTileSupport > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTileSupport = 0;
                     centralKeyFieldTile = uc.UnitTileId - 2;
@@ -513,20 +472,27 @@ public class BattleManager : MonoBehaviour {
                 }
                 else
                 {
+                    if (uc.UnitTileId == 6)
+                    {
+                        myUnit.SetUnitOutsideOfBattlefield();
+                        tempTileId = 11;
+                    }
+                    else tempTileId = uc.UnitTileId;
+                    if (uc.UnitTileId == 11) supportTile = 6;
                     uc.SetArrowsBlockValue(true);
-                    leftAttackTile = uc.UnitTileId + 8;
-                    centralAttackTile = uc.UnitTileId + 3;
-                    rightAttackTile = uc.UnitTileId - 2;
-                    leftAttackTileSupport = uc.UnitTileId + 9;
-                    centralAttackTileSupport = uc.UnitTileId + 4;
-                    rightAttackTileSupport = uc.UnitTileId - 1;
-                    if (rightAttackTile <= 5) rightAttackTile = 0;
-                    if (rightAttackTileSupport <= 5) rightAttackTileSupport = 0;
+                    leftAttackTile = tempTileId + 8;
+                    centralAttackTile = tempTileId + 3;
+                    rightAttackTile = tempTileId - 2;
+                    leftAttackTileSupport = tempTileId + 9;
+                    centralAttackTileSupport = tempTileId + 4;
+                    rightAttackTileSupport = tempTileId - 1;
+                    if (rightAttackTile <= 6) rightAttackTile = 0;
+                    if (rightAttackTileSupport <= 6) rightAttackTileSupport = 0;
                     if (leftAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTile = 0;
                     if (leftAttackTileSupport > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTileSupport = 0;
-                    centralKeyFieldTile = uc.UnitTileId + 2;
-                    leftKeyFieldTile = uc.UnitTileId + 2 + BattleManager.Instance.boardHeight;
-                    rightKeyFieldTile = uc.UnitTileId + 2 - BattleManager.Instance.boardHeight;
+                    centralKeyFieldTile = tempTileId + 2;
+                    leftKeyFieldTile = tempTileId + 2 + BattleManager.Instance.boardHeight;
+                    rightKeyFieldTile = tempTileId + 2 - BattleManager.Instance.boardHeight;
                 }
             }
             else   // if unit in first line
@@ -541,8 +507,8 @@ public class BattleManager : MonoBehaviour {
                     leftAttackTileSupport = uc.UnitTileId - 8;
                     centralAttackTileSupport = uc.UnitTileId - 3;
                     rightAttackTileSupport = uc.UnitTileId + 2;
-                    if (leftAttackTile <= 5) leftAttackTile = 0;
-                    if (leftAttackTileSupport <= 5) leftAttackTileSupport = 0;
+                    if (leftAttackTile <= 6) leftAttackTile = 0;
+                    if (leftAttackTileSupport <= 6) leftAttackTileSupport = 0;
                     if (rightAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTile = 0;
                     if (rightAttackTileSupport > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTileSupport = 0;
                     centralKeyFieldTile = uc.UnitTileId - 1;
@@ -551,15 +517,25 @@ public class BattleManager : MonoBehaviour {
                 }
                 else
                 {
-                    supportTile = uc.UnitTileId - 1;
+                    if(uc.UnitTileId == 12)
+                    {
+                        foreach (GameObject g2 in units)
+                        {
+                            uc2 = g2.GetComponent<UnitController>();
+                            if (uc2.UnitTileId == 11) isTileOccupied = true;
+                        }
+                        if (!isTileOccupied) supportTile = 6;
+                        else supportTile = 11;
+                    }
+                    else supportTile = uc.UnitTileId - 1;
                     leftAttackTile = uc.UnitTileId + 7;
                     centralAttackTile = uc.UnitTileId + 2;
                     rightAttackTile = uc.UnitTileId - 3;
                     leftAttackTileSupport = uc.UnitTileId + 8;
                     centralAttackTileSupport = uc.UnitTileId + 3;
                     rightAttackTileSupport = uc.UnitTileId - 2;
-                    if (rightAttackTile <= 5) rightAttackTile = 0;
-                    if (rightAttackTileSupport <= 5) rightAttackTileSupport = 0;
+                    if (rightAttackTile <= 6) rightAttackTile = 0;
+                    if (rightAttackTileSupport <= 6) rightAttackTileSupport = 0;
                     if (leftAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTile = 0;
                     if (leftAttackTileSupport > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTileSupport = 0;
                     centralKeyFieldTile = uc.UnitTileId + 1;
@@ -581,52 +557,74 @@ public class BattleManager : MonoBehaviour {
                 if(tc.tileId == leftKeyFieldTile) leftKeyFieldId = tc.GetKeyFieldId();
                 if (tc.tileId == rightKeyFieldTile) rightKeyFieldId = tc.GetKeyFieldId();
             }
+            // initialize french rear guard
+            if (uc.UnitTileId == 6)
+            {
+                tempAttack = new MoveAttack(attackIdCounter++, uc.GetArrowId("side"), !isTileOccupied, uc.ArmyId, myUnit, 0, false, 0, uc.transform.position + arrowLeftPositionShift);
+                if (tempAttack != null)
+                {
+                    tempAttack.AddDeactivatedAttackId(tempAttack.GetId());
+                    myUnit.AddAttack(tempAttack);
+                }
+            }
 
             //looks for units ids which sits on tiles pointed at attack arrows and support units
             foreach (GameObject g2 in units)
             {
                 uc2 = g2.GetComponent<UnitController>();
                 if (!uc2.isPlaced) continue;
+                //initialize garrison attack
+                if(uc.UnitTileId == 8 && uc2.UnitTileId == 12)  // if garrison and other unit on garrisons target tile
+                {
+                    tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("central"), true, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
+                    myUnit.AddAttack(tempAttack);
+                }
+                if ((uc.UnitTileId == 12 || uc.UnitTileId == 11 || uc.UnitTileId == 6) && uc2.UnitTileId == 8)
+                {
+                    tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("right"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, true, false);
+                    if (tempAttack != null) myUnit.AddAttack(tempAttack);
+                }
                 if (uc2.UnitTileId == supportTile) myUnit.supportLineUnitId = uc2.UnitId; 
                 if (uc2.UnitTileId == leftAttackTile)   // set attack on left tile in first enemy line
                 {
                     // na podstawie typu jednostki wybrać rodzaj ataku
                     tempAttack = null;
-                    if(myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdTemp++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
+                    if(myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdCounter++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
                     if (myUnit.GetUnitType() == "Artillery")
                     {
-                        tempAttack = new BombardAttack(attackIdTemp++, uc.GetArrowId("left"), true, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType, false);
+                        tempAttack = new BombardAttack(attackIdCounter++, uc.GetArrowId("left"), true, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType, false);
                         if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) tempAttack.Deactivate();   // deactivate if unit in second line
                     }
-                    if((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && leftKeyFieldId !=0 ) tempAttack = new CaptureAttack(attackIdTemp++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, leftKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
+                    if((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && leftKeyFieldId !=0 ) tempAttack = new CaptureAttack(attackIdCounter++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, leftKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
                     if (tempAttack != null) myUnit.AddAttack(tempAttack);
                     tempAttack = null;
-                    if (myUnit.GetUnitType() != "Artillery") tempAttack = new ChargeAttack(attackIdTemp++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType, true, false);
+                    if (myUnit.GetUnitType() != "Artillery") tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType, true, false);
                     if (tempAttack != null) myUnit.AddAttack(tempAttack);
                 }
                 if (uc2.UnitTileId == centralAttackTile) // set attack on central tile in first enemy line
                 {
+                    if (uc.UnitTileId == 6 && uc2.UnitTileId == 8) continue; // avoid rear guard attack on garrison
                     if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) // if attacking unit in second line
                     {
-                        if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdTemp++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, true);
-                        else tempAttack = new ChargeAttack(attackIdTemp++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
+                        if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdCounter++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, true);
+                        else tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
                         if (uc.ArmyId == 1) tc = GetTile(uc.UnitTileId - 1);
                         else tc = GetTile(uc.UnitTileId + 1);
                         tempAttack.ChangeAttack(tc.ChangeAttackStrength(uc.UnitType));
                         myUnit.AddAttack(tempAttack);
                         if (uc.UnitType == "Coustilliers" || uc.UnitType == "Stradioti") // sets far attack for light cavalry
                         {
-                            tempAttack = new SkirmishAttack(attackIdTemp++, uc.GetArrowId("far"), true, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType);
+                            tempAttack = new SkirmishAttack(attackIdCounter++, uc.GetArrowId("far"), true, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType);
                             myUnit.AddAttack(tempAttack);
                         }
                     }
                     else   // if attacking unit in first line
                     {
-                        if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdTemp++, uc.GetArrowId("central"), true, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, true);
-                        else tempAttack = new ChargeAttack(attackIdTemp++, uc.GetArrowId("central"), true, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
+                        if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdCounter++, uc.GetArrowId("central"), true, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, true);
+                        else tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("central"), true, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
                         tc = GetTile(uc.UnitTileId);
                         tempAttack.ChangeAttack(tc.ChangeAttackStrength(uc.UnitType));
-                        myUnit.AddAttack(tempAttack);
+                        if ((uc.UnitTileId != 8 || uc2.UnitTileId != 6) && (uc.UnitTileId != 6 || uc2.UnitTileId != 8)) myUnit.AddAttack(tempAttack);
                     }
                 }
                 if (uc2.UnitTileId == rightAttackTile) // set attack on right tile in first enemy line
@@ -634,35 +632,41 @@ public class BattleManager : MonoBehaviour {
                     // na podstawie typu jednostki wybrać rodzaj ataku
                     tempAttackId = uc.GetArrowId("right");
                     tempAttack = null;
-                    if (myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdTemp++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
+                    if (myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdCounter++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
                     if (myUnit.GetUnitType() == "Artillery")
                     {
-                        tempAttack = new BombardAttack(attackIdTemp++, tempAttackId, true, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, false);
+                        tempAttack = new BombardAttack(attackIdCounter++, tempAttackId, true, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, false);
                         if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) tempAttack.Deactivate();    // deactivate if unit in second line
                     }
-                    if ((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && rightKeyFieldId != 0) tempAttack = new CaptureAttack(attackIdTemp++, uc.GetArrowId("right"), false, uc.ArmyId, myUnit, rightKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
+                    if ((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && rightKeyFieldId != 0) tempAttack = new CaptureAttack(attackIdCounter++, uc.GetArrowId("right"), false, uc.ArmyId, myUnit, rightKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
                     if (tempAttack != null) myUnit.AddAttack(tempAttack);
                     tempAttack = null;
-                    if (myUnit.GetUnitType() != "Artillery") tempAttack = new ChargeAttack(attackIdTemp++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, true, false);
+                    if (myUnit.GetUnitType() != "Artillery") tempAttack = new ChargeAttack(attackIdCounter++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, true, false);
                     if (tempAttack != null) myUnit.AddAttack(tempAttack);
                 }
-                if (uc2.UnitTileId == leftAttackTileSupport) // set attack on left tile in second enemy line
+                //initialize garrison additional attack
+                if (uc.UnitTileId == 8 && (uc2.UnitTileId == 11 || uc2.UnitTileId == 6))  // if garrison and other unit on garrisons target tile
+                {
+                    tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
+                    myUnit.AddAdditionalAttack(tempAttack);
+                }
+                if (uc2.UnitTileId == leftAttackTileSupport || ((uc.UnitTileId == 19 || uc.UnitTileId == 20) && uc2.UnitTileId == 6)) // set attack on left tile in second enemy line
                 {
                     // na podstawie typu jednostki wybrać rodzaj ataku
                     tempAttack = null;
-                    if (myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdTemp++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
-                    if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdTemp++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType,false);
-                    if ((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && leftKeyFieldId != 0) tempAttack = new CaptureAttack(attackIdTemp++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, leftKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
+                    if (myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdCounter++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
+                    if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdCounter++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType,false);
+                    if ((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && leftKeyFieldId != 0) tempAttack = new CaptureAttack(attackIdCounter++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, leftKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType);
                     if (tempAttack != null) myUnit.AddAdditionalAttack(tempAttack);
                     tempAttack = null;
-                    if (myUnit.GetUnitType() == "Artillery") tempAttack = new ChargeAttack(attackIdTemp++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType, true, false);
+                    if (myUnit.GetUnitType() != "Artillery") tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("left"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowLeftPositionShift, uc.UnitType, uc2.UnitType, true, false);
                     if (tempAttack != null) myUnit.AddAdditionalAttack(tempAttack);
                 }
-                if (uc2.UnitTileId == centralAttackTileSupport) // set attack on central tile in second enemy line
+                if (uc2.UnitTileId == centralAttackTileSupport || ((uc.UnitTileId == 14 || uc.UnitTileId == 15) && uc2.UnitTileId == 6)) // set attack on central tile in second enemy line
                 {
                     tc = null;
-                    if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdTemp++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, true);
-                    else tempAttack = new ChargeAttack(attackIdTemp++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
+                    if (myUnit.GetUnitType() == "Artillery") tempAttack = new BombardAttack(attackIdCounter++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, true);
+                    else tempAttack = new ChargeAttack(attackIdCounter++, uc.GetArrowId("central"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType, false, true);
                     if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1) tc = GetTile(uc.UnitTileId-1);
                     else if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) tc = GetTile(uc.UnitTileId + 1);
                     else tc = GetTile(uc.UnitTileId);
@@ -673,7 +677,7 @@ public class BattleManager : MonoBehaviour {
                     }
                     if(uc.UnitType == "Coustilliers" || uc.UnitType == "Stradioti")
                     {
-                        tempAttack = new SkirmishAttack(attackIdTemp++, uc.GetArrowId("far"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType);
+                        tempAttack = new SkirmishAttack(attackIdCounter++, uc.GetArrowId("far"), false, uc.ArmyId, myUnit, centralKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowCentralPositionShift, uc.UnitType, uc2.UnitType);
                         myUnit.AddAdditionalAttack(tempAttack);
                     }
                 }
@@ -682,12 +686,12 @@ public class BattleManager : MonoBehaviour {
                     // na podstawie typu jednostki wybrać rodzaj ataku
                     tempAttackId = uc.GetArrowId("right");
                     tempAttack = null;
-                    if (myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdTemp++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
-                    if (myUnit.GetUnitType() == "Artilllery") tempAttack = new BombardAttack(attackIdTemp++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, false);
-                    if ((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && rightKeyFieldId != 0) tempAttack = new CaptureAttack(attackIdTemp++, uc.GetArrowId("right"), false, uc.ArmyId, myUnit, rightKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
+                    if (myUnit.GetUnitType() == "Arquebusiers") tempAttack = new CounterAttack(attackIdCounter++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
+                    if (myUnit.GetUnitType() == "Artilllery") tempAttack = new BombardAttack(attackIdCounter++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, false);
+                    if ((myUnit.GetUnitType() == "Coustilliers" || myUnit.GetUnitType() == "Stradioti") && rightKeyFieldId != 0) tempAttack = new CaptureAttack(attackIdCounter++, uc.GetArrowId("right"), false, uc.ArmyId, myUnit, rightKeyFieldId, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType);
                     if (tempAttack != null) myUnit.AddAdditionalAttack(tempAttack);
                     tempAttack = null;
-                    if (myUnit.GetUnitType() != "Artillery") tempAttack = new ChargeAttack(attackIdTemp++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, true, false);
+                    if (myUnit.GetUnitType() != "Artillery") tempAttack = new ChargeAttack(attackIdCounter++, tempAttackId, false, uc.ArmyId, myUnit, 0, false, uc2.UnitId, uc.transform.position + arrowRightPositionShift, uc.UnitType, uc2.UnitType, true, false);
                     if (tempAttack != null) myUnit.AddAdditionalAttack(tempAttack);
                 }
 
@@ -726,8 +730,8 @@ public class BattleManager : MonoBehaviour {
                     centralAttackTileSupport = uc.UnitTileId - 3;
                     rightAttackTileSupport = uc.UnitTileId + 2;
                 }
-                if (leftAttackTile <= 5) leftAttackTile = 0;
-                if (leftAttackTileSupport <= 5) leftAttackTileSupport = 0;
+                if (leftAttackTile <= 6) leftAttackTile = 0;
+                if (leftAttackTileSupport <= 6) leftAttackTileSupport = 0;
                 if (rightAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTile = 0;
                 if (rightAttackTileSupport > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) rightAttackTileSupport = 0;
             }
@@ -735,12 +739,14 @@ public class BattleManager : MonoBehaviour {
             {
                 if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0)  //  if unit in second line
                 {
-                    leftAttackTile = uc.UnitTileId + 8;
-                    centralAttackTile = uc.UnitTileId + 3;
-                    rightAttackTile = uc.UnitTileId - 2;
-                    leftAttackTileSupport = uc.UnitTileId + 9;
-                    centralAttackTileSupport = uc.UnitTileId + 4;
-                    rightAttackTileSupport = uc.UnitTileId - 1;
+                    if (uc.UnitTileId == 6) tempTileId = 11;
+                    else tempTileId = uc.UnitTileId;
+                    leftAttackTile = tempTileId + 8;
+                    centralAttackTile = tempTileId + 3;
+                    rightAttackTile = tempTileId - 2;
+                    leftAttackTileSupport = tempTileId + 9;
+                    centralAttackTileSupport = tempTileId + 4;
+                    rightAttackTileSupport = tempTileId - 1;
                 }
                 else
                 {
@@ -751,8 +757,8 @@ public class BattleManager : MonoBehaviour {
                     centralAttackTileSupport = uc.UnitTileId + 3;
                     rightAttackTileSupport = uc.UnitTileId - 2;
                 }
-                if (rightAttackTile <= 5) rightAttackTile = 0;
-                if (rightAttackTileSupport <= 5) rightAttackTileSupport = 0;
+                if (rightAttackTile <= 6) rightAttackTile = 0;
+                if (rightAttackTileSupport <= 6) rightAttackTileSupport = 0;
                 if (leftAttackTile > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTile = 0;
                 if (leftAttackTileSupport > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - BattleManager.Instance.boardHeight) leftAttackTileSupport = 0;
             }
@@ -761,26 +767,79 @@ public class BattleManager : MonoBehaviour {
             {
                 uc2 = g2.GetComponent<UnitController>();
                 if (!uc2.isPlaced) continue;
-                if (uc2.UnitTileId == leftAttackTile)   // adds to central attack, attack  on the left unit, that is activated by this central attack
+                //initialize garrison dependencies
+                if (uc.UnitTileId == 8 && (uc2.UnitTileId == 12 || uc2.UnitTileId == 11 || uc2.UnitTileId == 6) && uc2.UnitType != "Artillery")
                 {
+                    if(uc2.UnitTileId == 12) resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
+                    else resultAttacks = myUnit.GetAdditionalAttacksByArrowId(uc.GetArrowId("central"));
+                    if (resultAttacks.Count > 0) 
+                    {
+                        tempAttack = null;
+                        foreach (Attack a in resultAttacks)
+                        {
+                            if (a.GetTargetId() == uc2.UnitId) tempAttack = a;
+                        }
+                        otherUnit = myBoardState.GetUnit(uc2.UnitId);
+                        resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                        foreach (Attack a in resultAttacks)
+                        {
+                            if (tempAttack != null)
+                            {
+                                if (a.GetName() == "Charge!") tempAttack.AddActivatedAttackId(a.GetId());
+                                else
+                                {
+                                    tempAttack.AddDeactivatedAttackId(a.GetId());
+                                    tempAttack.AddBlockedAttackId(a.GetId());
+                                }
+                            }
+                        }
+                        resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
+                        foreach (Attack a in resultAttacks)
+                        {
+                            if (tempAttack != null)
+                            {
+                                tempAttack.AddDeactivatedAttackId(a.GetId());
+                                tempAttack.AddBlockedAttackId(a.GetId());
+                            }
+                        }
+                        resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                        foreach (Attack a in resultAttacks)
+                        {
+                            if (tempAttack != null)
+                            {
+                                tempAttack.AddDeactivatedAttackId(a.GetId());
+                                tempAttack.AddBlockedAttackId(a.GetId());
+                            }
+                        }
+                    }
+                }
+                if (uc2.UnitTileId == leftAttackTile || uc2.UnitTileId == leftAttackTileSupport)   // adds to central attack, attack  on the left unit, that is activated by this central attack
+                {
+                    otherUnit = myBoardState.GetUnit(uc2.UnitId);
                     if (uc2.UnitType == "Arquebusiers" || uc2.UnitType == "Coustilliers" || uc2.UnitType == "Stradioti" || uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse")
                     {
                         resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
                         if (resultAttacks.Count > 0) tempAttack = resultAttacks[0];
                         else tempAttack = null;
-                        if (tempAttack != null)
+                        resultAttacks = myUnit.GetAdditionalAttacksByArrowId(uc.GetArrowId("central"));
+                        if (resultAttacks.Count > 0) tempAdditionalAttack = resultAttacks[0];
+                        else tempAdditionalAttack = null;
+
+                        if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                        else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("left"));
+                        foreach (Attack a in resultAttacks)
                         {
-                            resultAttacks = myBoardState.GetAttacksByArrowId(uc2.GetArrowId("left"));
-                            foreach (Attack a in resultAttacks)
+                            if (a.GetTargetId() == uc.UnitId && (a.GetName() != "Charge!" || (a.GetName() == "Charge!" && (uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse"))))
                             {
-                                if(a.GetName() == "Counter Attack" || a.GetName() == "Capture") tempAttack.AddActivatedAttackId(a.GetId());
-                                else if(uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse") tempAttack.AddActivatedAttackId(a.GetId());
+                                if (tempAttack != null) tempAttack.AddActivatedAttackId(a.GetId());
+                                if (tempAdditionalAttack != null) tempAdditionalAttack.AddActivatedAttackId(a.GetId());
                             }
                         }
                     }
-                    if (uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") //set deactivated attacks by Landsknechts charge
+                    if ((uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") && uc2.UnitType != "Artillery") //set deactivated attacks by Landsknechts charge
                     {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("left"));
+                        if(uc2.UnitTileId == leftAttackTile) resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("left"));
+                        else resultAttacks = myUnit.GetAdditionalAttacksByArrowId(uc.GetArrowId("left"));
                         if (resultAttacks.Count > 0)
                         {
                             tempAttack = null;
@@ -788,13 +847,13 @@ public class BattleManager : MonoBehaviour {
                             {
                                 if (a.GetName() == "Charge!") tempAttack = a;
                             }
-                            otherUnit = myBoardState.GetUnit(uc2.UnitId);
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
-                            foreach (Attack a in resultAttacks)
+                            if (tempAttack != null)
                             {
-                                if (tempAttack != null)
+                                if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                                else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("left"));
+                                foreach (Attack a in resultAttacks)
                                 {
-                                    if (a.GetName() == "Charge!") tempAttack.AddActivatedAttackId(a.GetId());
+                                    if (a.GetTargetId() == uc.UnitId && a.GetName() == "Charge!") tempAttack.AddActivatedAttackId(a.GetId());
                                     else
                                     {
                                         tempAttack.AddDeactivatedAttackId(a.GetId());
@@ -802,47 +861,65 @@ public class BattleManager : MonoBehaviour {
                                     }
                                 }
                             }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("central"));
                             foreach (Attack a in resultAttacks)
                             {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
+                                tempAttack.AddDeactivatedAttackId(a.GetId());
+                                tempAttack.AddBlockedAttackId(a.GetId());
                             }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("right"));
                             foreach (Attack a in resultAttacks)
                             {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
+                                tempAttack.AddDeactivatedAttackId(a.GetId());
+                                tempAttack.AddBlockedAttackId(a.GetId());
                             }
                         }
                     }
                 }
-                if (uc2.UnitTileId == rightAttackTile) // adds to central attack, attack  on the right unit, that is activated by this central attack
+                if (uc2.UnitTileId == rightAttackTile || uc2.UnitTileId == rightAttackTileSupport) // adds to central attack, attack  on the right unit, that is activated by this central attack
                 {
+                    otherUnit = myBoardState.GetUnit(uc2.UnitId);
                     if (uc2.UnitType == "Arquebusiers" || uc2.UnitType == "Coustilliers" || uc2.UnitType == "Stradioti" || uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse")
                     {
                         resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
                         if (resultAttacks.Count > 0) tempAttack = resultAttacks[0];
                         else tempAttack = null;
-                        if (tempAttack != null)
+                        resultAttacks = myUnit.GetAdditionalAttacksByArrowId(uc.GetArrowId("central"));
+                        if (resultAttacks.Count > 0) tempAdditionalAttack = resultAttacks[0];
+                        else tempAdditionalAttack = null;
+
+                        if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                        else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("right"));
+                        foreach (Attack a in resultAttacks)
                         {
-                            resultAttacks = myBoardState.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                            if (a.GetTargetId() == uc.UnitId && (a.GetName() != "Charge!" || (a.GetName() == "Charge!" && (uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse"))))
+                            {
+                                if (tempAttack != null) tempAttack.AddActivatedAttackId(a.GetId());
+                                if (tempAdditionalAttack != null) tempAdditionalAttack.AddActivatedAttackId(a.GetId());
+                            }
+                        }
+                        if (uc.UnitTileId == 14 || uc.UnitTileId == 15)
+                        {
+                            resultAttacks = myUnit.GetAdditionalAttacksByArrowId(uc.GetArrowId("central"));
+                            if (resultAttacks.Count > 1) tempAdditionalAttack = resultAttacks[1];
+                            else tempAdditionalAttack = null;
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("right"));
                             foreach (Attack a in resultAttacks)
                             {
-                                if (a.GetName() == "Counter Attack" || a.GetName() == "Capture") tempAttack.AddActivatedAttackId(a.GetId());
-                                else if (uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse") tempAttack.AddActivatedAttackId(a.GetId());
+                                if (a.GetTargetId() == uc.UnitId && (a.GetName() != "Charge!" || (a.GetName() == "Charge!" && (uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse"))))
+                                {
+                                    if (tempAdditionalAttack != null) tempAdditionalAttack.AddActivatedAttackId(a.GetId());
+                                }
                             }
                         }
                     }
-                    if (uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") //set deactivated attacks by Landsknechts charge
+                    if ((uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") && uc2.UnitType != "Artillery") //set deactivated attacks by Landsknechts charge
                     {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("right"));
+                        if (uc2.UnitTileId == rightAttackTile) resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("right"));
+                        else resultAttacks = myUnit.GetAdditionalAttacksByArrowId(uc.GetArrowId("right"));
                         if (resultAttacks.Count > 0)
                         {
                             tempAttack = null;
@@ -850,13 +927,13 @@ public class BattleManager : MonoBehaviour {
                             {
                                 if (a.GetName() == "Charge!") tempAttack = a;
                             }
-                            otherUnit = myBoardState.GetUnit(uc2.UnitId);
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
-                            foreach (Attack a in resultAttacks)
+                            if (tempAttack != null)
                             {
-                                if (tempAttack != null)
+                                if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                                else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("right"));
+                                foreach (Attack a in resultAttacks)
                                 {
-                                    if (a.GetName() == "Charge!") tempAttack.AddActivatedAttackId(a.GetId());
+                                    if (a.GetTargetId() == uc.UnitId && a.GetName() == "Charge!") tempAttack.AddActivatedAttackId(a.GetId());
                                     else
                                     {
                                         tempAttack.AddDeactivatedAttackId(a.GetId());
@@ -864,206 +941,78 @@ public class BattleManager : MonoBehaviour {
                                     }
                                 }
                             }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("central"));
                             foreach (Attack a in resultAttacks)
                             {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
+                                tempAttack.AddDeactivatedAttackId(a.GetId());
+                                tempAttack.AddBlockedAttackId(a.GetId());
                             }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("left"));
                             foreach (Attack a in resultAttacks)
                             {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
+                                tempAttack.AddDeactivatedAttackId(a.GetId());
+                                tempAttack.AddBlockedAttackId(a.GetId());
                             }
                         }
                     }
                 }
-                if(uc2.UnitTileId == centralAttackTile) // changes attack strength because of tile g2 unit sits on
+                if((uc2.UnitTileId == centralAttackTile || uc2.UnitTileId == centralAttackTileSupport) && !(uc.UnitTileId == 6 && uc2.UnitTileId == 8) && !(uc.UnitTileId == 8 && uc2.UnitTileId == 6)) // changes attack strength because of tile g2 unit sits on
                 {
                     otherUnit = myBoardState.GetUnit(uc2.UnitId);
-                    resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
+                    if(myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
+                    else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("central"));
                     if (resultAttacks.Count > 0) tempAttack = resultAttacks[0];
                     else tempAttack = null;
                     if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1) tc = GetTile(uc.UnitTileId - 1);
                     else if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) tc = GetTile(uc.UnitTileId + 1);
                     else tc = GetTile(uc.UnitTileId);
                     tempAttack.ChangeDefence(tc.ChangeDefenceStrength(uc.UnitType, uc2.UnitType));
-                    if(uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") //set deactivated attacks by Landsknechts charge
+                    if (resultAttacks.Count > 1)
                     {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
+                        tempAttack = resultAttacks[1];
+                        if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1) tc = GetTile(uc.UnitTileId - 1);
+                        else if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) tc = GetTile(uc.UnitTileId + 1);
+                        else tc = GetTile(uc.UnitTileId);
+                        tempAttack.ChangeDefence(tc.ChangeDefenceStrength(uc.UnitType, uc2.UnitType));
+                    }
+                    if((uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") && uc2.UnitType != "Artillery") //set deactivated attacks by Landsknechts charge
+                    {
+                        if (uc2.UnitTileId == centralAttackTile) resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
+                        else resultAttacks = myUnit.GetAdditionalAttacksByArrowId(uc.GetArrowId("central"));
                         if (resultAttacks.Count > 0)
                         {
                             tempAttack = resultAttacks[0];
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
-                            foreach(Attack a in resultAttacks)
-                            {
-                                tempAttack.AddDeactivatedAttackId(a.GetId());
-                                tempAttack.AddBlockedAttackId(a.GetId());
-                            }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("right"));
                             foreach (Attack a in resultAttacks)
                             {
                                 tempAttack.AddDeactivatedAttackId(a.GetId());
                                 tempAttack.AddBlockedAttackId(a.GetId());
                             }
-                        }
-                    }
-                }
-                if (uc2.UnitTileId == leftAttackTileSupport)   // adds to central attack, attack  on the left unit, that is activated by this central attack
-                {
-                    if (uc2.UnitType == "Arquebusiers" || uc2.UnitType == "Coustilliers" || uc2.UnitType == "Stradioti" || uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse")
-                    {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
-                        if (resultAttacks.Count > 0) tempAttack = resultAttacks[0];
-                        else tempAttack = null;
-                        if (tempAttack != null)
-                        {
-                            resultAttacks = myBoardState.GetAttacksByArrowId(uc2.GetArrowId("left"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (a.GetName() == "Counter Attack" || a.GetName() == "Capture") tempAttack.AddActivatedAttackId(a.GetId());
-                                else if (uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse") tempAttack.AddActivatedAttackId(a.GetId());
-                            }
-                        }
-                    }
-                    if (uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") //set deactivated attacks by Landsknechts charge
-                    {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("left"));
-                        if (resultAttacks.Count > 0)
-                        {
-                            tempAttack = null;
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (a.GetName() == "Charge!") tempAttack = a;
-                            }
-                            otherUnit = myBoardState.GetUnit(uc2.UnitId);
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (tempAttack != null)
-                                {
-                                    if (a.GetName() == "Charge!") tempAttack.AddActivatedAttackId(a.GetId());
-                                    else
-                                    {
-                                        tempAttack.AddDeactivatedAttackId(a.GetId());
-                                        tempAttack.AddBlockedAttackId(a.GetId());
-                                    }
-                                }
-                            }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
-                            }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
-                            }
-                        }
-                    }
-                }
-                if (uc2.UnitTileId == rightAttackTileSupport) // adds to central attack, attack  on the right unit, that is activated by this central attack
-                {
-                    if (uc2.UnitType == "Arquebusiers" || uc2.UnitType == "Coustilliers" || uc2.UnitType == "Stradioti" || uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse")
-                    {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
-                        if (resultAttacks.Count > 0) tempAttack = resultAttacks[0];
-                        else tempAttack = null;
-                        if (tempAttack != null)
-                        {
-                            resultAttacks = myBoardState.GetAttacksByArrowId(uc2.GetArrowId("right"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (a.GetName() == "Counter Attack" || a.GetName() == "Capture") tempAttack.AddActivatedAttackId(a.GetId());
-                                else if (uc2.UnitType == "Landsknechte" || uc2.UnitType == "Suisse") tempAttack.AddActivatedAttackId(a.GetId());
-                            }
-                        }
-                    }
-                    if (uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") //set deactivated attacks by Landsknechts charge
-                    {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("right"));
-                        if (resultAttacks.Count > 0)
-                        {
-                            tempAttack = null;
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (a.GetName() == "Charge!") tempAttack = a;
-                            }
-                            otherUnit = myBoardState.GetUnit(uc2.UnitId);
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (tempAttack != null)
-                                {
-                                    if (a.GetName() == "Charge!") tempAttack.AddActivatedAttackId(a.GetId());
-                                    else
-                                    {
-                                        tempAttack.AddDeactivatedAttackId(a.GetId());
-                                        tempAttack.AddBlockedAttackId(a.GetId());
-                                    }
-                                }
-                            }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
-                            }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
-                            foreach (Attack a in resultAttacks)
-                            {
-                                if (tempAttack != null)
-                                {
-                                    tempAttack.AddDeactivatedAttackId(a.GetId());
-                                    tempAttack.AddBlockedAttackId(a.GetId());
-                                }
-                            }
-                        }
-                    }
-                }
-                if (uc2.UnitTileId == centralAttackTileSupport) // changes attack strength because of tile g2 unit sits on
-                {
-                    otherUnit = myBoardState.GetUnit(uc2.UnitId);
-                    tempAttack = null;
-                    resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("central"));
-                    if (resultAttacks.Count > 0) tempAttack = resultAttacks[0];
-                    else tempAttack = null;
-                    if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1) tc = GetTile(uc.UnitTileId - 1);
-                    else if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) tc = GetTile(uc.UnitTileId + 1);
-                    else tc = GetTile(uc.UnitTileId);
-                    if(tempAttack != null) tempAttack.ChangeDefence(tc.ChangeDefenceStrength(uc.UnitType, uc2.UnitType));
-                    if (uc.UnitType == "Landsknechte" || uc.UnitType == "Suisse") //set deactivated attacks by Landsknechts charge
-                    {
-                        resultAttacks = myUnit.GetAttacksByArrowId(uc.GetArrowId("central"));
-                        if (resultAttacks.Count > 0)
-                        {
-                            tempAttack = resultAttacks[0];
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("left"));
                             foreach (Attack a in resultAttacks)
                             {
                                 tempAttack.AddDeactivatedAttackId(a.GetId());
                                 tempAttack.AddBlockedAttackId(a.GetId());
                             }
-                            resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                        }
+                        if (resultAttacks.Count > 1)
+                        {
+                            tempAttack = resultAttacks[1];
+
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("right"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("right"));
+                            foreach (Attack a in resultAttacks)
+                            {
+                                tempAttack.AddDeactivatedAttackId(a.GetId());
+                                tempAttack.AddBlockedAttackId(a.GetId());
+                            }
+                            if (myUnit.UnitMoved()) resultAttacks = otherUnit.GetAttacksByArrowId(uc2.GetArrowId("left"));
+                            else resultAttacks = otherUnit.GetAdditionalAttacksByArrowId(uc2.GetArrowId("left"));
                             foreach (Attack a in resultAttacks)
                             {
                                 tempAttack.AddDeactivatedAttackId(a.GetId());
@@ -1078,14 +1027,14 @@ public class BattleManager : MonoBehaviour {
         foreach (GameObject g in units)
         {
             uc = g.GetComponent<UnitController>();
-            if (!uc.isPlaced) continue;
+            if (!uc.isPlaced || uc.UnitTileId == 8) continue;
             ac = uc.GetArrowController("left");
             resultAttacks = myBoardState.GetAttacksByArrowId(ac.ArrowId);
             attackList = new List<int>();
             foreach (Attack a in resultAttacks)
             {
-                if (a.GetName() == "Counter Attack" || a.GetName() == "Capture") attackList = myBoardState.GetAttacksActivating(a.GetId()); 
-                else if (a.GetOwner().GetUnitType() == "Landsknechte" || a.GetOwner().GetUnitType() == "Suisse") attackList = myBoardState.GetAttacksActivating(a.GetId());
+                if (a.GetName() == "Counter Attack" || a.GetName() == "Capture") attackList.AddRange(myBoardState.GetAttacksActivating(a.GetId())); 
+                else if (a.GetOwner().GetUnitType() == "Landsknechte" || a.GetOwner().GetUnitType() == "Suisse") attackList.AddRange(myBoardState.GetAttacksActivating(a.GetId()));
             }
             foreach (int i in attackList)
             {
@@ -1096,8 +1045,8 @@ public class BattleManager : MonoBehaviour {
             attackList = new List<int>();
             foreach (Attack a in resultAttacks)
             {
-                if (a.GetName() == "Counter Attack" || a.GetName() == "Capture") attackList = myBoardState.GetAttacksActivating(a.GetId());
-                else if (a.GetOwner().GetUnitType() == "Landsknechte" || a.GetOwner().GetUnitType() == "Suisse") attackList = myBoardState.GetAttacksActivating(a.GetId());
+                if (a.GetName() == "Counter Attack" || a.GetName() == "Capture") attackList.AddRange(myBoardState.GetAttacksActivating(a.GetId()));
+                else if (a.GetOwner().GetUnitType() == "Landsknechte" || a.GetOwner().GetUnitType() == "Suisse") attackList.AddRange(myBoardState.GetAttacksActivating(a.GetId()));
             }
             foreach (int i in attackList)
             {
@@ -1123,12 +1072,15 @@ public class BattleManager : MonoBehaviour {
             defenderArmyId = 2;
         }
         else defenderArmyId = 1;
-        if ((result.attackerStrengthChange < 0 || myBoardState.GetUnit(result.attackerId).morale + result.attackerMoraleChanged <= 0)
-            && (result.defenderStrengthChange < 0 || myBoardState.GetUnit(result.defenderId).morale + result.defenderMoraleChanged <= 0)
-            && myBoardState.GetArmy(attackerArmyId).GetMorale() <= 30
-            && myBoardState.GetArmy(defenderArmyId).GetMorale() <= 30) armyRouteTest = 3;
-        else if ((result.attackerStrengthChange < 0 || myBoardState.GetUnit(result.attackerId).morale + result.attackerMoraleChanged <= 0) && myBoardState.GetArmy(attackerArmyId).GetMorale() <= 30) armyRouteTest = attackerArmyId;
-        else if ((result.defenderStrengthChange < 0 || myBoardState.GetUnit(result.defenderId).morale + result.defenderMoraleChanged <= 0) && myBoardState.GetArmy(defenderArmyId).GetMorale() <= 30) armyRouteTest = defenderArmyId;
+        if (result.defenderId != 0)
+        {
+            if ((result.attackerStrengthChange < 0 || myBoardState.GetUnit(result.attackerId).morale + result.attackerMoraleChanged <= 0)
+                && (result.defenderStrengthChange < 0 || myBoardState.GetUnit(result.defenderId).morale + result.defenderMoraleChanged <= 0)
+                && myBoardState.GetArmy(attackerArmyId).GetMorale() <= 30
+                && myBoardState.GetArmy(defenderArmyId).GetMorale() <= 30) armyRouteTest = 3;
+            else if ((result.attackerStrengthChange < 0 || myBoardState.GetUnit(result.attackerId).morale + result.attackerMoraleChanged <= 0) && myBoardState.GetArmy(attackerArmyId).GetMorale() <= 30) armyRouteTest = attackerArmyId;
+            else if ((result.defenderStrengthChange < 0 || myBoardState.GetUnit(result.defenderId).morale + result.defenderMoraleChanged <= 0) && myBoardState.GetArmy(defenderArmyId).GetMorale() <= 30) armyRouteTest = defenderArmyId;
+        }
         // check if game ended
         winnerId = myBoardState.ChangeState(result);
         if (winnerId != 0) EventManager.RaiseEventGameOver(winnerId);
@@ -1137,7 +1089,6 @@ public class BattleManager : MonoBehaviour {
     private void MakeRouteTest(string closedMode)
     {
         Vector3 testSpot = new Vector3(20.0f, 2.0f, -16.0f);
-
         if (armyRouteTest == 0 || armyRouteTest < 3 && closedMode == "routtest" || ignoreRoutTest)
         {
             EventManager.RaiseEventRouteTestOver("noResult", 0, 0);
@@ -1169,7 +1120,7 @@ public class BattleManager : MonoBehaviour {
         Vector3 testSpot = new Vector3(20.0f, 2.0f, -16.0f);
 
         yield return new WaitForSeconds(1.5f);
-        throwId = Dice.Roll("3d10", diceTexture, testSpot, new Vector3(2.0f, 5.5f + Random.value * 0.5f, 0.0f));
+        throwId = Dice.Roll("3d10", diceTexture, testSpot, new Vector3(2.0f, 6.5f + Random.value * 0.5f, 0.5f));
         while (Dice.rolling)
         {
             yield return null;
@@ -1273,12 +1224,15 @@ public class BattleManager : MonoBehaviour {
         {
             outBoardState = new BoardState(inBoardState);
             outBoardState.ChangeState(sc);
-            if((sc.defenderStrengthChange != 0 || outBoardState.GetUnit(sc.defenderId).morale <= 0) && outBoardState.GetArmyMorale(otherArmyId) < 30)  //defender looses rout test
+            if (sc.defenderId != 0)
             {
-                defenderRoutProbability = routProbabilityTable[outBoardState.GetArmyMorale(otherArmyId)];
-                 attackValue += -500.0f * defenderRoutProbability * sc.changeProbability;
+                if ((sc.defenderStrengthChange != 0 || outBoardState.GetUnit(sc.defenderId).morale <= 0) && outBoardState.GetArmyMorale(otherArmyId) < 30)  //defender looses rout test
+                {
+                    defenderRoutProbability = routProbabilityTable[outBoardState.GetArmyMorale(otherArmyId)];
+                    attackValue += -500.0f * defenderRoutProbability * sc.changeProbability;
+                }
             }
-            if((sc.attackerStrengthChange != 0 || outBoardState.GetUnit(sc.attackerId).morale <= 0) && outBoardState.GetArmyMorale(armyId) < 30) // attacker looses from test
+            if((sc.attackerStrengthChange != 0 || outBoardState.GetUnit(sc.attackerId).morale <= 0) && outBoardState.GetArmyMorale(armyId) < 30) // attacker looses rout test
             {
                 attackerRoutProbability = routProbabilityTable[outBoardState.GetArmyMorale(armyId)];
                 attackValue += 500.0f * attackerRoutProbability * (1 - defenderRoutProbability) * sc.changeProbability;
@@ -1291,23 +1245,24 @@ public class BattleManager : MonoBehaviour {
     private void ComputeBestAttack()
     {
         List<int> avialableAttacks = new List<int>();
-        int bestAttack = 0;
+        int bestAttack = 0, maxDice, diceCount;
         float score, maxScore, minimaxLimit;
 
         maxScore = -1000.0f;
+        maxDice = 0;
         switch(GameManagerController.Instance.difficultyLevel)
         {
             case GameManagerController.diffLevelEnum.easy:
-                minimaxLimit = 5.0f;
+                minimaxLimit = 1.0f;
                 break;
             case GameManagerController.diffLevelEnum.medium:
-                minimaxLimit = 10.0f;
+                minimaxLimit = 5.0f;
                 break;
             case GameManagerController.diffLevelEnum.hard:
-                minimaxLimit = 15.0f;
+                minimaxLimit = 10.0f;
                 break;
             default:
-                minimaxLimit = 10.0f;
+                minimaxLimit = 5.0f;
                 break;
         }
         avialableAttacks = myBoardState.GetPossibleAttacks(turnOwnerId);
@@ -1315,11 +1270,23 @@ public class BattleManager : MonoBehaviour {
         {
             foreach (int i in avialableAttacks)
             {
-                score = -ExpectiMinMaxAttack(new BoardState(myBoardState), i, minimaxLimit, turnOwnerId);
-                if (score > maxScore)
+                if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy)
                 {
-                    maxScore = score;
-                    bestAttack = i;
+                    diceCount = myBoardState.GetAttackById(i).GetAttackDiceNumber();
+                    if (diceCount > maxDice)
+                    {
+                        maxDice = diceCount;
+                        bestAttack = i;
+                    }
+                }
+                else
+                {
+                    score = -ExpectiMinMaxAttack(new BoardState(myBoardState), i, minimaxLimit, turnOwnerId);
+                    if (score > maxScore)
+                    {
+                        maxScore = score;
+                        bestAttack = i;
+                    }
                 }
             }
             if (bestAttack > 0)
@@ -1432,7 +1399,7 @@ public class BattleManager : MonoBehaviour {
             uc = g.GetComponent<UnitController>();
             if (uc.UnitId == uId) break;
         }
-        if (uc == null) return 0;
+        if (uc == null || uc.UnitTileId == 8) return 0;
         else
         {
             if (uc.ArmyId == 1) opposingTileId = uc.UnitTileId - 2;

@@ -62,7 +62,10 @@ public class PanZoom : MonoBehaviour
 
     private void ZoomOutAfterRoutTest(string resultDescription, int result, int morale)
     {
-        ZoomOut(new StateChange());
+        if (resultDescription != "noResult")
+        {
+            ZoomOut(new StateChange());
+        }
     }
 
    /* private void TurnEnd()

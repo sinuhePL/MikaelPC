@@ -26,7 +26,7 @@ public class ArrowController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if ((_isArrowActive || isShownAsCounterAttack) && !IsPointerOverGameObject())
+        if ((_isArrowActive/* || isShownAsCounterAttack*/) && !IsPointerOverGameObject())
         {
             EventManager.RaiseEventOnAttackClicked(_arrowId, !_isArrowActive);
         }

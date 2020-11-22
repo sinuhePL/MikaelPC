@@ -223,4 +223,10 @@ public class SkirmishAttack : Attack
         }
         return (Attack)nca;
     }
+
+    public override void Activate()
+    {
+        //Assert.IsFalse(isActiveState);
+        if (isBlocked == 0 && !owner.UnitMoved()) isActiveState = true;
+    }
 }

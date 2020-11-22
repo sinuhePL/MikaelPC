@@ -12,6 +12,7 @@ public class PictureController : MonoBehaviour
     [SerializeField] private Sprite artillery;
     [SerializeField] private Sprite stradioti;
     [SerializeField] private Sprite coustilliers;
+    [SerializeField] private Sprite garrison;
     private Image myImage;
 
     private void UnitClicked(int unitId)
@@ -46,6 +47,9 @@ public class PictureController : MonoBehaviour
                 case "Coustilliers":
                     myImage.sprite = coustilliers;
                     break;
+                case "Garrison":
+                    myImage.sprite = garrison;
+                    break;
             }
         }
     }
@@ -77,6 +81,9 @@ public class PictureController : MonoBehaviour
                 break;
             case "Coustilliers":
                 myImage.sprite = coustilliers;
+                break;
+            case "Garrison":
+                myImage.sprite = garrison;
                 break;
         }
     }

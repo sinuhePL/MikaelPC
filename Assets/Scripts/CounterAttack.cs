@@ -10,29 +10,29 @@ public class CounterAttack : Attack
         switch (aType)
         {
             case "Gendarmes":
-                attackDiceNumber = 2;
+                attackDiceNumber = 4;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 5;
                 break;
             case "Landsknechte":
                 attackDiceNumber = 2;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 10;
+                specialOutcomeType = 2;
                 break;
             case "Suisse":
                 attackDiceNumber = 2;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 10;
+                specialOutcomeType = 1;
                 break;
             case "Imperial Cavalery":
-                attackDiceNumber = 2;
+                attackDiceNumber = 4;
                 defenceDiceNumber = 0;
                 specialOutcomeType = 8;
                 break;
             case "Arquebusiers":
                 attackDiceNumber = 5;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 7;
+                specialOutcomeType = 5;
                 break;
             case "Artillery":
                 attackDiceNumber = 3;
@@ -60,53 +60,27 @@ public class CounterAttack : Attack
         {
             if (specialOutcomeType == 1)
             {
-                sc.attackerMoraleChanged = 0;
-                sc.attackerStrengthChange = 0;
+                sc.defenderMoraleChanged = -1;
             }
             if (specialOutcomeType == 2)
             {
-                sc.attackerMoraleChanged = 0;
-                sc.attackerStrengthChange = 0;
-                sc.defenderMoraleChanged--;
+                sc.defenderMoraleChanged = -2;
             }
             if (specialOutcomeType == 3)
             {
-                sc.attackerMoraleChanged = 1;
-                sc.attackerStrengthChange = 0;
+                sc.defenderStrengthChange = -1;
             }
             if (specialOutcomeType == 4)
             {
-                sc.attackerMoraleChanged = 0;
-                sc.attackerStrengthChange = 0;
-                sc.defenderStrengthChange--;
+                sc.defenderStrengthChange = -2;
             }
             if (specialOutcomeType == 5)
             {
-                sc.attackerMoraleChanged++;
-                sc.defenderMoraleChanged--;
+                sc.attackerMoraleChanged = 1;
             }
             if (specialOutcomeType == 6)
             {
-                sc.defenderMoraleChanged = sc.defenderMoraleChanged - 2;
-            }
-            if (specialOutcomeType == 7)
-            {
-                sc.attackerMoraleChanged++;
-            }
-            if (specialOutcomeType == 8)
-            {
-                sc.defenderStrengthChange--;
-            }
-            if (specialOutcomeType == 9)
-            {
-                sc.attackerMoraleChanged = 1;
-                sc.attackerStrengthChange = 0;
-                sc.defenderMoraleChanged--;
-
-            }
-            if (specialOutcomeType == 10)
-            {
-                sc.defenderMoraleChanged--;
+                sc.attackerMoraleChanged = 2;
             }
         }
         sc.specialOutcomeDescription = GetSpecialOutcomeDescription();
@@ -120,16 +94,12 @@ public class CounterAttack : Attack
         }
         else
         {
-            if (specialOutcomeType == 1) return "Defender loses hits";
-            if (specialOutcomeType == 2) return "Defender loses hits and 1 morale";
-            if (specialOutcomeType == 3) return "Defender loses hits, attacker gains 1 morale";
-            if (specialOutcomeType == 4) return "Defender loses hits and 1 strength";
-            if (specialOutcomeType == 5) return "Attacker gains 1 morale, defender loses 1 morale";
-            if (specialOutcomeType == 6) return "Defender loses 2 morale";
-            if (specialOutcomeType == 7) return "Attacker gains 1 morale";
-            if (specialOutcomeType == 8) return "Defender loses 1 strength";
-            if (specialOutcomeType == 9) return "Attacker gains 1 morale, defender loses 1 morale and hits";
-            if (specialOutcomeType == 10) return "Defender loses 1 morale";
+            if (specialOutcomeType == 1) return "Defender loses 1 morale";
+            if (specialOutcomeType == 2) return "Defender loses 2 morale";
+            if (specialOutcomeType == 3) return "Defender loses 1 strength";
+            if (specialOutcomeType == 4) return "Defender loses 2 strength";
+            if (specialOutcomeType == 5) return "Attacker gains 1 morale";
+            if (specialOutcomeType == 6) return "Attacker gains 2 morale";
         }
         return "";
     }

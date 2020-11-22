@@ -13,6 +13,7 @@ public class CaptionController : MonoBehaviour
     [SerializeField] private Sprite artillery;
     [SerializeField] private Sprite stradioti;
     [SerializeField] private Sprite coustilliers;
+    [SerializeField] private Sprite garrison;
     private Image myImage;
     // Start is called before the first frame update
 
@@ -47,6 +48,9 @@ public class CaptionController : MonoBehaviour
                     break;
                 case "Coustilliers":
                     myImage.sprite = coustilliers;
+                    break;
+                case "Garrison":
+                    myImage.sprite = garrison;
                     break;
             }
         }
@@ -89,6 +93,9 @@ public class CaptionController : MonoBehaviour
                 break;
             case "Coustilliers":
                 myImage.sprite = coustilliers;
+                break;
+            case "Garrison":
+                myImage.sprite = garrison;
                 break;
         }
     }

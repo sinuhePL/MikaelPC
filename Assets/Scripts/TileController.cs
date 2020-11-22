@@ -344,7 +344,7 @@ public class TileController : MonoBehaviour
         else
         {
             tileInfluenceDescription.gameObject.SetActive(false);
-            //tileTypeText.gameObject.SetActive(false);
+            tileTypeText.gameObject.SetActive(false);
         }
     }
 
@@ -672,13 +672,15 @@ public class TileController : MonoBehaviour
         {
             if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.easy)
             {
-                if (uType == "Coustilliers" || uType == "Stradioti") score += 10;
-                if (tileType == "Hill") score += 10;    // better because protected from Heavy cavalry
-                if (tileType == "Town") score -= 10;    // worse because easy target for artillery
-                if (tileType == "Forest" && uType == "Arquebusiers") score -= 10;
+                if (tileId == 12 && uType == "Artillery") score -= 30;
+                if (uType == "Coustilliers" || uType == "Stradioti") score -= 10;
+                if (tileType == "Hill" && uType == "Arquebusiers") score += 10;    // better because protected from Heavy cavalry
+                if (tileType == "Town" && (uType == "Landsknechte" || uType == "Suisse")) score -= 10;    // worse because easy target for artillery
+                if (tileType == "Forest" && uType == "Arquebusiers") score += 10;
             }
             else if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.medium || GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard)
             {
+                if (tileId == 12 && uType == "Artillery") score -= 10;
                 if (uType == "Coustilliers" || uType == "Stradioti") score += 10;
                 if (tileType == "Hill") score -= 10;    // better because protected from Heavy cavalry
                 if (tileType == "Town") score += 10;    // worse because easy target for artillery
@@ -704,6 +706,7 @@ public class TileController : MonoBehaviour
                 }
                 if (GameManagerController.Instance.difficultyLevel == GameManagerController.diffLevelEnum.hard) // Heavy cavalry shoudn't be placed on both end of deployment zone
                 {
+                    if (tileId == 12 && uType == "Artillery") score += 10;
                     if (uType == "Imperial Cavalery" || uType == "Gendarmes")
                     {
                         if (tileId < 2 * BattleManager.Instance.boardHeight || tileId > BattleManager.Instance.boardHeight * BattleManager.Instance.boardWidth - 2 * BattleManager.Instance.boardHeight) score += 10;

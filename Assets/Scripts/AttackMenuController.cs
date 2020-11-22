@@ -35,9 +35,6 @@ public class AttackMenuController : MonoBehaviour
             mySequence.Append(transform.DOMoveX(dummy.transform.position.x, 0.3f).SetEase(Ease.InBack));
             mySequence.Join(transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack));
         }
-        mySequence.Append(transform.DOMoveX(510.0f, 0.3f).SetEase(Ease.OutBack));
-        mySequence.Join(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
-        isVisible = true;
         tempAttacks = BattleManager.Instance.GetAttacksByArrowId(idArrow);
         tempAttack = null;
         foreach(Attack a in tempAttacks)
@@ -45,6 +42,9 @@ public class AttackMenuController : MonoBehaviour
             if (a.IsActive()) tempAttack = a;
         }
         if (tempAttack == null) return;
+        mySequence.Append(transform.DOMoveX(510.0f, 0.3f).SetEase(Ease.OutBack));
+        mySequence.Join(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
+        isVisible = true;
         an = tempAttack.GetName();
         attackNameText.text = an;
         if (an == "Aim")
@@ -64,6 +64,20 @@ public class AttackMenuController : MonoBehaviour
         else if (an == "Capture")
         {
             attackerText.text = tempAttack.GetSpecialOutcomeDescription();
+            attackerText.alignment = TextAnchor.UpperCenter;
+            attackerText.fontSize = 25;
+            colonText.text = "";
+            defenderText.text = "";
+            die1Image.enabled = false;
+            die2Image.enabled = false;
+            starImage.enabled = false;
+            attackDiceNumberText.text = "";
+            starText.text = "";
+            defenceDiceNumberText.text = "";
+        }
+        else if(an == "Move")
+        {
+            attackerText.text = "Move Rear Guard to battlefield";
             attackerText.alignment = TextAnchor.UpperCenter;
             attackerText.fontSize = 25;
             colonText.text = "";

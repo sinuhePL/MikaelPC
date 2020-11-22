@@ -50,7 +50,8 @@ public class BoardState
         result = new List<Attack>();
         foreach (Unit u in units)
         {
-            result.AddRange(u.GetAttacksByArrowId(arrowId)); 
+            result.AddRange(u.GetAttacksByArrowId(arrowId));
+            result.AddRange(u.GetAdditionalAttacksByArrowId(arrowId));
         }
         return result;
     }
@@ -158,11 +159,52 @@ public class BoardState
 
     public int ChangeState(StateChange change)  // zmienia stan planszy zgodnie z definicją zmiany
     {
-        Unit u, u2, u3;
+        Unit u, u2;
         KeyField kf;
         Attack a;
         int army1ActiveCount, army2ActiveCount, oldKeyFieldOwner = 0, unitToMove = 0, tempUnitId, opposingUnitId;
-    
+        // deactivated side attacks not used this turn
+        foreach (Unit un in units)
+        {
+            un.DeactivateSideAttacks();
+        }
+        // activates and deactivates attacks
+        if (change.activatedAttacks.Count > 0)
+        {
+            foreach (Unit un in units)
+            {
+                foreach (int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+                {
+                    if (un.UnitMoved())
+                    {
+                        if(change.defenderId == un.GetUnitId()) un.UnblockAttack(i, change.attackerId);
+                        un.ActivateAttack(i);
+                    }
+                }
+            }
+        }
+        if (change.deactivatedAttacks.Count > 0)
+        {
+            foreach (Unit un in units)
+            {
+                foreach (int i in change.deactivatedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+                {
+                    un.DeactivateAttack(i);
+                }
+            }
+        }
+        //blocks attacks
+        if (change.blockedAttacks.Count > 0)
+        {
+            foreach (Unit un in units)
+            {
+                foreach (int i in change.blockedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
+                {
+                    un.BlockAttack(i, change.attackerId);
+                }
+            }
+        }
+
         // wprowadza rezultat ataku do oddziału atakującego
         u = GetUnit(change.attackerId);
         // increase morale of heavy cavalry neighbours after killing enemy squad
@@ -176,11 +218,15 @@ public class BoardState
         unitToMove = u.ChangeStrength(change.attackerStrengthChange);
         if (!u.IsAlive)
         {
+            foreach (Unit un in units)
+            {
+                un.UnblockAttacks(u.GetUnitId());
+            }
             tempUnitId = u.GetNotBlockedTarget();
             if(tempUnitId != 0)
             {
                 u2 = GetUnit(tempUnitId);
-                u2.UnblockAttacks();    // applies to pikeman targets
+                u2.UnblockAttacks(u2.GetUnitId());    // applies to pikeman targets
             }
             DeactivateAttacksOnUnit(u.GetUnitId());
             if (unitToMove != 0)
@@ -188,8 +234,6 @@ public class BoardState
                 u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                 u2.MoveToFrontLine();
                 PromoteAttacksOnUnit(unitToMove);
-                u2 = GetUnit(change.defenderId);    // unit that is opposite of killed unit
-                //DeleteAttacksOnUnit(u.GetUnitId());
             }
             else
             {
@@ -203,11 +247,15 @@ public class BoardState
             unitToMove = u.ChangeMorale(change.attackerMoraleChanged);
             if (!u.IsAlive)
             {
+                foreach (Unit un in units)
+                {
+                    un.UnblockAttacks(u.GetUnitId());
+                }
                 tempUnitId = u.GetNotBlockedTarget();
                 if (tempUnitId != 0)
                 {
                     u2 = GetUnit(tempUnitId);
-                    u2.UnblockAttacks();    // applies to pikeman targets
+                    u2.UnblockAttacks(u2.GetUnitId());    // applies to pikeman targets
                 }
                 DeactivateAttacksOnUnit(u.GetUnitId());
                 if (unitToMove != 0)
@@ -215,14 +263,12 @@ public class BoardState
                     u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
                     PromoteAttacksOnUnit(unitToMove);
-                    u2 = GetUnit(change.defenderId);
-                    //DeleteAttacksOnUnit(u.GetUnitId());
                 }
                 else
                 {
                     opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.attackerId);
                     u2 = GetUnit(opposingUnitId);
-                    u2.ActivateOtherAttacks(change.attackerId);
+                    if(u2.GetTileId() != 6 && u2.GetTileId() != 8)u2.ActivateOtherAttacks(change.attackerId);
                 }
             }
         }
@@ -246,60 +292,36 @@ public class BoardState
             }
         }
         // wprowadza rezultat ataku do oddziału zaatakowanego
-        u = GetUnit(change.defenderId);
-        // increase morale of heavy cavalry neighbours after killing enemy squad
-        if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && change.attackerStrengthChange < 0)
+        if (change.defenderId != 0)
         {
-            u2 = GetUnitByTileId(u.GetTileId() + BattleManager.Instance.boardHeight);
-            if (u2 != null) u2.ChangeMorale(1);
-            u2 = GetUnitByTileId(u.GetTileId() - BattleManager.Instance.boardHeight);
-            if (u2 != null) u2.ChangeMorale(1);
-        }
-        unitToMove = u.ChangeStrength(change.defenderStrengthChange);
-        if (!u.IsAlive)
-        {
-            tempUnitId = u.GetNotBlockedTarget();
-            if (tempUnitId != 0)
+            u = GetUnit(change.defenderId);
+            // increase morale of heavy cavalry neighbours after killing enemy squad
+            if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && change.attackerStrengthChange < 0)
             {
-                u2 = GetUnit(tempUnitId);
-                u2.UnblockAttacks();    // applies to pikeman targets
+                u2 = GetUnitByTileId(u.GetTileId() + BattleManager.Instance.boardHeight);
+                if (u2 != null) u2.ChangeMorale(1);
+                u2 = GetUnitByTileId(u.GetTileId() - BattleManager.Instance.boardHeight);
+                if (u2 != null) u2.ChangeMorale(1);
             }
-            DeactivateAttacksOnUnit(u.GetUnitId());
-            if (unitToMove != 0)
-            {
-                u2 = GetUnit(unitToMove);   // unit that moves from second to first line
-                u2.MoveToFrontLine();
-                PromoteAttacksOnUnit(unitToMove);
-                u2 = GetUnit(change.attackerId);
-                //DeleteAttacksOnUnit(u.GetUnitId());
-            }
-            else
-            {
-                opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.defenderId);
-                u2 = GetUnit(opposingUnitId);
-                u2.ActivateOtherAttacks(change.defenderId);
-            }
-        }
-        else
-        {
-            unitToMove = u.ChangeMorale(change.defenderMoraleChanged);
+            unitToMove = u.ChangeStrength(change.defenderStrengthChange);
             if (!u.IsAlive)
             {
+                foreach (Unit un in units)
+                {
+                    un.UnblockAttacks(u.GetUnitId());
+                }
                 tempUnitId = u.GetNotBlockedTarget();
                 if (tempUnitId != 0)
                 {
                     u2 = GetUnit(tempUnitId);
-                    u2.UnblockAttacks();    // applies to pikeman targets
+                    u2.UnblockAttacks(u2.GetUnitId());    // applies to pikeman targets
                 }
                 DeactivateAttacksOnUnit(u.GetUnitId());
                 if (unitToMove != 0)
                 {
                     u2 = GetUnit(unitToMove);   // unit that moves from second to first line
                     u2.MoveToFrontLine();
-                    tempUnitId = u2.GetUnitId();
                     PromoteAttacksOnUnit(unitToMove);
-                    u2 = GetUnit(change.attackerId);
-                    //DeleteAttacksOnUnit(u.GetUnitId());
                 }
                 else
                 {
@@ -308,64 +330,53 @@ public class BoardState
                     u2.ActivateOtherAttacks(change.defenderId);
                 }
             }
-        }
-        if (change.keyFieldChangeId != 0)
-        {
-            if(oldKeyFieldOwner != 0)
+            else
             {
-                foreach (Unit loopUnit in units)
+                unitToMove = u.ChangeMorale(change.defenderMoraleChanged);
+                if (!u.IsAlive)
                 {
-                    if (loopUnit.GetArmyId() == oldKeyFieldOwner)
+                    foreach (Unit un in units)
                     {
-                        a = null;
-                        a = loopUnit.GetAttackOnKeyField(change.keyFieldChangeId);
-                        if (a != null && a.GetName() != "Capture" && a.GetName() != "Aim")
+                        un.UnblockAttacks(u.GetUnitId());
+                    }
+                    tempUnitId = u.GetNotBlockedTarget();
+                    if (tempUnitId != 0)
+                    {
+                        u2 = GetUnit(tempUnitId);
+                        u2.UnblockAttacks(u2.GetUnitId());    // applies to pikeman targets
+                    }
+                    DeactivateAttacksOnUnit(u.GetUnitId());
+                    if (unitToMove != 0)
+                    {
+                        u2 = GetUnit(unitToMove);   // unit that moves from second to first line
+                        u2.MoveToFrontLine();
+                        PromoteAttacksOnUnit(unitToMove);
+                    }
+                    else
+                    {
+                        opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.defenderId);
+                        u2 = GetUnit(opposingUnitId);
+                        u2.ActivateOtherAttacks(change.defenderId);
+                    }
+                }
+            }
+            if (change.keyFieldChangeId != 0)
+            {
+                if (oldKeyFieldOwner != 0)
+                {
+                    foreach (Unit loopUnit in units)
+                    {
+                        if (loopUnit.GetArmyId() == oldKeyFieldOwner)
                         {
-                            a.keyFieldTaken = false;
-                            a.ChangeAttack(-1);
+                            a = null;
+                            a = loopUnit.GetAttackOnKeyField(change.keyFieldChangeId);
+                            if (a != null && a.GetName() != "Capture" && a.GetName() != "Aim")
+                            {
+                                a.keyFieldTaken = false;
+                                a.ChangeAttack(-1);
+                            }
                         }
                     }
-                }
-            }
-        }
-        // deactivated side attacks not used this turn
-        foreach(Unit un in units)
-        {
-            un.DeactivateSideAttacks();
-        }
-        // activates and deactivates attacks
-        if (change.activatedAttacks.Count > 0)
-        {
-            foreach (Unit un in units)
-            {
-                foreach (int i in change.activatedAttacks)   // przesyła wszystkie aktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
-                {
-                    if (un.UnitMoved())
-                    {
-                        un.UnblockAttack(i);
-                        un.ActivateAttack(i);
-                    }
-                }
-            }
-        }
-        if (change.deactivatedAttacks.Count > 0)
-        {
-            foreach (Unit un in units)
-            {
-                foreach (int i in change.deactivatedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
-                {
-                    un.DeactivateAttack(i);
-                }
-            }
-        }
-        //blocks attacks
-        if (change.blockedAttacks.Count > 0)
-        {
-            foreach (Unit un in units)
-            {
-                foreach (int i in change.blockedAttacks) // przesyła wszystkie deaktywowane ataki do klasy jednostki, jednostka odrzuci ataki do niej nienależące
-                {
-                    un.BlockAttack(i);
                 }
             }
         }

@@ -14,6 +14,7 @@ public class UnitDescriptionController : MonoBehaviour
     [SerializeField] private Sprite artillerySprite;
     [SerializeField] private Sprite stradiotiSprite;
     [SerializeField] private Sprite coustilliersSprite;
+    [SerializeField] private Sprite garrisonSprite;
     [SerializeField] private Sprite suisseCaption;
     [SerializeField] private Sprite gendarmesCaption;
     [SerializeField] private Sprite landsknechtsCaption;
@@ -22,6 +23,7 @@ public class UnitDescriptionController : MonoBehaviour
     [SerializeField] private Sprite artilleryCaption;
     [SerializeField] private Sprite stradiotiCaption;
     [SerializeField] private Sprite coustilliersCaption;
+    [SerializeField] private Sprite garrisonCaption;
     [SerializeField] private Image unitImage;
     [SerializeField] private Image unitCaption;
     [SerializeField] private Text unitDescription;
@@ -72,13 +74,13 @@ public class UnitDescriptionController : MonoBehaviour
                 unitImage.sprite = landsknechtsSprite;
                 unitCaption.sprite = landsknechtsCaption;
                 unitDescription.text = "    The Landsknechte were German-speaking mercenaries, consisting predominantly of pikemen and supporting foot soldiers, who became an important military force in early modern Europe. Their front line was formed by doppelsöldner, renowned for their use of arquebus and zweihänder in the early modern period. They formed the bulk of the Imperial Army (Holy Roman Empire) from the late 1400s to the early 1600s.";
-                unitRules.text = "- Good defence againt cavalry.\n- Disables enemy attacks targeting other units.";
+                unitRules.text = "- Good defence againt cavalry.\n- Disables enemy attacks targeting other units.\n- Good attack against arquebusiers.";
                 break;
             case "Suisse":
                 unitImage.sprite = suisseSprite;
                 unitCaption.sprite = suisseCaption;
                 unitDescription.text = "    The Suisse were considered the best mercenery infrantry during late Medieval Age. They formed up into three dense columns, up to eight thousand men strong, for an attack. Each column was composed of pikemen, carrying their pikes at shoulder height as they advanced, with halberdiers and double-handed swordsmen in the center. The key to victory, the Swiss believed, was to advance, regardless of cost, regardless of obstacles.";
-                unitRules.text = "- Good defence againt cavalry.\n- Disables enemy attacks targeting other units.";
+                unitRules.text = "- Good defence againt cavalry.\n- Disables enemy attacks targeting other units.\n- Good attack against arquebusiers.";
                 break;
             case "Imperial Cavalery":
                 unitImage.sprite = imperialCavalerySprite;
@@ -96,19 +98,25 @@ public class UnitDescriptionController : MonoBehaviour
                 unitImage.sprite = artillerySprite;
                 unitCaption.sprite = artilleryCaption;
                 unitDescription.text = "    Cannons appeared in Europe in 14th century, by the 16th century they were made in a great variety of lengths and bore diameters but field Artillery was still young invention during battle of Pavia. Used for the first time by Charles VIII of France in 1494 during his italian campaign. Cannons where placed on wooden carts pulled by horses and oxes. While very slow and with low fire rate field artillery proved useful on battlefields during Italian Wars (1494 - 1529). ";
-                unitRules.text = "- Effective against Landsknechts and Suisse.\n- Good attack against targets in buildings.\n- Weak defence against cavalery.\n- Can change attack target.";
+                unitRules.text = "- Effective against Landsknechts and Suisse.\n- Good attack against targets in buildings.\n- Weak defence against light cavalery.\n- Can change attack target.\n- Can't capture key fields.";
                 break;
             case "Stradioti":
                 unitImage.sprite = stradiotiSprite;
                 unitCaption.sprite = stradiotiCaption;
                 unitDescription.text = "    The stradioti or stratioti were mercenary units from the Balkans recruited mainly by states of southern and central Europe. The stradioti were pioneers of light cavalry tactics during renaissance era. They employed hit-and-run tactics, ambushes, feigned retreats and other complex maneuvers. In some ways, these tactics echoed those of the Ottoman sipahis and akinci. They had some notable successes also against French heavy cavalry during the Italian Wars";
-                unitRules.text = "- Can attack from second line.\n- Good attack against arquebusiers and artillery units.\n- Counterattack captures key points.\n- Weak defence against Imperial Gendarmes";
+                unitRules.text = "- Can attack from second line.\n- Good attack against artillery units.\n- Counterattack captures key points.\n- Weak defence against Imperial Gendarmes";
                 break;
             case "Coustilliers":
                 unitImage.sprite = coustilliersSprite;
                 unitCaption.sprite = coustilliersCaption;
                 unitDescription.text = "    The coustillier (also coutillier, coutilier) was a title of a low-ranking professional soldier in Medieval French armies. Since mid 15th century coustelliers were a lightly armoured horseman.  A French coutilier of 1446 was equipped with a helmet, leg armour, a haubergeon, jack or brigandine, a dagger, sword and either a demilance or a voulge. Although unable to stand up against heavy cavalry in battle, these soldiers made excellent skirmishers, raiders and scouts.";
-                unitRules.text = "- Can attack from second line.\n- Good attack against arquebusiers and artillery units.\n- Counterattack captures key points.\n- Weak defence against Imperial Cavalery";
+                unitRules.text = "- Can attack from second line.\n- Good attack against artillery units.\n- Counterattack captures key points.\n- Weak defence against Imperial Cavalery";
+                break;
+            case "Garrison":
+                unitImage.sprite = garrisonSprite;
+                unitCaption.sprite = garrisonCaption;
+                unitDescription.text = "    During battle of Pavia, it's garrison was 9000 men strong, well equipped and prepared for long siege. Before battle garrison managed to repell two french assaults and the only concern of its commander was paying wages - garrison consisted mainly of mercenaries whom Antonio de Leyva was able to pay only by melting the church plates.";
+                unitRules.text = " - Good defence againt cavalry.\n - Disables enemy attacks targeting other units.\n - Weak attack";
                 break;
         }
         switch(commander)
@@ -142,6 +150,12 @@ public class UnitDescriptionController : MonoBehaviour
                 break;
             case "Pescara":
                 unitCommander.text = "    Fernando Francesco d'Ávalos, 5th marquis of Pescara (1489 – 1525), was an Italian condottiero of Aragonese extraction. He was the chief commander of the Habsburg armies of Charles V in Italy during italian wars. ";
+                break;
+            case "de Leyva":
+                unitCommander.text = "    Antonio de Leyva, Duke of Terranova, Prince of Ascoli (1480–1536) was a Spanish general during the Italian Wars. He commanded Pavia during the siege of the city by Francis I of France, and took part in the Battle of Pavia in 1525.";
+                break;
+            case "d'Alencon":
+                unitCommander.text = "    Charles IV of Alençon,  Duke of Alençon etc. (1489 – 1525) As first prince of the blood, Charles was a prominent figure in the early part of Francis I (his brother-in-law) reign. He commanded rear guard during battle of Pavia.";
                 break;
             case "":
                 unitCommander.text = "    Unknown";

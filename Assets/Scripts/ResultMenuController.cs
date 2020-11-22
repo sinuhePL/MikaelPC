@@ -47,7 +47,8 @@ public class ResultMenuController : MonoBehaviour
         defenceText.rectTransform.sizeDelta = new Vector2(386.0f, 71.0f);
         attackResultText.rectTransform.sizeDelta = new Vector2(226.0f, 96.0f);
         attackResultText.fontSize = 40;
-        attackText.text = BattleManager.Instance.GetArmyName(result.attackerId) + ":";
+        if (result.attackerId != 0) attackText.text = BattleManager.Instance.GetArmyName(result.attackerId) + ":";
+        else attackText.text = "";
         Line2.gameObject.SetActive(true);
         attackResultText.text = "";
         attackerArmyId = BattleManager.Instance.turnOwnerId;
@@ -72,7 +73,8 @@ public class ResultMenuController : MonoBehaviour
         {
             attackResultText.text += "\n+1 morale for neighbours";
         }
-        defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":";
+        if (result.defenderId != 0) defenceText.text = BattleManager.Instance.GetArmyName(result.defenderId) + ":";
+        else defenceText.text = "";
         defenceResultText.text = "";
         defenderRoutText.text = "";
         if (result.defenderStrengthChange != 0)
@@ -85,10 +87,13 @@ public class ResultMenuController : MonoBehaviour
             defenceResultText.text += "\nMorale: " + result.defenderMoraleChanged.ToString();
             if (BattleManager.Instance.GetUnit(result.defenderId).morale + result.defenderMoraleChanged <= 0) defenderRoutText.text = "Rout test imminent!";
         }
-        u = BattleManager.Instance.GetUnit(result.defenderId);
-        if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && result.attackerStrengthChange < 0)
+        if (result.defenderId != 0)
         {
-            defenceResultText.text += "\n+1 morale for neighbours";
+            u = BattleManager.Instance.GetUnit(result.defenderId);
+            if ((u.GetUnitType() == "Gendarmes" || u.GetUnitType() == "Imperial Cavalery") && result.attackerStrengthChange < 0)
+            {
+                defenceResultText.text += "\n+1 morale for neighbours";
+            }
         }
         endPosition = new Vector3(Screen.width/2, Screen.height/2);
         mySequence.Append(transform.DOMove(endPosition, 0.01f));

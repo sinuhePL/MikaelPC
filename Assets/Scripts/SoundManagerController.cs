@@ -54,9 +54,10 @@ public class SoundManagerController : MonoBehaviour
     {
         Attack at;
         Unit un;
-        if (GameManagerController.Instance.isSoundEnabled)
+
+        at = BattleManager.Instance.GetAttackById(a);
+        if (GameManagerController.Instance.isSoundEnabled && at.GetName() != "Move")
         {
-            at = BattleManager.Instance.GetAttackById(a);
             un = at.GetOwner();
             if(un.GetUnitType() == "Landsknechte" || un.GetUnitType() == "Suisse") sfxAudioSource.PlayOneShot(pikemanAttackSound, GameManagerController.Instance.soundLevel*0.5f);
             if (un.GetUnitType() == "Arquebusiers") sfxAudioSource.PlayOneShot(arquebusiersAttackSound, GameManagerController.Instance.soundLevel*0.5f);

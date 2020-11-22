@@ -11,7 +11,7 @@ public abstract class Attack
     protected bool isForward;
     //protected Unit target;
     protected bool isActiveState;
-    protected bool isBlocked;   // attack may be blocked by landsknechts/swiss
+    protected int isBlocked;   // attack may be blocked by landsknechts/swiss - blocking unit id
     protected int armyId;
     protected Unit owner;
     protected List<int> activatesAttacks;
@@ -84,7 +84,7 @@ public abstract class Attack
         arrowId = arrId;
         isActiveState = state;
         isForward = false;
-        isBlocked = false;
+        isBlocked = 0;
         armyId = army;
         owner = o;
         activatesAttacks = new List<int>();
@@ -116,7 +116,7 @@ public abstract class Attack
     public virtual void Activate()
     {
         //Assert.IsFalse(isActiveState);
-        if(!isBlocked) isActiveState = true;
+        if(isBlocked == 0) isActiveState = true;
     }
 
     public virtual void Deactivate()
@@ -136,17 +136,23 @@ public abstract class Attack
 
     public bool IsBlocked()
     {
-        return isBlocked;
+        if (isBlocked == 0) return false;
+        else return true;
     }
 
-    public void Block()
+    public void Block(int blockerId)
     {
-        isBlocked = true;
+        isBlocked = blockerId;
     }
 
     public void UnBlock()
     {
-        isBlocked = false;
+        isBlocked = 0;
+    }
+
+    public int GetBlockerId()
+    {
+        return isBlocked;
     }
 
     public int GetId()
@@ -1304,12 +1310,12 @@ public abstract class Attack
         Dice.Clear();
         if (armyId == 1)
         {
-            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackyellow", arrowPosition + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
+            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackyellow", arrowPosition + new Vector3(-2.0f, 3.0f, -1.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
             if (defenceDiceNumber > 0) throw2 = Dice.Roll(defenceDiceNumber.ToString() + "d6", "d6-defenceblue", arrowPosition + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
         }
         else
         {
-            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackblue", arrowPosition + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
+            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackblue", arrowPosition + new Vector3(-2.0f, 3.0f, -2.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
             if (defenceDiceNumber > 0) throw2 = Dice.Roll(defenceDiceNumber.ToString() + "d6", "d6-defenceyellow", arrowPosition + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
         }
         BattleManager.Instance.StartCoroutine(WaitForDice(throw1, throw2, attackId));

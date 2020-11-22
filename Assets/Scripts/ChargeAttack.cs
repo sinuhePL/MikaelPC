@@ -28,41 +28,46 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 1;
+                        specialOutcomeType = 3;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 2;
+                        specialOutcomeType = 6;
                         break;
                     case "Suisse":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 3;
+                        specialOutcomeType = 5;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 4;
+                        specialOutcomeType = 1;
                         break;
                     case "Arquebusiers":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 2;
+                        specialOutcomeType = 4;
                         break;
                     case "Artillery":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 3;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 3;
                         break;
                     case "Stradioti":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 3;
                         break;
                     case "Coustilliers":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
+                        specialOutcomeType = 4;
+                        break;
+                    case "Garrison":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 4;
                         specialOutcomeType = 6;
                         break;
                 }
@@ -73,42 +78,47 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 5;
+                        specialOutcomeType = 3;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 2;
                         break;
                     case "Suisse":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 7;
+                        specialOutcomeType = 1;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 7;
+                        specialOutcomeType = 3;
                         break;
                     case "Arquebusiers":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 1;
+                        specialOutcomeType = 4;
                         break;
                     case "Artillery":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 5;
+                        specialOutcomeType = 6;
                         break;
                     case "Stradioti":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 3;
                         break;
                     case "Coustilliers":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 3;
+                        break;
+                    case "Garrison":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        specialOutcomeType = 5;
                         break;
                 }
                 break;
@@ -118,42 +128,47 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 3;
+                        specialOutcomeType = 4;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 4;
                         break;
                     case "Suisse":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 8;
+                        specialOutcomeType = 3;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 9;
+                        specialOutcomeType = 4;
                         break;
                     case "Arquebusiers":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 2;
+                        specialOutcomeType = 4;
                         break;
                     case "Artillery":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 2;
+                        specialOutcomeType = 6;
                         break;
                     case "Stradioti":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 3;
                         break;
                     case "Coustilliers":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 3;
+                        break;
+                    case "Garrison":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        specialOutcomeType = 3;
                         break;
                 }
                 break;
@@ -163,12 +178,12 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 7;
+                        specialOutcomeType = 3;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 1;
+                        specialOutcomeType = 6;
                         break;
                     case "Suisse":
                         attackDiceNumber = 2;
@@ -183,21 +198,26 @@ public class ChargeAttack : Attack
                     case "Arquebusiers":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 1;
+                        specialOutcomeType = 6;
                         break;
                     case "Artillery":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 3;
-                        specialOutcomeType = 10;
+                        specialOutcomeType = 5;
                         break;
                     case "Stradioti":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 4;
                         break;
                     case "Coustilliers":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
+                        specialOutcomeType = 4;
+                        break;
+                    case "Garrison":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 4;
                         specialOutcomeType = 6;
                         break;
                 }
@@ -208,42 +228,47 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 4;
+                        specialOutcomeType = 6;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 2;
+                        specialOutcomeType = 5;
                         break;
                     case "Suisse":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 8;
+                        specialOutcomeType = 5;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 2;
+                        specialOutcomeType = 6;
                         break;
                     case "Arquebusiers":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 2;
+                        specialOutcomeType = 3;
                         break;
                     case "Artillery":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 3;
-                        specialOutcomeType = 1;
+                        specialOutcomeType = 5;
                         break;
                     case "Stradioti":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 1;
                         break;
                     case "Coustilliers":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 3;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 2;
+                        break;
+                    case "Garrison":
+                        attackDiceNumber = 3;
+                        defenceDiceNumber = 3;
+                        specialOutcomeType = 3;
                         break;
                 }
                 break;
@@ -253,7 +278,7 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 10;
+                        specialOutcomeType = 6;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 2;
@@ -263,31 +288,36 @@ public class ChargeAttack : Attack
                     case "Suisse":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 10;
+                        specialOutcomeType = 6;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 5;
+                        specialOutcomeType = 6;
                         break;
                     case "Arquebusiers":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 8;
+                        specialOutcomeType = 3;
                         break;
                     case "Artillery":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 7;
+                        specialOutcomeType = 4;
                         break;
                     case "Stradioti":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 1;
                         break;
                     case "Coustilliers":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
+                        specialOutcomeType = 3;
+                        break;
+                    case "Garrison":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 4;
                         specialOutcomeType = 6;
                         break;
                 }
@@ -298,7 +328,7 @@ public class ChargeAttack : Attack
                     case "Gendarmes":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 10;
+                        specialOutcomeType = 5;
                         break;
                     case "Landsknechte":
                         attackDiceNumber = 2;
@@ -308,30 +338,80 @@ public class ChargeAttack : Attack
                     case "Suisse":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 10;
+                        specialOutcomeType = 5;
                         break;
                     case "Imperial Cavalery":
                         attackDiceNumber = 2;
                         defenceDiceNumber = 4;
-                        specialOutcomeType = 5;
+                        specialOutcomeType = 6;
                         break;
                     case "Arquebusiers":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 8;
+                        specialOutcomeType = 1;
                         break;
                     case "Artillery":
                         attackDiceNumber = 4;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 7;
+                        specialOutcomeType = 6;
                         break;
                     case "Stradioti":
                         attackDiceNumber = 3;
                         defenceDiceNumber = 2;
-                        specialOutcomeType = 6;
+                        specialOutcomeType = 3;
                         break;
                     case "Coustilliers":
                         attackDiceNumber = 3;
+                        defenceDiceNumber = 2;
+                        specialOutcomeType = 6;
+                        break;
+                    case "Garrison":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 4;
+                        specialOutcomeType = 6;
+                        break;
+                }
+                break;
+            case "Garrison":
+                switch (dType)
+                {
+                    case "Gendarmes":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 2;
+                        specialOutcomeType = 5;
+                        break;
+                    case "Landsknechte":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 2;
+                        specialOutcomeType = 6;
+                        break;
+                    case "Suisse":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 2;
+                        specialOutcomeType = 5;
+                        break;
+                    case "Imperial Cavalery":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 2;
+                        specialOutcomeType = 6;
+                        break;
+                    case "Arquebusiers":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 2;
+                        specialOutcomeType = 5;
+                        break;
+                    case "Artillery":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 4;
+                        specialOutcomeType = 6;
+                        break;
+                    case "Stradioti":
+                        attackDiceNumber = 2;
+                        defenceDiceNumber = 2;
+                        specialOutcomeType = 5;
+                        break;
+                    case "Coustilliers":
+                        attackDiceNumber = 2;
                         defenceDiceNumber = 2;
                         specialOutcomeType = 6;
                         break;
@@ -360,55 +440,29 @@ public class ChargeAttack : Attack
         }
         else
         {
-            if(specialOutcomeType == 1)
+            if (specialOutcomeType == 1)
             {
-                sc.attackerMoraleChanged = 0;
-                sc.attackerStrengthChange = 0;
+                sc.defenderMoraleChanged = -1;
             }
             if (specialOutcomeType == 2)
             {
-                sc.attackerMoraleChanged = 0;
-                sc.attackerStrengthChange = 0;
-                sc.defenderMoraleChanged--;
+                sc.defenderMoraleChanged = -2;
             }
             if (specialOutcomeType == 3)
             {
-                sc.attackerMoraleChanged = 1;
-                sc.attackerStrengthChange = 0;
+                sc.defenderStrengthChange = -1;
             }
             if (specialOutcomeType == 4)
             {
-                sc.attackerMoraleChanged = 0;
-                sc.attackerStrengthChange = 0;
-                sc.defenderStrengthChange--;
+                sc.defenderStrengthChange = -2;
             }
             if (specialOutcomeType == 5)
             {
-                sc.attackerMoraleChanged++;
-                sc.defenderMoraleChanged--;
+                sc.attackerMoraleChanged = 1;
             }
             if (specialOutcomeType == 6)
             {
-                sc.defenderMoraleChanged = sc.defenderMoraleChanged - 2;
-            }
-            if (specialOutcomeType == 7)
-            {
-                sc.attackerMoraleChanged++;
-            }
-            if (specialOutcomeType == 8)
-            {
-                sc.defenderStrengthChange--;
-            }
-            if (specialOutcomeType == 9)
-            {
-                sc.attackerMoraleChanged = 1;
-                sc.attackerStrengthChange = 0;
-                sc.defenderMoraleChanged--;
-
-            }
-            if(specialOutcomeType == 10)
-            {
-                sc.defenderMoraleChanged--;
+                sc.attackerMoraleChanged = 2;
             }
         }
         sc.specialOutcomeDescription = GetSpecialOutcomeDescription();
@@ -422,16 +476,12 @@ public class ChargeAttack : Attack
         }
         else
         {
-            if(specialOutcomeType == 1) return "Defender loses hits";
-            if (specialOutcomeType == 2) return "Defender loses hits and 1 morale";
-            if (specialOutcomeType == 3) return "Defender loses hits, attacker gains 1 morale";
-            if (specialOutcomeType == 4) return "Defender loses hits and 1 strength";
-            if (specialOutcomeType == 5) return "Attacker gains 1 morale, defender loses 1 morale";
-            if (specialOutcomeType == 6) return "Defender loses 2 morale";
-            if (specialOutcomeType == 7) return "Attacker gains 1 morale";
-            if (specialOutcomeType == 8) return "Defender loses 1 strength";
-            if (specialOutcomeType == 9) return "Attacker gains 1 morale, defender loses 1 morale and hits";
-            if (specialOutcomeType == 10) return "Defender loses 1 morale";
+            if (specialOutcomeType == 1) return "Defender loses 1 morale";
+            if (specialOutcomeType == 2) return "Defender loses 2 morale";
+            if (specialOutcomeType == 3) return "Defender loses 1 strength";
+            if (specialOutcomeType == 4) return "Defender loses 2 strength";
+            if (specialOutcomeType == 5) return "Attacker gains 1 morale";
+            if (specialOutcomeType == 6) return "Attacker gains 2 morale";
         }
         return "";
     }
@@ -480,12 +530,12 @@ public class ChargeAttack : Attack
         Dice.Clear();
         if (armyId == 1)
         {
-            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackyellow", arrowPosition + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
+            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackyellow", arrowPosition + new Vector3(-2.0f, 3.0f, -1.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
             if (defenceDiceNumber > 0) throw2 = Dice.Roll(defenceDiceNumber.ToString() + "d6", "d6-defenceblue", arrowPosition + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
         }
         else
         {
-            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackblue", arrowPosition + new Vector3(-2.0f, 2.0f, -2.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
+            if (attackDiceNumber > 0) throw1 = Dice.Roll(attackDiceNumber.ToString() + "d6", "d6-attackblue", arrowPosition + new Vector3(-2.0f, 3.0f, -2.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
             if (defenceDiceNumber > 0) throw2 = Dice.Roll(defenceDiceNumber.ToString() + "d6", "d6-defenceyellow", arrowPosition + new Vector3(-2.0f, 2.0f, -1.0f), new Vector3(2.0f, 6.5f + Random.value * 0.25f, 0.0f));
         }
         BattleManager.Instance.StartCoroutine(WaitForDice(throw1, throw2, attackId));

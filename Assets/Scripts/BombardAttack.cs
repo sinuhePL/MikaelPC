@@ -15,42 +15,47 @@ public class BombardAttack : Attack
             case "Gendarmes":
                 attackDiceNumber = 3;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 5;
+                specialOutcomeType = 11;
                 break;
             case "Landsknechte":
                 attackDiceNumber = 4;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 10;
+                specialOutcomeType = 11;
                 break;
             case "Suisse":
                 attackDiceNumber = 4;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 10;
+                specialOutcomeType = 11;
                 break;
             case "Imperial Cavalery":
                 attackDiceNumber = 3;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 8;
+                specialOutcomeType = 11;
                 break;
             case "Arquebusiers":
                 attackDiceNumber = 3;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 7;
+                specialOutcomeType = 11;
                 break;
             case "Artillery":
                 attackDiceNumber = 3;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 6;
+                specialOutcomeType = 11;
                 break;
             case "Stradioti":
                 attackDiceNumber = 2;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 6;
+                specialOutcomeType = 11;
                 break;
             case "Coustilliers":
                 attackDiceNumber = 2;
                 defenceDiceNumber = 0;
-                specialOutcomeType = 6;
+                specialOutcomeType = 11;
+                break;
+            case "Garrison":
+                attackDiceNumber = 4;
+                defenceDiceNumber = 0;
+                specialOutcomeType = 11;
                 break;
         }
     }
@@ -123,6 +128,10 @@ public class BombardAttack : Attack
             {
                 sc.defenderMoraleChanged--;
             }
+            if (specialOutcomeType == 11)
+            {
+                sc.attackerStrengthChange--;
+            }
         }
         sc.specialOutcomeDescription = GetSpecialOutcomeDescription();
     }
@@ -145,6 +154,7 @@ public class BombardAttack : Attack
             if (specialOutcomeType == 8) return "Defender loses 1 strength";
             if (specialOutcomeType == 9) return "Attacker gains 1 morale, defender loses 1 morale and hits";
             if (specialOutcomeType == 10) return "Defender loses 1 morale";
+            if (specialOutcomeType == 11) return "Artillery loses 1 strength";
         }
         return "";
     }
