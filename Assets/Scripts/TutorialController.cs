@@ -30,7 +30,7 @@ public class TutorialController : MonoBehaviour
         BattleManager.Instance.ignoreRoutTest = true;
         tutorialStep = 1;
         titleText.text = "Welcome!";
-        mainText.text = "     Welcome to Renaissance Battles: Pavia 1525. In this  tutorial you will learn the rules of the game.\n    The game consist of two phases: deployment phase when you deploy your troops on the battlefield so that your forces gain upper hand over opponent's units and battle phase when you lead your army to victory (or defeat). Actions in battle phase are taken in alternating turns. Every turn you can order one of your units to attack. To win the game you have to destroy your opponent's forces or force them to retreat. ";
+        mainText.text = "     Welcome to Renaissance Battles: Pavia 1525. In this  tutorial you will learn the rules of the game.\n    The game consist of two phases: deployment phase when you deploy your troops on the battlefield and battle phase when you lead your army to victory (or defeat). Actions in battle phase are taken in alternating turns. Every turn you can order one of your units to attack. To win the game you have to destroy your opponent's forces or force them to retreat. ";
     }
 
     private void OnDestroy()
@@ -126,7 +126,7 @@ public class TutorialController : MonoBehaviour
         if (tutorialStep == 8)
         {
             titleText.text = "Battle phase";
-            mainText.text = "     In order to defeat enemy you have to destroy all of it's units or force them to retreat. Every time a unit loose it's strength or retreats and morale of whole army is 30 or less a rout test is triggered - a number between 3 and 30 is drawn and if it's less than morale of the whole army the test is failed, whole army retreats and the battle is over. You can check morale of both armys in the right top corner of the screen.";
+            mainText.text = "     In order to defeat enemy you have to destroy all of it's units or force them to retreat. Every time a unit loose it's strength or retreats and morale of whole army is 30 or less a rout test is triggered - a number between 3 and 30 is drawn and if it's less than morale of the whole army the test is failed, whole army retreats and the battle is over. You can check morale of both army in the right top corner of the screen.";
             tutorialStep++;
             return;
         }

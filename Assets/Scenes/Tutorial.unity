@@ -301,8 +301,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.35, y: 9.38}
-  m_SizeDelta: {x: 249.15, y: 37.44}
+  m_AnchoredPosition: {x: -203.35, y: 90.075}
+  m_SizeDelta: {x: 203.61, y: 118.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5413577
 MonoBehaviour:
@@ -326,18 +326,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 30
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 40
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: Congratulations!
 --- !u!222 &5413578
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -845,8 +845,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.17, y: -103.13}
-  m_SizeDelta: {x: 605.92, y: 187.57}
+  m_AnchoredPosition: {x: -1.5, y: -95.9}
+  m_SizeDelta: {x: 607.3, y: 253.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &106701730
 MonoBehaviour:
@@ -870,7 +870,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 20
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -881,7 +881,12 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: "    Welcome to Renaissance Battles: Pavia 1525. In this  tutorial you will
+    learn the rules of the game.   \n    The game consist of two phases: deployment
+    phase when you deploy your troops on the battlefield and battle phase when you
+    lead your army to victory (or defeat). Actions in battle phase are taken in alternating
+    turns. Every turn you can order one of your units to attack. To win the game you
+    have to destroy your opponent's forces or force them to retreat."
 --- !u!222 &106701731
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1102,7 +1107,7 @@ RectTransform:
   m_GameObject: {fileID: 137980293}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 1}
+  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
   m_Children:
   - {fileID: 1706926561}
   - {fileID: 446660525}
@@ -1119,7 +1124,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 216, y: 123}
+  m_AnchoredPosition: {x: 216, y: 57}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &137980295
@@ -2893,7 +2898,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 210, y: -261}
+  m_AnchoredPosition: {x: 210, y: -287}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &446660526
@@ -3083,6 +3088,7 @@ MonoBehaviour:
   artillery: {fileID: 21300000, guid: a9538e18dd0a08c48a6481caf3a06bef, type: 3}
   stradioti: {fileID: 21300000, guid: b892a34cf0a4cd64c9960f4831c17ffc, type: 3}
   coustilliers: {fileID: 21300000, guid: cb33f45595f6a4642904ce0d5d020ca8, type: 3}
+  garrison: {fileID: 0}
 --- !u!1 &492145174
 GameObject:
   m_ObjectHideFlags: 0
@@ -3614,7 +3620,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -255.99983, y: -256}
+  m_AnchoredPosition: {x: -255.99983, y: -273}
   m_SizeDelta: {x: 33, y: 33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &699675021
@@ -4791,6 +4797,7 @@ MonoBehaviour:
   artillerySprite: {fileID: 21300000, guid: b61a183111c422648b6de4176e2e2485, type: 3}
   stradiotiSprite: {fileID: 21300000, guid: 285e1c21ca65e4441ac7e8cdf5442656, type: 3}
   coustilliersSprite: {fileID: 21300000, guid: 0b80ad5319f36c24d9bb310c3735b083, type: 3}
+  garrisonSprite: {fileID: 0}
   suisseCaption: {fileID: 21300000, guid: 5225677092180df46a4faa0002ae382c, type: 3}
   gendarmesCaption: {fileID: 21300000, guid: 655838c1d1336f047bf005d01c674845, type: 3}
   landsknechtsCaption: {fileID: 21300000, guid: d6f2e6c252a619a45a33d4cbee4dd851,
@@ -4803,6 +4810,7 @@ MonoBehaviour:
   stradiotiCaption: {fileID: 21300000, guid: ba9041f8503803749a0452cc42b6c4fd, type: 3}
   coustilliersCaption: {fileID: 21300000, guid: 1a31fd38f4b6c7049baede933f0d184c,
     type: 3}
+  garrisonCaption: {fileID: 0}
   unitImage: {fileID: 1454520709}
   unitCaption: {fileID: 748443955}
   unitDescription: {fileID: 1498853700}
@@ -5353,6 +5361,7 @@ MonoBehaviour:
   artillery: {fileID: 21300000, guid: 0ee745740d4b50f4eab54c15af31efd4, type: 3}
   stradioti: {fileID: 21300000, guid: ba9041f8503803749a0452cc42b6c4fd, type: 3}
   coustilliers: {fileID: 21300000, guid: 1a31fd38f4b6c7049baede933f0d184c, type: 3}
+  garrison: {fileID: 0}
 --- !u!1 &1014987539
 GameObject:
   m_ObjectHideFlags: 0
@@ -6175,8 +6184,7 @@ MonoBehaviour:
     type: 3}
   imperialLandsknechtePrefab2: {fileID: 6657950607933084939, guid: eb69ea82df27f8b41838671e864805fd,
     type: 3}
-  imperialLandsknechtePrefab3: {fileID: 4147560290058988426, guid: 576dce287cf0f3c40aad8dc666e55ca9,
-    type: 3}
+  garrisonPrefab: {fileID: 0}
   imperialCavaleryPrefab: {fileID: 1393855818835718730, guid: 07b980fb536eed9449e87fb6e53b723e,
     type: 3}
   imperialArquebusiersPrefab: {fileID: 6167746437382340248, guid: fe636339d365b944b8d459e9e1a40e03,
@@ -7547,7 +7555,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -71.72507, y: -189.75}
+  m_AnchoredPosition: {x: -71.72507, y: -204}
   m_SizeDelta: {x: 334.55, y: 33.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1386111799
@@ -7572,7 +7580,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 20
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -8243,7 +8251,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -256, y: -190}
+  m_AnchoredPosition: {x: -256, y: -203}
   m_SizeDelta: {x: 33, y: 33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1489139266
@@ -9089,7 +9097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -255.99983, y: -223.00002}
+  m_AnchoredPosition: {x: -255.99983, y: -238}
   m_SizeDelta: {x: 33, y: 33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1639090286
@@ -10692,7 +10700,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -71.72487, y: -257}
+  m_AnchoredPosition: {x: -71.72487, y: -272}
   m_SizeDelta: {x: 334.55, y: 33.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1946309072
@@ -10717,7 +10725,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 20
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -11779,7 +11787,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -71.72487, y: -224.00002}
+  m_AnchoredPosition: {x: -71.72487, y: -238}
   m_SizeDelta: {x: 334.55, y: 33.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2093743281
@@ -11804,7 +11812,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: fc7c1c603d1fe0a419bb7d2786045768, type: 3}
-    m_FontSize: 20
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2

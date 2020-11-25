@@ -1132,7 +1132,7 @@ public class BattleManager : MonoBehaviour {
         {
             throwResult = Dice.Value("d10");
             //throwResult = 1;
-            Debug.Log("Wynik testu morale: " + throwResult);
+            //Debug.Log("Wynik testu morale: " + throwResult);
             if (throwResult > armyMorale)
             {
                 if (testingArmyId == 1) resultDescription = "imperialFlee";
@@ -1143,14 +1143,14 @@ public class BattleManager : MonoBehaviour {
                 if (testingArmyId == 1) resultDescription = "imperialStays";
                 else resultDescription = "frenchStays";
             }
-            Debug.Log(resultDescription);
+            //Debug.Log(resultDescription);
             yield return new WaitForSeconds(1.5f);
             EventManager.RaiseEventRouteTestOver(resultDescription, throwResult, armyMorale);
             Dice.Clear();
         }
         else
         {
-            Debug.Log("Błąd przy route test");
+            //Debug.Log("Błąd przy route test");
             Dice.Clear();
             MakeRouteTest(mode);
         }

@@ -453,7 +453,7 @@ public class UnitController : MonoBehaviour
         {
             if (initialStrength > BattleManager.Instance.maxSquads)
             {
-                Debug.Log("Tried to create too much squads in unit! Id: " + unitId);
+                //Debug.Log("Tried to create too much squads in unit! Id: " + unitId);
                 return;
             }
             isInitialized = true;
@@ -537,7 +537,7 @@ public class UnitController : MonoBehaviour
             // set position based on id tile which it sits on
             ChangePosition(tileId);
         }
-        else Debug.Log("Tried to initialized UnitController again! Id: " + _unitId);
+        //else Debug.Log("Tried to initialized UnitController again! Id: " + _unitId);
     }
 
 

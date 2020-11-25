@@ -238,8 +238,11 @@ public class BoardState
             else
             {
                 opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.attackerId);
-                u2 = GetUnit(opposingUnitId);
-                u2.ActivateOtherAttacks(change.attackerId);
+                if (opposingUnitId != 0)
+                {
+                    u2 = GetUnit(opposingUnitId);
+                    if (u2.GetTileId() != 6 && u2.GetTileId() != 8) u2.ActivateOtherAttacks(change.attackerId);
+                }
             }
         }
         else
@@ -267,8 +270,11 @@ public class BoardState
                 else
                 {
                     opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.attackerId);
-                    u2 = GetUnit(opposingUnitId);
-                    if(u2.GetTileId() != 6 && u2.GetTileId() != 8)u2.ActivateOtherAttacks(change.attackerId);
+                    if (opposingUnitId != 0)
+                    {
+                        u2 = GetUnit(opposingUnitId);
+                        if (u2.GetTileId() != 6 && u2.GetTileId() != 8) u2.ActivateOtherAttacks(change.attackerId);
+                    }
                 }
             }
         }
@@ -326,8 +332,11 @@ public class BoardState
                 else
                 {
                     opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.defenderId);
-                    u2 = GetUnit(opposingUnitId);
-                    u2.ActivateOtherAttacks(change.defenderId);
+                    if (opposingUnitId != 0)
+                    {
+                        u2 = GetUnit(opposingUnitId);
+                        if (u2.GetTileId() != 6 && u2.GetTileId() != 8) u2.ActivateOtherAttacks(change.attackerId);
+                    }
                 }
             }
             else
@@ -355,8 +364,11 @@ public class BoardState
                     else
                     {
                         opposingUnitId = BattleManager.Instance.GetOpposingUnitId(change.defenderId);
-                        u2 = GetUnit(opposingUnitId);
-                        u2.ActivateOtherAttacks(change.defenderId);
+                        if (opposingUnitId != 0)
+                        {
+                            u2 = GetUnit(opposingUnitId);
+                            if (u2.GetTileId() != 6 && u2.GetTileId() != 8) u2.ActivateOtherAttacks(change.attackerId);
+                        }
                     }
                 }
             }

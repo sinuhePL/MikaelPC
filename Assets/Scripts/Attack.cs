@@ -1333,8 +1333,8 @@ public abstract class Attack
         }
         if (throw1Id > 0) result1 = Dice.AsString("d6", throw1Id);
         if (throw2Id > 0) result2 = Dice.AsString("d6", throw2Id);
-        Debug.Log(result1);
-        Debug.Log(result2);
+        //Debug.Log(result1);
+        //Debug.Log(result2);
         StateChange result = new StateChange();
         string[] throw1Hits, throw2Hits;
         int attackStrengthHit = 0, attackMoraleHit = 0, defenceStrengthHit = 0, defenceMoraleHit = 0;
@@ -1367,8 +1367,8 @@ public abstract class Attack
                 if (isSpecialOutcome) SpecialOutcome(ref result);
                 result.activatedAttacks = new List<int>(activatesAttacks.ToArray());
                 result.deactivatedAttacks = new List<int>(deactivatesAttacks.ToArray());
-                Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
-                Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
+                //Debug.Log("Attack inflicted " + attackStrengthHit + " strength casualty and " + attackMoraleHit + " morale loss for defender.");
+                //Debug.Log("Defence inflicted " + defenceStrengthHit + " strength casualty and " + defenceMoraleHit + " morale loss for attacker.");
                 BattleManager.Instance.hasTurnOwnerAttacked = true;
                 yield return new WaitForSeconds(1.5f);
                 EventManager.RaiseEventOnDiceResult(result);
@@ -1377,7 +1377,7 @@ public abstract class Attack
         }
         else
         {
-            Debug.Log("Błąd przy rzucie");
+            //Debug.Log("Błąd przy rzucie");
             MakeAttack();
         }
     }

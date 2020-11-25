@@ -87,8 +87,8 @@ public class Dice : MonoBehaviour {
 				return inst;
 			}
 		}
-		else
-			Debug.Log("Prefab "+name+" not found!");
+		//else
+			//Debug.Log("Prefab "+name+" not found!");
 		return null;		
 	}	
 	
@@ -129,7 +129,7 @@ public class Dice : MonoBehaviour {
 	/// </summary>
 	public static void debug(string txt)
 	{
-		Debug.Log(txt);
+		//Debug.Log(txt);
 	}		
 	
 	/// <summary>
@@ -233,7 +233,7 @@ public class Dice : MonoBehaviour {
         string v = ""+Count(dieType, throwId);
         if (v == "0")
         {
-            Debug.Log("B³¹d");
+            //Debug.Log("B³¹d");
         }
         if (dieType == "")
             v += " dice | ";

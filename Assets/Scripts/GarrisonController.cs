@@ -13,7 +13,7 @@ public class GarrisonController : UnitController
 
         if (initialStrength > BattleManager.Instance.maxSquads)
         {
-            Debug.Log("Tried to create too much squads in unit! Id: " + unitId);
+            //Debug.Log("Tried to create too much squads in unit! Id: " + unitId);
             return;
         }
         isInitialized = true;

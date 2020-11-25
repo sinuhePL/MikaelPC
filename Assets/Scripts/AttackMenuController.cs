@@ -33,7 +33,7 @@ public class AttackMenuController : MonoBehaviour
         {
             //mySequence.Append(transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack));
             mySequence.Append(transform.DOMoveX(dummy.transform.position.x, 0.3f).SetEase(Ease.InBack));
-            mySequence.Join(transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack));
+            mySequence.Join(transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack));
         }
         tempAttacks = BattleManager.Instance.GetAttacksByArrowId(idArrow);
         tempAttack = null;
@@ -43,7 +43,7 @@ public class AttackMenuController : MonoBehaviour
         }
         if (tempAttack == null) return;
         mySequence.Append(transform.DOMoveX(510.0f, 0.3f).SetEase(Ease.OutBack));
-        mySequence.Join(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
+        mySequence.Join(transform.DOScale(1.1f, 0.3f).SetEase(Ease.OutBack));
         isVisible = true;
         an = tempAttack.GetName();
         attackNameText.text = an;
