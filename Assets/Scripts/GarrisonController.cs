@@ -19,6 +19,7 @@ public class GarrisonController : UnitController
         isInitialized = true;
         isOutlined = false;
         isDisabled = false;
+        isClicked = false;
         _isBlocked = false;
         _isPlaced = false;
         _unitId = unitId * 10;
@@ -78,6 +79,7 @@ public class GarrisonController : UnitController
 
     protected override void anyTileClicked(int idTile)
     {
+        isClicked = false;
         if (isOutlined)
         {
             for (int i = 0; i < _strength; i++)
@@ -184,19 +186,20 @@ public class GarrisonController : UnitController
     {
         if (!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
-            if (idUnit == UnitId && !isOutlined)
+            if (idUnit == UnitId)
             {
+                isClicked = true;
                 forwardArrow.SetActive(true);
                 forwardArrowEmpty.SetActive(true);
                 for (int i = 0; i < _strength; i++)
                 {
-                    _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+                    _squads[i].GetComponentInChildren<PawnController>().EnablePunch();
                 }
                 forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-                isOutlined = true;
             }
             else
             {
+                isClicked = false;
                 if (isOutlined)
                 {
                     for (int i = 0; i < _strength; i++)

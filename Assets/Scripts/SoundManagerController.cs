@@ -54,9 +54,9 @@ public class SoundManagerController : MonoBehaviour
     {
         Attack at;
         Unit un;
-
+        at = null;
         at = BattleManager.Instance.GetAttackById(a);
-        if (GameManagerController.Instance.isSoundEnabled && at.GetName() != "Move")
+        if (at != null && GameManagerController.Instance.isSoundEnabled && at.GetName() != "Move")
         {
             un = at.GetOwner();
             if(un.GetUnitType() == "Landsknechte" || un.GetUnitType() == "Suisse") sfxAudioSource.PlayOneShot(pikemanAttackSound, GameManagerController.Instance.soundLevel*0.5f);

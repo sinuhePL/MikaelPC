@@ -242,7 +242,7 @@ public class EndTurnController : MonoBehaviour
     {
         if (!isShifted && BattleManager.Instance.gameMode != "deploy")
         {
-            transform.DOMoveX(startingPosition.x - 430.0f, 0.3f).SetEase(Ease.InOutQuint);
+            transform.DOMoveX(startingPosition.x - 440.0f, 0.3f).SetEase(Ease.InOutQuint);
             isShifted = true;
         }
         else

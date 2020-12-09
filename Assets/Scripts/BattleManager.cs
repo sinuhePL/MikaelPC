@@ -111,7 +111,7 @@ public class BattleManager : MonoBehaviour {
     private void InitiateManager(int _boardWidth, int _boardHeight)
     {
         GameObject tempObj;
-        int tileCounter = 0, keyFieldCounter = 0, tempKeyFieldId, possibleArmyDeployment;
+        int tileCounter = 0, keyFieldIdCounter = 0, tempKeyFieldId, possibleArmyDeployment, keyFieldCounter;
 
         units = new List<GameObject>();
         tiles = new List<GameObject>();
@@ -119,6 +119,7 @@ public class BattleManager : MonoBehaviour {
         myCamera = Camera.main;
         armyRouteTest = 0;
         ignoreRoutTest = false;
+        keyFieldCounter = 0;
         //inicjalizacja elementów graficznych planszy
         for (int i=0; i< _boardWidth+4; i++)
         {
@@ -138,7 +139,11 @@ public class BattleManager : MonoBehaviour {
                     int r = Random.Range(0, 5);
                     tempObj = Instantiate(tilePrefab, new Vector3(i * 4.0f, 0.0f, j * -4.0f), tilePrefab.transform.rotation);
                     // add condition on creating key field
-                    if (j == 4 && (r < 3) && i > 3 && i < _boardWidth + 1) tempKeyFieldId = ++keyFieldCounter;
+                    if (j == 4 && (r < 3) && i > 3 && i < _boardWidth + 1 && keyFieldCounter < 4)
+                    {
+                        tempKeyFieldId = ++keyFieldIdCounter;
+                        keyFieldCounter++;
+                    }
                     else tempKeyFieldId = 0;
                     possibleArmyDeployment = 0;
                     if (j == 3 && i > 3 && i < _boardWidth+1) possibleArmyDeployment = 2;
@@ -438,15 +443,15 @@ public class BattleManager : MonoBehaviour {
             // sets arrow position depending on direction of attack (left, central right)
             if (uc.ArmyId == 1)
             {
-                arrowLeftPositionShift = new Vector3(1.0f, 0.0f, 5.0f);
-                arrowCentralPositionShift = new Vector3(3.0f, 0.0f, 5.0f);
-                arrowRightPositionShift = new Vector3(5.0f, 0.0f, 5.0f);
+                arrowLeftPositionShift = new Vector3(1.0f, 0.0f, 4.0f);
+                arrowCentralPositionShift = new Vector3(3.0f, 0.0f, 4.0f);
+                arrowRightPositionShift = new Vector3(5.0f, 0.0f, 4.0f);
             }
             else
             {
-                arrowLeftPositionShift = new Vector3(1.0f, 0.0f, -3.0f);
-                arrowCentralPositionShift = new Vector3(3.0f, 0.0f, -3.0f);
-                arrowRightPositionShift = new Vector3(5.0f, 0.0f, -3.0f);
+                arrowLeftPositionShift = new Vector3(5.0f, 0.0f, -4.0f);
+                arrowCentralPositionShift = new Vector3(3.0f, 0.0f, -4.0f);
+                arrowRightPositionShift = new Vector3(1.0f, 0.0f, -4.0f);
             }
 
             if ((uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == BattleManager.Instance.boardHeight - 1 || (uc.UnitTileId - 1) % BattleManager.Instance.boardHeight == 0) // if unit in second line

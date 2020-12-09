@@ -29,6 +29,18 @@ public class EventManager : MonoBehaviour
         if (onUnitClicked != null) onUnitClicked(idUnit);
     }
 
+    public static event Action<int> onMouseEnter;
+    public static void RaiseEventOnMouseEnter(int idUnit)
+    {
+        if (onMouseEnter != null) onMouseEnter(idUnit);
+    }
+
+    public static event Action<int> onMouseExit;
+    public static void RaiseEventOnMouseExit(int idUnit)
+    {
+        if (onMouseExit != null) onMouseExit(idUnit);
+    }
+
     public static event Action<int, bool> onAttackClicked;
     public static void RaiseEventOnAttackClicked(int idArrow, bool isCounterAttack)
     {

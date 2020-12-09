@@ -132,8 +132,9 @@ public class RearGuardController : UnitController
     {
         if (!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
-            if (idUnit == UnitId && !isOutlined)
+            if (idUnit == UnitId)
             {
+                isClicked = true;
                 forwardArrow.SetActive(true);
                 forwardArrowEmpty.SetActive(true);
                 leftArrow.SetActive(true);
@@ -144,7 +145,7 @@ public class RearGuardController : UnitController
                 sideArrowEmpty.SetActive(true);
                 for (int i = 0; i < _strength; i++)
                 {
-                    _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+                    _squads[i].GetComponentInChildren<PawnController>().EnablePunch();
                 }
                 forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
                 leftArrowEmpty.GetComponent<ArrowController>().ShowArrow();
@@ -154,6 +155,7 @@ public class RearGuardController : UnitController
             }
             else
             {
+                isClicked = false;
                 if (isOutlined)
                 {
                     for (int i = 0; i < _strength; i++)

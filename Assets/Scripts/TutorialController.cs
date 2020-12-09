@@ -57,7 +57,7 @@ public class TutorialController : MonoBehaviour
         {
             tutorialSequence.Append(nextButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
             titleText.text = "Controls";
-            mainText.text = "    You can move your view over battlefield by touching and moving you finger over screen and zoom in and out by pinching the screeen. During battle phase you can also rotate your view by touching arrows on the left and right side of the screen. \n\n     You can enter game menu by touching right bottom button and make game actions by touching left bottom button.";
+            mainText.text = "    You can move your view over battlefield by clicking and dragging cursor over screen and zoom in and out by moving mouse wheel. During battle phase you can also rotate your view by clicking arrows on the left and right side of the screen. \n    You can enter game menu by clicking right bottom button and make game actions by clicking left bottom button.";
             tutorialStep++;
             return;
         }
@@ -65,7 +65,7 @@ public class TutorialController : MonoBehaviour
         {
             tutorialSequence.Append(nextButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
             titleText.text = "Deployment phase";
-            mainText.text = "    In the deployment phase on right side of the screen you can see a list of your available units. Selected unit is enlarged and it's description is visible in the right window. On the battlefield borders of tiles available to deployment are highlighted in army's color. Influence of every available battlefield tile on selected unit is displayed on this tile.\n    Now touch one unit from the list on the right side of screen to select it and deploy it on a battlefield by touching selected tile.";
+            mainText.text = "    In the deployment phase on right side of the screen you can see a list of your available units. Selected unit is enlarged and it's description is visible in the right window. On the battlefield borders of tiles available to deployment are highlighted in army's color. Influence of every available battlefield tile on selected unit is displayed on this tile.\n    Now click one unit from the list on the right side of screen to select it and deploy it on a battlefield by clicking selected tile.";
             tutorialStep++;
             return;
         }
@@ -73,7 +73,7 @@ public class TutorialController : MonoBehaviour
         {
             tutorialSequence.Append(nextButton.transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20));
             titleText.text = "Attacking";
-            mainText.text = "     Every turn in the Battle phase you can order one unit to make attack. Touch an unit to select it. Selected unit is highlighted and in the left top corner you can see selected unit picture, name, strength and morale. Touch the picture to see more information about this unit. In front of selected unit appears arrows representing available attacks. Touch one of arrows to select it. Detailed information about attack appear next to unit picture.";
+            mainText.text = "     Every turn in the Battle phase you can order one unit to make attack. Click an unit to select it. Selected unit is highlighted and in the left top corner you can see selected unit picture, name, strength and morale. Click the picture to see more information about this unit. In front of selected unit arrows appear representing available attacks. Click one of arrows to select it. Detailed information about attack appear next to unit picture.";
             tutorialStep++;
             return;
         }
@@ -102,7 +102,7 @@ public class TutorialController : MonoBehaviour
         tutorialStep++;
         if (tutorialStep != 7 )
         {
-            transform.DOScale(1.4f, 0.0f).SetEase(Ease.OutBack);
+            transform.DOScale(1.0f, 0.0f).SetEase(Ease.OutBack);
             BattleManager.Instance.isInputBlocked = true;
         }
         if (tutorialStep == 4)
@@ -120,7 +120,7 @@ public class TutorialController : MonoBehaviour
         if (tutorialStep == 6)
         {
             titleText.text = "Deployment";
-            mainText.text = "    All right! Some tiles between army lines are key fields. They have name and place for owner marker. Capturing them gives your unit one more attacking die. Now, touch End Deployment button on the left bottom corner of the screen to finish deployment phase.";
+            mainText.text = "    All right! Some tiles between army lines are key fields. They have name and place for owner marker. Capturing them gives your unit one more attacking die. Now, click End Deployment button on the left bottom corner of the screen to finish deployment phase.";
             return;
         }
         if (tutorialStep == 8)
@@ -136,7 +136,7 @@ public class TutorialController : MonoBehaviour
     {
         if(tutorialStep == 10)
         {
-            transform.DOScale(1.4f, 0.0f).SetEase(Ease.OutBack);
+            transform.DOScale(1.0f, 0.0f).SetEase(Ease.OutBack);
             BattleManager.Instance.isInputBlocked = true;
             titleText.text = "Attacking";
             mainText.text = "     In the window next to unit picture attack description appeared. Making attack means throwing two sets of dice - attack dice and defence dice. To make a successful attack you have to get at least one pair of the same symbols on attack dice. Pair of the same symbols on defence dice means that defender inflicted strength or morale damage. Meaning of dice symbols is explained below.";
@@ -158,7 +158,7 @@ public class TutorialController : MonoBehaviour
             transform.DOScale(1.4f, 0.0f).SetEase(Ease.OutBack);
             BattleManager.Instance.isInputBlocked = true;
             titleText.text = "Attack result";
-            mainText.text = "     After every attack window with attack result appear. Besides strength and morale loose attack may result in capturing key field, triggering rout test, changing attack target or adding morale to neighbours. Touch end turn button in the left bottom corner of the screen to end your turn. Keep attacking until someone does strength damage.";
+            mainText.text = "     After every attack window with attack result appear. Besides strength and morale loose attack may result in capturing key field, triggering rout test, changing attack target or adding morale to neighbours. Click end turn button in the left bottom corner of the screen to end your turn. Keep attacking until someone does strength damage.";
             tutorialStep++;
             BattleManager.Instance.ignoreRoutTest = false;
             return;
@@ -185,7 +185,7 @@ public class TutorialController : MonoBehaviour
             transform.DOScale(1.4f, 0.0f).SetEase(Ease.OutBack);
             BattleManager.Instance.isInputBlocked = true;
             titleText.text = "Congratulations!";
-            mainText.text = "     You've just finished tutorial for Renaissance Battles: Pavia 1525 and you're ready to start a game. Touch Quit button to return to main menu.";
+            mainText.text = "     You've just finished tutorial for Renaissance Battles: Pavia 1525 and you're ready to start a game. Click Quit button to return to main menu.";
             tutorialStep++;
             nextButton.GetComponent<Image>().sprite = quitSprite;
             return;

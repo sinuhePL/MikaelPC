@@ -13,6 +13,7 @@ public class UnitController : MonoBehaviour
     protected bool _isPlaced;
     protected bool _isBlocked;  // blocked during deployment
     protected bool isMoved;
+    protected bool isClicked;
     protected int _strength;
     protected string _unitType;
     protected string _unitCommander;
@@ -51,6 +52,7 @@ public class UnitController : MonoBehaviour
     // deselects unit after any tile is clicked
     protected virtual void anyTileClicked(int idTile)
     {
+        isClicked = false;
         if (isOutlined)
         {
             for (int i = 0; i < _strength; i++)
@@ -73,29 +75,54 @@ public class UnitController : MonoBehaviour
         rightArrowEmpty.SetActive(false);
     }
 
+    protected virtual void EnterMouse(int idUnit)
+    {
+        if (idUnit == UnitId && !isOutlined)
+        {
+            for (int i = 0; i < _strength; i++)
+            {
+                _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+            }
+            isOutlined = true;
+        }
+    }
+
+    protected virtual void ExitMouse(int idUnit)
+    {
+        if (isOutlined && idUnit == UnitId && !isClicked)
+        {
+            for (int i = 0; i < _strength; i++)
+            {
+                _squads[i].GetComponentInChildren<PawnController>().DisableOutline();
+            }
+            isOutlined = false;
+        }
+    }
+
     protected virtual void myUnitClicked(int idUnit)
     {
         if(!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
-            if (idUnit == UnitId && !isOutlined)
+            if (idUnit == UnitId)
             {
+                isClicked = true;
+                for (int i = 0; i < _strength; i++)
+                {
+                    _squads[i].GetComponentInChildren<PawnController>().EnablePunch();
+                }
                 forwardArrow.SetActive(true);
                 forwardArrowEmpty.SetActive(true);
                 leftArrow.SetActive(true);
                 leftArrowEmpty.SetActive(true);
                 rightArrow.SetActive(true);
                 rightArrowEmpty.SetActive(true);
-                for (int i = 0; i < _strength; i++)
-                {
-                    _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
-                }
                 forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
                 leftArrowEmpty.GetComponent<ArrowController>().ShowArrow();
                 rightArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-                isOutlined = true;
             }
             else
             {
+                isClicked = false;
                 if (isOutlined)
                 {
                     for (int i = 0; i < _strength; i++)
@@ -287,6 +314,7 @@ public class UnitController : MonoBehaviour
                 for (int i = 0; i < _strength; i++)
                 {
                     _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+                    _squads[i].GetComponentInChildren<PawnController>().EnablePunch();
                 }
                 isOutlined = true;
             }
@@ -323,6 +351,8 @@ public class UnitController : MonoBehaviour
         EventManager.onDeploymentStart += StartDeployment;
         EventManager.onGameStart += UpdateOnStart;
         EventManager.onUIDeployPressed += UnitDeployUIClicked;
+        EventManager.onMouseEnter += EnterMouse;
+        EventManager.onMouseExit += ExitMouse;
     }
 
     protected virtual void OnDestroy()
@@ -335,6 +365,8 @@ public class UnitController : MonoBehaviour
         EventManager.onDeploymentStart -= StartDeployment;
         EventManager.onGameStart -= UpdateOnStart;
         EventManager.onUIDeployPressed -= UnitDeployUIClicked;
+        EventManager.onMouseEnter -= EnterMouse;
+        EventManager.onMouseExit -= ExitMouse;
     }
 
     public int UnitId
@@ -389,7 +421,7 @@ public class UnitController : MonoBehaviour
         {
             deployWidget = Instantiate(deployUnitPrefab, deployUnitPrefab.transform.position, deployUnitPrefab.transform.rotation);
             deployWidget.transform.SetParent(uiCanvas.transform);
-            deployWidget.GetComponent<RectTransform>().anchoredPosition = new Vector3(485.0f, -65.0f - position * 115.0f, 0.0f);
+            deployWidget.GetComponent<RectTransform>().anchoredPosition = new Vector3(490.0f, -75.0f - position * 125.0f, 0.0f);
             deployWidget.GetComponent<DeployUIController>().InitializeDeploy(_unitType, _strength, _morale, position, _armyId, _unitId, _unitCommander);
         }
         else ShowAll();
@@ -461,6 +493,7 @@ public class UnitController : MonoBehaviour
             isDisabled = false;
             _isBlocked = false;
             _isPlaced = false;
+            isClicked = false;
             _unitId = unitId*10;
             _strength = initialStrength;
             _morale = initialMorale;

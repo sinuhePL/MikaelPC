@@ -157,7 +157,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 549, y: 89}
+  m_AnchoredPosition: {x: 555, y: 89}
   m_SizeDelta: {x: 213, y: 181}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &676734
@@ -301,8 +301,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -203.35, y: 90.075}
-  m_SizeDelta: {x: 203.61, y: 118.45}
+  m_AnchoredPosition: {x: -9, y: 17}
+  m_SizeDelta: {x: 275.4, y: 58.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5413577
 MonoBehaviour:
@@ -845,8 +845,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.5, y: -95.9}
-  m_SizeDelta: {x: 607.3, y: 253.5}
+  m_AnchoredPosition: {x: -3.1, y: -105.4}
+  m_SizeDelta: {x: 604.2, y: 209.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &106701730
 MonoBehaviour:
@@ -1107,7 +1107,7 @@ RectTransform:
   m_GameObject: {fileID: 137980293}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.6, y: 1.6, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1706926561}
   - {fileID: 446660525}
@@ -1124,7 +1124,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 216, y: 57}
+  m_AnchoredPosition: {x: 118, y: 57}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &137980295
@@ -1548,7 +1548,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -202.3, y: -210.8}
+  m_AnchoredPosition: {x: -199, y: -200}
   m_SizeDelta: {x: 383.4, y: 421.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &227061752
@@ -2898,7 +2898,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 210, y: -287}
+  m_AnchoredPosition: {x: 210, y: -275}
   m_SizeDelta: {x: 512, y: 256}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &446660526
@@ -4262,7 +4262,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &739196337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4635,7 +4635,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -72.8999, y: -163.89996}
+  m_AnchoredPosition: {x: -72.89844, y: -163.90039}
   m_SizeDelta: {x: 52.9, y: 74.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &872145362
@@ -4736,7 +4736,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.4}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 232, y: -5}
+  m_AnchoredPosition: {x: 229, y: -1}
   m_SizeDelta: {x: 466, y: 928}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &920065490
@@ -6743,7 +6743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -61, y: -18}
+  m_AnchoredPosition: {x: -47, y: -18}
   m_SizeDelta: {x: 146, y: 163}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1293243939
@@ -7842,8 +7842,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -179.05005, y: -203}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -165, y: -179}
+  m_SizeDelta: {x: 51.3, y: 56.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1422548797
 GameObject:
@@ -8399,7 +8399,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.4884644, y: 86.799866}
+  m_AnchoredPosition: {x: -6, y: 87}
   m_SizeDelta: {x: 387.84998, y: 361}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1498853700
@@ -8540,7 +8540,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -74, y: -56.400024}
+  m_AnchoredPosition: {x: -74, y: -56.40039}
   m_SizeDelta: {x: 52.9, y: 74.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1511832296
@@ -9171,7 +9171,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -66.9, y: -170.6}
+  m_AnchoredPosition: {x: -66.89844, y: -170.59961}
   m_SizeDelta: {x: 230, y: 225}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1657814448
@@ -9761,7 +9761,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -67, y: -60.7}
+  m_AnchoredPosition: {x: -67, y: -60.69922}
   m_SizeDelta: {x: 232, y: 216}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1781136625
@@ -10779,7 +10779,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -71.50012, y: -116}
+  m_AnchoredPosition: {x: -71.5, y: -116}
   m_SizeDelta: {x: 258, y: 95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1973004635
@@ -11087,7 +11087,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!114 &1993111600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11688,9 +11688,9 @@ MonoBehaviour:
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

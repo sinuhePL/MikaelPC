@@ -1377,7 +1377,7 @@ public abstract class Attack
         }
         else
         {
-            //Debug.Log("Błąd przy rzucie");
+            //Debug.Log("Błąd przy rzucie:"+result1 + "\n"+result2);
             MakeAttack();
         }
     }

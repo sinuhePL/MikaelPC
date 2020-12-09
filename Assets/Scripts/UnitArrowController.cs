@@ -10,20 +10,24 @@ public class UnitArrowController : MonoBehaviour
 
     private void MoveArrow(int aId, int p, int uId, string uType, string commander)
     {
-        transform.DOMoveY(startingPosition.y - p * 116.0f, 0.25f).SetEase(Ease.InOutQuint);
+        transform.DOMoveY(startingPosition.y - p * 124.0f, 0.25f).SetEase(Ease.InOutQuint);
     }
 
     private void OnEnable()
     {
         EventManager.onUIDeployPressed += MoveArrow;
         EventManager.onGameStart += positionOnGameStart;
-        GetComponent<RectTransform>().anchoredPosition = new Vector3(460.0f, -90.0f, 0.0f);
+        GetComponent<RectTransform>().anchoredPosition = new Vector3(460.0f, -82.0f, 0.0f);
+    }
+
+    private void Start()
+    {
         startingPosition = transform.position;
     }
 
     private void positionOnGameStart()
     {
-        transform.DOMoveY(startingPosition.y - 116.0f, 0.0f);
+        transform.DOMoveY(startingPosition.y - 92.0f, 0.0f);
     }
 
     private void OnDestroy()

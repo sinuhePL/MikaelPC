@@ -125,11 +125,11 @@ public class TileController : MonoBehaviour
                 {
                     case "Town":
                         myRenderer.material.mainTexture = town1Texture;
-                        if (keyFieldId != 0) fieldCaption.text = "Mirabello Castle";
+                        if (keyFieldId != 0) fieldCaption.text = "New Village";
                         break;
                     case "Forest":
                         myRenderer.material.mainTexture = forest1Texture;
-                        if (keyFieldId != 0) fieldCaption.text = "Deep Forest";
+                        if (keyFieldId != 0) fieldCaption.text = "Dark Forest";
                         break;
                     case "Field":
                         if (randomInt == 1) myRenderer.material.mainTexture = field1Texture;
@@ -265,6 +265,10 @@ public class TileController : MonoBehaviour
                             myRenderer.material.mainTexture = forest1Texture;
                             tileType = "Forest";
                             tileTypeText.text = "Forest";
+                            fieldCaption.text = "Visconti Forest";
+                            border.SetActive(true);
+                            floor.SetActive(true);
+                            keyFieldId = 1;
                             break;
                         case 34:
                             myRenderer.material.mainTexture = forest1Texture;

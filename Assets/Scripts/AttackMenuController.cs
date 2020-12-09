@@ -42,8 +42,8 @@ public class AttackMenuController : MonoBehaviour
             if (a.IsActive()) tempAttack = a;
         }
         if (tempAttack == null) return;
-        mySequence.Append(transform.DOMoveX(510.0f, 0.3f).SetEase(Ease.OutBack));
-        mySequence.Join(transform.DOScale(1.1f, 0.3f).SetEase(Ease.OutBack));
+        mySequence.Append(transform.DOMoveX(520.0f, 0.3f).SetEase(Ease.OutBack));
+        mySequence.Join(transform.DOScale(1.0f, 0.3f).SetEase(Ease.OutBack));
         isVisible = true;
         an = tempAttack.GetName();
         attackNameText.text = an;
@@ -111,14 +111,14 @@ public class AttackMenuController : MonoBehaviour
         {
             //transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack);
             transform.DOMoveX(dummy.transform.position.x, 0.3f).SetEase(Ease.InBack);
-            transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
+            transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }
         else if(isVisible && lastClickedUnitId == idUnit)
         {
             //transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
             transform.DOMoveX(dummy2.transform.position.x, 0.3f).SetEase(Ease.InBack);
-            transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
+            transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }
         lastClickedUnitId = idUnit;
@@ -130,7 +130,7 @@ public class AttackMenuController : MonoBehaviour
         {
             //transform.DOMoveX(-190.0f, 0.3f).SetEase(Ease.InBack);
             transform.DOMoveX(dummy2.transform.position.x, 0.3f).SetEase(Ease.InBack);
-            transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
+            transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }
     }
@@ -141,7 +141,7 @@ public class AttackMenuController : MonoBehaviour
         {
             //transform.DOMoveX(205.0f, 0.3f).SetEase(Ease.InBack);
             transform.DOMoveX(dummy.transform.position.x, 0.3f).SetEase(Ease.InBack);
-            transform.DOScale(0.65f, 0.3f).SetEase(Ease.InBack);
+            transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack);
             isVisible = false;
         }
     }

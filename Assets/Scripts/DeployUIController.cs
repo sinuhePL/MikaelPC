@@ -17,6 +17,8 @@ public class DeployUIController : MonoBehaviour
     private string unitType;
     private string unitCommander;
     private Vector3 startingPosition;
+    [SerializeField] private GameObject panelMovedDummy;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -48,7 +50,7 @@ public class DeployUIController : MonoBehaviour
         {
             isEnlarged = false;
             transform.DOScale(0.28f, 0.25f).SetEase(Ease.OutBack);
-            transform.DOMoveX(485.0f, 0.25f).SetEase(Ease.OutBack);
+            transform.DOMoveX(490.0f, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveY(transform.position.y + 25.0f, 0.25f).SetEase(Ease.OutBack);
             if (aId == armyId && p < myPosition) transform.DOMoveY(startingPosition.y - 42.0f, 0.25f).SetEase(Ease.OutBack);
             return;
@@ -92,8 +94,8 @@ public class DeployUIController : MonoBehaviour
         if (!isEnlarged && !BattleManager.Instance.isInputBlocked)
         {
             if(playSound) SoundManagerController.Instance.PlayUnitReport();
-            transform.DOScale(0.4f, 0.25f).SetEase(Ease.OutBack);
-            transform.DOMoveX(540.0f, 0.25f).SetEase(Ease.OutBack);
+            transform.DOScale(0.45f, 0.25f).SetEase(Ease.OutBack);
+            transform.DOMoveX(panelMovedDummy.transform.position.x, 0.25f).SetEase(Ease.OutBack);
             transform.DOMoveY(startingPosition.y - 25.0f, 0.25f).SetEase(Ease.OutBack);
             isEnlarged = true;
             EventManager.RaiseEventOnUIDeployPressed(armyId, myPosition, unitId, unitType, unitCommander);

@@ -84,8 +84,9 @@ public class StradiotiController : UnitController
     {
         if (!BattleManager.Instance.isInputBlocked && BattleManager.Instance.gameMode != "deploy")
         {
-            if (idUnit == UnitId && !isOutlined)
+            if (idUnit == UnitId)
             {
+                isClicked = true;
                 forwardArrow.SetActive(true);
                 forwardArrowEmpty.SetActive(true);
                 leftArrow.SetActive(true);
@@ -96,16 +97,16 @@ public class StradiotiController : UnitController
                 farArrowEmpty.SetActive(true);
                 for (int i = 0; i < _strength; i++)
                 {
-                    _squads[i].GetComponentInChildren<PawnController>().EnableOutline();
+                    _squads[i].GetComponentInChildren<PawnController>().EnablePunch();
                 }
                 forwardArrowEmpty.GetComponent<ArrowController>().ShowArrow();
                 leftArrowEmpty.GetComponent<ArrowController>().ShowArrow();
                 rightArrowEmpty.GetComponent<ArrowController>().ShowArrow();
                 farArrowEmpty.GetComponent<ArrowController>().ShowArrow();
-                isOutlined = true;
             }
             else
             {
+                isClicked = false;
                 if (isOutlined)
                 {
                     for (int i = 0; i < _strength; i++)
