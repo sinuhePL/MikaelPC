@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class EndTurnController : MonoBehaviour
 {
@@ -69,6 +70,7 @@ public class EndTurnController : MonoBehaviour
         {
             transform.DOKill();
             transform.DOPunchScale(new Vector3(0.1f, 0.1f), 0.15f, 20);
+            if (SceneManager.GetActiveScene().name == "Tutorial" && TutorialController.tutorialStep != 6 && TutorialController.tutorialStep != 12 && TutorialController.tutorialStep != 13 && TutorialController.tutorialStep != 14) return;
             if (mode == 0) return;
             if (mode == 1) // if displays End Deployment
             {

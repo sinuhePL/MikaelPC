@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class TutorialController : MonoBehaviour
 {
-    private int tutorialStep;
+    public static int tutorialStep;
 
     [SerializeField] private Button nextButton;
     [SerializeField] private Button endTurnButton;
